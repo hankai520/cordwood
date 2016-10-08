@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigInteger;
 
 import ren.hankai.cordwood.core.domain.Plugin;
+import ren.hankai.cordwood.persist.model.PluginBean;
 import ren.hankai.cordwood.persist.util.CustomJpaRepository;
 
 /**
@@ -16,5 +17,5 @@ import ren.hankai.cordwood.persist.util.CustomJpaRepository;
  */
 @Transactional
 public interface PluginRepository
-                extends CustomJpaRepository<Plugin>, JpaRepository<Plugin, BigInteger> {
+                extends CustomJpaRepository<Plugin>, JpaRepository<PluginBean, BigInteger> {
 }

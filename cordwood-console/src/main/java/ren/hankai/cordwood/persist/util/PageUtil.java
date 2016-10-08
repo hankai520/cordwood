@@ -4,7 +4,7 @@
  * http://www.hankai.ren
  */
 
-package ren.hankai.cordwood.core.util;
+package ren.hankai.cordwood.persist.util;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

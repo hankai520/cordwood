@@ -21,8 +21,6 @@ import java.util.Map;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.domain.Plugin;
 import ren.hankai.cordwood.core.domain.PluginFunction;
-import ren.hankai.cordwood.persist.PluginRepository;
-import ren.hankai.cordwood.persist.util.EntitySpecs;
 import ren.hankai.cordwood.plugin.PluginLoader;
 import ren.hankai.cordwood.plugin.PluginManager;
 import ren.hankai.cordwood.plugin.PluginValidator;
@@ -44,15 +42,12 @@ public class SpringPluginManager implements PluginManager {
     private PluginLoader              pluginLoader;
     @Autowired
     private PluginValidator           pluginValidator;
-    @Autowired
-    private PluginRepository          pluginRepository;
     private final Map<String, Plugin> plugins = new HashMap<>();
 
     private boolean changeActivationStatus( String pluginName, boolean active ) {
         Plugin plugin = plugins.get( pluginName );
         if ( plugin != null ) {
             plugin.setActive( active );
-            plugin = pluginRepository.save( plugin );
             plugins.put( plugin.getName(), plugin );
             return true;
         } else {
@@ -108,11 +103,6 @@ public class SpringPluginManager implements PluginManager {
                         aware = (PluginLifeCycleAware) instance;
                     }
                     Plugin plugin = wrapPlugin( instance );
-                    Plugin existPlugin = pluginRepository
-                        .findOne( EntitySpecs.<Plugin>field( "name", plugin.getName() ) );
-                    if ( existPlugin == null ) {
-                        plugin = pluginRepository.save( plugin );
-                    }
                     plugins.put( plugin.getName(), plugin );
                     aware.pluginDidLoad();
                 }

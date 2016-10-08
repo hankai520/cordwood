@@ -1,26 +1,36 @@
 
-package ren.hankai.cordwood.core.domain;
+package ren.hankai.cordwood.persist.model;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
+
+import javax.persistence.Cacheable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * @author hankai
  * @version TODO Missing version number
  * @since Sep 30, 2016 11:04:40 AM
  */
-public final class Plugin implements Serializable {
+@Entity
+@Table(
+    name = "plugins" )
+@Cacheable( false )
+public final class PluginBean implements Serializable {
 
-    private static final long           serialVersionUID = 1L;
-    private BigInteger                  id;
-    private String                      name;
-    private String                      version;
-    private String                      description;
-    private boolean                     isActive;
-    private Object                      instance;
-    private Map<String, PluginFunction> functions        = new HashMap<>();
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(
+        strategy = GenerationType.IDENTITY )
+    private BigInteger        id;
+    private String            name;
+    private String            version;
+    private String            description;
+    private boolean           isActive;
 
     public BigInteger getId() {
         return id;
@@ -60,22 +70,6 @@ public final class Plugin implements Serializable {
 
     public void setActive( boolean isActive ) {
         this.isActive = isActive;
-    }
-
-    public Object getInstance() {
-        return instance;
-    }
-
-    public void setInstance( Object instance ) {
-        this.instance = instance;
-    }
-
-    public Map<String, PluginFunction> getFunctions() {
-        return functions;
-    }
-
-    public void setFunctions( Map<String, PluginFunction> functions ) {
-        this.functions = functions;
     }
 
     public static long getSerialversionuid() {
