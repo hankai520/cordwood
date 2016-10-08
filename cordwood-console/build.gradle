@@ -1,0 +1,49 @@
+apply plugin: 'war'
+apply plugin: 'spring-boot'
+apply plugin: 'io.spring.dependency-management'
+
+buildscript {
+    dependencies { 
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE") 
+        classpath("io.spring.gradle:dependency-management-plugin:0.5.1.RELEASE")
+    }
+}
+
+war {
+    baseName = 'cordwood-console'
+    version = mainVersion
+    manifest {
+        attributes(
+            "Implementation-Version": mainVersion
+        )
+    }
+}
+
+sourceSets {
+    main.java.srcDirs = ['src/main/java']
+    main.resources.srcDirs = ['src/main/resources', 'src/main/webapp']
+    test.java.srcDirs = ['src/test/java']
+    test.resources.srcDirs = ['src/test/resources']
+}
+
+configurations {
+    providedRuntime
+    compile.exclude module: 'hibernate-entitymanager'
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web:1.4.0.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa:1.4.0.RELEASE'
+    compile 'org.springframework.boot:spring-boot-configuration-processor:1.4.0.RELEASE'
+    compile 'commons-codec:commons-codec:1.9'
+    compile 'commons-lang:commons-lang:2.6'
+    
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat:1.4.0.RELEASE'
+    providedRuntime 'org.apache.tomcat.embed:tomcat-embed-jasper:8.0.23'
+}
+
+eclipse {
+    classpath {
+         downloadSources=true
+    }
+}

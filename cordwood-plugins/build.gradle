@@ -1,0 +1,32 @@
+buildscript {
+    dependencies { 
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE") 
+        classpath("io.spring.gradle:dependency-management-plugin:0.5.1.RELEASE")
+    }
+}
+
+jar {
+    baseName = 'cordwood-plugins'
+    version = mainVersion
+    manifest {
+        attributes(
+            "Implementation-Version": mainVersion,
+            "Boot-Class": "ren.hankai.cordwood.plugins.PluginBootstrap",
+            "Plugin-Packages": "ren.hankai.cordwood.plugins"
+        )
+    }
+}
+
+sourceSets {
+    main.java.srcDirs = ['src/main/java']
+    main.resources.srcDirs = ['src/main/resources']
+    test.java.srcDirs = ['src/test/java']
+    test.resources.srcDirs = ['src/test/resources']
+}
+
+dependencies {
+    compile 'org.springframework:spring-core:4.1.7.RELEASE'
+    compile 'org.springframework:spring-beans:4.1.7.RELEASE'
+    compile 'org.springframework:spring-context:4.1.7.RELEASE'
+    compile 'javax.servlet:javax.servlet-api:3.0.1'
+}

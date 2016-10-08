@@ -1,12 +1,27 @@
-*.class
+# eclipse generated files
+**/.apt_generated
+**/.classpath
+**/.factorypath
+**/.gradle
+**/.project
+**/.settings
+**/bin
+**/build
+**/.springBeans
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# app generated files
+**/home-not-set
 
-# Package Files #
-*.jar
-*.war
-*.ear
+# common generated files
+**/.DS_Store
+**/*.java.hsp
+**/*.sonarj
+**/*.sw*
+**/ivy-cache
+**/*.log
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+# IDEA artifacts and output dirs
+**/*.iml
+**/*.ipr
+**/*.iws
+**/.idea
