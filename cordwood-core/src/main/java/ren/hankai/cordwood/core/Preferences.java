@@ -73,7 +73,7 @@ public class Preferences {
                 }
                 appHome = home;
             }
-            appHome = "home-not-set";
+            appHome = System.getProperty( "user.dir" ) + File.separator + "home-not-set";
             System.setProperty( ENV_APP_HOME_DIR, appHome );
         }
         return appHome;
@@ -111,7 +111,7 @@ public class Preferences {
 
     /**
      * 数据库存储目录
-     * 
+     *
      * @return
      * @author hankai
      * @since Sep 30, 2016 3:39:19 PM

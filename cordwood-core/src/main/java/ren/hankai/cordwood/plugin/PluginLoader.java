@@ -14,7 +14,7 @@ public interface PluginLoader {
     /**
      * 载入插件集合
      *
-     * @param jarFileUrl 插件地址
+     * @param jarFileUrl 插件本地路径
      * @return 插件实例，返回 null 表示加载失败
      * @author hankai
      * @since Sep 30, 2016 10:43:38 AM

@@ -43,21 +43,28 @@ public class PluggableController {
                     HttpServletRequest request, HttpServletResponse response ) {
         try {
             Plugin plugin = pluginManager.getPlugin( pluginName );
-            PluginFunction fun = plugin.getFunctions().get( function );
-            Class<?>[] paramTypes = fun.getMethod().getParameterTypes();
-            List<Object> args = new ArrayList<>();
-            if ( ( paramTypes != null ) && ( paramTypes.length > 0 ) ) {
-                for ( Class<?> paramType : paramTypes ) {
-                    if ( paramType.isInstance( request ) ) {
-                        args.add( request );
-                    } else if ( paramType.isInstance( response ) ) {
-                        args.add( response );
+            if ( plugin != null ) {
+                PluginFunction fun = plugin.getFunctions().get( function );
+                Class<?>[] paramTypes = fun.getMethod().getParameterTypes();
+                List<Object> args = new ArrayList<>();
+                if ( ( paramTypes != null ) && ( paramTypes.length > 0 ) ) {
+                    for ( Class<?> paramType : paramTypes ) {
+                        if ( paramType.isInstance( request ) ) {
+                            args.add( request );
+                        } else if ( paramType.isInstance( response ) ) {
+                            args.add( response );
+                        }
                     }
                 }
+                Object result = fun.getMethod().invoke( plugin.getInstance(), args.toArray() );
+                return new ResponseEntity<>( result, HttpStatus.OK );
+            } else {
+                return new ResponseEntity<>( "service not found!", HttpStatus.NOT_FOUND );
             }
-            Object result = fun.getMethod().invoke( plugin.getInstance(), args.toArray() );
-            return new ResponseEntity<>( result, HttpStatus.OK );
         } catch (Exception e) {
+            logger.error(
+                String.format( "Failed to call plugin { %s#%s }", pluginName, function ), e );
+        } catch (Error e) {
             logger.error(
                 String.format( "Failed to call plugin { %s#%s }", pluginName, function ), e );
         }

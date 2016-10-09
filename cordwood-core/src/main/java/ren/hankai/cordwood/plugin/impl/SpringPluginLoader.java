@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -48,7 +49,8 @@ public class SpringPluginLoader implements PluginLoader {
             URL[] urls = loader.getURLs();
             if ( ( urls != null ) && ( urls.length > 0 ) ) {
                 URL url = urls[0];
-                jarStream = new JarInputStream( url.openStream() );
+                InputStream is = url.openStream();
+                jarStream = new JarInputStream( is );
                 Manifest manifest = jarStream.getManifest();
                 attrs = manifest.getMainAttributes();
             }

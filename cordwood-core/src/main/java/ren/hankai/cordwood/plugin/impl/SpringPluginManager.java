@@ -1,6 +1,8 @@
 
 package ren.hankai.cordwood.plugin.impl;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,23 +12,28 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
 import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.domain.Plugin;
 import ren.hankai.cordwood.core.domain.PluginFunction;
+import ren.hankai.cordwood.core.domain.PluginPackage;
+import ren.hankai.cordwood.plugin.PluginDownloader;
+import ren.hankai.cordwood.plugin.PluginEventEmitter;
 import ren.hankai.cordwood.plugin.PluginLoader;
 import ren.hankai.cordwood.plugin.PluginManager;
+import ren.hankai.cordwood.plugin.PluginRegistry;
 import ren.hankai.cordwood.plugin.PluginValidator;
 import ren.hankai.cordwood.plugin.api.Functional;
 import ren.hankai.cordwood.plugin.api.Pluggable;
-import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
 
 /**
  * @author hankai
@@ -34,21 +41,32 @@ import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
  * @since Sep 29, 2016 6:01:21 PM
  */
 @Component
-public class SpringPluginManager implements PluginManager {
+public class SpringPluginManager implements PluginManager, PluginRegistry {
 
-    private static final Logger       logger  =
-                                             LoggerFactory.getLogger( SpringPluginManager.class );
+    private static final Logger              logger   =
+                                                    LoggerFactory
+                                                        .getLogger( SpringPluginManager.class );
     @Autowired
-    private PluginLoader              pluginLoader;
+    private PluginLoader                     pluginLoader;
     @Autowired
-    private PluginValidator           pluginValidator;
-    private final Map<String, Plugin> plugins = new HashMap<>();
+    private PluginValidator                  pluginValidator;
+    @Autowired
+    private PluginEventEmitter               pluginEventEmitter;
+    @Autowired
+    private PluginDownloader                 pluginDownloader;
+    private final Map<String, Plugin>        plugins  = new HashMap<>();
+    private final Map<String, PluginPackage> packages = new HashMap<>();
 
     private boolean changeActivationStatus( String pluginName, boolean active ) {
         Plugin plugin = plugins.get( pluginName );
         if ( plugin != null ) {
             plugin.setActive( active );
             plugins.put( plugin.getName(), plugin );
+            if ( active ) {
+                pluginEventEmitter.emitEvent( PluginEventEmitter.PLUGIN_ACTIVATED, plugin );
+            } else {
+                pluginEventEmitter.emitEvent( PluginEventEmitter.PLUGIN_DEACTIVATED, plugin );
+            }
             return true;
         } else {
             logger.warn(
@@ -92,32 +110,105 @@ public class SpringPluginManager implements PluginManager {
         return plugin;
     }
 
+    private PluginPackage extractPackageInfo( URL localPath ) {
+        InputStream is = null;
+        try {
+            PluginPackage p = new PluginPackage();
+            p.setFileName( FilenameUtils.getName( localPath.getPath() ) );
+            p.setInstallUrl( localPath );
+            is = localPath.openStream();
+            p.setIdentifier( DigestUtils.sha1Hex( is ) );
+            return p;
+        } catch (IOException e) {
+            logger.error(
+                String.format( "Failed to calculate the checksum of package \"%s\"", localPath ),
+                e );
+        } finally {
+            try {
+                if ( is != null ) {
+                    is.close();
+                }
+            } catch (Exception e2) {
+            }
+        }
+        return null;
+    }
+
     @Override
-    public boolean installPlugin( URL pluginUrl ) {
-        if ( pluginValidator.validatePackage( pluginUrl ) ) {
-            List<Object> instances = pluginLoader.loadPlugins( pluginUrl );
+    public PluginPackage register( URL packageUrl ) {
+        URL localPath = pluginDownloader.downloadIfNeeded( packageUrl );
+        if ( localPath == null ) {
+            logger.error(
+                String.format( "Failed to download plugin package at %s", packageUrl.toString() ) );
+        } else if ( !pluginValidator.validatePackage( localPath ) ) {
+            logger.error(
+                String.format( "Failed to verify plugin package at %s", localPath.toString() ) );
+        } else {
+            PluginPackage pack = extractPackageInfo( localPath );
+            PluginPackage loadedPack = packages.get( pack.getIdentifier() );
+            if ( loadedPack != null ) {
+                return loadedPack;
+            }
+            String name = FilenameUtils.getName( localPath.getPath() );
+            logger.info( String.format( "Loading plugin package %s ...", name ) );
+            List<Object> instances = pluginLoader.loadPlugins( localPath );
             if ( ( instances != null ) && !instances.isEmpty() ) {
                 for ( Object instance : instances ) {
-                    PluginLifeCycleAware aware = null;
-                    if ( instance instanceof PluginLifeCycleAware ) {
-                        aware = (PluginLifeCycleAware) instance;
-                    }
                     Plugin plugin = wrapPlugin( instance );
+                    pack.addPlugin( plugin );
                     plugins.put( plugin.getName(), plugin );
-                    aware.pluginDidLoad();
+                    pluginEventEmitter.emitEvent( PluginEventEmitter.PLUGIN_LOADED, plugin );
                 }
-                return true;
+                packages.put( pack.getIdentifier(), pack );
+                logger.info( String.format( "Plugin package %s loaded successfully!", name ) );
+                return pack;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean unregister( String packageId ) {
+        PluginPackage pp = packages.get( packageId );
+        if ( pp != null ) {
+            for ( Plugin p : pp.getPlugins() ) {
+                pluginLoader.unloadPlugin( p.getInstance() );
+                pluginEventEmitter.emitEvent( PluginEventEmitter.PLUGIN_UNLOADED, p );
+            }
+            plugins.remove( packageId );
+            try {
+                File file = new File( pp.getInstallUrl().toURI() );
+                return FileUtils.deleteQuietly( file );
+            } catch (Exception e) {
+                logger.error( String.format( "Failed to unregister plugin package \"%s\"",
+                    pp.getInstallUrl().toString() ), e );
             }
         }
         return false;
     }
 
     @Override
-    public boolean uninstallPlugin( String pluginId ) {
-        // 从内存中卸载
-        // 在数据库中删除插件信息
-        // 删除插件包物理文件
-        return false;
+    public void initializePlugins( List<String> packageNames ) {
+        File dir = new File( Preferences.getPluginsDir() );
+        if ( dir.exists() && dir.isDirectory() ) {
+            File[] plugins = dir.listFiles( new FilenameFilter() {
+
+                @Override
+                public boolean accept( File dir, String name ) {
+                    return packageNames.contains( name );
+                }
+            } );
+            if ( ( plugins != null ) && ( plugins.length > 0 ) ) {
+                for ( File file : plugins ) {
+                    try {
+                        register( file.toURI().toURL() );
+                    } catch (MalformedURLException e) {
+                        logger.warn( String.format( "Invalid plugin package url: \"%s\"",
+                            file.getAbsolutePath() ), e );
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -137,56 +228,5 @@ public class SpringPluginManager implements PluginManager {
             logger.error( String.format( "Plugin with name \"%s\" not found!", pluginName ) );
         }
         return plugin;
-    }
-
-    @Override
-    public void initializeInstalledPlugins() {
-        // 读取数据库中所有的插件信息
-        // 扫描插件包物理文件（忽略未在数据库记录的插件；忽略插件包不存在的插件）
-        // 将插件包载入内存
-        File dir = new File( Preferences.getPluginsDir() );
-        if ( dir.exists() && dir.isDirectory() ) {
-            File[] plugins = dir.listFiles();
-            if ( ( plugins != null ) && ( plugins.length > 0 ) ) {
-                for ( File file : plugins ) {
-                    if ( !FilenameUtils.isExtension( file.getName(), "jar" ) ) {
-                        continue;
-                    }
-                    try {
-                        logger.info(
-                            String.format( "Loading plugin package %s ...", file.getName() ) );
-                        installPlugin( file.toURI().toURL() );
-                        logger.info( String.format( "Plugin package %s loaded successfully!",
-                            file.getName() ) );
-                    } catch (MalformedURLException e) {
-                        logger.warn( String.format( "Failed to load plugin package at \"%s\"",
-                            file.getAbsolutePath() ), e );
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
-    public Iterator<Plugin> getPluginIterator() {
-        return new Iterator<Plugin>() {
-
-            @Override
-            public boolean hasNext() {
-                // TODO Auto-generated method stub
-                return false;
-            }
-
-            @Override
-            public Plugin next() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public void remove() {
-                // TODO Auto-generated method stub
-            }
-        };
     }
 }

@@ -1,7 +1,7 @@
 
 package ren.hankai.cordwood.plugin;
 
-import java.util.Iterator;
+import java.util.List;
 
 import ren.hankai.cordwood.core.domain.Plugin;
 
@@ -10,7 +10,7 @@ import ren.hankai.cordwood.core.domain.Plugin;
  * @version TODO Missing version number
  * @since Sep 29, 2016 5:44:44 PM
  */
-public interface PluginManager extends PluginRegistry {
+public interface PluginManager {
 
     /**
      * 启用插件
@@ -43,19 +43,11 @@ public interface PluginManager extends PluginRegistry {
     Plugin getPlugin( String pluginName );
 
     /**
-     * 初始化所有已安装的插件
+     * 初始化已安装的插件
      *
+     * @param packageNames 插件包文件名
      * @author hankai
-     * @since Sep 30, 2016 11:07:12 AM
+     * @since Oct 9, 2016 10:56:22 AM
      */
-    void initializeInstalledPlugins();
-
-    /**
-     * 获取插件迭代器
-     *
-     * @return 插件迭代器
-     * @author hankai
-     * @since Sep 30, 2016 3:54:19 PM
-     */
-    Iterator<Plugin> getPluginIterator();
+    void initializePlugins( List<String> packageNames );
 }

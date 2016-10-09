@@ -2,16 +2,12 @@
 package ren.hankai.cordwood.console.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
-import org.springframework.boot.context.embedded.EmbeddedWebApplicationContext;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import java.net.URL;
-import java.net.URLClassLoader;
+import ren.hankai.cordwood.persist.PluginPackageRepository;
+import ren.hankai.cordwood.plugin.PluginRegistry;
 
 /**
  * @author hankai
@@ -22,22 +18,28 @@ import java.net.URLClassLoader;
 public class DefaultController {
 
     @Autowired
-    private EmbeddedWebApplicationContext context;
+    private PluginPackageRepository pluginPackageRepository;
     @Autowired
-    private RequestMappingHandlerMapping  requestMappingHandlerMapping;
+    private PluginRegistry          pluginRegistry;
 
     @RequestMapping( "/" )
     @ResponseBody
     public String home() throws Exception {
-        URL url = new URL(
-            "file:/Users/hankai/Documents/devops/projects/cordwood/cordwood-plugins/build/libs/cordwood-plugins-0.0.1.RELEASE.jar" );
-        URLClassLoader loader =
-                              new URLClassLoader( new URL[] { url }, context.getClassLoader() );
-        ClassPathResource resource = new ClassPathResource( "beans.xml", loader );
-        XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader( context );
-        xmlReader.setBeanClassLoader( loader );
-        xmlReader.loadBeanDefinitions( resource );
-        requestMappingHandlerMapping.afterPropertiesSet();
+        // URL url = new URL( "file:///Users/hankai/Desktop/cordwood-plugins-0.0.1.RELEASE.jar" );
+        // PluginPackage pp = pluginRegistry.register( url );
+        // PluginPackageBean ppb = new PluginPackageBean();
+        // ppb.setChecksum( pp.getIdentifier() );
+        // ppb.setFileName( pp.getFileName() );
+        // for ( Plugin plugin : pp.getPlugins() ) {
+        // PluginBean pb = new PluginBean();
+        // pb.setActive( plugin.isActive() );
+        // pb.setDescription( plugin.getDescription() );
+        // pb.setName( plugin.getName() );
+        // pb.setVersion( plugin.getVersion() );
+        // pb.setPluginPackage( ppb );
+        // ppb.getPlugins().add( pb );
+        // }
+        // pluginPackageRepository.save( ppb );
         return "hello";
     }
 }

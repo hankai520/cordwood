@@ -2,13 +2,15 @@
 package ren.hankai.cordwood.persist.model;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -26,17 +28,23 @@ public final class PluginBean implements Serializable {
     @Id
     @GeneratedValue(
         strategy = GenerationType.IDENTITY )
-    private BigInteger        id;
+    private Integer           id;
+    @ManyToOne(
+        fetch = FetchType.EAGER )
+    @JoinColumn(
+        name = "packageId",
+        referencedColumnName = "id" )
+    private PluginPackageBean pluginPackage;
     private String            name;
     private String            version;
     private String            description;
     private boolean           isActive;
 
-    public BigInteger getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId( BigInteger id ) {
+    public void setId( Integer id ) {
         this.id = id;
     }
 
@@ -46,6 +54,14 @@ public final class PluginBean implements Serializable {
 
     public void setName( String name ) {
         this.name = name;
+    }
+
+    public PluginPackageBean getPluginPackage() {
+        return pluginPackage;
+    }
+
+    public void setPluginPackage( PluginPackageBean pluginPackage ) {
+        this.pluginPackage = pluginPackage;
     }
 
     public String getVersion() {
