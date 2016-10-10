@@ -1,1 +1,0 @@
-include "cordwood-plugin-api", "cordwood-plugins", "cordwood-core", "cordwood-console"

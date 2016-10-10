@@ -1,0 +1,78 @@
+ext {
+    springVersion = "4.3.3.RELEASE"
+    mainVersion = "0.0.1.RELEASE"
+}
+
+apply plugin: "java"
+apply plugin: "eclipse"
+apply plugin: "eclipse-wtp"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+buildscript {
+    repositories {
+        maven { url "http://192.168.1.107:8081/repository/maven-public/" }
+    }
+}
+
+repositories {
+    maven { url "http://192.168.1.107:8081/repository/maven-public/" }
+}
+
+eclipse {
+    project {
+        name="myplugin"
+    }
+}
+
+jar {
+    baseName = "demo-plugin"
+    version = mainVersion
+    manifest {
+        attributes(
+            "Implementation-Version": mainVersion,
+            "Boot-Class": "com.demo.plugins.config.PluginBootstrap",
+            "Plugin-Packages": "com.demo.plugins"
+        )
+    }
+}
+
+sourceSets {
+    main.java.srcDirs = ["src/main/java"]
+    main.resources.srcDirs = ["src/main/resources"]
+    test.java.srcDirs = ["src/test/java"]
+    test.resources.srcDirs = ["src/test/resources"]
+}
+
+configurations {
+    compile.exclude module: 'hibernate-entitymanager'
+}
+
+dependencies {
+    compile "org.springframework:spring-core:${springVersion}"
+    compile "org.springframework:spring-beans:${springVersion}"
+    compile "org.springframework:spring-context:${springVersion}"
+    compile "org.springframework:spring-orm:${springVersion}"
+    compile "org.springframework:spring-expression:${springVersion}"
+    
+    compile "org.springframework.data:spring-data-jpa:1.10.4.RELEASE"
+    
+    compile "javax.servlet:javax.servlet-api:3.1.0"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.7.8"
+
+    compile "org.eclipse.persistence:eclipselink:2.5.0"
+    compile "org.apache.tomcat:tomcat-jdbc:8.5.5"
+    compile "mysql:mysql-connector-java:5.1.35"
+
+    compile files("libs/cordwood-plugin-api-0.0.1.RELEASE.jar")
+
+    compile "org.slf4j:slf4j-api:1.7.12"
+    compile "org.slf4j:jcl-over-slf4j:1.7.12"
+    compile "ch.qos.logback:logback-classic:1.1.7"
+
+    testCompile "junit:junit:4.12"
+    testCompile "org.springframework:spring-test:${springVersion}"
+    testRuntime "org.springframework:spring-webmvc:${springVersion}"
+    testCompile "com.jayway.jsonpath:json-path-assert:0.8.1"
+}

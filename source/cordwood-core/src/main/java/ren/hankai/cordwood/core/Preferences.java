@@ -1,0 +1,216 @@
+
+package ren.hankai.cordwood.core;
+
+import org.springframework.util.StringUtils;
+
+import java.io.File;
+
+/**
+ * 程序运行时配置
+ *
+ * @author hankai
+ * @version 1.0.0
+ * @since Jun 21, 2016 12:54:36 PM
+ */
+public class Preferences {
+
+    /**
+     * 测试 运行时配置，启用后所有添加了 @profile(Bootstrap.PROFILE_TEST) 标记的配置将被加载。
+     */
+    public static final String PROFILE_TEST       = "test";
+    /**
+     * 调试运行时配置，启用后所有添加了 @profile(Bootstrap.PROFILE_PRODUCTION) 标记的配置将被加载。
+     */
+    public static final String PROFILE_PRODUCTION = "prod";
+    /**
+     * 启用 HSQL 数据库
+     */
+    public static final String PROFILE_HSQL       = "hsql";
+    /**
+     * 启用 MySQL 数据库
+     */
+    public static final String PROFILE_MYSQL      = "mysql";
+    /**
+     * 启用 Oracle 数据库
+     */
+    public static final String PROFILE_ORACLE     = "oracle";
+    /**
+     * 命令行参数：程序数据根目录
+     */
+    public static final String ENV_APP_HOME_DIR   = "app.home";
+    /**
+     * 配置：程序内部或数据库采用的数据分隔符。例如：字符串hello,apple,etc就是采用了分隔符将子串连接为
+     * 一个字符串。
+     */
+    public static final String DATA_SEPARATOR     = ",";
+    /**
+     * 程序默认数据根目录（此默认名称用于提示开发者环境变量缺失）
+     */
+    private static String      appHome            = null;
+
+    /**
+     * 获取程序数据根目录
+     *
+     * @author hankai
+     * @since Jul 28, 2015 10:51:49 AM
+     */
+    public static String getHomeDir() {
+        if ( appHome == null ) {
+            // 优先检查 JVM 环境变量
+            String home = System.getProperty( ENV_APP_HOME_DIR );
+            if ( !StringUtils.isEmpty( home ) ) {
+                appHome = home;
+            } else {
+                // 检查系统环境变量
+                home = System.getenv( ENV_APP_HOME_DIR );
+                if ( !StringUtils.isEmpty( home ) ) {
+                    appHome = home;
+                }
+            }
+            if ( !StringUtils.isEmpty( home ) ) {
+                if ( home.endsWith( File.separator ) ) {
+                    appHome = home.substring( 0, home.length() );
+                }
+                appHome = home;
+            }
+            appHome = System.getProperty( "user.dir" ) + File.separator + "home-not-set";
+            System.setProperty( ENV_APP_HOME_DIR, appHome );
+        }
+        return appHome;
+    }
+
+    /**
+     * 获取程序缓存目录
+     *
+     * @author hankai
+     * @since Jul 28, 2015 10:52:19 AM
+     */
+    public static String getCacheDir() {
+        String dir = getHomeDir() + File.separator + "cache";
+        System.setProperty( "app.cache", dir );
+        return dir;
+    }
+
+    /**
+     * 获取程序外部配置文件存储目录
+     *
+     * @author hankai
+     * @since Jul 28, 2015 10:52:44 AM
+     */
+    public static String getConfigDir() {
+        String dir = getHomeDir() + File.separator + "config";
+        System.setProperty( "app.config", dir );
+        return dir;
+    }
+
+    /**
+     * 获取程序数据存储目录
+     *
+     * @author hankai
+     * @since Jul 28, 2015 10:53:05 AM
+     */
+    public static String getDataDir() {
+        String dir = getHomeDir() + File.separator + "data";
+        System.setProperty( "app.data", dir );
+        return dir;
+    }
+
+    /**
+     * 数据库存储目录
+     *
+     * @return
+     * @author hankai
+     * @since Sep 30, 2016 3:39:19 PM
+     */
+    public static String getDbDir() {
+        return getHomeDir() + File.separator + "data" + File.separator + "database";
+    }
+
+    /**
+     * 获取默认的数据库配置文件路径
+     *
+     * @return 配置文件路径
+     * @author hankai
+     * @since Jun 21, 2016 11:21:50 AM
+     */
+    public static String getDbConfigFile() {
+        return getDbConfigFile( null );
+    }
+
+    /**
+     * 获取指定数据库配置文件路径
+     *
+     * @param fileName 数据库配置文件名
+     * @return 配置文件路径
+     * @author hankai
+     * @since Jun 21, 2016 11:21:15 AM
+     */
+    public static String getDbConfigFile( String fileName ) {
+        if ( StringUtils.isEmpty( fileName ) ) {
+            fileName = "database.properties";
+        }
+        return getConfigDir() + File.separator + fileName;
+    }
+
+    /**
+     * 获取程序日志目录
+     *
+     * @author hankai
+     * @since Jul 28, 2015 10:53:49 AM
+     */
+    public static String getLogDir() {
+        String dir = getHomeDir() + File.separator + "logs";
+        System.setProperty( "app.log", dir );
+        return dir;
+    }
+
+    /**
+     * 获取程序临时数据目录
+     *
+     * @author hankai
+     * @since Jul 28, 2015 10:54:02 AM
+     */
+    public static String getTempDir() {
+        String dir = getHomeDir() + File.separator + "temp";
+        System.setProperty( "app.temp", dir );
+        return dir;
+    }
+
+    /**
+     * 获取程序附件存储目录
+     *
+     * @author hankai
+     * @since Jul 28, 2015 10:54:16 AM
+     */
+    public static String getAttachmentDir() {
+        String dir = getDataDir() + File.separator + "attachment";
+        System.setProperty( "app.attachment", dir );
+        return dir;
+    }
+
+    /**
+     * 获取程序数据备份目录
+     *
+     * @return
+     * @author hankai
+     * @since Aug 18, 2016 5:09:38 PM
+     */
+    public static String getBackupDir() {
+        String dir = getDataDir() + File.separator + "backups";
+        System.setProperty( "app.backup", dir );
+        return dir;
+    }
+
+    /**
+     * 插件目录
+     *
+     * @return
+     * @author hankai
+     * @since Sep 30, 2016 3:37:19 PM
+     */
+    public static String getPluginsDir() {
+        String dir = getDataDir() + File.separator + "plugins";
+        System.setProperty( "app.plugins", dir );
+        return dir;
+    }
+}

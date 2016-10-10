@@ -1,0 +1,55 @@
+ext {
+    mainVersion = "0.0.1.RELEASE"
+}
+
+apply plugin: "eclipse"
+apply plugin: "eclipse-wtp"
+
+eclipse {
+    project {
+        name="cordwood"
+    }
+}
+
+subprojects {
+    apply plugin: "java"
+    apply plugin: "eclipse"
+    apply plugin: "eclipse-wtp"
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    buildscript {
+        repositories {
+            //maven { url "http://192.168.1.107:8081/repository/maven-public/" }
+            mavenCentral()
+        }
+    }
+
+    repositories {
+        //maven { url "http://192.168.1.107:8081/repository/maven-public/" }
+        mavenCentral()
+    }
+
+    dependencies {
+        compile "org.slf4j:slf4j-api:1.7.12"
+        compile "org.slf4j:jcl-over-slf4j:1.7.12"
+        compile "ch.qos.logback:logback-classic:1.1.7"
+
+        testCompile "junit:junit:4.8.2"
+        testCompile "com.jayway.jsonpath:json-path-assert:0.8.1"
+    }
+}
+
+project(":cordwood-console") {
+    dependencies {
+        compile project(":cordwood-core")
+        compile project(":cordwood-plugin-api")
+    }
+}
+
+project(":cordwood-core") {
+    dependencies {
+        compile project(":cordwood-plugin-api")
+    }
+}
