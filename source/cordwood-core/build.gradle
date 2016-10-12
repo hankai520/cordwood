@@ -35,4 +35,6 @@ dependencies {
     
     compile("commons-codec:commons-codec:1.9")
     compile("commons-lang:commons-lang:2.6")
+    
+    compile project(":cordwood-plugin-api")
 }

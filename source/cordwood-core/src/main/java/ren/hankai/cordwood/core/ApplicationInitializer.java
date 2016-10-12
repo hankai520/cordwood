@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 /**
  * 程序初始化类，用于自检，修复错误，初始化依赖项等。
@@ -38,6 +40,7 @@ public class ApplicationInitializer {
      * @since Jun 21, 2016 12:52:30 PM
      */
     public static boolean initialize() {
+        printClassPaths();
         boolean success = false;
         logger.info( "Initializing application ..." );
         success = checkHome();
@@ -57,6 +60,15 @@ public class ApplicationInitializer {
                 .error( "Application initialization failed." );
         }
         return success;
+    }
+
+    private static void printClassPaths() {
+        logger.info( "Class paths:" );
+        URLClassLoader cl = (URLClassLoader) ClassLoader.getSystemClassLoader();
+        URL[] urls = cl.getURLs();
+        for ( URL url : urls ) {
+            logger.info( url.getPath() );
+        }
     }
 
     /**

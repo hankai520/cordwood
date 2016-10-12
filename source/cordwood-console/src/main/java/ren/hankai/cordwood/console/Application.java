@@ -1,6 +1,8 @@
 
 package ren.hankai.cordwood.console;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -32,9 +34,20 @@ import ren.hankai.cordwood.core.ApplicationInitializer;
     basePackages = { "ren.hankai.cordwood" } )
 public class Application {
 
+    private static final Logger logger = LoggerFactory.getLogger( Application.class );
+
     public static void main( String[] args ) {
         if ( ApplicationInitializer.initialize() ) {
-            SpringApplication.run( Application.class, args );
+            if ( SpringApplication.run( Application.class, args ) != null ) {
+                logger.info( "\n============== JVM Arguments ==============" );
+                logger.info( System.getProperties().toString() );
+                logger.info( "=============================" );
+                logger.info( "\n\n" );
+                logger.info( "\n============== Environment Variables ==============" );
+                logger.info( System.getenv().toString() );
+                logger.info( "=============================" );
+                logger.info( "\n\n" );
+            }
         }
     }
 }

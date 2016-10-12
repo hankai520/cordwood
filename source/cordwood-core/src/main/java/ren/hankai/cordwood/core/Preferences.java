@@ -57,22 +57,17 @@ public class Preferences {
     public static String getHomeDir() {
         if ( appHome == null ) {
             // 优先检查 JVM 环境变量
-            String home = System.getProperty( ENV_APP_HOME_DIR );
-            if ( !StringUtils.isEmpty( home ) ) {
-                appHome = home;
-            } else {
+            appHome = System.getProperty( ENV_APP_HOME_DIR );
+            if ( StringUtils.isEmpty( appHome ) ) {
                 // 检查系统环境变量
-                home = System.getenv( ENV_APP_HOME_DIR );
-                if ( !StringUtils.isEmpty( home ) ) {
-                    appHome = home;
-                }
+                appHome = System.getenv( ENV_APP_HOME_DIR );
             }
-            if ( !StringUtils.isEmpty( home ) ) {
-                if ( home.endsWith( File.separator ) ) {
-                    appHome = home.substring( 0, home.length() );
-                }
-                appHome = home;
-            } else {
+            // 去掉尾部的路径分隔符
+            if ( ( appHome != null ) && appHome.endsWith( File.separator ) ) {
+                appHome = appHome.substring( 0, appHome.length() );
+            }
+            if ( StringUtils.isEmpty( appHome ) ) {
+                // 如果没有检测到任何环境变量设置了home目录，则使用默认目录。取名 home-not-set 是为了提示用户环境变量没有正确设置
                 appHome = System.getProperty( "user.dir" ) + File.separator + "home-not-set";
             }
             System.setProperty( ENV_APP_HOME_DIR, appHome );
