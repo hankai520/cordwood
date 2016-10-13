@@ -6,7 +6,7 @@ import org.springframework.util.StringUtils;
 import java.io.File;
 
 /**
- * 程序运行时配置
+ * 程序首选项配置
  *
  * @author hankai
  * @version 1.0.0

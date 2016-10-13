@@ -22,36 +22,25 @@ import java.net.URLClassLoader;
 public class ApplicationInitializer {
 
     private static final Logger logger = LoggerFactory.getLogger( ApplicationInitializer.class );
-    /**
-     * 默认配置文件，原始文件将从程序包中被复制到程序数据目录
-     */
-    private static String[]     files  = {
-        "hsql.properties",
-        "mysql.properties",
-        "oracle.properties",
-        "system.yml"
-    };
 
     /**
      * 程序初始化
      *
+     * @param supportFileNames 主程序位于 support 目录的预定义配置文件名称列表
      * @return 是否成功
      * @author hankai
      * @since Jun 21, 2016 12:52:30 PM
      */
-    public static boolean initialize() {
+    public static boolean initialize( String... supportFileNames ) {
         printClassPaths();
         boolean success = false;
         logger.info( "Initializing application ..." );
         success = checkHome();
         if ( success ) {
-            success = checkConfigurations();
+            success = checkConfigurations( supportFileNames );
             if ( success ) {
                 SystemConfig.loadParameters();
             }
-        }
-        if ( success ) {
-            success = checkDatabase();
         }
         if ( success ) {
             logger.info( "Application initialized successfully." );
@@ -62,6 +51,12 @@ public class ApplicationInitializer {
         return success;
     }
 
+    /**
+     * 打印类路径信息
+     *
+     * @author hankai
+     * @since Oct 13, 2016 9:52:48 AM
+     */
     private static void printClassPaths() {
         logger.info( "Class paths:" );
         URLClassLoader cl = (URLClassLoader) ClassLoader.getSystemClassLoader();
@@ -75,11 +70,15 @@ public class ApplicationInitializer {
      * 检查数据根目录下的配置文件，如果有丢失，则复制默认配置文件。注意：该操作不是基于事务的，因此在遇到失败时，可能出现部分文件复制成功。
      * 该方法不会覆盖用户指定的配置目录下已存在的配置文件。
      *
+     * @param files 配置文件名称列表
      * @return 是否正常
      * @author hankai
      * @since Jun 21, 2016 12:52:59 PM
      */
-    private static boolean checkConfigurations() {
+    private static boolean checkConfigurations( String... files ) {
+        if ( files == null ) {
+            return true;
+        }
         try {
             for ( String file : files ) {
                 InputStream is = ApplicationInitializer.class
@@ -126,22 +125,6 @@ public class ApplicationInitializer {
             }
         }
         logger.info( "Application home directory is fine." );
-        return true;
-    }
-
-    /**
-     * 检查数据库相关配置是否有效，如果数据库不存在，则用默认配置初始化数据库。
-     *
-     * @return 是否正常
-     * @author hankai
-     * @since Jun 21, 2016 12:54:13 PM
-     */
-    private static boolean checkDatabase() {
-        // TODO：检查数据库版本是否和程序兼容
-        // TODO：初始化数据库/升级数据库
-        // logger.info( "Initializing database..." );
-        // getDbConfigFile();
-        // logger.info( "Database initialized." );
         return true;
     }
 }

@@ -8,8 +8,10 @@ import java.net.URL;
 import ren.hankai.cordwood.plugin.PluginValidator;
 
 /**
+ * 默认插件文件验证器
+ *
  * @author hankai
- * @version TODO Missing version number
+ * @version 1.0.0
  * @since Sep 30, 2016 4:07:10 PM
  */
 @Component

@@ -6,8 +6,10 @@ import java.util.List;
 import ren.hankai.cordwood.core.domain.Plugin;
 
 /**
+ * 插件管理器
+ * 
  * @author hankai
- * @version TODO Missing version number
+ * @version 1.0.0
  * @since Sep 29, 2016 5:44:44 PM
  */
 public interface PluginManager {

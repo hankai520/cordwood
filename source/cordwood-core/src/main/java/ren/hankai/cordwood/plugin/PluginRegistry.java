@@ -6,8 +6,10 @@ import java.net.URL;
 import ren.hankai.cordwood.core.domain.PluginPackage;
 
 /**
+ * 插件注册表
+ *
  * @author hankai
- * @version TODO Missing version number
+ * @version 1.0.0
  * @since Sep 29, 2016 5:44:32 PM
  */
 public interface PluginRegistry {
@@ -15,7 +17,7 @@ public interface PluginRegistry {
     /**
      * 注册插件包。根据传入的插件包地址，下载或复制插件包文件到程序插件目录，然后载入插件到内存中。
      *
-     * @param packageUrl 插件包地址
+     * @param packageUrl 插件包本地路径，即 file://... 这种形式
      * @return 插件包信息
      * @author hankai
      * @since Sep 30, 2016 10:42:38 AM

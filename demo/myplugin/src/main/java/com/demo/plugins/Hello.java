@@ -36,16 +36,6 @@ public class Hello implements PluginLifeCycleAware {
     @Autowired
     private MyTbl1Repository    tbl1Repo;
 
-    @Override
-    public void pluginDidLoad() {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void pluginDidDestroy() {
-        // TODO Auto-generated method stub
-    }
-
     @Functional(
         name = "add",
         resultType = "text/plain" )
@@ -57,5 +47,25 @@ public class Hello implements PluginLifeCycleAware {
         tbl1Repo.save( mt );
         logger.warn( "feature \"add\" called" );
         return op1 + op2 + "";
+    }
+
+    @Override
+    public void pluginDidActivated() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void pluginDidDeactivated() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void pluginDidLoad() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void pluginDidUnload() {
+        // TODO Auto-generated method stub
     }
 }

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 系统运行参数配置类
+ * 系统运行时参数配置类
  *
  * @author hankai
  * @version 1.0.0

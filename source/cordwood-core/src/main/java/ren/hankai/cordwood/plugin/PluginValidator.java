@@ -4,8 +4,10 @@ package ren.hankai.cordwood.plugin;
 import java.net.URL;
 
 /**
+ * 插件验证器
+ * 
  * @author hankai
- * @version TODO Missing version number
+ * @version 1.0.0
  * @since Sep 29, 2016 5:45:09 PM
  */
 public interface PluginValidator {

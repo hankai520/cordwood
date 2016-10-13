@@ -32,7 +32,7 @@ jar {
     manifest {
         attributes(
             "Implementation-Version": mainVersion,
-            "Boot-Class": "com.demo.plugins.config.PluginBootstrap",
+            "Spring-Config-Class": "com.demo.plugins.config.PluginBootstrap",
             "Plugin-Packages": "com.demo.plugins"
         )
     }

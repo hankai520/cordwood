@@ -18,12 +18,22 @@ import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ren.hankai.cordwood.core.Preferences;
 
 /**
+ * Logback 日志助手类
+ *
  * @author hankai
- * @version TODO Missing version number
+ * @version 1.0.0
  * @since Oct 10, 2016 2:22:42 PM
  */
-public class LogbackUtil {
+public final class LogbackUtil {
 
+    /**
+     * 获取一个控制台日志追加器
+     *
+     * @param lc 日志上下文
+     * @return 追加器
+     * @author hankai
+     * @since Oct 13, 2016 10:20:37 AM
+     */
     private static ConsoleAppender<ILoggingEvent> getConsoleAppender( LoggerContext lc ) {
         ConsoleAppender<ILoggingEvent> ca = new ConsoleAppender<ILoggingEvent>();
         ca.setContext( lc );
@@ -40,6 +50,16 @@ public class LogbackUtil {
         return ca;
     }
 
+    /**
+     * 获取一个可自动归档的文件日志追加器
+     *
+     * @param loggerName 日志器名（即要记录日志的类名）
+     * @param lc 日志上下文
+     * @param fileName 日志物理文件名
+     * @return 日志追加器
+     * @author hankai
+     * @since Oct 13, 2016 10:21:07 AM
+     */
     private static RollingFileAppender<ILoggingEvent> getFileAppender( String loggerName,
                     LoggerContext lc, String fileName ) {
         String logDir = Preferences.getLogDir();
@@ -64,6 +84,14 @@ public class LogbackUtil {
         return rfa;
     }
 
+    /**
+     * 为指定的类或包添加控制台日志器
+     *
+     * @param name 类或包名
+     * @param level 日志级别
+     * @author hankai
+     * @since Oct 13, 2016 10:22:28 AM
+     */
     public static void setupConsoleLoggerFor( String name, Level level ) {
         LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
         Logger logger = lc.getLogger( name );
@@ -71,6 +99,15 @@ public class LogbackUtil {
         logger.setLevel( level );
     }
 
+    /**
+     * 为指定的类或包添加文件日志器
+     *
+     * @param name 类或包名
+     * @param level 日志级别
+     * @param logFileName 日志物理文件名
+     * @author hankai
+     * @since Oct 13, 2016 10:23:04 AM
+     */
     public static void setupFileLoggerFor( String name, Level level, String logFileName ) {
         LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
         Logger logger = lc.getLogger( name );

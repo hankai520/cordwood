@@ -37,16 +37,19 @@ public class Application {
     private static final Logger logger = LoggerFactory.getLogger( Application.class );
 
     public static void main( String[] args ) {
-        if ( ApplicationInitializer.initialize() ) {
+        String[] configs = {
+            "hsql.properties", "system.yml"
+        };
+        if ( ApplicationInitializer.initialize( configs ) ) {
             if ( SpringApplication.run( Application.class, args ) != null ) {
-                logger.info( "\n============== JVM Arguments ==============" );
-                logger.info( System.getProperties().toString() );
-                logger.info( "=============================" );
-                logger.info( "\n\n" );
-                logger.info( "\n============== Environment Variables ==============" );
-                logger.info( System.getenv().toString() );
-                logger.info( "=============================" );
-                logger.info( "\n\n" );
+                logger.info(
+                    "\n============== JVM Arguments ==============\n\n" +
+                        System.getProperties().toString() + "\n\n" +
+                        "==========================================================\n" );
+                logger.info(
+                    "\n============== Environment Variables ==============\n\n" +
+                        System.getenv().toString() + "\n\n" +
+                        "==========================================================\n" );
             }
         }
     }

@@ -14,7 +14,7 @@ import ren.hankai.cordwood.plugin.PluginEventEmitter;
 import ren.hankai.cordwood.plugin.PluginEventListener;
 
 /**
- * 插件事件发射器
+ * 默认的插件事件发射器
  *
  * @author hankai
  * @version 1.0
