@@ -46,7 +46,7 @@ public abstract class EntitySpecs {
 
     /**
      * 字段值在给定范围内的查询条件
-     * 
+     *
      * @param fieldName 字段
      * @param values 取值范围
      * @return 查询条件
@@ -60,6 +60,26 @@ public abstract class EntitySpecs {
             public Predicate toPredicate( Root<T> root, CriteriaQuery<?> query,
                             CriteriaBuilder cb ) {
                 return root.get( fieldName ).in( values );
+            }
+        };
+    }
+
+    /**
+     * 查询字段的值不在指定范围内的实体
+     *
+     * @param fieldName 字段
+     * @param values 取值范围
+     * @return 查询条件
+     * @author hankai
+     * @since Oct 14, 2016 1:07:16 PM
+     */
+    public static <T> Specification<T> fieldNotIn( final String fieldName, final List<?> values ) {
+        return new Specification<T>() {
+
+            @Override
+            public Predicate toPredicate( Root<T> root, CriteriaQuery<?> query,
+                            CriteriaBuilder cb ) {
+                return cb.not( root.get( fieldName ).in( values ) );
             }
         };
     }

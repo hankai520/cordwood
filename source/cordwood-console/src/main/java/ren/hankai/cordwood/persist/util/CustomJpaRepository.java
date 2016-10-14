@@ -24,11 +24,21 @@ import java.util.List;
 public interface CustomJpaRepository<T> {
 
     /**
+     * 根据指定条件查询实体
+     *
+     * @param spec 查询条件
+     * @return 实体集合
+     * @author hankai
+     * @since Oct 14, 2016 1:09:10 PM
+     */
+    List<T> findAll( Specification<T> spec );
+
+    /**
      * 根据查询和排序条件查找所有符合要求的实体
      *
      * @param spec 查询条件
      * @param sort 排序条件
-     * @return 实体列表
+     * @return 实体集合
      * @author hankai
      * @since Aug 18, 2016 10:27:03 AM
      */
@@ -39,7 +49,7 @@ public interface CustomJpaRepository<T> {
      *
      * @param spec 查询条件
      * @param pageable 分页及排序条件
-     * @return 实体列表
+     * @return 实体集合
      * @author hankai
      * @since Aug 18, 2016 10:27:49 AM
      */

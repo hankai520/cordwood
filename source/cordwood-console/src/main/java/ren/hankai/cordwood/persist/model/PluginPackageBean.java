@@ -35,7 +35,7 @@ public final class PluginPackageBean implements Serializable {
     private String            fileName;
     @OneToMany(
         fetch = FetchType.LAZY,
-        cascade = CascadeType.PERSIST,
+        cascade = CascadeType.ALL,
         mappedBy = "pluginPackage" )
     private List<PluginBean>  plugins          = new ArrayList<>();
 

@@ -2,8 +2,8 @@
 package ren.hankai.cordwood.plugin.impl;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -213,7 +214,7 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
     }
 
     @Override
-    public PluginPackage register( URL packageUrl ) {
+    public synchronized PluginPackage register( URL packageUrl ) {
         if ( !pluginValidator.validatePackage( packageUrl ) ) {
             logger.error(
                 String.format( "Failed to verify plugin package at %s", packageUrl.toString() ) );
@@ -223,7 +224,7 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
                 PluginPackage pack = extractPackageInfo( localPath );
                 PluginPackage loadedPack = packages.get( pack.getIdentifier() );
                 if ( loadedPack != null ) {
-                    return loadedPack;
+                    unregister( loadedPack.getIdentifier() );
                 }
                 String name = FilenameUtils.getName( localPath.getPath() );
                 logger.info( String.format( "Loading plugin package %s ...", name ) );
@@ -245,43 +246,54 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
     }
 
     @Override
-    public boolean unregister( String packageId ) {
+    public synchronized boolean unregister( String packageId ) {
         PluginPackage pp = packages.get( packageId );
         if ( pp != null ) {
             for ( Plugin p : pp.getPlugins() ) {
                 pluginLoader.unloadPlugin( p.getInstance() );
+                plugins.remove( p.getName() );
                 pluginEventEmitter.emitEvent( PluginEventEmitter.PLUGIN_UNLOADED, p );
             }
-            plugins.remove( packageId );
-            try {
-                File file = new File( pp.getInstallUrl().toURI() );
-                return FileUtils.deleteQuietly( file );
-            } catch (Exception e) {
-                logger.error( String.format( "Failed to unregister plugin package \"%s\"",
-                    pp.getInstallUrl().toString() ), e );
-            }
+            packages.remove( packageId );
+            return true;
         }
         return false;
     }
 
     @Override
-    public void initializePlugins( List<String> packageNames ) {
+    public boolean isRegistered( String packageId ) {
+        return packages.get( packageId ) != null;
+    }
+
+    @Override
+    public synchronized void initializePlugins( List<String> packageNames ) {
         File dir = new File( Preferences.getPluginsDir() );
         if ( dir.exists() && dir.isDirectory() ) {
             File[] plugins = dir.listFiles( new FilenameFilter() {
 
                 @Override
                 public boolean accept( File dir, String name ) {
+                    // TODO: 优化一下，每次都判断是否包含。当插件数量大时，性能会降低
                     return packageNames.contains( name );
                 }
             } );
             if ( ( plugins != null ) && ( plugins.length > 0 ) ) {
                 for ( File file : plugins ) {
+                    FileInputStream fis = null;
+                    String checksum = null;
                     try {
-                        register( file.toURI().toURL() );
-                    } catch (MalformedURLException e) {
-                        logger.warn( String.format( "Invalid plugin package url: \"%s\"",
-                            file.getAbsolutePath() ), e );
+                        fis = new FileInputStream( file );
+                        checksum = DigestUtils.sha1Hex( fis );
+                        if ( packages.get( checksum ) == null ) {
+                            register( file.toURI().toURL() );
+                        }
+                    } catch (Exception e) {
+                        logger.warn(
+                            String.format( "Failed to register plugin package at url: \"%s\"",
+                                file.getAbsolutePath() ),
+                            e );
+                    } finally {
+                        IOUtils.closeQuietly( fis );
                     }
                 }
             }
@@ -289,12 +301,12 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
     }
 
     @Override
-    public boolean activatePlugin( String pluginName ) {
+    public synchronized boolean activatePlugin( String pluginName ) {
         return changeActivationStatus( pluginName, true );
     }
 
     @Override
-    public boolean deactivatePlugin( String pluginName ) {
+    public synchronized boolean deactivatePlugin( String pluginName ) {
         return changeActivationStatus( pluginName, false );
     }
 

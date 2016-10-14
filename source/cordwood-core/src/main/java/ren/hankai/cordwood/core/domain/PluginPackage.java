@@ -20,7 +20,7 @@ public final class PluginPackage {
     private final List<Plugin> plugins = new ArrayList<>();
 
     /**
-     * 获取插件包唯一标识符
+     * 获取插件包唯一标识符（SHA1 校验和）
      *
      * @return 插件包ID
      * @author hankai
@@ -87,7 +87,7 @@ public final class PluginPackage {
 
     /**
      * 添加插件
-     * 
+     *
      * @param plugin 插件
      * @author hankai
      * @since Oct 13, 2016 10:19:09 AM
@@ -98,7 +98,7 @@ public final class PluginPackage {
 
     /**
      * 移除插件
-     * 
+     *
      * @param plugin 插件
      * @author hankai
      * @since Oct 13, 2016 10:19:23 AM
@@ -110,7 +110,7 @@ public final class PluginPackage {
     /**
      * 获取插件包内所有插件，此方法返回一个插件集合的副本，修改此副本不会影响
      * 原插件集合。
-     * 
+     *
      * @return 插件集合
      * @author hankai
      * @since Oct 13, 2016 10:19:41 AM

@@ -195,7 +195,6 @@ public class SpringablePluginLoader implements PluginLoader {
             }
             Map<String, Object> beans = ctx.getBeansWithAnnotation( Pluggable.class );
             if ( ( beans == null ) || ( beans.size() == 0 ) ) {
-                ctx.setParent( null );
                 ctx.close();
             }
             return true;
