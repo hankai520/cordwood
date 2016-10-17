@@ -239,6 +239,9 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
                     packages.put( pack.getIdentifier(), pack );
                     logger.info( String.format( "Plugin package %s loaded successfully!", name ) );
                     return pack;
+                } else {
+                    logger.error(
+                        String.format( "No plugin definitions found in package \"%s\" !", name ) );
                 }
             }
         }
