@@ -190,7 +190,7 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
                     os = new FileOutputStream( localFile );
                     FileCopyUtils.copy( is, os );
                 }
-                url = new URL( "file://" + localPath );
+                url = localFile.toURI().toURL();
             } catch (MalformedURLException e) {
                 logger.error( String.format( "Failed to convert package url to local: %s",
                     tempUrl.toString() ), e );

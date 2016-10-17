@@ -43,7 +43,11 @@ public class PluggableController {
                     HttpServletRequest request, HttpServletResponse response ) {
         try {
             Plugin plugin = pluginManager.getPlugin( pluginName );
-            if ( plugin != null ) {
+            if ( plugin == null ) {
+                return new ResponseEntity<>( "service not found!", HttpStatus.NOT_FOUND );
+            } else if ( !plugin.isActive() ) {
+                return new ResponseEntity<>( "service not enabled!", HttpStatus.OK );
+            } else {
                 PluginFunction fun = plugin.getFunctions().get( function );
                 Class<?>[] paramTypes = fun.getMethod().getParameterTypes();
                 List<Object> args = new ArrayList<>();
@@ -58,8 +62,6 @@ public class PluggableController {
                 }
                 Object result = fun.getMethod().invoke( plugin.getInstance(), args.toArray() );
                 return new ResponseEntity<>( result, HttpStatus.OK );
-            } else {
-                return new ResponseEntity<>( "service not found!", HttpStatus.NOT_FOUND );
             }
         } catch (Exception e) {
             logger.error(
