@@ -124,9 +124,10 @@ public class PluginInitializer {
                     pb.setPluginPackage( ppb );
                     ppb.getPlugins().add( pb );
                 }
+                pluginPackageRepository.save( ppb );
             }
-            pluginPackageRepository.save( ppb );
         } catch (Exception e) {
+            logger.error( "Failed to install plugin: " + file.getPath(), e );
         }
     }
 
