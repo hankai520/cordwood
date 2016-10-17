@@ -32,9 +32,8 @@ public class PluginLifeCycleNotifier implements PluginEventListener {
 
     @Override
     public void handleEvent( Plugin plugin, String eventType ) {
-        Object obj = plugin;
-        if ( obj instanceof PluginLifeCycleAware ) {
-            PluginLifeCycleAware plca = (PluginLifeCycleAware) obj;
+        if ( plugin.getInstance() instanceof PluginLifeCycleAware ) {
+            PluginLifeCycleAware plca = (PluginLifeCycleAware) plugin.getInstance();
             if ( eventType == PluginEventEmitter.PLUGIN_LOADED ) {
                 plca.pluginDidLoad();
             } else if ( eventType == PluginEventEmitter.PLUGIN_UNLOADED ) {

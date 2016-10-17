@@ -20,8 +20,10 @@ import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
 
 /**
+ * 示例插件，将插件访问时间插入数据库
+ * 
  * @author hankai
- * @version TODO Missing version number
+ * @version 1.0.0
  * @since Sep 30, 2016 3:51:07 PM
  */
 @Component

@@ -251,7 +251,9 @@ public class PluginInitializer {
                 String fileName = FilenameUtils.getName( path );
                 PluginPackageBean ppb = pluginPackageRepository
                     .findOne( EntitySpecs.field( "fileName", fileName ) );
-                uninstallPlugin( ppb.getChecksum() );
+                if ( ppb != null ) {
+                    uninstallPlugin( ppb.getChecksum() );
+                }
             }
         }
 
