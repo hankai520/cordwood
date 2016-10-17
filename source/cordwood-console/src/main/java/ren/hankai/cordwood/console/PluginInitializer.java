@@ -111,6 +111,11 @@ public class PluginInitializer {
             PluginPackageBean ppb = pluginPackageRepository
                 .findOne( EntitySpecs.field( "checksum", checksum ) );
             if ( ppb == null ) {
+                PluginPackageBean possiblePpb = pluginPackageRepository
+                    .findOne( EntitySpecs.field( "fileName", file.getName() ) );
+                if ( possiblePpb != null ) {
+                    pluginPackageRepository.delete( possiblePpb.getId() );
+                }
                 PluginPackage pp = pluginRegistry.register( file.toURI().toURL() );
                 ppb = new PluginPackageBean();
                 ppb.setChecksum( pp.getIdentifier() );
@@ -253,7 +258,7 @@ public class PluginInitializer {
         private void handleModification( String path ) {
             File file = new File( path );
             logger.info( "Detected modification of plugin package: " + file.getName() );
-            if ( !file.exists() ) {
+            if ( file.exists() ) {
                 String checksum = getChecksum( file );
                 uninstallPlugin( checksum );
                 installPlugin( file, checksum );
