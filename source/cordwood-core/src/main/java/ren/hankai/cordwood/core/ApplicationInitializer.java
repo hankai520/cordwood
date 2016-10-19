@@ -113,7 +113,8 @@ public class ApplicationInitializer {
         String[] subDirs = {
             Preferences.getConfigDir(), Preferences.getDataDir(), Preferences.getCacheDir(),
             Preferences.getLogDir(), Preferences.getTempDir(), Preferences.getAttachmentDir(),
-            Preferences.getBackupDir(), Preferences.getDbDir(), Preferences.getPluginsDir() };
+            Preferences.getBackupDir(), Preferences.getDbDir(), Preferences.getPluginsDir(),
+            Preferences.getLibsDir() };
         for ( String dir : subDirs ) {
             File file = new File( dir );
             if ( !file.exists() ) {

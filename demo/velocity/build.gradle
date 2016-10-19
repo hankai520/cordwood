@@ -1,0 +1,80 @@
+ext {
+    mainVersion = "0.0.1.RELEASE"
+}
+
+apply plugin: "java"
+apply plugin: "eclipse"
+apply plugin: "eclipse-wtp"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+buildscript {
+    repositories {
+        maven { url "http://192.168.1.107:8081/repository/maven-public/" }
+        //mavenCentral()
+    }
+}
+
+repositories {
+    maven { url "http://192.168.1.107:8081/repository/maven-public/" }
+    //mavenCentral()
+}
+
+eclipse {
+    project {
+        name="velocity"
+    }
+    
+    classpath {
+         downloadSources=true
+    }
+}
+
+jar {
+    baseName = "velocity"
+    version = mainVersion
+    manifest {
+        attributes(
+            "Implementation-Version": mainVersion,
+            "Plugin-Packages": "com.demo"
+        )
+    }
+}
+
+sourceSets {
+    main.java.srcDirs = ["src/main/java"]
+    main.resources.srcDirs = ["src/main/resources"]
+    test.java.srcDirs = ["src/test/java"]
+    test.resources.srcDirs = ["src/test/resources"]
+}
+
+configurations {
+    all*.exclude group: "org.apache.struts"
+    all*.exclude group: "sslext"
+    all*.exclude group: "org.objenesis"
+    all*.exclude group: "log4j"
+}
+
+dependencies {
+    compile "javax.servlet:javax.servlet-api:3.1.0"
+    compile "org.apache.velocity:velocity:1.7"
+    compile "org.apache.velocity:velocity-tools:2.0"
+
+    compile files("libs/cordwood-plugin-api-0.0.1.RELEASE.jar")
+
+    compile "org.slf4j:slf4j-api:1.7.12"
+    compile "org.slf4j:jcl-over-slf4j:1.7.12"
+    compile "org.slf4j:log4j-over-slf4j:1.7.12"
+    compile "ch.qos.logback:logback-classic:1.1.7"
+
+    compile "com.google.inject:guice:4.0"
+
+    testCompile "junit:junit:4.12"
+    testCompile "org.easymock:easymock:3.1"
+}
+
+task copyDependencies(type: Copy) {
+   from configurations.compile
+   into "dependencies"
+}

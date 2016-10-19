@@ -227,7 +227,6 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
                     unregister( loadedPack.getIdentifier() );
                 }
                 String name = FilenameUtils.getName( localPath.getPath() );
-                logger.info( String.format( "Loading plugin package %s ...", name ) );
                 List<Object> instances = pluginLoader.loadPlugins( localPath );
                 if ( ( instances != null ) && !instances.isEmpty() ) {
                     for ( Object instance : instances ) {
@@ -237,7 +236,7 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
                         pluginEventEmitter.emitEvent( PluginEventEmitter.PLUGIN_LOADED, plugin );
                     }
                     packages.put( pack.getIdentifier(), pack );
-                    logger.info( String.format( "Plugin package %s loaded successfully!", name ) );
+                    logger.info( String.format( "Loaded plugin package %s !", name ) );
                     return pack;
                 } else {
                     logger.error(
@@ -258,6 +257,8 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
                 pluginEventEmitter.emitEvent( PluginEventEmitter.PLUGIN_UNLOADED, p );
             }
             packages.remove( packageId );
+            logger.info(
+                String.format( "Unloaded Plugin package %s !", pp.getFileName() ) );
             return true;
         }
         return false;

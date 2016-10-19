@@ -1,6 +1,7 @@
 
 package ren.hankai.cordwood.plugin.impl;
 
+import org.apache.commons.io.IOUtils;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,9 @@ import java.util.jar.Attributes;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 
+import javax.annotation.PostConstruct;
+
+import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.PluginLoader;
 import ren.hankai.cordwood.plugin.api.Pluggable;
 
@@ -40,11 +44,23 @@ import ren.hankai.cordwood.plugin.api.Pluggable;
 @Component
 public class SpringablePluginLoader implements PluginLoader {
 
-    private static final Logger                          logger  = LoggerFactory
+    private static final Logger                          logger            = LoggerFactory
         .getLogger( SpringablePluginLoader.class );
     @Autowired
     private ApplicationContext                           context;
-    private final Map<String, GenericApplicationContext> plugins = new HashMap<>();
+    private final Map<String, GenericApplicationContext> plugins           = new HashMap<>();
+    /**
+     * 共享的类加载器，用于加载插件所依赖的包
+     */
+    private static URLClassLoader                        sharedClassLoader = null;
+
+    @PostConstruct
+    private void internalInit() {
+        if ( sharedClassLoader == null ) {
+            sharedClassLoader = new URLClassLoader( Preferences.getLibUrls(),
+                context.getClassLoader() );
+        }
+    }
 
     /**
      * 解析 jar 文件的 manifest
@@ -57,25 +73,21 @@ public class SpringablePluginLoader implements PluginLoader {
     private Attributes parseJarManifest( URLClassLoader loader ) {
         Attributes attrs = null;
         JarInputStream jarStream = null;
+        URL url = null;
         try {
             URL[] urls = loader.getURLs();
             if ( ( urls != null ) && ( urls.length > 0 ) ) {
-                URL url = urls[0];
+                url = urls[0];
                 InputStream is = url.openStream();
                 jarStream = new JarInputStream( is );
                 Manifest manifest = jarStream.getManifest();
                 attrs = manifest.getMainAttributes();
             }
         } catch (IOException e) {
-            logger.error( String.format( "Failed to read manifest of plugin at urls: %s",
-                loader.getURLs().toString() ) );
+            logger.error(
+                String.format( "Failed to read manifest of plugin at urls: %s", url.toString() ) );
         } finally {
-            if ( jarStream != null ) {
-                try {
-                    jarStream.close();
-                } catch (IOException e) {
-                }
-            }
+            IOUtils.closeQuietly( jarStream );
         }
         return attrs;
     }
@@ -106,8 +118,7 @@ public class SpringablePluginLoader implements PluginLoader {
                         return ctx;
                     }
                 } catch (ClassNotFoundException e) {
-                    logger.error( String.format( "Boot class not found in plugin : %s",
-                        loader.getURLs().toString() ) );
+                    logger.error( "Boot class not found in plugin!" );
                 }
             }
         }
@@ -151,9 +162,11 @@ public class SpringablePluginLoader implements PluginLoader {
                     obj = ctx.getBean( clazz );// 基于spring的插件包，从spring上下文获取装配好的插件实例
                 }
                 if ( obj == null ) {
-                    logger.warn( String.format(
-                        "No bean with type \"%s\" was found in spring context. Will try to instantiate it directly.",
-                        clazz.toString() ) );
+                    if ( ctx != null ) {
+                        logger.warn( String.format(
+                            "No bean with type \"%s\" was found in spring context. Will try to instantiate it directly.",
+                            clazz.toString() ) );
+                    }
                     try {
                         obj = clazz.newInstance();// 非spring的插件包，通过反射直接构造插件实例
                     } catch (Exception e) {
@@ -172,8 +185,13 @@ public class SpringablePluginLoader implements PluginLoader {
 
     @Override
     public List<Object> loadPlugins( URL jarFileUrl ) {
-        URLClassLoader loader = new URLClassLoader( new URL[] { jarFileUrl },
-            context.getClassLoader() );
+        URLClassLoader loader = new URLClassLoader( new URL[] { jarFileUrl }, sharedClassLoader );
+        /*
+         * 设置线程的上下文类加载器，这样，由此加载的插件都会使用此类加载器，这样
+         * 就能在运行时动态加载需要的依赖包，同时不同插件不共享类加载器，甚至能实现
+         * 同一个依赖包的不同版本同时被载入
+         */
+        Thread.currentThread().setContextClassLoader( loader );
         return loadPluginInstances( loader );
     }
 

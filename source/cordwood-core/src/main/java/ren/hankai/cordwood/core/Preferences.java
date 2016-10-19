@@ -1,9 +1,15 @@
 
 package ren.hankai.cordwood.core;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 程序首选项配置
@@ -208,5 +214,55 @@ public class Preferences {
         String dir = getDataDir() + File.separator + "plugins";
         System.setProperty( "app.plugins", dir );
         return dir;
+    }
+
+    /**
+     * 依赖包目录
+     *
+     * @return
+     * @author hankai
+     * @since Oct 18, 2016 2:45:39 PM
+     */
+    public static String getLibsDir() {
+        String dir = getHomeDir() + File.separator + "libs";
+        System.setProperty( "app.libs", dir );
+        return dir;
+    }
+
+    /**
+     * 获取插件依赖的第三方包
+     *
+     * @param extraUrls 额外补充的包地址，这些 URL 将会和依赖包的 URL 合并到一起返回
+     * @return 依赖包 URL 集合
+     * @author hankai
+     * @since Oct 18, 2016 3:09:42 PM
+     */
+    public static URL[] getLibUrls( URL... extraUrls ) {
+        List<URL> list = new ArrayList<>();
+        if ( ( extraUrls != null ) && ( extraUrls.length > 0 ) ) {
+            list.addAll( Arrays.asList( extraUrls ) );
+        }
+        File file = new File( getLibsDir() );
+        File[] files = file.listFiles();
+        if ( file != null ) {
+            for ( File libFile : files ) {
+                if ( FilenameUtils.isExtension( libFile.getName(), "jar" ) ) {
+                    try {
+                        list.add( libFile.toURI().toURL() );
+                    } catch (MalformedURLException e) {
+                        throw new RuntimeException(
+                            String.format( "Failed to get url from lib path: %s",
+                                libFile.getAbsolutePath() ),
+                            e );
+                    }
+                }
+            }
+        }
+        if ( list.size() > 0 ) {
+            URL[] urls = new URL[list.size()];
+            list.toArray( urls );
+            return urls;
+        }
+        return null;
     }
 }

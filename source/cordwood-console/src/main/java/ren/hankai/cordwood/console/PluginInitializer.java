@@ -76,8 +76,10 @@ public class PluginInitializer {
                     LogbackUtil.setupFileLoggerFor( clazz, Level.WARN, plugin.getName() + ".txt" );
                 }
             } );
+        // 启用插件目录监视器
         pluginWatcher = new PluginWatcher();
         pluginWatcher.watch();
+        // 加载依赖包
     }
 
     @PreDestroy
@@ -136,14 +138,12 @@ public class PluginInitializer {
         }
     }
 
-    private void uninstallPlugin( String checksum ) {
-        if ( pluginRegistry.isRegistered( checksum ) ) {
-            pluginRegistry.unregister( checksum );
-            PluginPackageBean ppb = pluginPackageRepository
-                .findOne( EntitySpecs.field( "checksum", checksum ) );
-            if ( ppb != null ) {
-                pluginPackageRepository.delete( ppb.getId() );
-            }
+    private void uninstallPlugin( String fileName ) {
+        PluginPackageBean ppb = pluginPackageRepository
+            .findOne( EntitySpecs.field( "fileName", fileName ) );
+        if ( ( ppb != null ) && pluginRegistry.isRegistered( ppb.getChecksum() ) ) {
+            pluginRegistry.unregister( ppb.getChecksum() );
+            pluginPackageRepository.delete( ppb.getId() );
         }
     }
 
@@ -252,7 +252,7 @@ public class PluginInitializer {
                 PluginPackageBean ppb = pluginPackageRepository
                     .findOne( EntitySpecs.field( "fileName", fileName ) );
                 if ( ppb != null ) {
-                    uninstallPlugin( ppb.getChecksum() );
+                    uninstallPlugin( ppb.getFileName() );
                 }
             }
         }
@@ -261,8 +261,8 @@ public class PluginInitializer {
             File file = new File( path );
             logger.info( "Detected modification of plugin package: " + file.getName() );
             if ( file.exists() ) {
+                uninstallPlugin( file.getName() );
                 String checksum = getChecksum( file );
-                uninstallPlugin( checksum );
                 installPlugin( file, checksum );
             }
         }
