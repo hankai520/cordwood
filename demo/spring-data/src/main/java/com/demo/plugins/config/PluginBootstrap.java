@@ -2,8 +2,6 @@
 package com.demo.plugins.config;
 
 import com.demo.plugins.util.Slf4jSessionLogger;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;
@@ -58,13 +56,6 @@ public class PluginBootstrap {
         ms.setFallbackToSystemLocale( false );
         ms.setUseCodeAsDefaultMessage( true );
         return ms;
-    }
-
-    @Bean
-    public ObjectMapper getObjectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion( Include.NON_NULL );
-        return objectMapper;
     }
 
     @Bean
