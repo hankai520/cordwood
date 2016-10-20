@@ -52,13 +52,17 @@ public class SpringablePluginLoader implements PluginLoader {
     /**
      * 共享的类加载器，用于加载插件所依赖的包
      */
-    private static URLClassLoader                        sharedClassLoader = null;
+    private static ClassLoader                           sharedClassLoader = null;
 
     @PostConstruct
     private void internalInit() {
         if ( sharedClassLoader == null ) {
-            sharedClassLoader = new URLClassLoader( Preferences.getLibUrls(),
-                context.getClassLoader() );
+            URL[] urls = Preferences.getLibUrls();
+            if ( ( urls != null ) && ( urls.length != 0 ) ) {
+                sharedClassLoader = new URLClassLoader( urls, context.getClassLoader() );
+            } else {
+                sharedClassLoader = context.getClassLoader();
+            }
         }
     }
 
