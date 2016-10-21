@@ -14,6 +14,7 @@ import java.util.Map;
  */
 public final class Plugin {
 
+    // 插件名称，用作唯一标识符
     private String                      name;
     private String                      version;
     private String                      description;

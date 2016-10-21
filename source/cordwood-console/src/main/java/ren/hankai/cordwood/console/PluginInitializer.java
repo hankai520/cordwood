@@ -87,6 +87,14 @@ public class PluginInitializer {
         pluginWatcher.stopWatching();
     }
 
+    /**
+     * 获取文件 SHA1 校验和
+     *
+     * @param file 文件
+     * @return 校验和(16进制字符串)
+     * @author hankai
+     * @since Oct 21, 2016 4:25:28 PM
+     */
     private String getChecksum( File file ) {
         FileInputStream fis = null;
         try {
@@ -104,15 +112,17 @@ public class PluginInitializer {
     /**
      * 安装插件包文件
      *
-     * @param url 插件本地路径
+     * @param file 文件
+     * @param checksum SHA1 校验和
      * @author hankai
-     * @since Oct 14, 2016 1:18:16 PM
+     * @since Oct 21, 2016 4:25:06 PM
      */
     private void installPlugin( File file, String checksum ) {
         try {
             PluginPackageBean ppb = pluginPackageRepository
                 .findOne( EntitySpecs.field( "checksum", checksum ) );
             if ( ppb == null ) {
+                // TODO: 在安装插件时，用插件的文件名作了补充判断，去更新数据库中已有的插件信息，这是否会有潜在风险？
                 PluginPackageBean possiblePpb = pluginPackageRepository
                     .findOne( EntitySpecs.field( "fileName", file.getName() ) );
                 if ( possiblePpb != null ) {
@@ -132,12 +142,24 @@ public class PluginInitializer {
                     ppb.getPlugins().add( pb );
                 }
                 pluginPackageRepository.save( ppb );
+            } else {
+                logger.info(
+                    String.format(
+                        "Found duplicate plugin package: \"%s\" and \"%s\" which have same checksum \"%s\"!",
+                        file.getName(), ppb.getFileName(), checksum ) );
             }
         } catch (Exception e) {
             logger.error( "Failed to install plugin: " + file.getPath(), e );
         }
     }
 
+    /**
+     * 在内存中注销插件，然后在数据库中删除插件信息。注意，本方法不会删除插件包物理文件
+     *
+     * @param fileName 插件包文件名
+     * @author hankai
+     * @since Oct 21, 2016 4:24:02 PM
+     */
     private void uninstallPlugin( String fileName ) {
         PluginPackageBean ppb = pluginPackageRepository
             .findOne( EntitySpecs.field( "fileName", fileName ) );

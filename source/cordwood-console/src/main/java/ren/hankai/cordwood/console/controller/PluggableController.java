@@ -22,8 +22,10 @@ import ren.hankai.cordwood.core.domain.PluginFunction;
 import ren.hankai.cordwood.plugin.PluginManager;
 
 /**
+ * 插件访问分发控制器
+ *
  * @author hankai
- * @version TODO Missing version number
+ * @version 1.0.0
  * @since Sep 29, 2016 5:28:48 PM
  */
 @Controller

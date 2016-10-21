@@ -58,7 +58,9 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
     private PluginValidator                  pluginValidator;
     @Autowired
     private PluginEventEmitter               pluginEventEmitter;
+    // 插件名作键，插件包装对象作值
     private final Map<String, Plugin>        plugins  = new HashMap<>();
+    // 插件包SHA1校验和作键，插件包包装对象作值
     private final Map<String, PluginPackage> packages = new HashMap<>();
 
     /**

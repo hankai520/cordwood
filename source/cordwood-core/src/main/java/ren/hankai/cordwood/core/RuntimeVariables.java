@@ -45,9 +45,12 @@ public final class RuntimeVariables {
                     variables.put( key, props.getProperty( key ) );
                 }
             } catch (FileNotFoundException e) {
-                logger.error( "Runtime variables file \"%s\" not found!", savePath );
+                logger.error( String.format( "Runtime variables file \"%s\" not found!", savePath ),
+                    e );
             } catch (IOException e) {
-                logger.error( "Failed to load runtime variables from file \"%s\"!", savePath );
+                logger.error(
+                    String.format( "Failed to load runtime variables from file \"%s\"!", savePath ),
+                    e );
             }
         }
         return variables;
@@ -66,7 +69,8 @@ public final class RuntimeVariables {
             props.putAll( variables );
             dpp.store( props, new FileWriter( savePath ), header );
         } catch (IOException e) {
-            logger.error( "Failed to save runtime variables to file \"%s\"!", savePath );
+            logger.error(
+                String.format( "Failed to save runtime variables to file \"%s\"!", savePath ), e );
         }
     }
 
