@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -32,6 +33,7 @@ import ren.hankai.cordwood.plugin.PluginValidator;
     classes = { TestSupport.class } )
 @ComponentScan(
     basePackages = { "ren.hankai" } )
+@Ignore
 public class TestSupport {
 
     @Autowired
