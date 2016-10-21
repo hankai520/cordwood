@@ -2,6 +2,8 @@
 package ren.hankai.cordwood.core;
 
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.config.YamlMapFactoryBean;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
@@ -9,50 +11,72 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * 程序首选项配置
+ * 程序只读配置项
  *
  * @author hankai
  * @version 1.0.0
  * @since Jun 21, 2016 12:54:36 PM
  */
-public class Preferences {
+public final class Preferences {
 
     /**
      * 测试 运行时配置，启用后所有添加了 @profile(Bootstrap.PROFILE_TEST) 标记的配置将被加载。
      */
-    public static final String PROFILE_TEST       = "test";
+    public static final String         PROFILE_TEST       = "test";
     /**
      * 调试运行时配置，启用后所有添加了 @profile(Bootstrap.PROFILE_PRODUCTION) 标记的配置将被加载。
      */
-    public static final String PROFILE_PRODUCTION = "prod";
+    public static final String         PROFILE_PRODUCTION = "prod";
     /**
      * 启用 HSQL 数据库
      */
-    public static final String PROFILE_HSQL       = "hsql";
+    public static final String         PROFILE_HSQL       = "hsql";
     /**
      * 启用 MySQL 数据库
      */
-    public static final String PROFILE_MYSQL      = "mysql";
+    public static final String         PROFILE_MYSQL      = "mysql";
     /**
      * 启用 Oracle 数据库
      */
-    public static final String PROFILE_ORACLE     = "oracle";
+    public static final String         PROFILE_ORACLE     = "oracle";
     /**
      * 命令行参数：程序数据根目录
      */
-    public static final String ENV_APP_HOME_DIR   = "app.home";
+    public static final String         ENV_APP_HOME_DIR   = "app.home";
     /**
      * 配置：程序内部或数据库采用的数据分隔符。例如：字符串hello,apple,etc就是采用了分隔符将子串连接为
      * 一个字符串。
      */
-    public static final String DATA_SEPARATOR     = ",";
+    public static final String         DATA_SEPARATOR     = ",";
+    // 程序默认数据根目录（此默认名称用于提示开发者环境变量缺失）
+    private static String              appHome            = null;
+    // 系统运行参数
+    private static Map<String, Object> parameters         = null;
+
+    private Preferences() {
+    }
+
     /**
-     * 程序默认数据根目录（此默认名称用于提示开发者环境变量缺失）
+     * 从外部配置文件加载系统参数配置
+     *
+     * @author hankai
+     * @since Jun 27, 2016 10:09:35 PM
      */
-    private static String      appHome            = null;
+    private static Map<String, Object> getSystemPrefs() {
+        if ( parameters == null ) {
+            parameters = new HashMap<String, Object>();
+            YamlMapFactoryBean bean = new YamlMapFactoryBean();
+            bean.setResources(
+                new FileSystemResource( Preferences.getConfigDir() + "/system.yml" ) );
+            parameters.putAll( bean.getObject() );
+        }
+        return parameters;
+    }
 
     /**
      * 获取程序数据根目录
@@ -103,6 +127,18 @@ public class Preferences {
         String dir = getHomeDir() + File.separator + "config";
         System.setProperty( "app.config", dir );
         return dir;
+    }
+
+    /**
+     * 获取配置文件路径
+     *
+     * @param configFile 配置文件名
+     * @return 文件路径
+     * @author hankai
+     * @since Oct 21, 2016 1:13:13 PM
+     */
+    public static String getConfigFilePath( String configFile ) {
+        return getConfigDir() + File.separator + configFile;
     }
 
     /**
@@ -244,7 +280,7 @@ public class Preferences {
         }
         File file = new File( getLibsDir() );
         File[] files = file.listFiles();
-        if ( file != null ) {
+        if ( files != null ) {
             for ( File libFile : files ) {
                 if ( FilenameUtils.isExtension( libFile.getName(), "jar" ) ) {
                     try {
@@ -262,6 +298,51 @@ public class Preferences {
             URL[] urls = new URL[list.size()];
             list.toArray( urls );
             return urls;
+        }
+        return null;
+    }
+
+    /**
+     * 获取系统秘钥（一般用于加密传输）
+     *
+     * @return 秘钥字串
+     * @author hankai
+     * @since Jun 28, 2016 1:27:31 PM
+     */
+    public static String getSystemSk() {
+        Object obj = getSystemPrefs().get( "systemSk" );
+        if ( obj != null ) {
+            return obj.toString();
+        }
+        return null;
+    }
+
+    /**
+     * 获取数据传输秘钥
+     *
+     * @return 用于数据传输完整性验证的秘钥
+     * @author hankai
+     * @since Jun 28, 2016 1:49:49 PM
+     */
+    public static String getTransferKey() {
+        Object obj = getSystemPrefs().get( "transferKey" );
+        if ( obj != null ) {
+            return obj.toString();
+        }
+        return null;
+    }
+
+    /**
+     * 获取 API 鉴权码有效时长（天）
+     *
+     * @return 有效时长
+     * @author hankai
+     * @since Jun 29, 2016 9:48:43 PM
+     */
+    public static Integer getApiAccessTokenExpiry() {
+        Object obj = getSystemPrefs().get( "apiAccessTokenExpiry" );
+        if ( obj != null ) {
+            return Integer.parseInt( obj.toString() );
         }
         return null;
     }

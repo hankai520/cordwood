@@ -38,9 +38,6 @@ public class ApplicationInitializer {
         success = checkHome();
         if ( success ) {
             success = checkConfigurations( supportFileNames );
-            if ( success ) {
-                SystemConfig.loadParameters();
-            }
         }
         if ( success ) {
             logger.info( "Application initialized successfully." );
@@ -102,7 +99,7 @@ public class ApplicationInitializer {
     }
 
     /**
-     * 创建或修复程序数据根目录
+     * 创建或修复程序数据根目录结构
      *
      * @return 是否正常
      * @author hankai

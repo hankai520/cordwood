@@ -41,7 +41,7 @@ public class DefaultPluginEventEmitter implements PluginEventEmitter {
     }
 
     @Override
-    public void removeListener( String event, PluginEventListener listener ) {
+    public synchronized void removeListener( String event, PluginEventListener listener ) {
         if ( ( event == null ) || ( event.length() == 0 ) ) {
             throw new InvalidParameterException( "event name must not be empty!" );
         }

@@ -37,4 +37,7 @@ dependencies {
     compile("commons-lang:commons-lang:2.6")
     
     compile project(":cordwood-plugin-api")
+    
+    testCompile "org.springframework:spring-test:${springVersion}"
+    testCompile "javax.servlet:javax.servlet-api:3.1.0"
 }
