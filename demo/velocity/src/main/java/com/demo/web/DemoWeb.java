@@ -11,6 +11,8 @@ import org.apache.velocity.runtime.resource.loader.URLResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URL;
 
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import ren.hankai.cordwood.plugin.api.Functional;
 import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
+import ren.hankai.cordwood.plugin.api.PluginResourceLoader;
 
 /**
  * @author hankai
@@ -31,10 +34,12 @@ import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
     version = "1.0.0",
     description = "test only",
     readme = "http://www.baidu.com" )
-public class DemoWeb implements PluginLifeCycleAware {
+public class DemoWeb implements PluginLifeCycleAware, PluginResourceLoader {
 
     public static final String    NAME   = "demo_web";
+
     private static final Logger   logger = LoggerFactory.getLogger( DemoWeb.class );
+
     private static VelocityEngine engine = null;
 
     @Functional(
@@ -42,6 +47,7 @@ public class DemoWeb implements PluginLifeCycleAware {
         resultType = "text/html" )
     public String sayHello( HttpServletRequest request, HttpServletResponse response ) {
         VelocityContext vc = new VelocityContext();
+        vc.put( "baseUrl", String.format( "/resources/%s", NAME ) );
         String name = request.getParameter( "name" );
         vc.put( "name", name );
         Template tmpl = null;
@@ -100,5 +106,18 @@ public class DemoWeb implements PluginLifeCycleAware {
     @Override
     public void pluginDidUnload() {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public InputStream getResource( String relativeUrl ) {
+        URL url = this.getClass().getResource( "/static/" + relativeUrl );
+        if ( url != null ) {
+            try {
+                return url.openStream();
+            } catch (IOException e) {
+                logger.error( String.format( "Failed to open resource: \"%s\"", relativeUrl ), e );
+            }
+        }
+        return null;
     }
 }

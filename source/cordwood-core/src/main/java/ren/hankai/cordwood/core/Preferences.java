@@ -27,36 +27,49 @@ public final class Preferences {
     /**
      * 测试 运行时配置，启用后所有添加了 @profile(Bootstrap.PROFILE_TEST) 标记的配置将被加载。
      */
-    public static final String         PROFILE_TEST       = "test";
+    public static final String         PROFILE_TEST         = "test";
+
     /**
      * 调试运行时配置，启用后所有添加了 @profile(Bootstrap.PROFILE_PRODUCTION) 标记的配置将被加载。
      */
-    public static final String         PROFILE_PRODUCTION = "prod";
+    public static final String         PROFILE_PRODUCTION   = "prod";
+
     /**
      * 启用 HSQL 数据库
      */
-    public static final String         PROFILE_HSQL       = "hsql";
+    public static final String         PROFILE_HSQL         = "hsql";
+
     /**
      * 启用 MySQL 数据库
      */
-    public static final String         PROFILE_MYSQL      = "mysql";
+    public static final String         PROFILE_MYSQL        = "mysql";
+
     /**
      * 启用 Oracle 数据库
      */
-    public static final String         PROFILE_ORACLE     = "oracle";
+    public static final String         PROFILE_ORACLE       = "oracle";
+
     /**
      * 命令行参数：程序数据根目录
      */
-    public static final String         ENV_APP_HOME_DIR   = "app.home";
+    public static final String         ENV_APP_HOME_DIR     = "app.home";
+
     /**
      * 配置：程序内部或数据库采用的数据分隔符。例如：字符串hello,apple,etc就是采用了分隔符将子串连接为
      * 一个字符串。
      */
-    public static final String         DATA_SEPARATOR     = ",";
+    public static final String         DATA_SEPARATOR       = ",";
+
+    /**
+     * 插件资源根路径
+     */
+    public static final String         PLUGIN_RESOURCE_BASE = "resources";
+
     // 程序默认数据根目录（此默认名称用于提示开发者环境变量缺失）
-    private static String              appHome            = null;
+    private static String              appHome              = null;
+
     // 系统运行参数
-    private static Map<String, Object> parameters         = null;
+    private static Map<String, Object> parameters           = null;
 
     private Preferences() {
     }

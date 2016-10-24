@@ -54,14 +54,19 @@ import ren.hankai.cordwood.plugin.PluginRegistry;
 public class PluginInitializer {
 
     private static final Logger     logger = LoggerFactory.getLogger( PluginInitializer.class );
+
     @Autowired
     private PluginPackageRepository pluginPackageRepository;
+
     @Autowired
     private PluginManager           pluginManager;
+
     @Autowired
     private PluginEventEmitter      pluginEventEmmitter;
+
     @Autowired
     private PluginRegistry          pluginRegistry;
+
     private PluginWatcher           pluginWatcher;
 
     @PostConstruct
@@ -142,7 +147,7 @@ public class PluginInitializer {
                     ppb.getPlugins().add( pb );
                 }
                 pluginPackageRepository.save( ppb );
-            } else {
+            } else if ( !file.getName().equals( ppb.getFileName() ) ) {
                 logger.info(
                     String.format(
                         "Found duplicate plugin package: \"%s\" and \"%s\" which have same checksum \"%s\"!",
@@ -222,8 +227,11 @@ public class PluginInitializer {
     private class PluginWatcher extends Thread {
 
         private final Logger logger = LoggerFactory.getLogger( PluginWatcher.class );
+
         private boolean      shouldStop;
+
         private boolean      watching;
+
         private WatchService watchService;
 
         public PluginWatcher() {
