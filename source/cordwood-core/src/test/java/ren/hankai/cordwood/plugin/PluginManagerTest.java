@@ -7,17 +7,17 @@ import org.junit.Test;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 import ren.hankai.cordwood.TestSupport;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.domain.Plugin;
 import ren.hankai.cordwood.core.domain.PluginFunction;
 import ren.hankai.cordwood.core.domain.PluginPackage;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author hankai

@@ -3,9 +3,9 @@ package ren.hankai.cordwood.plugin.impl;
 
 import org.springframework.stereotype.Component;
 
-import java.net.URL;
-
 import ren.hankai.cordwood.plugin.PluginValidator;
+
+import java.net.URL;
 
 /**
  * 默认插件文件验证器

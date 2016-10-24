@@ -4,7 +4,7 @@ package ren.hankai.cordwood.plugin;
 import ren.hankai.cordwood.core.domain.Plugin;
 
 /**
- * 插件事件发射器
+ * 插件事件发射器。
  *
  * @author hankai
  * @version 1.0.0
@@ -14,24 +14,24 @@ import ren.hankai.cordwood.core.domain.Plugin;
 public interface PluginEventEmitter {
 
   /**
-   * 插件被加载
+   * 插件被加载。
    */
   public static final String PLUGIN_LOADED = "cw-plugin-loaded";
   /**
-   * 插件被卸载
+   * 插件被卸载。
    */
   public static final String PLUGIN_UNLOADED = "cw-plugin-unloaded";
   /**
-   * 插件被启用
+   * 插件被启用。
    */
   public static final String PLUGIN_ACTIVATED = "cw-plugin-activated";
   /**
-   * 插件被禁用
+   * 插件被禁用。
    */
   public static final String PLUGIN_DEACTIVATED = "cw-plugin-deactivated";
 
   /**
-   * 添加插件事件监听器
+   * 添加插件事件监听器。
    *
    * @param event 事件名称
    * @param listener 监听器
@@ -41,7 +41,7 @@ public interface PluginEventEmitter {
   void addListener(String event, PluginEventListener listener);
 
   /**
-   * 删除特定插件事件监听器
+   * 删除特定插件事件监听器。
    *
    * @param event 事件名称
    * @param listener 监听器
@@ -51,7 +51,7 @@ public interface PluginEventEmitter {
   void removeListener(String event, PluginEventListener listener);
 
   /**
-   * 删除监听器关联的所有事件监听
+   * 删除监听器关联的所有事件监听。
    *
    * @param listener 监听器
    * @author hankai
@@ -60,7 +60,7 @@ public interface PluginEventEmitter {
   void removeListener(PluginEventListener listener);
 
   /**
-   * 发布事件
+   * 发布事件。
    *
    * @param event 事件名
    * @param sender 事件源

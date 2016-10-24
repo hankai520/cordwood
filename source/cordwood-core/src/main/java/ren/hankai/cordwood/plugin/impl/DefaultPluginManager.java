@@ -13,6 +13,18 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
+import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.core.domain.Plugin;
+import ren.hankai.cordwood.core.domain.PluginFunction;
+import ren.hankai.cordwood.core.domain.PluginPackage;
+import ren.hankai.cordwood.plugin.PluginEventEmitter;
+import ren.hankai.cordwood.plugin.PluginLoader;
+import ren.hankai.cordwood.plugin.PluginManager;
+import ren.hankai.cordwood.plugin.PluginRegistry;
+import ren.hankai.cordwood.plugin.PluginValidator;
+import ren.hankai.cordwood.plugin.api.Functional;
+import ren.hankai.cordwood.plugin.api.Pluggable;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -27,20 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ren.hankai.cordwood.core.Preferences;
-import ren.hankai.cordwood.core.domain.Plugin;
-import ren.hankai.cordwood.core.domain.PluginFunction;
-import ren.hankai.cordwood.core.domain.PluginPackage;
-import ren.hankai.cordwood.plugin.PluginEventEmitter;
-import ren.hankai.cordwood.plugin.PluginLoader;
-import ren.hankai.cordwood.plugin.PluginManager;
-import ren.hankai.cordwood.plugin.PluginRegistry;
-import ren.hankai.cordwood.plugin.PluginValidator;
-import ren.hankai.cordwood.plugin.api.Functional;
-import ren.hankai.cordwood.plugin.api.Pluggable;
-
 /**
- * 默认插件管理器
+ * 默认插件管理器。
  *
  * @author hankai
  * @version 1.0.0
@@ -62,7 +62,7 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
   private final Map<String, PluginPackage> packages = new HashMap<>();
 
   /**
-   * 启用或禁用插件
+   * 启用或禁用插件。
    *
    * @param pluginName 插件名
    * @param active 是否启用
@@ -89,7 +89,7 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
   }
 
   /**
-   * 将底层插件示例包装为插件模型对象
+   * 将底层插件示例包装为插件模型对象。
    *
    * @param pluginInstance 插件实例
    * @return 插件模型
@@ -135,7 +135,7 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
   }
 
   /**
-   * 从插件包文件中抽取插件包元数据
+   * 从插件包文件中抽取插件包元数据。
    *
    * @param localPath 插件包本地路径
    * @return 插件包模型
@@ -145,22 +145,17 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
   private PluginPackage extractPackageInfo(URL localPath) {
     InputStream is = null;
     try {
-      PluginPackage p = new PluginPackage();
-      p.setFileName(FilenameUtils.getName(localPath.getPath()));
-      p.setInstallUrl(localPath);
+      PluginPackage pluginPackage = new PluginPackage();
+      pluginPackage.setFileName(FilenameUtils.getName(localPath.getPath()));
+      pluginPackage.setInstallUrl(localPath);
       is = localPath.openStream();
-      p.setIdentifier(DigestUtils.sha1Hex(is));
-      return p;
+      pluginPackage.setIdentifier(DigestUtils.sha1Hex(is));
+      return pluginPackage;
     } catch (IOException e) {
       logger.error(String.format("Failed to calculate the checksum of package \"%s\"", localPath),
           e);
     } finally {
-      try {
-        if (is != null) {
-          is.close();
-        }
-      } catch (Exception e2) {
-      }
+      IOUtils.closeQuietly(is);
     }
     return null;
   }

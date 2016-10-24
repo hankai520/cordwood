@@ -5,7 +5,7 @@ import java.net.URL;
 import java.util.List;
 
 /**
- * 插件加载器
+ * 插件加载器。
  *
  * @author hankai
  * @version 1.0.0
@@ -27,7 +27,7 @@ public interface PluginLoader {
   public static final String PLUGIN_SPRING_CONFIG_CLASS = "Spring-Config-Class";
 
   /**
-   * 载入插件集合
+   * 载入插件集合。
    *
    * @param jarFileUrl 插件本地路径
    * @return 插件实例，返回 null 表示加载失败

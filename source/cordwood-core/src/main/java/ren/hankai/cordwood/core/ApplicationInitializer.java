@@ -24,7 +24,7 @@ public class ApplicationInitializer {
   private static final Logger logger = LoggerFactory.getLogger(ApplicationInitializer.class);
 
   /**
-   * 程序初始化
+   * 程序初始化。
    *
    * @param supportFileNames 主程序位于 support 目录的预定义配置文件名称列表
    * @return 是否成功
@@ -48,7 +48,7 @@ public class ApplicationInitializer {
   }
 
   /**
-   * 打印类路径信息
+   * 打印类路径信息。
    *
    * @author hankai
    * @since Oct 13, 2016 9:52:48 AM
@@ -96,7 +96,7 @@ public class ApplicationInitializer {
   }
 
   /**
-   * 创建或修复程序数据根目录结构
+   * 创建或修复程序数据根目录结构。
    *
    * @return 是否正常
    * @author hankai
@@ -104,10 +104,10 @@ public class ApplicationInitializer {
    */
   private static boolean checkHome() {
     logger.info(String.format("Application home is: \"%s\"", Preferences.getHomeDir()));
-    String[] subDirs = {Preferences.getConfigDir(), Preferences.getDataDir(),
+    String[] subDirs = { Preferences.getConfigDir(), Preferences.getDataDir(),
         Preferences.getCacheDir(), Preferences.getLogDir(), Preferences.getTempDir(),
         Preferences.getAttachmentDir(), Preferences.getBackupDir(), Preferences.getDbDir(),
-        Preferences.getPluginsDir(), Preferences.getLibsDir()};
+        Preferences.getPluginsDir(), Preferences.getLibsDir() };
     for (String dir : subDirs) {
       File file = new File(dir);
       if (!file.exists()) {

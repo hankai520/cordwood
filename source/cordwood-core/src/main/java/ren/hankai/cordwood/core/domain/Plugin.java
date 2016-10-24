@@ -89,7 +89,7 @@ public final class Plugin {
   }
 
   /**
-   * 获取插件是否启用
+   * 获取插件是否启用。
    *
    * @return 是否已启用
    * @author hankai
@@ -100,7 +100,7 @@ public final class Plugin {
   }
 
   /**
-   * 设置插件启用状态
+   * 设置插件启用状态。
    *
    * @param isActive 是否启用
    * @author hankai
@@ -111,7 +111,7 @@ public final class Plugin {
   }
 
   /**
-   * 获取插件底层实例
+   * 获取插件底层实例。
    *
    * @return 插件实例
    * @author hankai
@@ -122,7 +122,7 @@ public final class Plugin {
   }
 
   /**
-   * 设置插件底层实例
+   * 设置插件底层实例。
    *
    * @param instance 实例
    * @author hankai
@@ -133,7 +133,7 @@ public final class Plugin {
   }
 
   /**
-   * 获取插件功能集合
+   * 获取插件功能集合。
    *
    * @return 插件功能
    * @author hankai
@@ -144,7 +144,7 @@ public final class Plugin {
   }
 
   /**
-   * 设置插件功能集合
+   * 设置插件功能集合。
    *
    * @param functions
    * @author hankai

@@ -3,8 +3,6 @@ package ren.hankai.cordwood.core.util;
 
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
@@ -17,8 +15,12 @@ import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ren.hankai.cordwood.core.Preferences;
 
+import java.io.File;
+
+
+
 /**
- * Logback 日志助手类
+ * Logback 日志助手类。
  *
  * @author hankai
  * @version 1.0.0
@@ -27,7 +29,7 @@ import ren.hankai.cordwood.core.Preferences;
 public final class LogbackUtil {
 
   /**
-   * 获取一个控制台日志追加器
+   * 获取一个控制台日志追加器。
    *
    * @param lc 日志上下文
    * @return 追加器
@@ -35,10 +37,10 @@ public final class LogbackUtil {
    * @since Oct 13, 2016 10:20:37 AM
    */
   private static ConsoleAppender<ILoggingEvent> getConsoleAppender(LoggerContext lc) {
-    ConsoleAppender<ILoggingEvent> ca = new ConsoleAppender<ILoggingEvent>();
+    ConsoleAppender<ILoggingEvent> ca = new ConsoleAppender<>();
     ca.setContext(lc);
     ca.setName("console");
-    LayoutWrappingEncoder<ILoggingEvent> encoder = new LayoutWrappingEncoder<ILoggingEvent>();
+    LayoutWrappingEncoder<ILoggingEvent> encoder = new LayoutWrappingEncoder<>();
     encoder.setContext(lc);
     PatternLayout layout = new PatternLayout();
     layout.setContext(lc);
@@ -51,7 +53,7 @@ public final class LogbackUtil {
   }
 
   /**
-   * 获取一个可自动归档的文件日志追加器
+   * 获取一个可自动归档的文件日志追加器。
    *
    * @param loggerName 日志器名（即要记录日志的类名）
    * @param lc 日志上下文
@@ -85,7 +87,7 @@ public final class LogbackUtil {
   }
 
   /**
-   * 为指定的类或包添加控制台日志器
+   * 为指定的类或包添加控制台日志器。
    *
    * @param name 类或包名
    * @param level 日志级别
@@ -100,7 +102,7 @@ public final class LogbackUtil {
   }
 
   /**
-   * 为指定的类或包添加文件日志器
+   * 为指定的类或包添加文件日志器。
    *
    * @param name 类或包名
    * @param level 日志级别

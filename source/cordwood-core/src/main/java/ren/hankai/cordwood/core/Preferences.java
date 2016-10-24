@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 程序只读配置项
+ * 程序只读配置项。
  *
  * @author hankai
  * @version 1.0.0
@@ -35,22 +35,22 @@ public final class Preferences {
   public static final String PROFILE_PRODUCTION = "prod";
 
   /**
-   * 启用 HSQL 数据库
+   * 启用 HSQL 数据库。
    */
   public static final String PROFILE_HSQL = "hsql";
 
   /**
-   * 启用 MySQL 数据库
+   * 启用 MySQL 数据库。
    */
   public static final String PROFILE_MYSQL = "mysql";
 
   /**
-   * 启用 Oracle 数据库
+   * .启用 Oracle 数据库。
    */
   public static final String PROFILE_ORACLE = "oracle";
 
   /**
-   * 命令行参数：程序数据根目录
+   * 命令行参数：程序数据根目录。
    */
   public static final String ENV_APP_HOME_DIR = "app.home";
 
@@ -60,7 +60,7 @@ public final class Preferences {
   public static final String DATA_SEPARATOR = ",";
 
   /**
-   * 插件资源根路径
+   * 插件资源根路径。
    */
   public static final String PLUGIN_RESOURCE_BASE = "resources";
 
@@ -80,7 +80,7 @@ public final class Preferences {
    */
   private static Map<String, Object> getSystemPrefs() {
     if (parameters == null) {
-      parameters = new HashMap<String, Object>();
+      parameters = new HashMap<>();
       YamlMapFactoryBean bean = new YamlMapFactoryBean();
       bean.setResources(new FileSystemResource(Preferences.getConfigDir() + "/system.yml"));
       parameters.putAll(bean.getObject());
@@ -89,7 +89,7 @@ public final class Preferences {
   }
 
   /**
-   * 获取程序数据根目录
+   * 获取程序数据根目录。
    *
    * @author hankai
    * @since Jul 28, 2015 10:51:49 AM
@@ -116,7 +116,7 @@ public final class Preferences {
   }
 
   /**
-   * 获取程序缓存目录
+   * 获取程序缓存目录。
    *
    * @author hankai
    * @since Jul 28, 2015 10:52:19 AM
@@ -128,7 +128,7 @@ public final class Preferences {
   }
 
   /**
-   * 获取程序外部配置文件存储目录
+   * 获取程序外部配置文件存储目录。
    *
    * @author hankai
    * @since Jul 28, 2015 10:52:44 AM
@@ -140,7 +140,7 @@ public final class Preferences {
   }
 
   /**
-   * 获取配置文件路径
+   * 获取配置文件路径。
    *
    * @param configFile 配置文件名
    * @return 文件路径
@@ -152,7 +152,7 @@ public final class Preferences {
   }
 
   /**
-   * 获取程序数据存储目录
+   * 获取程序数据存储目录。
    *
    * @author hankai
    * @since Jul 28, 2015 10:53:05 AM
@@ -164,7 +164,7 @@ public final class Preferences {
   }
 
   /**
-   * 数据库存储目录
+   * 数据库存储目录。
    *
    * @return
    * @author hankai
@@ -175,7 +175,7 @@ public final class Preferences {
   }
 
   /**
-   * 获取默认的数据库配置文件路径
+   * 获取默认的数据库配置文件路径。
    *
    * @return 配置文件路径
    * @author hankai
@@ -186,7 +186,7 @@ public final class Preferences {
   }
 
   /**
-   * 获取指定数据库配置文件路径
+   * 获取指定数据库配置文件路径。
    *
    * @param fileName 数据库配置文件名
    * @return 配置文件路径
@@ -201,7 +201,7 @@ public final class Preferences {
   }
 
   /**
-   * 获取程序日志目录
+   * 获取程序日志目录。
    *
    * @author hankai
    * @since Jul 28, 2015 10:53:49 AM
@@ -213,7 +213,7 @@ public final class Preferences {
   }
 
   /**
-   * 获取程序临时数据目录
+   * 获取程序临时数据目录。
    *
    * @author hankai
    * @since Jul 28, 2015 10:54:02 AM
@@ -225,7 +225,7 @@ public final class Preferences {
   }
 
   /**
-   * 获取程序附件存储目录
+   * 获取程序附件存储目录。
    *
    * @author hankai
    * @since Jul 28, 2015 10:54:16 AM
@@ -237,7 +237,7 @@ public final class Preferences {
   }
 
   /**
-   * 获取程序数据备份目录
+   * 获取程序数据备份目录。
    *
    * @return
    * @author hankai
@@ -250,7 +250,7 @@ public final class Preferences {
   }
 
   /**
-   * 插件目录
+   * 插件目录。
    *
    * @return
    * @author hankai
@@ -263,7 +263,7 @@ public final class Preferences {
   }
 
   /**
-   * 依赖包目录
+   * 依赖包目录。
    *
    * @return
    * @author hankai
@@ -276,7 +276,7 @@ public final class Preferences {
   }
 
   /**
-   * 获取插件依赖的第三方包
+   * 获取插件依赖的第三方包。
    *
    * @param extraUrls 额外补充的包地址，这些 URL 将会和依赖包的 URL 合并到一起返回
    * @return 依赖包 URL 集合
@@ -311,7 +311,7 @@ public final class Preferences {
   }
 
   /**
-   * 获取系统秘钥（一般用于加密传输）
+   * 获取系统秘钥（一般用于加密传输）。
    *
    * @return 秘钥字串
    * @author hankai
@@ -326,7 +326,7 @@ public final class Preferences {
   }
 
   /**
-   * 获取数据传输秘钥
+   * 获取数据传输秘钥。
    *
    * @return 用于数据传输完整性验证的秘钥
    * @author hankai
@@ -341,7 +341,7 @@ public final class Preferences {
   }
 
   /**
-   * 获取 API 鉴权码有效时长（天）
+   * 获取 API 鉴权码有效时长（天）。
    *
    * @return 有效时长
    * @author hankai

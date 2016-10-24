@@ -4,10 +4,10 @@ package ren.hankai.cordwood.plugin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-
 import ren.hankai.cordwood.core.domain.Plugin;
 import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
+
+import javax.annotation.PostConstruct;
 
 /**
  * 插件生命周期时间通知器，用于将插件实现方和插件事件发射机制解耦。

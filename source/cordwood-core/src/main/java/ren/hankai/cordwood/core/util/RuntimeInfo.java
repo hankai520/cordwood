@@ -6,7 +6,7 @@ import java.net.UnknownHostException;
 import java.util.Properties;
 
 /**
- * 系统运行时信息
+ * 系统运行时信息。
  *
  * @author hankai
  * @version 1.0
@@ -28,8 +28,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * 获取主机信息
-   * 
+   * 获取主机信息。
+   *
    * @return
    * @author hankai
    * @since Oct 13, 2016 10:23:53 AM
@@ -39,8 +39,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * 获取IP地址
-   * 
+   * 获取IP地址。
+   *
    * @return IP地址
    * @author hankai
    * @since Oct 13, 2016 10:24:07 AM
@@ -50,8 +50,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * 获取 JVM 总内存大小
-   * 
+   * 获取 JVM 总内存大小。
+   *
    * @return 格式化后的大小信息（例如：100 MB）
    * @author hankai
    * @since Oct 13, 2016 10:24:24 AM
@@ -63,8 +63,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * JVM 剩余可用内存
-   * 
+   * JVM 剩余可用内存。
+   *
    * @return 格式化后的大小信息（例如：100 MB）
    * @author hankai
    * @since Oct 13, 2016 10:25:12 AM
@@ -76,8 +76,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * JVM 可用处理器数量
-   * 
+   * JVM 可用处理器数量。
+   *
    * @return 处理器数量
    * @author hankai
    * @since Oct 13, 2016 10:25:28 AM
@@ -87,8 +87,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * 获取 Java 版本
-   * 
+   * 获取 Java 版本。
+   *
    * @return
    * @author hankai
    * @since Oct 13, 2016 10:25:58 AM
@@ -98,8 +98,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * 获取 Java 实现（供应商）
-   * 
+   * 获取 Java 实现（供应商）。
+   *
    * @return
    * @author hankai
    * @since Oct 13, 2016 10:26:10 AM
@@ -109,8 +109,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * 获取 java home
-   * 
+   * 获取 java home。
+   *
    * @return
    * @author hankai
    * @since Oct 13, 2016 10:26:39 AM
@@ -120,8 +120,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * 获取 JVM 规范版本号
-   * 
+   * 获取 JVM 规范版本号。
+   *
    * @return
    * @author hankai
    * @since Oct 13, 2016 10:26:49 AM
@@ -131,8 +131,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * 获取 JVM 规范的实现（供应商）
-   * 
+   * 获取 JVM 规范的实现（供应商）。
+   *
    * @return
    * @author hankai
    * @since Oct 13, 2016 10:27:01 AM
@@ -142,8 +142,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * 获取 JVM 规范的名称
-   * 
+   * 获取 JVM 规范的名称。
+   *
    * @return
    * @author hankai
    * @since Oct 13, 2016 10:27:20 AM
@@ -153,8 +153,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * 获取 JVM 版本
-   * 
+   * 获取 JVM 版本。
+   *
    * @return
    * @author hankai
    * @since Oct 13, 2016 10:27:44 AM
@@ -164,8 +164,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * 获取 JVM 实现（供应商）
-   * 
+   * 获取 JVM 实现（供应商）。
+   *
    * @return
    * @author hankai
    * @since Oct 13, 2016 10:27:53 AM
@@ -175,8 +175,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * 获取 JVM 名称
-   * 
+   * 获取 JVM 名称。
+   *
    * @return
    * @author hankai
    * @since Oct 13, 2016 10:28:04 AM
@@ -186,8 +186,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * 获取 JAVA 运行时规范版本
-   * 
+   * 获取 JAVA 运行时规范版本。
+   *
    * @return
    * @author hankai
    * @since Oct 13, 2016 10:28:13 AM
@@ -197,8 +197,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * 获取 JAVA 运行时规范的实现
-   * 
+   * 获取 JAVA 运行时规范的实现。
+   *
    * @return
    * @author hankai
    * @since Oct 13, 2016 10:28:27 AM
@@ -208,8 +208,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * 获取 JAVA 运行时规范的名称
-   * 
+   * 获取 JAVA 运行时规范的名称。
+   *
    * @return
    * @author hankai
    * @since Oct 13, 2016 10:28:39 AM
@@ -219,8 +219,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * 获取操作系统名称
-   * 
+   * 获取操作系统名称。
+   *
    * @return
    * @author hankai
    * @since Oct 13, 2016 10:28:54 AM
@@ -230,8 +230,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * 获取操作系统架构
-   * 
+   * 获取操作系统架构。
+   *
    * @return
    * @author hankai
    * @since Oct 13, 2016 10:29:07 AM
@@ -241,8 +241,8 @@ public final class RuntimeInfo {
   }
 
   /**
-   * 获取操作系统版本
-   * 
+   * 获取操作系统版本。
+   *
    * @return
    * @author hankai
    * @since Oct 13, 2016 10:29:15 AM

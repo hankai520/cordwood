@@ -5,22 +5,21 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import ren.hankai.cordwood.TestSupport;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import ren.hankai.cordwood.TestSupport;
-
 /**
+ * 程序运行时变量测试
+ *
  * @author hankai
  * @version 1.0.0
  * @since Oct 21, 2016 1:16:46 PM
  */
 public class RuntimeVariablesTest extends TestSupport {
 
-  /**
-   * Test method for {@link ren.hankai.cordwood.core.RuntimeVariables#saveVariables()}.
-   */
   @Test
   public void testSaveParameters() throws Exception {
     Assert.assertTrue(ApplicationInitializer.initialize());
@@ -35,11 +34,6 @@ public class RuntimeVariablesTest extends TestSupport {
     FileUtils.deleteDirectory(new File(Preferences.getHomeDir()));
   }
 
-  /**
-   * Test method for
-   * {@link ren.hankai.cordwood.core.RuntimeVariables#setVariable(java.lang.String, java.lang.String)}
-   * .
-   */
   @Test
   public void testSetAndGetVariable() {
     RuntimeVariables.setVariable("testSetVariable", "testSetVariable");
@@ -47,9 +41,6 @@ public class RuntimeVariablesTest extends TestSupport {
     RuntimeVariables.setAllVariables(new HashMap<>());
   }
 
-  /**
-   * Test method for {@link ren.hankai.cordwood.core.RuntimeVariables#getBool(java.lang.String)}.
-   */
   @Test
   public void testGetBool() {
     RuntimeVariables.setVariable("bool", "true");
@@ -57,9 +48,6 @@ public class RuntimeVariablesTest extends TestSupport {
     RuntimeVariables.setAllVariables(new HashMap<>());
   }
 
-  /**
-   * Test method for {@link ren.hankai.cordwood.core.RuntimeVariables#getInt(java.lang.String)}.
-   */
   @Test
   public void testGetInt() {
     RuntimeVariables.setVariable("int", "1");
@@ -67,10 +55,6 @@ public class RuntimeVariablesTest extends TestSupport {
     RuntimeVariables.setAllVariables(new HashMap<>());
   }
 
-  /**
-   * Test method for
-   * {@link ren.hankai.cordwood.core.RuntimeVariables#setAllVariables(java.util.Map)} .
-   */
   @Test
   public void testSetAllParams() {
     RuntimeVariables.setVariable("shouldNotExist", "value");

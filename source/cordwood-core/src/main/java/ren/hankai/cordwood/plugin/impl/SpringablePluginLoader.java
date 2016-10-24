@@ -15,6 +15,12 @@ import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.plugin.PluginLoader;
+import ren.hankai.cordwood.plugin.api.Pluggable;
+
+import javax.annotation.PostConstruct;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -27,12 +33,6 @@ import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
-
-import javax.annotation.PostConstruct;
-
-import ren.hankai.cordwood.core.Preferences;
-import ren.hankai.cordwood.plugin.PluginLoader;
-import ren.hankai.cordwood.plugin.api.Pluggable;
 
 /**
  * 默认插件加载器，支持基于spring框架的插件。
@@ -184,7 +184,7 @@ public class SpringablePluginLoader implements PluginLoader {
 
   @Override
   public List<Object> loadPlugins(URL jarFileUrl) {
-    URLClassLoader loader = new URLClassLoader(new URL[] {jarFileUrl}, sharedClassLoader);
+    URLClassLoader loader = new URLClassLoader(new URL[] { jarFileUrl }, sharedClassLoader);
     /*
      * 设置线程的上下文类加载器，这样，由此加载的插件都会使用此类加载器，这样 就能在运行时动态加载需要的依赖包，同时不同插件不共享类加载器，甚至能实现 同一个依赖包的不同版本同时被载入
      */

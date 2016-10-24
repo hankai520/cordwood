@@ -7,12 +7,12 @@ import org.junit.Test;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.ResourceUtils;
 
+import ren.hankai.cordwood.TestSupport;
+import ren.hankai.cordwood.core.Preferences;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
-
-import ren.hankai.cordwood.TestSupport;
-import ren.hankai.cordwood.core.Preferences;
 
 /**
  * @author hankai

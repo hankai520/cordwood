@@ -3,18 +3,18 @@ package ren.hankai.cordwood.plugin.impl;
 
 import org.springframework.stereotype.Component;
 
+import ren.hankai.cordwood.core.domain.Plugin;
+import ren.hankai.cordwood.plugin.PluginEventEmitter;
+import ren.hankai.cordwood.plugin.PluginEventListener;
+
 import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import ren.hankai.cordwood.core.domain.Plugin;
-import ren.hankai.cordwood.plugin.PluginEventEmitter;
-import ren.hankai.cordwood.plugin.PluginEventListener;
-
 /**
- * 默认的插件事件发射器
+ * 默认的插件事件发射器。
  *
  * @author hankai
  * @version 1.0

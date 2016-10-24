@@ -12,8 +12,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.File;
-
 import ren.hankai.cordwood.core.ApplicationInitializer;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.domain.Plugin;
@@ -23,14 +21,18 @@ import ren.hankai.cordwood.plugin.PluginManager;
 import ren.hankai.cordwood.plugin.PluginRegistry;
 import ren.hankai.cordwood.plugin.PluginValidator;
 
+import java.io.File;
+
 /**
+ * 单元测试基类。
+ * 
  * @author hankai
  * @version 1.0.0
  * @since Oct 21, 2016 1:05:07 PM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestSupport.class})
-@ComponentScan(basePackages = {"ren.hankai"})
+@ContextConfiguration(classes = { TestSupport.class })
+@ComponentScan(basePackages = { "ren.hankai" })
 @Ignore
 public class TestSupport {
 

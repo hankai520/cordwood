@@ -4,7 +4,7 @@ package ren.hankai.cordwood.core.domain;
 import java.lang.reflect.Method;
 
 /**
- * 用于封装插件功能
+ * 用于封装插件功能。
  *
  * @author hankai
  * @version 1.0.0
@@ -18,7 +18,7 @@ public final class PluginFunction {
   private String resultType;
 
   /**
-   * 获取功能名
+   * 获取功能名。
    *
    * @return 功能名
    * @author hankai
@@ -29,7 +29,7 @@ public final class PluginFunction {
   }
 
   /**
-   * 设置功能名
+   * 设置功能名。
    *
    * @param name 功能名
    * @author hankai
@@ -40,7 +40,7 @@ public final class PluginFunction {
   }
 
   /**
-   * 获取插件对应的方法
+   * 获取插件对应的方法。
    *
    * @return 方法
    * @author hankai
@@ -51,7 +51,7 @@ public final class PluginFunction {
   }
 
   /**
-   * 设置插件对应的方法
+   * 设置插件对应的方法。
    *
    * @return 方法
    * @author hankai
@@ -62,7 +62,7 @@ public final class PluginFunction {
   }
 
   /**
-   * 获取插件功能返回的数据类型
+   * 获取插件功能返回的数据类型。
    *
    * @return 数据类型
    * @author hankai
@@ -73,7 +73,7 @@ public final class PluginFunction {
   }
 
   /**
-   * 设置插件功能返回的数据类型
+   * 设置插件功能返回的数据类型。
    *
    * @param resultType 数据类型
    * @author hankai

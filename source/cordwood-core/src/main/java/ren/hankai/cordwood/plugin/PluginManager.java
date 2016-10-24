@@ -1,13 +1,13 @@
 
 package ren.hankai.cordwood.plugin;
 
-import java.util.List;
-
 import ren.hankai.cordwood.core.domain.Plugin;
 
+import java.util.List;
+
 /**
- * 插件管理器
- * 
+ * 插件管理器。
+ *
  * @author hankai
  * @version 1.0.0
  * @since Sep 29, 2016 5:44:44 PM
@@ -15,7 +15,7 @@ import ren.hankai.cordwood.core.domain.Plugin;
 public interface PluginManager {
 
   /**
-   * 启用插件
+   * 启用插件。
    *
    * @param pluginName 插件标识符
    * @return 是否启用成功
@@ -25,7 +25,7 @@ public interface PluginManager {
   boolean activatePlugin(String pluginName);
 
   /**
-   * 禁用插件
+   * 禁用插件。
    *
    * @param pluginName 插件标识符
    * @return 是否禁用成功
@@ -35,7 +35,7 @@ public interface PluginManager {
   boolean deactivatePlugin(String pluginName);
 
   /**
-   * 获取插件
+   * 获取插件。
    *
    * @param pluginName 插件标识符
    * @return 插件
@@ -45,7 +45,7 @@ public interface PluginManager {
   Plugin getPlugin(String pluginName);
 
   /**
-   * 初始化已安装的插件
+   * 初始化已安装的插件。
    *
    * @param packageNames 插件包文件名
    * @author hankai

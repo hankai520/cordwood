@@ -5,10 +5,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.util.ResourceUtils;
 
+import ren.hankai.cordwood.TestSupport;
+
 import java.net.URL;
 import java.util.List;
-
-import ren.hankai.cordwood.TestSupport;
 
 /**
  * @author hankai
