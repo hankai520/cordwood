@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 public class PluginJunitRunner extends SpringJUnit4ClassRunner {
 
-    public PluginJunitRunner( Class<?> clazz ) throws InitializationError {
-        super( clazz );
-    }
+  public PluginJunitRunner(Class<?> clazz) throws InitializationError {
+    super(clazz);
+  }
 }

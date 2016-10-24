@@ -15,22 +15,22 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class SomeDemoTest {
 
-    /**
-     * Test method for
-     * {@link com.demo.withoutspring.SomeDemo#sayHello(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)}
-     * .
-     */
-    @Test
-    public void testSayHello() {
-        HttpServletRequest request = EasyMock.createMock( HttpServletRequest.class );
-        EasyMock.expect( request.getParameter( "op1" ) ).andReturn( "10" ).anyTimes();
-        EasyMock.expect( request.getParameter( "op2" ) ).andReturn( "15" ).anyTimes();
-        EasyMock.replay( request );
-        HttpServletResponse response = EasyMock.createNiceMock( HttpServletResponse.class );
-        EasyMock.replay( response );
-        SomeDemo sd = new SomeDemo();
-        String result = sd.sayHello( request, response );
-        Assert.assertTrue( result.equals( "Hi, the result is: 25" ) );
-        EasyMock.verify( request );
-    }
+  /**
+   * Test method for
+   * {@link com.demo.withoutspring.SomeDemo#sayHello(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)}
+   * .
+   */
+  @Test
+  public void testSayHello() {
+    HttpServletRequest request = EasyMock.createMock(HttpServletRequest.class);
+    EasyMock.expect(request.getParameter("op1")).andReturn("10").anyTimes();
+    EasyMock.expect(request.getParameter("op2")).andReturn("15").anyTimes();
+    EasyMock.replay(request);
+    HttpServletResponse response = EasyMock.createNiceMock(HttpServletResponse.class);
+    EasyMock.replay(response);
+    SomeDemo sd = new SomeDemo();
+    String result = sd.sayHello(request, response);
+    Assert.assertTrue(result.equals("Hi, the result is: 25"));
+    EasyMock.verify(request);
+  }
 }

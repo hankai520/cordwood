@@ -17,20 +17,20 @@ import java.util.List;
  */
 public class PathUtil {
 
-    public static String parseResourcePath( String url ) {
-        try {
-            String decodedUrl = URLDecoder.decode( url, "UTF-8" );
-            decodedUrl = decodedUrl.startsWith( "/" ) ? decodedUrl.substring( 1 ) : decodedUrl;
-            String[] parts = decodedUrl.split( "/" );
-            if ( ( parts != null ) && ( parts.length > 2 ) ) {
-                List<String> list = new ArrayList<>();
-                for ( int i = 2; i < parts.length; i++ ) {
-                    list.add( parts[i] );
-                }
-                return StringUtils.join( list, "/" );
-            }
-        } catch (UnsupportedEncodingException e) {
+  public static String parseResourcePath(String url) {
+    try {
+      String decodedUrl = URLDecoder.decode(url, "UTF-8");
+      decodedUrl = decodedUrl.startsWith("/") ? decodedUrl.substring(1) : decodedUrl;
+      String[] parts = decodedUrl.split("/");
+      if ((parts != null) && (parts.length > 2)) {
+        List<String> list = new ArrayList<>();
+        for (int i = 2; i < parts.length; i++) {
+          list.add(parts[i]);
         }
-        return null;
+        return StringUtils.join(list, "/");
+      }
+    } catch (UnsupportedEncodingException e) {
     }
+    return null;
+  }
 }

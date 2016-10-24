@@ -18,23 +18,23 @@ import ren.hankai.cordwood.plugin.impl.DefaultPluginEventEmitter;
  */
 public class PluginEventEmitterTest extends TestSupport {
 
-    @Autowired
-    private PluginEventEmitter emitter;
+  @Autowired
+  private PluginEventEmitter emitter;
 
-    /**
-     * Test method for
-     * {@link ren.hankai.cordwood.plugin.impl.DefaultPluginEventEmitter#emitEvent(java.lang.String, ren.hankai.cordwood.core.domain.Plugin)}
-     * .
-     */
-    @Test
-    public void testEmitEvent() {
-        emitter.addListener( "testEvent", new PluginEventListener() {
+  /**
+   * Test method for
+   * {@link ren.hankai.cordwood.plugin.impl.DefaultPluginEventEmitter#emitEvent(java.lang.String, ren.hankai.cordwood.core.domain.Plugin)}
+   * .
+   */
+  @Test
+  public void testEmitEvent() {
+    emitter.addListener("testEvent", new PluginEventListener() {
 
-            @Override
-            public void handleEvent( Plugin plugin, String event ) {
-                Assert.assertTrue( event.equals( "testEvent" ) );
-            }
-        } );
-        emitter.emitEvent( "testEvent", new Plugin() );
-    }
+      @Override
+      public void handleEvent(Plugin plugin, String event) {
+        Assert.assertTrue(event.equals("testEvent"));
+      }
+    });
+    emitter.emitEvent("testEvent", new Plugin());
+  }
 }

@@ -13,53 +13,52 @@ import org.slf4j.LoggerFactory;
  */
 public class MyLogChute implements LogChute {
 
-    private Logger logger = null;
+  private Logger logger = null;
 
-    public MyLogChute() {
-        this( null );
-    }
+  public MyLogChute() {
+    this(null);
+  }
 
-    public MyLogChute( String loggerName ) {
-        loggerName = ( loggerName == null ) ? MyLogChute.class.getName() : loggerName;
-        logger = LoggerFactory.getLogger( loggerName );
-    }
+  public MyLogChute(String loggerName) {
+    loggerName = (loggerName == null) ? MyLogChute.class.getName() : loggerName;
+    logger = LoggerFactory.getLogger(loggerName);
+  }
 
-    @Override
-    public void init( RuntimeServices rs ) throws Exception {
-    }
+  @Override
+  public void init(RuntimeServices rs) throws Exception {}
 
-    @Override
-    public boolean isLevelEnabled( int level ) {
-        return true;
-    }
+  @Override
+  public boolean isLevelEnabled(int level) {
+    return true;
+  }
 
-    @Override
-    public void log( int level, String message ) {
-        if ( level == LogChute.TRACE_ID ) {
-            logger.trace( message );
-        } else if ( level == LogChute.DEBUG_ID ) {
-            logger.debug( message );
-        } else if ( level == LogChute.INFO_ID ) {
-            logger.info( message );
-        } else if ( level == LogChute.WARN_ID ) {
-            logger.warn( message );
-        } else if ( level == LogChute.ERROR_ID ) {
-            logger.error( message );
-        }
+  @Override
+  public void log(int level, String message) {
+    if (level == LogChute.TRACE_ID) {
+      logger.trace(message);
+    } else if (level == LogChute.DEBUG_ID) {
+      logger.debug(message);
+    } else if (level == LogChute.INFO_ID) {
+      logger.info(message);
+    } else if (level == LogChute.WARN_ID) {
+      logger.warn(message);
+    } else if (level == LogChute.ERROR_ID) {
+      logger.error(message);
     }
+  }
 
-    @Override
-    public void log( int level, String message, Throwable throwable ) {
-        if ( level == LogChute.TRACE_ID ) {
-            logger.trace( message, throwable );
-        } else if ( level == LogChute.DEBUG_ID ) {
-            logger.debug( message, throwable );
-        } else if ( level == LogChute.INFO_ID ) {
-            logger.info( message, throwable );
-        } else if ( level == LogChute.WARN_ID ) {
-            logger.warn( message, throwable );
-        } else if ( level == LogChute.ERROR_ID ) {
-            logger.error( message, throwable );
-        }
+  @Override
+  public void log(int level, String message, Throwable throwable) {
+    if (level == LogChute.TRACE_ID) {
+      logger.trace(message, throwable);
+    } else if (level == LogChute.DEBUG_ID) {
+      logger.debug(message, throwable);
+    } else if (level == LogChute.INFO_ID) {
+      logger.info(message, throwable);
+    } else if (level == LogChute.WARN_ID) {
+      logger.warn(message, throwable);
+    } else if (level == LogChute.ERROR_ID) {
+      logger.error(message, throwable);
     }
+  }
 }

@@ -24,63 +24,60 @@ import javax.persistence.criteria.Root;
  */
 public abstract class EntitySpecs {
 
-    /**
-     * 单字段查询条件
-     *
-     * @param fieldName 字段名称
-     * @param value 字段值
-     * @return 查询条件
-     * @author hankai
-     * @since Aug 18, 2016 10:45:18 AM
-     */
-    public static <T> Specification<T> field( final String fieldName, final Object value ) {
-        return new Specification<T>() {
+  /**
+   * 单字段查询条件
+   *
+   * @param fieldName 字段名称
+   * @param value 字段值
+   * @return 查询条件
+   * @author hankai
+   * @since Aug 18, 2016 10:45:18 AM
+   */
+  public static <T> Specification<T> field(final String fieldName, final Object value) {
+    return new Specification<T>() {
 
-            @Override
-            public Predicate toPredicate( Root<T> root, CriteriaQuery<?> query,
-                            CriteriaBuilder cb ) {
-                return cb.equal( root.get( fieldName ), value );
-            }
-        };
-    }
+      @Override
+      public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+        return cb.equal(root.get(fieldName), value);
+      }
+    };
+  }
 
-    /**
-     * 字段值在给定范围内的查询条件
-     *
-     * @param fieldName 字段
-     * @param values 取值范围
-     * @return 查询条件
-     * @author hankai
-     * @since Oct 13, 2016 2:58:59 PM
-     */
-    public static <T> Specification<T> fieldIn( final String fieldName, final List<?> values ) {
-        return new Specification<T>() {
+  /**
+   * 字段值在给定范围内的查询条件
+   *
+   * @param fieldName 字段
+   * @param values 取值范围
+   * @return 查询条件
+   * @author hankai
+   * @since Oct 13, 2016 2:58:59 PM
+   */
+  public static <T> Specification<T> fieldIn(final String fieldName, final List<?> values) {
+    return new Specification<T>() {
 
-            @Override
-            public Predicate toPredicate( Root<T> root, CriteriaQuery<?> query,
-                            CriteriaBuilder cb ) {
-                return root.get( fieldName ).in( values );
-            }
-        };
-    }
+      @Override
+      public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+        return root.get(fieldName).in(values);
+      }
+    };
+  }
 
-    /**
-     * 查询字段的值不在指定范围内的实体
-     *
-     * @param fieldName 字段
-     * @param values 取值范围
-     * @return 查询条件
-     * @author hankai
-     * @since Oct 14, 2016 1:07:16 PM
-     */
-    public static <T> Specification<T> fieldNotIn( final String fieldName, final List<?> values ) {
-        return new Specification<T>() {
+  /**
+   * 查询字段的值不在指定范围内的实体
+   *
+   * @param fieldName 字段
+   * @param values 取值范围
+   * @return 查询条件
+   * @author hankai
+   * @since Oct 14, 2016 1:07:16 PM
+   */
+  public static <T> Specification<T> fieldNotIn(final String fieldName, final List<?> values) {
+    return new Specification<T>() {
 
-            @Override
-            public Predicate toPredicate( Root<T> root, CriteriaQuery<?> query,
-                            CriteriaBuilder cb ) {
-                return cb.not( root.get( fieldName ).in( values ) );
-            }
-        };
-    }
+      @Override
+      public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+        return cb.not(root.get(fieldName).in(values));
+      }
+    };
+  }
 }

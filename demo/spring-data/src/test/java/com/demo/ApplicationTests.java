@@ -20,23 +20,21 @@ import org.springframework.web.context.WebApplicationContext;
  * @version 1.0.0
  * @since Jun 21, 2016 1:29:53 PM
  */
-@RunWith( PluginJunitRunner.class )
-@ContextConfiguration(
-    classes = { PluginBootstrap.class } )
+@RunWith(PluginJunitRunner.class)
+@ContextConfiguration(classes = {PluginBootstrap.class})
 @WebAppConfiguration
-@ActiveProfiles( { "unit-test" } )
+@ActiveProfiles({"unit-test"})
 public abstract class ApplicationTests {
 
-    @Autowired
-    protected WebApplicationContext ctx;
-    protected MockMvc               mockMvc;
+  @Autowired
+  protected WebApplicationContext ctx;
+  protected MockMvc mockMvc;
 
-    @Before
-    public void setUpMVC() {
-        mockMvc = MockMvcBuilders.webAppContextSetup( ctx ).build();
-        initTestFixures();
-    }
+  @Before
+  public void setUpMVC() {
+    mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
+    initTestFixures();
+  }
 
-    private void initTestFixures() {
-    }
+  private void initTestFixures() {}
 }

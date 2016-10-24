@@ -29,95 +29,89 @@ import ren.hankai.cordwood.plugin.api.PluginResourceLoader;
  * @version TODO Missing version number
  * @since Oct 18, 2016 9:30:06 AM
  */
-@Pluggable(
-    name = DemoWeb.NAME,
-    version = "1.0.0",
-    description = "test only",
-    readme = "http://www.baidu.com" )
+@Pluggable(name = DemoWeb.NAME, version = "1.0.0", description = "test only",
+    readme = "http://www.baidu.com")
 public class DemoWeb implements PluginLifeCycleAware, PluginResourceLoader {
 
-    public static final String    NAME   = "demo_web";
+  public static final String NAME = "demo_web";
 
-    private static final Logger   logger = LoggerFactory.getLogger( DemoWeb.class );
+  private static final Logger logger = LoggerFactory.getLogger(DemoWeb.class);
 
-    private static VelocityEngine engine = null;
+  private static VelocityEngine engine = null;
 
-    @Functional(
-        name = "hello",
-        resultType = "text/html" )
-    public String sayHello( HttpServletRequest request, HttpServletResponse response ) {
-        VelocityContext vc = new VelocityContext();
-        vc.put( "baseUrl", String.format( "/resources/%s", NAME ) );
-        String name = request.getParameter( "name" );
-        vc.put( "name", name );
-        Template tmpl = null;
-        try {
-            tmpl = engine.getTemplate( "/content.html", "utf-8" );
-            StringWriter sw = new StringWriter();
-            tmpl.merge( vc, sw );
-            return sw.toString();
-        } catch (Exception e) {
-            logger.error( "Failed to render template!", e );
-        }
-        return "";
+  @Functional(name = "hello", resultType = "text/html")
+  public String sayHello(HttpServletRequest request, HttpServletResponse response) {
+    VelocityContext vc = new VelocityContext();
+    vc.put("baseUrl", String.format("/resources/%s", NAME));
+    String name = request.getParameter("name");
+    vc.put("name", name);
+    Template tmpl = null;
+    try {
+      tmpl = engine.getTemplate("/content.html", "utf-8");
+      StringWriter sw = new StringWriter();
+      tmpl.merge(vc, sw);
+      return sw.toString();
+    } catch (Exception e) {
+      logger.error("Failed to render template!", e);
     }
+    return "";
+  }
 
-    @Override
-    public void pluginDidActivated() {
-        // TODO Auto-generated method stub
-    }
+  @Override
+  public void pluginDidActivated() {
+    // TODO Auto-generated method stub
+  }
 
-    @Override
-    public void pluginDidDeactivated() {
-        // TODO Auto-generated method stub
-    }
+  @Override
+  public void pluginDidDeactivated() {
+    // TODO Auto-generated method stub
+  }
 
-    @Override
-    public void pluginDidLoad() {
-        try {
-            URL url = DemoWeb.class.getClassLoader().getResource( "templates" );
-            String templatePath = url.toString();
-            logger.info( "Velocity template root: " + templatePath );
-            if ( engine == null ) {
-                engine = new VelocityEngine();
-            }
-            engine.setProperty( "resource.loader", "url" );
-            engine.setProperty( "url.resource.loader.root", templatePath );
-            engine.setProperty( "url.resource.loader.class", URLResourceLoader.class.getName() );
-            engine.setProperty( "url.resource.loader.cache", "true" );
-            engine.setProperty( "url.resource.loader.modificationCheckInterval", "60" );
-            String logDir = System.getProperty( "app.log" );
-            if ( !StringUtils.isEmpty( logDir ) ) {
-                logger.info( "Velocity run time log: " + logDir );
-                engine.setProperty( RuntimeConstants.RUNTIME_LOG_LOGSYSTEM,
-                    new MyLogChute( DemoWeb.NAME ) );
-            }
-            // 必须设置该选项，因为velocity在生成html时，不会转义html实体（如 & <），需要通过该配置来自动转义
-            engine.setProperty( "eventhandler.referenceinsertion.class",
-                EscapeHtmlReference.class.getName() );
-            // 模板中所有符号都原样输出
-            engine.setProperty( "eventhandler.escape.html.match", "/.*/" );
-            engine.init();
-        } catch (Exception e) {
-            logger.error( "Failed to initialize velocity!", e );
-        }
+  @Override
+  public void pluginDidLoad() {
+    try {
+      URL url = DemoWeb.class.getClassLoader().getResource("templates");
+      String templatePath = url.toString();
+      logger.info("Velocity template root: " + templatePath);
+      if (engine == null) {
+        engine = new VelocityEngine();
+      }
+      engine.setProperty("resource.loader", "url");
+      engine.setProperty("url.resource.loader.root", templatePath);
+      engine.setProperty("url.resource.loader.class", URLResourceLoader.class.getName());
+      engine.setProperty("url.resource.loader.cache", "true");
+      engine.setProperty("url.resource.loader.modificationCheckInterval", "60");
+      String logDir = System.getProperty("app.log");
+      if (!StringUtils.isEmpty(logDir)) {
+        logger.info("Velocity run time log: " + logDir);
+        engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM, new MyLogChute(DemoWeb.NAME));
+      }
+      // 必须设置该选项，因为velocity在生成html时，不会转义html实体（如 & <），需要通过该配置来自动转义
+      engine.setProperty("eventhandler.referenceinsertion.class",
+          EscapeHtmlReference.class.getName());
+      // 模板中所有符号都原样输出
+      engine.setProperty("eventhandler.escape.html.match", "/.*/");
+      engine.init();
+    } catch (Exception e) {
+      logger.error("Failed to initialize velocity!", e);
     }
+  }
 
-    @Override
-    public void pluginDidUnload() {
-        // TODO Auto-generated method stub
-    }
+  @Override
+  public void pluginDidUnload() {
+    // TODO Auto-generated method stub
+  }
 
-    @Override
-    public InputStream getResource( String relativeUrl ) {
-        URL url = this.getClass().getResource( "/static/" + relativeUrl );
-        if ( url != null ) {
-            try {
-                return url.openStream();
-            } catch (IOException e) {
-                logger.error( String.format( "Failed to open resource: \"%s\"", relativeUrl ), e );
-            }
-        }
-        return null;
+  @Override
+  public InputStream getResource(String relativeUrl) {
+    URL url = this.getClass().getResource("/static/" + relativeUrl);
+    if (url != null) {
+      try {
+        return url.openStream();
+      } catch (IOException e) {
+        logger.error(String.format("Failed to open resource: \"%s\"", relativeUrl), e);
+      }
     }
+    return null;
+  }
 }

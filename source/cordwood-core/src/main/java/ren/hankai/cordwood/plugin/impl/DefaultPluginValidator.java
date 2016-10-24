@@ -17,12 +17,13 @@ import ren.hankai.cordwood.plugin.PluginValidator;
 @Component
 public class DefaultPluginValidator implements PluginValidator {
 
-    /*
-     * (non-Javadoc)
-     * @see ren.hankai.cordwood.plugin.PluginValidator#validatePackage(java.net.URL)
-     */
-    @Override
-    public boolean validatePackage( URL jarUrl ) {
-        return true;
-    }
+  /*
+   * (non-Javadoc)
+   * 
+   * @see ren.hankai.cordwood.plugin.PluginValidator#validatePackage(java.net.URL)
+   */
+  @Override
+  public boolean validatePackage(URL jarUrl) {
+    return true;
+  }
 }

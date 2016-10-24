@@ -28,70 +28,69 @@ import ren.hankai.cordwood.plugin.PluginRegistry;
 @Component
 public class PluginService {
 
-    private static final Logger     logger = LoggerFactory.getLogger( PluginService.class );
-    @Autowired
-    private PluginRegistry          pluginRegistry;
-    @Autowired
-    private PluginPackageRepository pluginPackageRepository;
+  private static final Logger logger = LoggerFactory.getLogger(PluginService.class);
+  @Autowired
+  private PluginRegistry pluginRegistry;
+  @Autowired
+  private PluginPackageRepository pluginPackageRepository;
 
-    public boolean installPlugin( URL url ) {
-        try {
-            PluginPackage pp = pluginRegistry.register( url );
-            PluginPackageBean ppb = new PluginPackageBean();
-            ppb.setChecksum( pp.getIdentifier() );
-            ppb.setFileName( pp.getFileName() );
-            for ( Plugin plugin : pp.getPlugins() ) {
-                PluginBean pb = new PluginBean();
-                pb.setActive( plugin.isActive() );
-                pb.setDescription( plugin.getDescription() );
-                pb.setName( plugin.getName() );
-                pb.setVersion( plugin.getVersion() );
-                pb.setPluginPackage( ppb );
-                ppb.getPlugins().add( pb );
-            }
-            pluginPackageRepository.save( ppb );
-        } catch (Exception e) {
-            logger.error( String.format( "Failed to install plugin from: %s", url.toString() ),
-                e );
-        }
-        return false;
+  public boolean installPlugin(URL url) {
+    try {
+      PluginPackage pp = pluginRegistry.register(url);
+      PluginPackageBean ppb = new PluginPackageBean();
+      ppb.setChecksum(pp.getIdentifier());
+      ppb.setFileName(pp.getFileName());
+      for (Plugin plugin : pp.getPlugins()) {
+        PluginBean pb = new PluginBean();
+        pb.setActive(plugin.isActive());
+        pb.setDescription(plugin.getDescription());
+        pb.setName(plugin.getName());
+        pb.setVersion(plugin.getVersion());
+        pb.setPluginPackage(ppb);
+        ppb.getPlugins().add(pb);
+      }
+      pluginPackageRepository.save(ppb);
+    } catch (Exception e) {
+      logger.error(String.format("Failed to install plugin from: %s", url.toString()), e);
     }
+    return false;
+  }
 
-    /**
-     * 插件包上传
-     *
-     * @param tempPath
-     * @return
-     * @author hankai
-     * @since Oct 13, 2016 1:28:21 PM
-     */
-    public boolean installPluginFromLocal( String tempPath ) {
-        File file = new File( tempPath );
-        if ( file.exists() ) {
-            try {
-                URL url = file.toURI().toURL();
-                if ( installPlugin( url ) ) {
-                    FileUtils.deleteQuietly( file );
-                    return true;
-                }
-            } catch (MalformedURLException e) {
-                logger.error( "Failed to get url of plugin file!", e );
-            }
+  /**
+   * 插件包上传
+   *
+   * @param tempPath
+   * @return
+   * @author hankai
+   * @since Oct 13, 2016 1:28:21 PM
+   */
+  public boolean installPluginFromLocal(String tempPath) {
+    File file = new File(tempPath);
+    if (file.exists()) {
+      try {
+        URL url = file.toURI().toURL();
+        if (installPlugin(url)) {
+          FileUtils.deleteQuietly(file);
+          return true;
         }
-        return false;
+      } catch (MalformedURLException e) {
+        logger.error("Failed to get url of plugin file!", e);
+      }
     }
+    return false;
+  }
 
-    public boolean installPluginFromWeb( String webUrl ) {
-        URL url = null;
-        try {
-            url = new URL( webUrl );
-        } catch (MalformedURLException e) {
-        }
-        if ( url != null ) {
-            return installPlugin( url );
-        } else {
-            logger.error( "Failed to install plugin from web due to invalid web url!" );
-        }
-        return false;
+  public boolean installPluginFromWeb(String webUrl) {
+    URL url = null;
+    try {
+      url = new URL(webUrl);
+    } catch (MalformedURLException e) {
     }
+    if (url != null) {
+      return installPlugin(url);
+    } else {
+      logger.error("Failed to install plugin from web due to invalid web url!");
+    }
+    return false;
+  }
 }

@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class DefaultController {
 
-    @RequestMapping( "/" )
-    @ResponseBody
-    public String home() throws Exception {
-        return "hello";
-    }
+  @RequestMapping("/")
+  @ResponseBody
+  public String home() throws Exception {
+    return "hello";
+  }
 }

@@ -26,31 +26,25 @@ import ren.hankai.cordwood.core.ApplicationInitializer;
 @EnableSpringConfigured
 @EnableAspectJAutoProxy
 @EnableConfigurationProperties
-@EnableJpaRepositories(
-    basePackages = { "ren.hankai" } )
+@EnableJpaRepositories(basePackages = {"ren.hankai"})
 @EnableTransactionManagement
 @EnableScheduling
-@ComponentScan(
-    basePackages = { "ren.hankai.cordwood" } )
+@ComponentScan(basePackages = {"ren.hankai.cordwood"})
 public class Application {
 
-    private static final Logger logger = LoggerFactory.getLogger( Application.class );
+  private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
-    public static void main( String[] args ) {
-        String[] configs = {
-            "hsql.properties", "system.yml"
-        };
-        if ( ApplicationInitializer.initialize( configs ) ) {
-            if ( SpringApplication.run( Application.class, args ) != null ) {
-                logger.info(
-                    "\n============== JVM Arguments ==============\n\n" +
-                        System.getProperties().toString() + "\n\n" +
-                        "==========================================================\n" );
-                logger.info(
-                    "\n============== Environment Variables ==============\n\n" +
-                        System.getenv().toString() + "\n\n" +
-                        "==========================================================\n" );
-            }
-        }
+  public static void main(String[] args) {
+    String[] configs = {"hsql.properties", "system.yml"};
+    if (ApplicationInitializer.initialize(configs)) {
+      if (SpringApplication.run(Application.class, args) != null) {
+        logger.info(
+            "\n============== JVM Arguments ==============\n\n" + System.getProperties().toString()
+                + "\n\n" + "==========================================================\n");
+        logger.info(
+            "\n============== Environment Variables ==============\n\n" + System.getenv().toString()
+                + "\n\n" + "==========================================================\n");
+      }
     }
+  }
 }

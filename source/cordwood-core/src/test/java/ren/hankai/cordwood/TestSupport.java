@@ -28,33 +28,31 @@ import ren.hankai.cordwood.plugin.PluginValidator;
  * @version 1.0.0
  * @since Oct 21, 2016 1:05:07 PM
  */
-@RunWith( SpringJUnit4ClassRunner.class )
-@ContextConfiguration(
-    classes = { TestSupport.class } )
-@ComponentScan(
-    basePackages = { "ren.hankai" } )
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {TestSupport.class})
+@ComponentScan(basePackages = {"ren.hankai"})
 @Ignore
 public class TestSupport {
 
-    @Autowired
-    protected PluginRegistry  pluginRegistry;
-    @Autowired
-    protected PluginManager   pluginManager;
-    @Autowired
-    protected PluginLoader    pluginLoader;
-    @Autowired
-    protected PluginValidator pluginValidator;
-    protected PluginPackage   pluginPackage;
-    protected Plugin          plugin;
+  @Autowired
+  protected PluginRegistry pluginRegistry;
+  @Autowired
+  protected PluginManager pluginManager;
+  @Autowired
+  protected PluginLoader pluginLoader;
+  @Autowired
+  protected PluginValidator pluginValidator;
+  protected PluginPackage pluginPackage;
+  protected Plugin plugin;
 
-    @Before
-    public void setup() throws Exception {
-        System.setProperty( Preferences.ENV_APP_HOME_DIR, "./test-home" );
-        Assert.assertTrue( ApplicationInitializer.initialize( "testSupport.txt" ) );
-    }
+  @Before
+  public void setup() throws Exception {
+    System.setProperty(Preferences.ENV_APP_HOME_DIR, "./test-home");
+    Assert.assertTrue(ApplicationInitializer.initialize("testSupport.txt"));
+  }
 
-    @After
-    public void teardown() throws Exception {
-        FileUtils.deleteDirectory( new File( Preferences.getHomeDir() ) );
-    }
+  @After
+  public void teardown() throws Exception {
+    FileUtils.deleteDirectory(new File(Preferences.getHomeDir()));
+  }
 }

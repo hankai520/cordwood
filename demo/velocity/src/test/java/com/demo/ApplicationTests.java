@@ -15,14 +15,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 public abstract class ApplicationTests {
 
-    protected HttpServletRequest  mockRequest;
-    protected HttpServletResponse mockResponse;
+  protected HttpServletRequest mockRequest;
+  protected HttpServletResponse mockResponse;
 
-    @Before
-    public void setup() {
-        initTestFixures();
-    }
+  @Before
+  public void setup() {
+    initTestFixures();
+  }
 
-    private void initTestFixures() {
-    }
+  private void initTestFixures() {}
 }

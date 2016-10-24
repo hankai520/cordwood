@@ -16,35 +16,33 @@ import javax.persistence.Table;
  * @since Oct 9, 2016 3:19:05 PM
  */
 @Entity
-@Table(
-    name = "mytbl1" )
-@Cacheable( false )
+@Table(name = "mytbl1")
+@Cacheable(false)
 public class MyTbl1 implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(
-        strategy = GenerationType.IDENTITY )
-    private Integer           id;
-    private String            name;
+  private static final long serialVersionUID = 1L;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+  private String name;
 
-    public Integer getId() {
-        return id;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public void setId( Integer id ) {
-        this.id = id;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName( String name ) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public static long getSerialversionuid() {
-        return serialVersionUID;
-    }
+  public static long getSerialversionuid() {
+    return serialVersionUID;
+  }
 }

@@ -22,20 +22,16 @@ import java.util.Map;
  */
 public class HelloTest extends ApplicationTests {
 
-    @Test
-    public void testAdd() throws Exception {
-        Map<String, String> params = new HashMap<>();
-        params.put( "op1", "12" );
-        params.put( "op2", "11" );
-        MvcResult result = mockMvc.perform(
-            post( "/hello/add" )
-                .contentType( MediaType.APPLICATION_FORM_URLENCODED )
-                .param( "op1", params.get( "op1" ) )
-                .param( "op2", params.get( "op2" ) ) )
-            .andExpect( status().isOk() )
-            .andDo( print() )
-            .andReturn();
-        String response = result.getResponse().getContentAsString();
-        Assert.assertEquals( "23", response );
-    }
+  @Test
+  public void testAdd() throws Exception {
+    Map<String, String> params = new HashMap<>();
+    params.put("op1", "12");
+    params.put("op2", "11");
+    MvcResult result = mockMvc
+        .perform(post("/hello/add").contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .param("op1", params.get("op1")).param("op2", params.get("op2")))
+        .andExpect(status().isOk()).andDo(print()).andReturn();
+    String response = result.getResponse().getContentAsString();
+    Assert.assertEquals("23", response);
+  }
 }

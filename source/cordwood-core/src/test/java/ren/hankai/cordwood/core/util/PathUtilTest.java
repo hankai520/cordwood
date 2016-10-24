@@ -13,13 +13,13 @@ import org.junit.Test;
  */
 public class PathUtilTest {
 
-    /**
-     * Test method for
-     * {@link ren.hankai.cordwood.core.util.PathUtil#parseResourcePath(java.lang.String)}.
-     */
-    @Test
-    public void testParseResourcePath() {
-        String result = PathUtil.parseResourcePath( "/resources/demo_plugin/css/light/style.css" );
-        Assert.assertEquals( "css/light/style.css", result );
-    }
+  /**
+   * Test method for
+   * {@link ren.hankai.cordwood.core.util.PathUtil#parseResourcePath(java.lang.String)}.
+   */
+  @Test
+  public void testParseResourcePath() {
+    String result = PathUtil.parseResourcePath("/resources/demo_plugin/css/light/style.css");
+    Assert.assertEquals("css/light/style.css", result);
+  }
 }

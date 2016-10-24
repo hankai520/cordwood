@@ -12,13 +12,13 @@ import java.io.InputStream;
  */
 public interface PluginResourceLoader {
 
-    /**
-     * 获取插件资源
-     *
-     * @param relativeUrl web请求相对路径，不以 "/"开头，此路径相对于插件资源根路径( http://.../resources/{ 这部分即相对路径 } )
-     * @return 资源输入流
-     * @author hankai
-     * @since Oct 24, 2016 4:25:27 PM
-     */
-    InputStream getResource( String relativeUrl );
+  /**
+   * 获取插件资源
+   *
+   * @param relativeUrl web请求相对路径，不以 "/"开头，此路径相对于插件资源根路径( http://.../resources/{ 这部分即相对路径 } )
+   * @return 资源输入流
+   * @author hankai
+   * @since Oct 24, 2016 4:25:27 PM
+   */
+  InputStream getResource(String relativeUrl);
 }

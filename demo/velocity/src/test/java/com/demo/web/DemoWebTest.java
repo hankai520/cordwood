@@ -18,21 +18,21 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class DemoWebTest extends ApplicationTests {
 
-    /**
-     * Test method for
-     * {@link com.demo.web.DemoWeb#sayHello(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)}
-     * .
-     */
-    @Test
-    public void testSayHello() throws Exception {
-        HttpServletRequest request = EasyMock.createMock( HttpServletRequest.class );
-        EasyMock.expect( request.getParameter( "name" ) ).andReturn( "Eola" ).anyTimes();
-        EasyMock.replay( request );
-        HttpServletResponse response = EasyMock.createNiceMock( HttpServletResponse.class );
-        EasyMock.replay( response );
-        DemoWeb dw = new DemoWeb();
-        String result = dw.sayHello( request, response );
-        Assert.assertTrue( !StringUtils.isEmpty( result ) );
-        EasyMock.verify( request );
-    }
+  /**
+   * Test method for
+   * {@link com.demo.web.DemoWeb#sayHello(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)}
+   * .
+   */
+  @Test
+  public void testSayHello() throws Exception {
+    HttpServletRequest request = EasyMock.createMock(HttpServletRequest.class);
+    EasyMock.expect(request.getParameter("name")).andReturn("Eola").anyTimes();
+    EasyMock.replay(request);
+    HttpServletResponse response = EasyMock.createNiceMock(HttpServletResponse.class);
+    EasyMock.replay(response);
+    DemoWeb dw = new DemoWeb();
+    String result = dw.sayHello(request, response);
+    Assert.assertTrue(!StringUtils.isEmpty(result));
+    EasyMock.verify(request);
+  }
 }

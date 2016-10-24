@@ -19,30 +19,30 @@ import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
 @Component
 public class PluginLifeCycleNotifier implements PluginEventListener {
 
-    @Autowired
-    private PluginEventEmitter eventEmitter;
+  @Autowired
+  private PluginEventEmitter eventEmitter;
 
-    @PostConstruct
-    private void observePluginEvents() {
-        eventEmitter.addListener( PluginEventEmitter.PLUGIN_LOADED, this );
-        eventEmitter.addListener( PluginEventEmitter.PLUGIN_UNLOADED, this );
-        eventEmitter.addListener( PluginEventEmitter.PLUGIN_ACTIVATED, this );
-        eventEmitter.addListener( PluginEventEmitter.PLUGIN_DEACTIVATED, this );
-    }
+  @PostConstruct
+  private void observePluginEvents() {
+    eventEmitter.addListener(PluginEventEmitter.PLUGIN_LOADED, this);
+    eventEmitter.addListener(PluginEventEmitter.PLUGIN_UNLOADED, this);
+    eventEmitter.addListener(PluginEventEmitter.PLUGIN_ACTIVATED, this);
+    eventEmitter.addListener(PluginEventEmitter.PLUGIN_DEACTIVATED, this);
+  }
 
-    @Override
-    public void handleEvent( Plugin plugin, String eventType ) {
-        if ( plugin.getInstance() instanceof PluginLifeCycleAware ) {
-            PluginLifeCycleAware plca = (PluginLifeCycleAware) plugin.getInstance();
-            if ( eventType == PluginEventEmitter.PLUGIN_LOADED ) {
-                plca.pluginDidLoad();
-            } else if ( eventType == PluginEventEmitter.PLUGIN_UNLOADED ) {
-                plca.pluginDidUnload();
-            } else if ( eventType == PluginEventEmitter.PLUGIN_ACTIVATED ) {
-                plca.pluginDidActivated();
-            } else if ( eventType == PluginEventEmitter.PLUGIN_DEACTIVATED ) {
-                plca.pluginDidDeactivated();
-            }
-        }
+  @Override
+  public void handleEvent(Plugin plugin, String eventType) {
+    if (plugin.getInstance() instanceof PluginLifeCycleAware) {
+      PluginLifeCycleAware plca = (PluginLifeCycleAware) plugin.getInstance();
+      if (eventType == PluginEventEmitter.PLUGIN_LOADED) {
+        plca.pluginDidLoad();
+      } else if (eventType == PluginEventEmitter.PLUGIN_UNLOADED) {
+        plca.pluginDidUnload();
+      } else if (eventType == PluginEventEmitter.PLUGIN_ACTIVATED) {
+        plca.pluginDidActivated();
+      } else if (eventType == PluginEventEmitter.PLUGIN_DEACTIVATED) {
+        plca.pluginDidDeactivated();
+      }
     }
+  }
 }
