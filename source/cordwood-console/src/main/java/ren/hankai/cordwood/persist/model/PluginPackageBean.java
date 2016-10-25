@@ -16,8 +16,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
+ * 插件包实体。
+ *
  * @author hankai
- * @version TODO Missing version number
+ * @version 1.0.0
  * @since Oct 9, 2016 11:34:32 AM
  */
 @Entity

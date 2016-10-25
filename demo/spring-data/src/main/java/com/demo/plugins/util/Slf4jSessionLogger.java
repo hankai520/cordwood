@@ -45,7 +45,7 @@ import java.util.Map;
 public class Slf4jSessionLogger extends AbstractSessionLog {
 
   /**
-   * SLF4J 日志级别
+   * SLF4J 日志级别。
    */
   enum LogLevel {
     TRACE, DEBUG, INFO, WARN, ERROR, OFF
@@ -59,7 +59,7 @@ public class Slf4jSessionLogger extends AbstractSessionLog {
   private final Map<String, Logger> categoryLoggers = new HashMap<String, Logger>();
 
   /**
-   * 初始化日志器和日志级别映射
+   * 初始化日志器和日志级别映射。
    */
   public Slf4jSessionLogger() {
     super();
@@ -68,14 +68,14 @@ public class Slf4jSessionLogger extends AbstractSessionLog {
   }
 
   /**
-   * 将日志器加到日志类别中
+   * 将日志器加到日志类别中。
    */
   private void addLogger(String loggerCategory, String loggerNameSpace) {
     categoryLoggers.put(loggerCategory, LoggerFactory.getLogger(loggerNameSpace));
   }
 
   /**
-   * 主动初始化日志器
+   * 主动初始化日志器。
    */
   private void createCategoryLoggers() {
     for (String category : SessionLog.loggerCatagories) {
@@ -85,7 +85,7 @@ public class Slf4jSessionLogger extends AbstractSessionLog {
   }
 
   /**
-   * 为指定的类别生成日志器
+   * 为指定的类别生成日志器。
    */
   private Logger getLogger(String category) {
     if (StringUtils.isEmpty(category) || !categoryLoggers.containsKey(category)) {
@@ -95,7 +95,7 @@ public class Slf4jSessionLogger extends AbstractSessionLog {
   }
 
   /**
-   * 为 eclipse link 的日志级别找到对应的 SLF4J 日志级别
+   * 为 eclipse link 的日志级别找到对应的 SLF4J 日志级别。
    */
   private LogLevel getLogLevel(Integer level) {
     LogLevel logLevel = mapLevels.get(level);
@@ -106,7 +106,7 @@ public class Slf4jSessionLogger extends AbstractSessionLog {
   }
 
   /**
-   * 构造 SLF4J 和 Eclipselink 的日志级别对应关系
+   * 构造 SLF4J 和 Eclipselink 的日志级别对应关系。
    */
   private void initMapLevels() {
     mapLevels = new HashMap<Integer, LogLevel>();

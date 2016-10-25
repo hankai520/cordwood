@@ -1,6 +1,19 @@
 
 package ren.hankai.cordwood.console;
 
+import ch.qos.logback.classic.Level;
+import ren.hankai.cordwood.console.service.PluginService;
+import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.core.domain.Plugin;
+import ren.hankai.cordwood.core.util.LogbackUtil;
+import ren.hankai.cordwood.persist.PluginPackageRepository;
+import ren.hankai.cordwood.persist.model.PluginPackageBean;
+import ren.hankai.cordwood.persist.util.EntitySpecs;
+import ren.hankai.cordwood.plugin.PluginEventEmitter;
+import ren.hankai.cordwood.plugin.PluginEventListener;
+import ren.hankai.cordwood.plugin.PluginManager;
+import ren.hankai.cordwood.plugin.PluginRegistry;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -29,22 +42,8 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import ch.qos.logback.classic.Level;
-import ren.hankai.cordwood.core.Preferences;
-import ren.hankai.cordwood.core.domain.Plugin;
-import ren.hankai.cordwood.core.domain.PluginPackage;
-import ren.hankai.cordwood.core.util.LogbackUtil;
-import ren.hankai.cordwood.persist.PluginPackageRepository;
-import ren.hankai.cordwood.persist.model.PluginBean;
-import ren.hankai.cordwood.persist.model.PluginPackageBean;
-import ren.hankai.cordwood.persist.util.EntitySpecs;
-import ren.hankai.cordwood.plugin.PluginEventEmitter;
-import ren.hankai.cordwood.plugin.PluginEventListener;
-import ren.hankai.cordwood.plugin.PluginManager;
-import ren.hankai.cordwood.plugin.PluginRegistry;
-
 /**
- * 插件初始化器
+ * 插件初始化器。
  *
  * @author hankai
  * @version 1.0.0
@@ -69,6 +68,9 @@ public class PluginInitializer {
 
   private PluginWatcher pluginWatcher;
 
+  @Autowired
+  private PluginService pluginService;
+
   @PostConstruct
   private void setupLoggersForPlugins() throws Exception {
     // 注册插件事件监听
@@ -92,7 +94,7 @@ public class PluginInitializer {
   }
 
   /**
-   * 获取文件 SHA1 校验和
+   * 获取文件 SHA1 校验和。
    *
    * @param file 文件
    * @return 校验和(16进制字符串)
@@ -114,7 +116,7 @@ public class PluginInitializer {
   }
 
   /**
-   * 安装插件包文件
+   * 安装插件包文件。
    *
    * @param file 文件
    * @param checksum SHA1 校验和
@@ -132,20 +134,8 @@ public class PluginInitializer {
         if (possiblePpb != null) {
           pluginPackageRepository.delete(possiblePpb.getId());
         }
-        PluginPackage pp = pluginRegistry.register(file.toURI().toURL());
-        ppb = new PluginPackageBean();
-        ppb.setChecksum(pp.getIdentifier());
-        ppb.setFileName(pp.getFileName());
-        for (Plugin plugin : pp.getPlugins()) {
-          PluginBean pb = new PluginBean();
-          pb.setActive(plugin.isActive());
-          pb.setDescription(plugin.getDescription());
-          pb.setName(plugin.getName());
-          pb.setVersion(plugin.getVersion());
-          pb.setPluginPackage(ppb);
-          ppb.getPlugins().add(pb);
-        }
-        pluginPackageRepository.save(ppb);
+
+        pluginService.installPlugin(file.toURI().toURL());
       } else if (!file.getName().equals(ppb.getFileName())) {
         logger.info(String.format(
             "Found duplicate plugin package: \"%s\" and \"%s\" which have same checksum \"%s\"!",
@@ -214,7 +204,7 @@ public class PluginInitializer {
   }
 
   /**
-   * 插件目录观察器，监视插件目录的文件变化
+   * 插件目录观察器，监视插件目录的文件变化。
    *
    * @author hankai
    * @version 1.0.0

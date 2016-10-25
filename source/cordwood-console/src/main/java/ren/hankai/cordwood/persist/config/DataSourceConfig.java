@@ -6,6 +6,8 @@
 
 package ren.hankai.cordwood.persist.config;
 
+import ren.hankai.cordwood.core.Preferences;
+
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;
 import org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer;
@@ -26,10 +28,8 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import ren.hankai.cordwood.core.Preferences;
-
 /**
- * 数据源配置类
+ * 数据源配置类。
  *
  * @author hankai
  * @version 1.0
@@ -66,6 +66,13 @@ public class DataSourceConfig {
   @Configuration
   public static class HsqlConfig {
 
+    /**
+     * 数据源。
+     *
+     * @return 数据源
+     * @author hankai
+     * @since Oct 25, 2016 11:35:04 AM
+     */
     @Bean
     public DataSource dataSource() {
       Properties props = loadExternalConfig("hsql.properties");
@@ -78,6 +85,13 @@ public class DataSourceConfig {
       return ds;
     }
 
+    /**
+     * 数据源配置信息。
+     *
+     * @return 数据源配置信息
+     * @author hankai
+     * @since Oct 25, 2016 11:35:17 AM
+     */
     @Bean
     public DataSourceInfo dataSourceInfo() {
       return new DataSourceInfo(HSQLPlatform.class.getName(), basePackages);
@@ -88,6 +102,13 @@ public class DataSourceConfig {
   @Profile(Preferences.PROFILE_MYSQL)
   public static class MySqlConfig {
 
+    /**
+     * MySQL 数据源。
+     *
+     * @return 数据源
+     * @author hankai
+     * @since Oct 25, 2016 11:35:34 AM
+     */
     @Bean
     public DataSource dataSource() {
       Properties props = loadExternalConfig("mysql.properties");
@@ -128,6 +149,13 @@ public class DataSourceConfig {
   @Profile(Preferences.PROFILE_ORACLE)
   public static class OracleConfig {
 
+    /**
+     * ORACLE 数据源。
+     *
+     * @return 数据源
+     * @author hankai
+     * @since Oct 25, 2016 11:35:50 AM
+     */
     @Bean
     public DataSource dataSource() {
       Properties props = loadExternalConfig("oracle.properties");

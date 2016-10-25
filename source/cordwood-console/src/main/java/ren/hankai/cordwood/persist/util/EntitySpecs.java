@@ -16,7 +16,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
- * JPA 实体通用查询条件
+ * JPA 实体通用查询条件。
  *
  * @author hankai
  * @version 1.0
@@ -25,7 +25,7 @@ import javax.persistence.criteria.Root;
 public abstract class EntitySpecs {
 
   /**
-   * 单字段查询条件
+   * 单字段查询条件。
    *
    * @param fieldName 字段名称
    * @param value 字段值
@@ -44,7 +44,7 @@ public abstract class EntitySpecs {
   }
 
   /**
-   * 字段值在给定范围内的查询条件
+   * 字段值在给定范围内的查询条件。
    *
    * @param fieldName 字段
    * @param values 取值范围
@@ -63,7 +63,7 @@ public abstract class EntitySpecs {
   }
 
   /**
-   * 查询字段的值不在指定范围内的实体
+   * 查询字段的值不在指定范围内的实体。
    *
    * @param fieldName 字段
    * @param values 取值范围

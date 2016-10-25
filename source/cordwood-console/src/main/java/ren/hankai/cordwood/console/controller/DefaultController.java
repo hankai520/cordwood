@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
+ * 默认控制器。
+ *
  * @author hankai
  * @version 0.0.1
  * @since Sep 28, 2016 11:19:57 AM

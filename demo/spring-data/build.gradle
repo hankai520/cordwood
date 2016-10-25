@@ -81,7 +81,7 @@ dependencies {
 
     testCompile "junit:junit:4.12"
     testCompile "org.springframework:spring-test:${springVersion}"
-    testRuntime "org.springframework:spring-webmvc:${springVersion}"
     testCompile "com.jayway.jsonpath:json-path-assert:0.8.1"
     testCompile "org.easymock:easymock:3.1"
+    testCompile ("org.hsqldb:hsqldb:2.3.4")
 }

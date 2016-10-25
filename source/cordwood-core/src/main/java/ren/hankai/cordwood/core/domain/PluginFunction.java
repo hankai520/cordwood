@@ -53,7 +53,6 @@ public final class PluginFunction {
   /**
    * 设置插件对应的方法。
    *
-   * @return 方法
    * @author hankai
    * @since Oct 13, 2016 10:14:52 AM
    */

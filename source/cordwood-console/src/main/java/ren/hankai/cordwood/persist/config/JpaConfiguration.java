@@ -6,6 +6,8 @@
 
 package ren.hankai.cordwood.persist.config;
 
+import ren.hankai.cordwood.persist.util.Slf4jSessionLogger;
+
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,10 +25,8 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import ren.hankai.cordwood.persist.util.Slf4jSessionLogger;
-
 /**
- * JPA 配置基类
+ * JPA 配置基类。
  *
  * @author hankai
  * @version 1.0
@@ -36,9 +36,11 @@ import ren.hankai.cordwood.persist.util.Slf4jSessionLogger;
 public class JpaConfiguration extends JpaBaseConfiguration {
 
   /**
-   * @param dataSource
-   * @param properties
-   * @param jtaTransactionManagerProvider
+   * 初始化 JPA 配置。
+   * 
+   * @param dataSource 数据源
+   * @param properties JPA 属性配置
+   * @param jtaTransactionManagerProvider 事务管理器提供者
    */
   protected JpaConfiguration(DataSource dataSource, JpaProperties properties,
       ObjectProvider<JtaTransactionManager> jtaTransactionManagerProvider) {
@@ -61,7 +63,7 @@ public class JpaConfiguration extends JpaBaseConfiguration {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see
    * org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration#createJpaVendorAdapter()
    */
@@ -75,7 +77,7 @@ public class JpaConfiguration extends JpaBaseConfiguration {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration#getVendorProperties()
    */
   @Override

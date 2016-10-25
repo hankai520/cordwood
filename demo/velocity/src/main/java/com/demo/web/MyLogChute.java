@@ -7,8 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Velocity 日志。
+ *
  * @author hankai
- * @version TODO Missing version number
+ * @version 1.0.0
  * @since Oct 19, 2016 6:49:47 PM
  */
 public class MyLogChute implements LogChute {

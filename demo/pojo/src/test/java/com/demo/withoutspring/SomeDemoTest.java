@@ -9,17 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * 示例插件测试。
+ *
  * @author hankai
- * @version TODO Missing version number
+ * @version 1.0.0
  * @since Oct 21, 2016 5:23:31 PM
  */
 public class SomeDemoTest {
 
-  /**
-   * Test method for
-   * {@link com.demo.withoutspring.SomeDemo#sayHello(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)}
-   * .
-   */
   @Test
   public void testSayHello() {
     HttpServletRequest request = EasyMock.createMock(HttpServletRequest.class);

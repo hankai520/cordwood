@@ -12,7 +12,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.util.StringUtils;
 
 /**
- * Spring 分页助手类
+ * Spring 分页助手类。
  *
  * @author hankai
  * @version 1.0
@@ -21,7 +21,7 @@ import org.springframework.util.StringUtils;
 public class PageUtil {
 
   /**
-   * 根据页码和页大小构建分页信息
+   * 根据页码和页大小构建分页信息。
    *
    * @param index 页码（从1开始, ps: spring 是从0开始，这有违习惯）
    * @param size 页大小
@@ -34,7 +34,7 @@ public class PageUtil {
   }
 
   /**
-   * 根据页码和页大小构建分页信息
+   * 根据页码和页大小构建分页信息。
    *
    * @param index 页码（从1开始, ps: spring 是从0开始，这有违习惯）
    * @param size 页大小
@@ -53,7 +53,7 @@ public class PageUtil {
   }
 
   /**
-   * 根据首条记录位置和返回记录数构建分页信息
+   * 根据首条记录位置和返回记录数构建分页信息。
    *
    * @param offset 首条记录位置
    * @param count 返回记录数
@@ -66,7 +66,7 @@ public class PageUtil {
   }
 
   /**
-   * 根据首条记录位置和返回记录数构建分页信息
+   * 根据首条记录位置和返回记录数构建分页信息。
    *
    * @param offset 首条记录位置
    * @param count 返回记录数

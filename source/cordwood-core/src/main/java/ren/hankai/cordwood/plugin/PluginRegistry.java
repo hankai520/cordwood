@@ -6,7 +6,7 @@ import ren.hankai.cordwood.core.domain.PluginPackage;
 import java.net.URL;
 
 /**
- * 插件注册表
+ * 插件注册表。
  *
  * @author hankai
  * @version 1.0.0
@@ -35,8 +35,8 @@ public interface PluginRegistry {
   boolean unregister(String packageId);
 
   /**
-   * 检查插件表是否已注册
-   * 
+   * 检查插件表是否已注册。
+   *
    * @param packageId 插件包 SHA1 校验和
    * @return 是否已注册
    * @author hankai

@@ -1,18 +1,18 @@
 
 package ren.hankai.cordwood.core;
 
+import ren.hankai.cordwood.TestSupport;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
-
-import ren.hankai.cordwood.TestSupport;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 程序运行时变量测试
+ * 程序运行时变量测试。
  *
  * @author hankai
  * @version 1.0.0

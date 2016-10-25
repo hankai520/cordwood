@@ -7,7 +7,7 @@
 package ren.hankai.cordwood.persist.config;
 
 /**
- * 数据源平台信息封装
+ * 数据源平台信息封装。
  *
  * @author hankai
  * @version 1.0

@@ -1,6 +1,15 @@
 
 package ren.hankai.cordwood;
 
+import ren.hankai.cordwood.core.ApplicationInitializer;
+import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.core.domain.Plugin;
+import ren.hankai.cordwood.core.domain.PluginPackage;
+import ren.hankai.cordwood.plugin.PluginLoader;
+import ren.hankai.cordwood.plugin.PluginManager;
+import ren.hankai.cordwood.plugin.PluginRegistry;
+import ren.hankai.cordwood.plugin.PluginValidator;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
@@ -11,15 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import ren.hankai.cordwood.core.ApplicationInitializer;
-import ren.hankai.cordwood.core.Preferences;
-import ren.hankai.cordwood.core.domain.Plugin;
-import ren.hankai.cordwood.core.domain.PluginPackage;
-import ren.hankai.cordwood.plugin.PluginLoader;
-import ren.hankai.cordwood.plugin.PluginManager;
-import ren.hankai.cordwood.plugin.PluginRegistry;
-import ren.hankai.cordwood.plugin.PluginValidator;
 
 import java.io.File;
 

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 封装插件包信息
+ * 封装插件包信息。
  *
  * @author hankai
  * @version 1.0.0
@@ -20,7 +20,7 @@ public final class PluginPackage {
   private final List<Plugin> plugins = new ArrayList<>();
 
   /**
-   * 获取插件包唯一标识符（SHA1 校验和）
+   * 获取插件包唯一标识符（SHA1 校验和）。
    *
    * @return 插件包ID
    * @author hankai
@@ -31,9 +31,8 @@ public final class PluginPackage {
   }
 
   /**
-   * 设置插件包唯一标识符
+   * 设置插件包唯一标识符。
    *
-   * @return 插件包ID
    * @author hankai
    * @since Oct 13, 2016 10:17:33 AM
    */
@@ -42,7 +41,7 @@ public final class PluginPackage {
   }
 
   /**
-   * 获取插件包对应的物理文件名
+   * 获取插件包对应的物理文件名。
    *
    * @return 文件名
    * @author hankai
@@ -53,7 +52,7 @@ public final class PluginPackage {
   }
 
   /**
-   * 设置插件包对应的物理文件名
+   * 设置插件包对应的物理文件名。
    *
    * @param fileName 文件名
    * @author hankai
@@ -64,7 +63,7 @@ public final class PluginPackage {
   }
 
   /**
-   * 获取插件包安装后的本地路径
+   * 获取插件包安装后的本地路径。
    *
    * @return 插件包本地路径
    * @author hankai
@@ -75,9 +74,8 @@ public final class PluginPackage {
   }
 
   /**
-   * 设置插件包安装后的本地路径
-   *
-   * @return 插件包本地路径
+   * 设置插件包安装后的本地路径。
+   * 
    * @author hankai
    * @since Oct 13, 2016 10:18:56 AM
    */
@@ -86,7 +84,7 @@ public final class PluginPackage {
   }
 
   /**
-   * 添加插件
+   * 添加插件。
    *
    * @param plugin 插件
    * @author hankai
@@ -97,7 +95,7 @@ public final class PluginPackage {
   }
 
   /**
-   * 移除插件
+   * 移除插件。
    *
    * @param plugin 插件
    * @author hankai

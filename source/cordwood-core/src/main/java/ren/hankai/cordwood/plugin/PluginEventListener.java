@@ -4,7 +4,7 @@ package ren.hankai.cordwood.plugin;
 import ren.hankai.cordwood.core.domain.Plugin;
 
 /**
- * 事件监听器
+ * 事件监听器。
  *
  * @author hankai
  * @version 1.0.0
@@ -13,7 +13,7 @@ import ren.hankai.cordwood.core.domain.Plugin;
 public interface PluginEventListener {
 
   /**
-   * 处理插件事件
+   * 处理插件事件。
    *
    * @param plugin 插件
    * @param event 事件

@@ -1,6 +1,10 @@
 
 package ren.hankai.cordwood.plugin.impl;
 
+import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.plugin.PluginLoader;
+import ren.hankai.cordwood.plugin.api.Pluggable;
+
 import org.apache.commons.io.IOUtils;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -15,12 +19,6 @@ import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import ren.hankai.cordwood.core.Preferences;
-import ren.hankai.cordwood.plugin.PluginLoader;
-import ren.hankai.cordwood.plugin.api.Pluggable;
-
-import javax.annotation.PostConstruct;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -33,6 +31,8 @@ import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
+
+import javax.annotation.PostConstruct;
 
 /**
  * 默认插件加载器，支持基于spring框架的插件。
@@ -49,7 +49,7 @@ public class SpringablePluginLoader implements PluginLoader {
   private ApplicationContext context;
   private final Map<String, GenericApplicationContext> plugins = new HashMap<>();
   /**
-   * 共享的类加载器，用于加载插件所依赖的包
+   * 共享的类加载器，用于加载插件所依赖的包。
    */
   private static ClassLoader sharedClassLoader = null;
 
@@ -66,7 +66,7 @@ public class SpringablePluginLoader implements PluginLoader {
   }
 
   /**
-   * 解析 jar 文件的 manifest
+   * 解析 jar 文件的 manifest。
    *
    * @param loader 类加载器
    * @return manifest 属性
@@ -95,11 +95,11 @@ public class SpringablePluginLoader implements PluginLoader {
   }
 
   /**
-   * 加载插件包的 spring 上下文
+   * 加载插件包的 spring 上下文。
    *
    * @param attrs 插件包 manifest 属性
    * @param loader 插件包类加载器
-   * @return
+   * @return 基于注解的 spring 上下文
    * @author hankai
    * @since Oct 13, 2016 1:16:18 PM
    */
@@ -126,6 +126,14 @@ public class SpringablePluginLoader implements PluginLoader {
     return null;
   }
 
+  /**
+   * 解析 jar 包中设置的插件基包。
+   *
+   * @param attrs jar 包的 manifest 属性
+   * @return 基包数组
+   * @author hankai
+   * @since Oct 25, 2016 10:24:21 AM
+   */
   private String[] resolvePluginBasePackages(Attributes attrs) {
     String str = attrs.getValue(PluginLoader.PLUGIN_BASE_PACKAGES);
     if (StringUtils.isEmpty(str)) {
@@ -136,7 +144,7 @@ public class SpringablePluginLoader implements PluginLoader {
   }
 
   /**
-   * 加载插件包中的插件实例
+   * 加载插件包中的插件实例。
    *
    * @param loader 插件包类加载器
    * @return 插件实例集合
@@ -164,7 +172,7 @@ public class SpringablePluginLoader implements PluginLoader {
         if (obj == null) {
           if (ctx != null) {
             logger.warn(String.format(
-                "No bean with type \"%s\" was found in spring context. Will try to instantiate it directly.",
+                "No bean with type \"%s\" was found. Will try to instantiate it directly.",
                 clazz.toString()));
           }
           try {
@@ -184,7 +192,7 @@ public class SpringablePluginLoader implements PluginLoader {
 
   @Override
   public List<Object> loadPlugins(URL jarFileUrl) {
-    URLClassLoader loader = new URLClassLoader(new URL[] { jarFileUrl }, sharedClassLoader);
+    URLClassLoader loader = new URLClassLoader(new URL[] {jarFileUrl}, sharedClassLoader);
     /*
      * 设置线程的上下文类加载器，这样，由此加载的插件都会使用此类加载器，这样 就能在运行时动态加载需要的依赖包，同时不同插件不共享类加载器，甚至能实现 同一个依赖包的不同版本同时被载入
      */

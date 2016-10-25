@@ -14,8 +14,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
+ * 插件实体。
+ *
  * @author hankai
- * @version TODO Missing version number
+ * @version 1.0.0
  * @since Sep 30, 2016 11:04:40 AM
  */
 @Entity

@@ -1,11 +1,11 @@
 
 package ren.hankai.cordwood.plugin;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import ren.hankai.cordwood.core.domain.Plugin;
 import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 

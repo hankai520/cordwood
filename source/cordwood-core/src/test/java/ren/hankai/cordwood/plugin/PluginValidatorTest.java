@@ -1,30 +1,28 @@
 
 package ren.hankai.cordwood.plugin;
 
+import ren.hankai.cordwood.TestSupport;
+import ren.hankai.cordwood.core.Preferences;
+
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.ResourceUtils;
 
-import ren.hankai.cordwood.TestSupport;
-import ren.hankai.cordwood.core.Preferences;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
 
 /**
+ * 插件验证器测试。
+ *
  * @author hankai
  * @version 1.0.0
  * @since Oct 21, 2016 3:26:43 PM
  */
 public class PluginValidatorTest extends TestSupport {
 
-  /**
-   * Test method for
-   * {@link ren.hankai.cordwood.plugin.PluginValidator#validatePackage(java.net.URL)}.
-   */
   @Test
   public void testValidatePackage() throws Exception {
     URL url = ResourceUtils.getURL("classpath:pojo-0.0.1.RELEASE.jar");

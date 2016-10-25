@@ -1,6 +1,11 @@
 
 package com.demo.web;
 
+import ren.hankai.cordwood.plugin.api.Functional;
+import ren.hankai.cordwood.plugin.api.Pluggable;
+import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
+import ren.hankai.cordwood.plugin.api.PluginResourceLoader;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -19,14 +24,11 @@ import java.net.URL;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ren.hankai.cordwood.plugin.api.Functional;
-import ren.hankai.cordwood.plugin.api.Pluggable;
-import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
-import ren.hankai.cordwood.plugin.api.PluginResourceLoader;
-
 /**
+ * 示例插件。
+ *
  * @author hankai
- * @version TODO Missing version number
+ * @version 1.0.0
  * @since Oct 18, 2016 9:30:06 AM
  */
 @Pluggable(name = DemoWeb.NAME, version = "1.0.0", description = "test only",
@@ -39,6 +41,15 @@ public class DemoWeb implements PluginLifeCycleAware, PluginResourceLoader {
 
   private static VelocityEngine engine = null;
 
+  /**
+   * 示例功能。
+   * 
+   * @param request HTTP 请求
+   * @param response HTTP 响应
+   * @return 网页内容
+   * @author hankai
+   * @since Oct 25, 2016 1:01:24 PM
+   */
   @Functional(name = "hello", resultType = "text/html")
   public String sayHello(HttpServletRequest request, HttpServletResponse response) {
     VelocityContext vc = new VelocityContext();

@@ -11,8 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
+ * 数据实体。
+ *
  * @author hankai
- * @version TODO Missing version number
+ * @version 1.0.0
  * @since Oct 9, 2016 3:19:05 PM
  */
 @Entity
@@ -24,6 +26,7 @@ public class MyTbl1 implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+  // @Column
   private String name;
 
   public Integer getId() {

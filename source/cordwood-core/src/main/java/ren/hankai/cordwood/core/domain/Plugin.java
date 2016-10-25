@@ -23,7 +23,7 @@ public final class Plugin {
   private Map<String, PluginFunction> functions = new HashMap<>();
 
   /**
-   * 获取插件名
+   * 获取插件名。
    *
    * @return 插件名
    * @author hankai
@@ -34,7 +34,7 @@ public final class Plugin {
   }
 
   /**
-   * 设置插件名
+   * 设置插件名。
    *
    * @param name 插件名
    * @author hankai
@@ -45,7 +45,7 @@ public final class Plugin {
   }
 
   /**
-   * 获取插件版本
+   * 获取插件版本。
    *
    * @return 插件版本号
    * @author hankai
@@ -56,7 +56,7 @@ public final class Plugin {
   }
 
   /**
-   * 设置插件版本
+   * 设置插件版本。
    *
    * @param version 插件版本号
    * @author hankai
@@ -67,7 +67,7 @@ public final class Plugin {
   }
 
   /**
-   * 获取插件简介
+   * 获取插件简介。
    *
    * @return 插件简介
    * @author hankai
@@ -78,7 +78,7 @@ public final class Plugin {
   }
 
   /**
-   * 设置插件简介
+   * 设置插件简介。
    *
    * @param description 插件简介
    * @author hankai
@@ -146,7 +146,7 @@ public final class Plugin {
   /**
    * 设置插件功能集合。
    *
-   * @param functions
+   * @param functions 插件功能集合
    * @author hankai
    * @since Oct 13, 2016 10:00:16 AM
    */

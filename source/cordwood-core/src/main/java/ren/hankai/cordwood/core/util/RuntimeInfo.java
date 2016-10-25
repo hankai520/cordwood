@@ -16,6 +16,9 @@ public final class RuntimeInfo {
 
   private final Properties props;
 
+  /**
+   * 初始化运行时信息。
+   */
   public RuntimeInfo() {
     props = System.getProperties();
     props.putAll(System.getenv());
@@ -24,13 +27,14 @@ public final class RuntimeInfo {
       props.put("hostName", addr.getHostName());
       props.put("hostIp", addr.getHostAddress());
     } catch (UnknownHostException e) {
+      throw new RuntimeException("Failed to initialize runtime info.", e);
     }
   }
 
   /**
    * 获取主机信息。
    *
-   * @return
+   * @return 主机名
    * @author hankai
    * @since Oct 13, 2016 10:23:53 AM
    */
@@ -89,7 +93,7 @@ public final class RuntimeInfo {
   /**
    * 获取 Java 版本。
    *
-   * @return
+   * @return JAVA版本
    * @author hankai
    * @since Oct 13, 2016 10:25:58 AM
    */
@@ -100,7 +104,7 @@ public final class RuntimeInfo {
   /**
    * 获取 Java 实现（供应商）。
    *
-   * @return
+   * @return JAVA实现
    * @author hankai
    * @since Oct 13, 2016 10:26:10 AM
    */
@@ -111,7 +115,7 @@ public final class RuntimeInfo {
   /**
    * 获取 java home。
    *
-   * @return
+   * @return java home
    * @author hankai
    * @since Oct 13, 2016 10:26:39 AM
    */
@@ -122,7 +126,7 @@ public final class RuntimeInfo {
   /**
    * 获取 JVM 规范版本号。
    *
-   * @return
+   * @return JVM规范版本
    * @author hankai
    * @since Oct 13, 2016 10:26:49 AM
    */
@@ -133,7 +137,7 @@ public final class RuntimeInfo {
   /**
    * 获取 JVM 规范的实现（供应商）。
    *
-   * @return
+   * @return JVM规范实现
    * @author hankai
    * @since Oct 13, 2016 10:27:01 AM
    */
@@ -144,7 +148,7 @@ public final class RuntimeInfo {
   /**
    * 获取 JVM 规范的名称。
    *
-   * @return
+   * @return JVM规范名
    * @author hankai
    * @since Oct 13, 2016 10:27:20 AM
    */
@@ -155,7 +159,7 @@ public final class RuntimeInfo {
   /**
    * 获取 JVM 版本。
    *
-   * @return
+   * @return JVM版本
    * @author hankai
    * @since Oct 13, 2016 10:27:44 AM
    */
@@ -166,7 +170,7 @@ public final class RuntimeInfo {
   /**
    * 获取 JVM 实现（供应商）。
    *
-   * @return
+   * @return JVM实现
    * @author hankai
    * @since Oct 13, 2016 10:27:53 AM
    */
@@ -177,7 +181,7 @@ public final class RuntimeInfo {
   /**
    * 获取 JVM 名称。
    *
-   * @return
+   * @return JVM名
    * @author hankai
    * @since Oct 13, 2016 10:28:04 AM
    */
@@ -188,7 +192,7 @@ public final class RuntimeInfo {
   /**
    * 获取 JAVA 运行时规范版本。
    *
-   * @return
+   * @return JRE规范版本
    * @author hankai
    * @since Oct 13, 2016 10:28:13 AM
    */
@@ -199,7 +203,7 @@ public final class RuntimeInfo {
   /**
    * 获取 JAVA 运行时规范的实现。
    *
-   * @return
+   * @return JRE规范实现
    * @author hankai
    * @since Oct 13, 2016 10:28:27 AM
    */
@@ -210,7 +214,7 @@ public final class RuntimeInfo {
   /**
    * 获取 JAVA 运行时规范的名称。
    *
-   * @return
+   * @return JRE规范名
    * @author hankai
    * @since Oct 13, 2016 10:28:39 AM
    */
@@ -221,7 +225,7 @@ public final class RuntimeInfo {
   /**
    * 获取操作系统名称。
    *
-   * @return
+   * @return 操作系统名
    * @author hankai
    * @since Oct 13, 2016 10:28:54 AM
    */
@@ -232,7 +236,7 @@ public final class RuntimeInfo {
   /**
    * 获取操作系统架构。
    *
-   * @return
+   * @return 操作系统架构
    * @author hankai
    * @since Oct 13, 2016 10:29:07 AM
    */
@@ -243,7 +247,7 @@ public final class RuntimeInfo {
   /**
    * 获取操作系统版本。
    *
-   * @return
+   * @return 操作系统版本
    * @author hankai
    * @since Oct 13, 2016 10:29:15 AM
    */

@@ -1,8 +1,6 @@
 
 package com.demo.plugins.config;
 
-import java.io.File;
-
 import ch.qos.logback.classic.BasicConfigurator;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -16,11 +14,13 @@ import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 
+import java.io.File;
+
 /**
- * Logback 配置类，用于取代 XML 配置文件
+ * Logback 配置类，用于取代 XML 配置文件。
  *
  * @author hankai
- * @version 1.0
+ * @version 1.0.0
  * @since Oct 10, 2016 11:00:14 AM
  */
 public class LogbackConfig extends BasicConfigurator implements Configurator {

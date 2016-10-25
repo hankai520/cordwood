@@ -73,7 +73,7 @@ public final class Preferences {
   private Preferences() {}
 
   /**
-   * 从外部配置文件加载系统参数配置
+   * 从外部配置文件加载系统参数配置。
    *
    * @author hankai
    * @since Jun 27, 2016 10:09:35 PM
@@ -166,7 +166,7 @@ public final class Preferences {
   /**
    * 数据库存储目录。
    *
-   * @return
+   * @return 数据库目录
    * @author hankai
    * @since Sep 30, 2016 3:39:19 PM
    */
@@ -239,7 +239,7 @@ public final class Preferences {
   /**
    * 获取程序数据备份目录。
    *
-   * @return
+   * @return 备份目录
    * @author hankai
    * @since Aug 18, 2016 5:09:38 PM
    */
@@ -252,7 +252,7 @@ public final class Preferences {
   /**
    * 插件目录。
    *
-   * @return
+   * @return 插件目录
    * @author hankai
    * @since Sep 30, 2016 3:37:19 PM
    */
@@ -265,7 +265,7 @@ public final class Preferences {
   /**
    * 依赖包目录。
    *
-   * @return
+   * @return 依赖包目录
    * @author hankai
    * @since Oct 18, 2016 2:45:39 PM
    */

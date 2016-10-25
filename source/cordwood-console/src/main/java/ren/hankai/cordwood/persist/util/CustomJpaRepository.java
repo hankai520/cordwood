@@ -14,7 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.List;
 
 /**
- * 扩展 Spring Data 的 jpa repository 来提供更多实用查询。 实体 Repository 类似 DAO，主要提供直接面向实体的查询接口
+ * 扩展 Spring Data 的 jpa repository 来提供更多实用查询。 实体 Repository 类似 DAO，主要提供直接面向实体的查询接口。
  *
  * @author hankai
  * @version 1.0
@@ -23,7 +23,7 @@ import java.util.List;
 public interface CustomJpaRepository<T> {
 
   /**
-   * 根据指定条件查询实体
+   * 根据指定条件查询实体。
    *
    * @param spec 查询条件
    * @return 实体集合
@@ -33,7 +33,7 @@ public interface CustomJpaRepository<T> {
   List<T> findAll(Specification<T> spec);
 
   /**
-   * 根据查询和排序条件查找所有符合要求的实体
+   * 根据查询和排序条件查找所有符合要求的实体。
    *
    * @param spec 查询条件
    * @param sort 排序条件
@@ -44,7 +44,7 @@ public interface CustomJpaRepository<T> {
   List<T> findAll(Specification<T> spec, Sort sort);
 
   /**
-   * 根据查询和排序条件分页查找所有符合要求的实体
+   * 根据查询和排序条件分页查找所有符合要求的实体。
    *
    * @param spec 查询条件
    * @param pageable 分页及排序条件
@@ -55,7 +55,7 @@ public interface CustomJpaRepository<T> {
   Page<T> findAll(Specification<T> spec, Pageable pageable);
 
   /**
-   * 统计满足条件的实体数量
+   * 统计满足条件的实体数量。
    *
    * @param spec 查询条件
    * @return 实体数量
@@ -65,7 +65,7 @@ public interface CustomJpaRepository<T> {
   long count(Specification<T> spec);
 
   /**
-   * 查询唯一满足条件的实体
+   * 查询唯一满足条件的实体。
    *
    * @param spec 查询条件
    * @return 实体示例

@@ -22,7 +22,7 @@ public class PathUtil {
   private static final Logger logger = LoggerFactory.getLogger(PathUtil.class);
 
   /**
-   * 根据请求的路径解析出资源相对路径
+   * 根据请求的路径解析出资源相对路径。
    *
    * @param url 请求路径
    * @return 资源相对路径

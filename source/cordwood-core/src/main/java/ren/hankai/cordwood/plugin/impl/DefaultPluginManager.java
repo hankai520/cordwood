@@ -1,18 +1,6 @@
 
 package ren.hankai.cordwood.plugin.impl;
 
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.stereotype.Component;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.util.ReflectionUtils;
-import org.springframework.util.StringUtils;
-
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.domain.Plugin;
 import ren.hankai.cordwood.core.domain.PluginFunction;
@@ -24,6 +12,18 @@ import ren.hankai.cordwood.plugin.PluginRegistry;
 import ren.hankai.cordwood.plugin.PluginValidator;
 import ren.hankai.cordwood.plugin.api.Functional;
 import ren.hankai.cordwood.plugin.api.Pluggable;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.stereotype.Component;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.util.ReflectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -191,15 +191,8 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
         logger.error(String.format("Failed to copy plugin package file: %s", tempUrl.toString()),
             e);
       } finally {
-        try {
-          if (is != null) {
-            is.close();
-          }
-          if (os != null) {
-            os.close();
-          }
-        } catch (IOException e) {
-        }
+        IOUtils.closeQuietly(is);
+        IOUtils.closeQuietly(os);
       }
     }
     return url;

@@ -1,11 +1,10 @@
 package ren.hankai.cordwood.console.controller;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import ren.hankai.cordwood.core.domain.Plugin;
+import ren.hankai.cordwood.core.domain.PluginFunction;
+import ren.hankai.cordwood.core.util.PathUtil;
+import ren.hankai.cordwood.plugin.PluginManager;
+import ren.hankai.cordwood.plugin.api.PluginResourceLoader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,14 +17,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ren.hankai.cordwood.core.domain.Plugin;
-import ren.hankai.cordwood.core.domain.PluginFunction;
-import ren.hankai.cordwood.core.util.PathUtil;
-import ren.hankai.cordwood.plugin.PluginManager;
-import ren.hankai.cordwood.plugin.api.PluginResourceLoader;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
- * 插件访问分发控制器
+ * 插件访问分发控制器。
  *
  * @author hankai
  * @version 1.0.0
@@ -39,6 +39,17 @@ public class PluggableController {
   @Autowired
   private PluginManager pluginManager;
 
+  /**
+   * 分发插件访问请求。
+   *
+   * @param pluginName 插件名
+   * @param function 插件功能
+   * @param request HTTP 请求
+   * @param response HTTP 响应
+   * @return 插件功能返回内容
+   * @author hankai
+   * @since Oct 25, 2016 10:54:24 AM
+   */
   @RequestMapping(value = "/service/{plugin_name}/{function}")
   @ResponseBody
   public ResponseEntity<Object> dispatchPluginRequest(
@@ -74,6 +85,15 @@ public class PluggableController {
     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
+  /**
+   * 分发插件资源访问请求。
+   *
+   * @param pluginName 插件名
+   * @param request HTTP 请求
+   * @return HTTP 响应内容
+   * @author hankai
+   * @since Oct 25, 2016 10:59:26 AM
+   */
   @RequestMapping(value = "/resources/{plugin_name}/**")
   @ResponseBody
   public ResponseEntity<Object> dispatchPluginResourceRequest(

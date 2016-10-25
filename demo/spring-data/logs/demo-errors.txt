@@ -1,0 +1,6 @@
+2016-10-25 13:22:27.849 [main] WARN  com.demo.plugins.Hello - feature "add" called
+2016-10-25 13:32:30.612 [main] WARN  com.demo.plugins.Hello - feature "add" called
+2016-10-25 14:11:56.448 [main] WARN  com.demo.plugins.Hello - feature "add" called
+2016-10-25 14:13:31.696 [main] WARN  com.demo.plugins.Hello - feature "add" called
+2016-10-25 14:13:52.930 [main] WARN  com.demo.plugins.Hello - feature "add" called
+2016-10-25 14:14:13.467 [main] WARN  com.demo.plugins.Hello - feature "add" called

@@ -11,7 +11,7 @@ package ren.hankai.cordwood.plugin.api;
 public interface PluginLifeCycleAware {
 
   /**
-   * 插件被加载
+   * 插件被加载。
    *
    * @author hankai
    * @since Oct 13, 2016 9:17:13 AM
@@ -19,7 +19,7 @@ public interface PluginLifeCycleAware {
   void pluginDidLoad();
 
   /**
-   * 插件被卸载
+   * 插件被卸载。
    *
    * @author hankai
    * @since Oct 13, 2016 9:17:33 AM
@@ -27,16 +27,16 @@ public interface PluginLifeCycleAware {
   void pluginDidUnload();
 
   /**
-   * 插件被启用（激活）
-   * 
+   * 插件被启用（激活）。
+   *
    * @author hankai
    * @since Oct 13, 2016 9:18:35 AM
    */
   void pluginDidActivated();
 
   /**
-   * 插件被禁用（失活）
-   * 
+   * 插件被禁用（失活）。
+   *
    * @author hankai
    * @since Oct 13, 2016 9:18:48 AM
    */
