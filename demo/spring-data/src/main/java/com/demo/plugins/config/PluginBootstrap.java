@@ -64,7 +64,7 @@ public class PluginBootstrap {
 
   /**
    * 定义数据源。
-   * 
+   *
    * @param env spring环境参数
    * @return 数据源
    * @author hankai
@@ -102,7 +102,7 @@ public class PluginBootstrap {
 
   /**
    * 定义用于生产 JPA 核心对象 EntityManager 的工厂。
-   * 
+   *
    * @param dataSource 数据源
    * @return EntityManager 工厂
    * @author hankai
@@ -133,7 +133,7 @@ public class PluginBootstrap {
 
   /**
    * 定义事务管理器。
-   * 
+   *
    * @return 事务管理器
    * @author hankai
    * @since Oct 25, 2016 1:07:56 PM

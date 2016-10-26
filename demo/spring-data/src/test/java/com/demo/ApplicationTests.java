@@ -1,7 +1,6 @@
 
 package com.demo;
 
-import com.demo.plugins.config.PluginBootstrap;
 import com.demo.plugins.util.Slf4jSessionLogger;
 
 import org.eclipse.persistence.platform.database.HSQLPlatform;
@@ -11,12 +10,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.Properties;
 
@@ -30,10 +34,11 @@ import javax.sql.DataSource;
  * @since Jun 21, 2016 1:29:53 PM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {PluginBootstrap.class})
+@ContextConfiguration(classes = {ApplicationTests.class})
+@EnableJpaRepositories(basePackages = {"com.demo"})
+@EnableTransactionManagement
 @ComponentScan(basePackages = {"com.demo"})
 @Configuration
-@ActiveProfiles({"unit-test"})
 public abstract class ApplicationTests {
 
   @Before
@@ -42,6 +47,29 @@ public abstract class ApplicationTests {
   }
 
   private void initTestFixures() {}
+
+  @Bean
+  public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
+    return new PropertySourcesPlaceholderConfigurer();
+  }
+
+  /**
+   * 定义消息源，用于国际化。
+   *
+   * @return 消息源
+   * @author hankai
+   * @since Oct 25, 2016 1:05:30 PM
+   */
+  @Bean(name = "messageSource")
+  public ReloadableResourceBundleMessageSource getMessageSource() {
+    ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
+    ms.setBasenames("i18n/messages");
+    ms.setDefaultEncoding("UTF-8");
+    ms.setCacheSeconds(0);
+    ms.setFallbackToSystemLocale(false);
+    ms.setUseCodeAsDefaultMessage(true);
+    return ms;
+  }
 
   /**
    * 定义测试数据源。
@@ -91,5 +119,17 @@ public abstract class ApplicationTests {
     jpaProperties.setProperty("eclipselink.logging.logger", Slf4jSessionLogger.class.getName());
     factory.setJpaProperties(jpaProperties);
     return factory;
+  }
+
+  /**
+   * 定义事务管理器。
+   *
+   * @return 事务管理器
+   * @author hankai
+   * @since Oct 25, 2016 1:07:56 PM
+   */
+  @Bean(name = "transactionManager")
+  public PlatformTransactionManager getTransactionManager() {
+    return new JpaTransactionManager();
   }
 }
