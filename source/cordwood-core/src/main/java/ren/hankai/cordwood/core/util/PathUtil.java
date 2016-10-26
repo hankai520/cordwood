@@ -1,14 +1,13 @@
 
 package ren.hankai.cordwood.core.util;
 
-import org.apache.commons.lang.StringUtils;
+import ren.hankai.cordwood.plugin.api.Pluggable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 路径工具类。
@@ -32,14 +31,22 @@ public class PathUtil {
   public static String parseResourcePath(String url) {
     try {
       String decodedUrl = URLDecoder.decode(url, "UTF-8");
-      decodedUrl = decodedUrl.startsWith("/") ? decodedUrl.substring(1) : decodedUrl;
-      String[] parts = decodedUrl.split("/");
-      if ((parts != null) && (parts.length > 2)) {
-        List<String> list = new ArrayList<>();
-        for (int i = 2; i < parts.length; i++) {
-          list.add(parts[i]);
+
+      int index = decodedUrl.indexOf(Pluggable.PLUGIN_RESOURCE_BASE_URL);
+      if (index >= 0) {
+        decodedUrl = decodedUrl.substring(index + 1);
+        decodedUrl = decodedUrl.startsWith("/") ? decodedUrl.substring(1) : decodedUrl;
+        String[] parts = decodedUrl.split("/");
+        if ((parts != null) && (parts.length > 2)) {
+          StringBuilder sb = new StringBuilder();
+          for (int i = 2; i < parts.length; i++) {
+            sb.append(parts[i] + "/");
+          }
+          if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+          }
+          return sb.toString();
         }
-        return StringUtils.join(list, "/");
       }
     } catch (UnsupportedEncodingException e) {
       logger.error(String.format("Failed to decode url: \"%s\"", url), e);

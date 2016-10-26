@@ -1,7 +1,4 @@
-
-package ren.hankai.cordwood.core.util;
-
-import ren.hankai.cordwood.plugin.util.PathUtil;
+package ren.hankai.cordwood.plugin.util;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,7 +8,7 @@ import org.junit.Test;
  *
  * @author hankai
  * @version 1.0.0
- * @since Oct 24, 2016 5:40:03 PM
+ * @since Oct 26, 2016 1:09:35 PM
  */
 public class PathUtilTest {
 
@@ -37,4 +34,5 @@ public class PathUtilTest {
     path = PathUtil.parseResourcePath(url);
     Assert.assertNull(path);
   }
+
 }

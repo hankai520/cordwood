@@ -4,6 +4,7 @@ import ren.hankai.cordwood.core.domain.Plugin;
 import ren.hankai.cordwood.core.domain.PluginFunction;
 import ren.hankai.cordwood.core.util.PathUtil;
 import ren.hankai.cordwood.plugin.PluginManager;
+import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.api.PluginResourceLoader;
 
 import org.slf4j.Logger;
@@ -50,7 +51,7 @@ public class PluggableController {
    * @author hankai
    * @since Oct 25, 2016 10:54:24 AM
    */
-  @RequestMapping(value = "/service/{plugin_name}/{function}")
+  @RequestMapping(value = Pluggable.PLUGIN_BASE_URL + "/{plugin_name}/{function}")
   @ResponseBody
   public ResponseEntity<Object> dispatchPluginRequest(
       @PathVariable("plugin_name") String pluginName, @PathVariable("function") String function,
@@ -94,7 +95,7 @@ public class PluggableController {
    * @author hankai
    * @since Oct 25, 2016 10:59:26 AM
    */
-  @RequestMapping(value = "/resources/{plugin_name}/**")
+  @RequestMapping(value = Pluggable.PLUGIN_RESOURCE_BASE_URL + "/{plugin_name}/**")
   @ResponseBody
   public ResponseEntity<Object> dispatchPluginResourceRequest(
       @PathVariable("plugin_name") String pluginName, HttpServletRequest request) {

@@ -1,5 +1,6 @@
 package com.demo.web;
 
+import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.util.PathUtil;
 
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ public class PluginContainer {
 
   private static final Logger logger = LoggerFactory.getLogger(PluginContainer.class);
 
-  @RequestMapping(value = "/service/{plugin_name}/{function}")
+  @RequestMapping(value = Pluggable.PLUGIN_BASE_URL + "/{plugin_name}/{function}")
   @ResponseBody
   public ResponseEntity<Object> dispatchPluginRequest(
       @PathVariable("plugin_name") String pluginName, @PathVariable("function") String function,
@@ -64,7 +65,7 @@ public class PluginContainer {
    * @author hankai
    * @since Oct 25, 2016 10:59:26 AM
    */
-  @RequestMapping(value = "/resources/{plugin_name}/**")
+  @RequestMapping(value = Pluggable.PLUGIN_RESOURCE_BASE_URL + "/{plugin_name}/**")
   @ResponseBody
   public ResponseEntity<Object> dispatchPluginResourceRequest(
       @PathVariable("plugin_name") String pluginName, HttpServletRequest request) {
@@ -83,6 +84,7 @@ public class PluginContainer {
   }
 
   public static void main(String[] args) throws Exception {
+    System.setProperty("server.port", "8000");
     SpringApplication.run(PluginContainer.class, args);
   }
 }

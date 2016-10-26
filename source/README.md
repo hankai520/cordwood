@@ -1,5 +1,5 @@
-Cordwood
-========
+Cordwood 源码结构
+=================
 
 Cordwood 是一个基于 Spring framework 的插件架构 web
 容器，符合插件API要求的插件包可以被安装到 cordwood，并以 web的方式提供服务。

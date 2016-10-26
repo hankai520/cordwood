@@ -45,7 +45,7 @@ public abstract class ApplicationTests {
 
   /**
    * 定义测试数据源。
-   * 
+   *
    * @return 数据源
    * @author hankai
    * @since Oct 25, 2016 2:15:51 PM
@@ -63,7 +63,7 @@ public abstract class ApplicationTests {
 
   /**
    * 定义测试用的 EntityManager 工厂。
-   * 
+   *
    * @param dataSource 数据源
    * @return EntityManager 工厂
    * @author hankai
@@ -84,7 +84,7 @@ public abstract class ApplicationTests {
     jpaProperties.setProperty("eclipselink.target-database", HSQLPlatform.class.getName());
     jpaProperties.setProperty("eclipselink.ddl-generation", "drop-and-create-tables");
     // this controls what will be logged during DDL execution
-    jpaProperties.setProperty("eclipselink.ddl-generation.output-mode", "both");
+    // jpaProperties.setProperty("eclipselink.ddl-generation.output-mode", "both");
     jpaProperties.setProperty("eclipselink.weaving", "static");
     jpaProperties.setProperty("eclipselink.logging.level", "FINE");
     jpaProperties.setProperty("eclipselink.logging.parameters", "true");
