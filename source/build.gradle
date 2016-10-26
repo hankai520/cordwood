@@ -49,4 +49,8 @@ subprojects {
         testCompile "junit:junit:4.12"
         testCompile "com.jayway.jsonpath:json-path-assert:0.8.1"
     }
+    
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
 }

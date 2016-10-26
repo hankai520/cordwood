@@ -76,6 +76,10 @@ dependencies {
     testCompile "org.easymock:easymock:3.1"
 }
 
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
 task copyDependencies(type: Copy) {
    from configurations.compile
    into "dependencies"
