@@ -1,8 +1,11 @@
 package ren.hankai.cordwood.console.controller;
 
+import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.domain.Plugin;
 import ren.hankai.cordwood.core.domain.PluginFunction;
+import ren.hankai.cordwood.core.domain.TokenInfo;
 import ren.hankai.cordwood.core.util.PathUtil;
+import ren.hankai.cordwood.core.util.SecurityUtil;
 import ren.hankai.cordwood.plugin.PluginManager;
 import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.api.PluginResourceLoader;
@@ -64,6 +67,24 @@ public class PluggableController {
         return new ResponseEntity<>("service not enabled!", HttpStatus.OK);
       } else {
         PluginFunction fun = plugin.getFunctions().get(function);
+        if (fun.isCheckInboundParameters()
+            && !SecurityUtil.verifyParameters(request.getParameterMap())) {
+          String msg = "Failed to complete plugin request due to invalid parameter signature!";
+          logger.warn(msg);
+          return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+        } else if (fun.isCheckAccessToken()) {
+          String rawToken = request.getParameter(Preferences.API_ACCESS_TOKEN);
+          int result = SecurityUtil.verifyToken(rawToken);
+          if (result == TokenInfo.TOKEN_ERROR_INVALID) {
+            String msg = String.format("Access token is invalid: %s", rawToken);
+            logger.warn(msg);
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+          } else if (result == TokenInfo.TOKEN_ERROR_EXPIRED) {
+            String msg = String.format("Access token is expired: %s", rawToken);
+            logger.warn(msg);
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+          }
+        }
         Class<?>[] paramTypes = fun.getMethod().getParameterTypes();
         List<Object> args = new ArrayList<>();
         if ((paramTypes != null) && (paramTypes.length > 0)) {

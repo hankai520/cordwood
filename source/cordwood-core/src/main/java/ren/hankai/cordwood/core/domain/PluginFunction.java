@@ -16,6 +16,8 @@ public final class PluginFunction {
   private String name;
   private Method method;
   private String resultType;
+  private boolean checkInboundParameters = false;
+  private boolean checkAccessToken = false;
 
   /**
    * 获取功能名。
@@ -81,4 +83,49 @@ public final class PluginFunction {
   public void setResultType(String resultType) {
     this.resultType = resultType;
   }
+
+  /**
+   * 是否检查入参完整性。
+   *
+   * @return 是否检查入参
+   * @author hankai
+   * @since Oct 27, 2016 6:20:25 PM
+   */
+  public boolean isCheckInboundParameters() {
+    return checkInboundParameters;
+  }
+
+  /**
+   * 设置是否检查入参。
+   *
+   * @param checkInboundParameters 是否检查
+   * @author hankai
+   * @since Oct 27, 2016 6:20:40 PM
+   */
+  public void setCheckInboundParameters(boolean checkInboundParameters) {
+    this.checkInboundParameters = checkInboundParameters;
+  }
+
+  /**
+   * 是否检查令牌。
+   *
+   * @return 是否检查令牌
+   * @author hankai
+   * @since Oct 27, 2016 6:20:57 PM
+   */
+  public boolean isCheckAccessToken() {
+    return checkAccessToken;
+  }
+
+  /**
+   * 设置是否检查令牌。
+   *
+   * @param checkAccessToken 是否检查令牌
+   * @author hankai
+   * @since Oct 27, 2016 6:21:10 PM
+   */
+  public void setCheckAccessToken(boolean checkAccessToken) {
+    this.checkAccessToken = checkAccessToken;
+  }
+
 }

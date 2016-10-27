@@ -12,6 +12,7 @@ import ren.hankai.cordwood.plugin.PluginRegistry;
 import ren.hankai.cordwood.plugin.PluginValidator;
 import ren.hankai.cordwood.plugin.api.Functional;
 import ren.hankai.cordwood.plugin.api.Pluggable;
+import ren.hankai.cordwood.plugin.api.Secure;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -106,6 +107,7 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
     plugin.setInstance(pluginInstance);
     plugin.setActive(true);
     // 扫描插件标记的功能
+    Secure pluginSecure = clazz.getAnnotation(Secure.class);
     ReflectionUtils.doWithMethods(clazz, new ReflectionUtils.MethodCallback() {
 
       @Override
@@ -121,6 +123,14 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
             function.setName(method.getName());
           }
           function.setResultType(functional.resultType());
+          Secure secure = AnnotationUtils.getAnnotation(method, Secure.class);
+          if (secure == null) {
+            secure = pluginSecure;
+          }
+          if (secure != null) {
+            function.setCheckAccessToken(secure.checkAccessToken());
+            function.setCheckInboundParameters(secure.checkParameterIntegrity());
+          }
           plugin.getFunctions().put(functional.name(), function);
         }
       }

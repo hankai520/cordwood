@@ -4,6 +4,7 @@ package com.demo.withoutspring;
 import ren.hankai.cordwood.plugin.api.Functional;
 import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
+import ren.hankai.cordwood.plugin.api.Secure;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,13 +27,14 @@ public class SomeDemo implements PluginLifeCycleAware {
 
   /**
    * 示例功能。
-   * 
+   *
    * @param request HTTP 请求
    * @param response HTTP 响应
    * @return 返回内容
    * @author hankai
    * @since Oct 25, 2016 2:18:22 PM
    */
+  @Secure
   @Functional(name = "hello", resultType = "text/plain")
   public String sayHello(HttpServletRequest request, HttpServletResponse response) {
     int op1 = Integer.parseInt(request.getParameter("op1"));
