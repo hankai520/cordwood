@@ -37,7 +37,7 @@ public class JpaConfiguration extends JpaBaseConfiguration {
 
   /**
    * 初始化 JPA 配置。
-   * 
+   *
    * @param dataSource 数据源
    * @param properties JPA 属性配置
    * @param jtaTransactionManagerProvider 事务管理器提供者
