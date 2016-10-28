@@ -7,9 +7,11 @@ import ren.hankai.cordwood.core.domain.Plugin;
 import ren.hankai.cordwood.core.domain.PluginFunction;
 import ren.hankai.cordwood.core.domain.PluginPackage;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.ResourceUtils;
 
@@ -28,14 +30,21 @@ import java.util.List;
  */
 public class PluginManagerTest extends TestSupport {
 
+  private Plugin plugin;
+
+  @Autowired
+  protected PluginRegistry pluginRegistry;
+  @Autowired
+  protected PluginManager pluginManager;
+
   @Test
   public void testActivatePlugin() throws Exception {
     URL url = ResourceUtils.getURL("classpath:pojo-0.0.1.RELEASE.jar");
+    String checksum = DigestUtils.sha1Hex(url.openStream());
     PluginPackage pp = pluginRegistry.register(url);
-    pluginPackage = pp;
     Assert.assertNotNull(pp);
     Assert.assertEquals("pojo-0.0.1.RELEASE.jar", pp.getFileName());
-    Assert.assertEquals("73ed386ba57f41e908f1757970df071187aa7a28", pp.getIdentifier());
+    Assert.assertEquals(checksum, pp.getIdentifier());
     URL expUrl = new File(Preferences.getPluginsDir() + File.separator + "pojo-0.0.1.RELEASE.jar")
         .toURI().toURL();
     Assert.assertEquals(expUrl, pp.getInstallUrl());
@@ -55,17 +64,17 @@ public class PluginManagerTest extends TestSupport {
     pluginManager.activatePlugin(plugin.getName());
     plugin2 = pluginManager.getPlugin(plugin.getName());
     Assert.assertTrue(plugin2.isActive());
-    pluginRegistry.unregister("73ed386ba57f41e908f1757970df071187aa7a28");
+    pluginRegistry.unregister(checksum);
   }
 
   @Test
   public void testGetPlugin() throws Exception {
     URL url = ResourceUtils.getURL("classpath:pojo-0.0.1.RELEASE.jar");
+    String checksum = DigestUtils.sha1Hex(url.openStream());
     PluginPackage pp = pluginRegistry.register(url);
-    pluginPackage = pp;
     Assert.assertNotNull(pp);
     Assert.assertEquals("pojo-0.0.1.RELEASE.jar", pp.getFileName());
-    Assert.assertEquals("73ed386ba57f41e908f1757970df071187aa7a28", pp.getIdentifier());
+    Assert.assertEquals(checksum, pp.getIdentifier());
     URL expUrl = new File(Preferences.getPluginsDir() + File.separator + "pojo-0.0.1.RELEASE.jar")
         .toURI().toURL();
     Assert.assertEquals(expUrl, pp.getInstallUrl());
@@ -84,7 +93,7 @@ public class PluginManagerTest extends TestSupport {
     Assert.assertEquals(plugin2.getVersion(), plugin.getVersion());
     Assert.assertEquals(plugin2.getDescription(), plugin.getDescription());
     Assert.assertEquals(plugin2.getInstance(), plugin.getInstance());
-    pluginRegistry.unregister("73ed386ba57f41e908f1757970df071187aa7a28");
+    pluginRegistry.unregister(checksum);
   }
 
   @Test
@@ -102,6 +111,6 @@ public class PluginManagerTest extends TestSupport {
     Assert.assertEquals(plugin2.getVersion(), "1.0.0");
     Assert.assertEquals(plugin2.getDescription(), "test only");
     Assert.assertNotNull(plugin2.getInstance());
-    pluginRegistry.unregister("73ed386ba57f41e908f1757970df071187aa7a28");
+    pluginRegistry.unregister(DigestUtils.sha1Hex(url.openStream()));
   }
 }

@@ -3,16 +3,13 @@ package ren.hankai.cordwood.plugin.impl;
 
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.domain.Plugin;
-import ren.hankai.cordwood.core.domain.PluginFunction;
 import ren.hankai.cordwood.core.domain.PluginPackage;
 import ren.hankai.cordwood.plugin.PluginEventEmitter;
 import ren.hankai.cordwood.plugin.PluginLoader;
 import ren.hankai.cordwood.plugin.PluginManager;
 import ren.hankai.cordwood.plugin.PluginRegistry;
+import ren.hankai.cordwood.plugin.PluginResolver;
 import ren.hankai.cordwood.plugin.PluginValidator;
-import ren.hankai.cordwood.plugin.api.Functional;
-import ren.hankai.cordwood.plugin.api.Pluggable;
-import ren.hankai.cordwood.plugin.api.Secure;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -20,11 +17,8 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.util.ReflectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,7 +27,6 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -51,6 +44,8 @@ import java.util.Map;
 public class DefaultPluginManager implements PluginManager, PluginRegistry {
 
   private static final Logger logger = LoggerFactory.getLogger(DefaultPluginManager.class);
+  @Autowired
+  private PluginResolver pluginResolver;
   @Autowired
   private PluginLoader pluginLoader;
   @Autowired
@@ -87,87 +82,6 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
           (active ? "activate" : "deactivate"), pluginName));
     }
     return false;
-  }
-
-  /**
-   * 将底层插件示例包装为插件模型对象。
-   *
-   * @param pluginInstance 插件实例
-   * @return 插件模型
-   * @author hankai
-   * @since Oct 13, 2016 1:09:23 PM
-   */
-  private Plugin wrapPlugin(Object pluginInstance) {
-    final Class<?> clazz = pluginInstance.getClass();
-    Pluggable pluggable = clazz.getAnnotation(Pluggable.class);
-    final Plugin plugin = new Plugin();
-    plugin.setName(pluggable.name());
-    plugin.setVersion(pluggable.version());
-    plugin.setDescription(pluggable.description());
-    plugin.setInstance(pluginInstance);
-    plugin.setActive(true);
-    // 扫描插件标记的功能
-    Secure pluginSecure = clazz.getAnnotation(Secure.class);
-    ReflectionUtils.doWithMethods(clazz, new ReflectionUtils.MethodCallback() {
-
-      @Override
-      public void doWith(final Method method)
-          throws IllegalArgumentException, IllegalAccessException {
-        Functional functional = AnnotationUtils.getAnnotation(method, Functional.class);
-        if (functional != null) {
-          PluginFunction function = new PluginFunction();
-          function.setMethod(method);
-          if (!StringUtils.isEmpty(functional.name())) {
-            function.setName(functional.name());
-          } else {
-            function.setName(method.getName());
-          }
-          function.setResultType(functional.resultType());
-          Secure secure = AnnotationUtils.getAnnotation(method, Secure.class);
-          if (secure == null) {
-            secure = pluginSecure;
-          }
-          if (secure != null) {
-            function.setCheckAccessToken(secure.checkAccessToken());
-            function.setCheckInboundParameters(secure.checkParameterIntegrity());
-          }
-          plugin.getFunctions().put(functional.name(), function);
-        }
-      }
-    }, new ReflectionUtils.MethodFilter() {
-
-      @Override
-      public boolean matches(final Method method) {
-        return (method.getDeclaringClass() == clazz);
-      }
-    });
-    return plugin;
-  }
-
-  /**
-   * 从插件包文件中抽取插件包元数据。
-   *
-   * @param localPath 插件包本地路径
-   * @return 插件包模型
-   * @author hankai
-   * @since Oct 13, 2016 1:09:47 PM
-   */
-  private PluginPackage extractPackageInfo(URL localPath) {
-    InputStream is = null;
-    try {
-      PluginPackage pluginPackage = new PluginPackage();
-      pluginPackage.setFileName(FilenameUtils.getName(localPath.getPath()));
-      pluginPackage.setInstallUrl(localPath);
-      is = localPath.openStream();
-      pluginPackage.setIdentifier(DigestUtils.sha1Hex(is));
-      return pluginPackage;
-    } catch (IOException e) {
-      logger.error(String.format("Failed to calculate the checksum of package \"%s\"", localPath),
-          e);
-    } finally {
-      IOUtils.closeQuietly(is);
-    }
-    return null;
   }
 
   /**
@@ -215,7 +129,7 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
     } else {
       URL localPath = copyPackage(packageUrl);
       if (localPath != null) {
-        PluginPackage pack = extractPackageInfo(localPath);
+        PluginPackage pack = pluginResolver.resolvePackage(localPath);
         PluginPackage loadedPack = packages.get(pack.getIdentifier());
         if (loadedPack != null) {
           unregister(loadedPack.getIdentifier());
@@ -224,7 +138,7 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
         List<Object> instances = pluginLoader.loadPlugins(localPath);
         if ((instances != null) && !instances.isEmpty()) {
           for (Object instance : instances) {
-            Plugin plugin = wrapPlugin(instance);
+            Plugin plugin = pluginResolver.resolvePlugin(instance);
             pack.addPlugin(plugin);
             plugins.put(plugin.getName(), plugin);
             pluginEventEmitter.emitEvent(PluginEventEmitter.PLUGIN_LOADED, plugin);

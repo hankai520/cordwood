@@ -2,22 +2,16 @@
 package ren.hankai.cordwood;
 
 import ren.hankai.cordwood.core.ApplicationInitializer;
+import ren.hankai.cordwood.core.CoreSpringConfig;
 import ren.hankai.cordwood.core.Preferences;
-import ren.hankai.cordwood.core.domain.Plugin;
-import ren.hankai.cordwood.core.domain.PluginPackage;
-import ren.hankai.cordwood.plugin.PluginLoader;
-import ren.hankai.cordwood.plugin.PluginManager;
-import ren.hankai.cordwood.plugin.PluginRegistry;
-import ren.hankai.cordwood.plugin.PluginValidator;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -25,27 +19,16 @@ import java.io.File;
 
 /**
  * 单元测试基类。
- * 
+ *
  * @author hankai
  * @version 1.0.0
  * @since Oct 21, 2016 1:05:07 PM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { TestSupport.class })
-@ComponentScan(basePackages = { "ren.hankai" })
-@Ignore
-public class TestSupport {
-
-  @Autowired
-  protected PluginRegistry pluginRegistry;
-  @Autowired
-  protected PluginManager pluginManager;
-  @Autowired
-  protected PluginLoader pluginLoader;
-  @Autowired
-  protected PluginValidator pluginValidator;
-  protected PluginPackage pluginPackage;
-  protected Plugin plugin;
+@ContextConfiguration(classes = {TestSupport.class, CoreSpringConfig.class})
+@Configuration
+@ComponentScan(basePackages = {"ren.hankai"})
+public abstract class TestSupport {
 
   @Before
   public void setup() throws Exception {

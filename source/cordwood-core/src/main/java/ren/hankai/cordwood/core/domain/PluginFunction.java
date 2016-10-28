@@ -2,6 +2,7 @@
 package ren.hankai.cordwood.core.domain;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 
 /**
  * 用于封装插件功能。
@@ -18,6 +19,7 @@ public final class PluginFunction {
   private String resultType;
   private boolean checkInboundParameters = false;
   private boolean checkAccessToken = false;
+  private Parameter[] parameters;
 
   /**
    * 获取功能名。
@@ -126,6 +128,28 @@ public final class PluginFunction {
    */
   public void setCheckAccessToken(boolean checkAccessToken) {
     this.checkAccessToken = checkAccessToken;
+  }
+
+  /**
+   * 插件功能需要的参数。
+   * 
+   * @return 参数数组
+   * @author hankai
+   * @since Oct 28, 2016 9:30:49 AM
+   */
+  public Parameter[] getParameters() {
+    return parameters;
+  }
+
+  /**
+   * 设置插件功能需要的参数。
+   * 
+   * @param parameters 参数数组
+   * @author hankai
+   * @since Oct 28, 2016 9:30:51 AM
+   */
+  public void setParameters(Parameter[] parameters) {
+    this.parameters = parameters;
   }
 
 }

@@ -109,10 +109,10 @@ public class SecurityUtil {
   }
 
   /**
-   * 生成 API 鉴权码。
+   * 生成令牌。
    *
-   * @param token 鉴权信息
-   * @return
+   * @param ti 鉴权信息
+   * @return 令牌
    * @author hankai
    * @since Jun 29, 2016 9:13:55 PM
    */

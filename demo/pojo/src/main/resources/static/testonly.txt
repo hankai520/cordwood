@@ -1,0 +1,1 @@
+this file is used as plugin resource, just for test and demonstration.

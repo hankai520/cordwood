@@ -77,10 +77,15 @@ dependencies {
 }
 
 tasks.withType(JavaCompile) {
+    options.compilerArgs << "-parameters"
     options.encoding = "UTF-8"
 }
 
 task copyDependencies(type: Copy) {
    from configurations.compile
    into "dependencies"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = "3.1"
 }

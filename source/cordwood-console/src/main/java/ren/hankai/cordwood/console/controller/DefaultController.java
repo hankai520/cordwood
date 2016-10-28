@@ -20,6 +20,15 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class DefaultController {
 
+  /**
+   * 控制台首页。
+   * 
+   * @param session 会话
+   * @return 页面内容
+   * @throws Exception 异常
+   * @author hankai
+   * @since Oct 28, 2016 11:25:31 AM
+   */
   @RequestMapping("/")
   @ResponseBody
   public String home(HttpSession session) throws Exception {

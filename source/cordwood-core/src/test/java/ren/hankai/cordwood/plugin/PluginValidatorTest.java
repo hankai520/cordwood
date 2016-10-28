@@ -7,6 +7,7 @@ import ren.hankai.cordwood.core.Preferences;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.ResourceUtils;
 
@@ -22,6 +23,9 @@ import java.net.URL;
  * @since Oct 21, 2016 3:26:43 PM
  */
 public class PluginValidatorTest extends TestSupport {
+
+  @Autowired
+  protected PluginValidator pluginValidator;
 
   @Test
   public void testValidatePackage() throws Exception {

@@ -4,10 +4,14 @@ package com.demo.withoutspring;
 import ren.hankai.cordwood.plugin.api.Functional;
 import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
-import ren.hankai.cordwood.plugin.api.Secure;
+import ren.hankai.cordwood.plugin.api.PluginResourceLoader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,10 +23,9 @@ import javax.servlet.http.HttpServletResponse;
  * @version 1.0.0
  * @since Sep 30, 2016 3:51:07 PM
  */
-@Secure(checkParameterIntegrity = false)
 @Pluggable(name = "demo", version = "1.0.0", description = "test only",
     readme = "http://www.baidu.com")
-public class SomeDemo implements PluginLifeCycleAware {
+public class SomeDemo implements PluginLifeCycleAware, PluginResourceLoader {
 
   private static final Logger logger = LoggerFactory.getLogger(SomeDemo.class);
 
@@ -39,7 +42,11 @@ public class SomeDemo implements PluginLifeCycleAware {
   public String sayHello(HttpServletRequest request, HttpServletResponse response) {
     int op1 = Integer.parseInt(request.getParameter("op1"));
     int op2 = Integer.parseInt(request.getParameter("op2"));
-    logger.warn("feature \"sayHello\" called");
+    return "Hi, the result is: " + (op1 + op2);
+  }
+
+  @Functional(name = "hello2", resultType = "text/plain")
+  public String sayHello2(Integer op1, Integer op2) {
     return "Hi, the result is: " + (op1 + op2);
   }
 
@@ -61,5 +68,18 @@ public class SomeDemo implements PluginLifeCycleAware {
   @Override
   public void pluginDidUnload() {
     logger.warn("plugin did unload");
+  }
+
+  @Override
+  public InputStream getResource(String relativeUrl) {
+    URL url = this.getClass().getResource("/static/" + relativeUrl);
+    if (url != null) {
+      try {
+        return url.openStream();
+      } catch (IOException e) {
+        logger.error(String.format("Failed to open resource: \"%s\"", relativeUrl), e);
+      }
+    }
+    return null;
   }
 }

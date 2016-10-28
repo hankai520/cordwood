@@ -65,11 +65,11 @@ public final class Preferences {
   public static final String PLUGIN_RESOURCE_BASE = "resources";
 
   /**
-   * 访问鉴权码字段名
+   * 访问令牌字段名。
    */
   public static final String API_ACCESS_TOKEN = "access_token";
   /**
-   * 请求入参的签名字段名
+   * 请求入参的签名字段名。
    */
   public static final String API_REQUEST_SIGN = "sign";
 

@@ -75,7 +75,7 @@ public final class PluginPackage {
 
   /**
    * 设置插件包安装后的本地路径。
-   * 
+   *
    * @author hankai
    * @since Oct 13, 2016 10:18:56 AM
    */
@@ -91,7 +91,9 @@ public final class PluginPackage {
    * @since Oct 13, 2016 10:19:09 AM
    */
   public void addPlugin(Plugin plugin) {
-    plugins.add(plugin);
+    if (plugin != null) {
+      plugins.add(plugin);
+    }
   }
 
   /**
@@ -102,7 +104,9 @@ public final class PluginPackage {
    * @since Oct 13, 2016 10:19:23 AM
    */
   public void removePlugin(Plugin plugin) {
-    plugins.remove(plugin);
+    if (plugin != null) {
+      plugins.remove(plugin);
+    }
   }
 
   /**

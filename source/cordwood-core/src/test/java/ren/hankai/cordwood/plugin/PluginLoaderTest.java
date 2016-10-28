@@ -5,6 +5,7 @@ import ren.hankai.cordwood.TestSupport;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
 
 import java.net.URL;
@@ -18,6 +19,9 @@ import java.util.List;
  * @since Oct 21, 2016 3:25:46 PM
  */
 public class PluginLoaderTest extends TestSupport {
+
+  @Autowired
+  protected PluginLoader pluginLoader;
 
   @Test
   public void testLoadPlugins() throws Exception {

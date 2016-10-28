@@ -31,5 +31,6 @@ public class DemoWebTest extends ApplicationTests {
     String result = dw.sayHello(request, response);
     Assert.assertTrue(!StringUtils.isEmpty(result));
     EasyMock.verify(request);
+    EasyMock.verify(response);
   }
 }

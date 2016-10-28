@@ -2,7 +2,7 @@
 package ren.hankai.cordwood.core.domain;
 
 /**
- * 鉴权码信息
+ * 鉴权码信息。
  *
  * @author hankai
  * @version 1.0.0
@@ -15,7 +15,7 @@ public class TokenInfo {
    */
   public static final int TOKEN_ERROR_INVALID = -1;
   /**
-   * 令牌已过期
+   * 令牌已过期。
    */
   public static final int TOKEN_ERROR_EXPIRED = -2;
 
@@ -24,7 +24,7 @@ public class TokenInfo {
 
   /**
    * 生成一个将在若干分钟后过期的令牌。
-   * 
+   *
    * @param uid 用户ID
    * @param minutes 分钟数
    * @return 令牌
@@ -41,7 +41,7 @@ public class TokenInfo {
 
   /**
    * 生成一个将在若干小时后过期的令牌。
-   * 
+   *
    * @param uid 用户ID
    * @param hours 小时数
    * @return 令牌
@@ -54,7 +54,7 @@ public class TokenInfo {
 
   /**
    * 生成一个将在若干天后过期的令牌。
-   * 
+   *
    * @param uid 用户ID
    * @param days 天数
    * @return 令牌

@@ -22,8 +22,12 @@ public class PluginLifeCycleNotifier implements PluginEventListener {
   @Autowired
   private PluginEventEmitter eventEmitter;
 
+  private Plugin lastEventSender;
+
+  private String lastEventType;
+
   @PostConstruct
-  private void observePluginEvents() {
+  public void observePluginEvents() {
     eventEmitter.addListener(PluginEventEmitter.PLUGIN_LOADED, this);
     eventEmitter.addListener(PluginEventEmitter.PLUGIN_UNLOADED, this);
     eventEmitter.addListener(PluginEventEmitter.PLUGIN_ACTIVATED, this);
@@ -32,6 +36,8 @@ public class PluginLifeCycleNotifier implements PluginEventListener {
 
   @Override
   public void handleEvent(Plugin plugin, String eventType) {
+    lastEventSender = plugin;
+    lastEventType = eventType;
     if (plugin.getInstance() instanceof PluginLifeCycleAware) {
       PluginLifeCycleAware plca = (PluginLifeCycleAware) plugin.getInstance();
       if (eventType == PluginEventEmitter.PLUGIN_LOADED) {
@@ -45,4 +51,13 @@ public class PluginLifeCycleNotifier implements PluginEventListener {
       }
     }
   }
+
+  public Plugin getLastEventSender() {
+    return lastEventSender;
+  }
+
+  public String getLastEventType() {
+    return lastEventType;
+  }
+
 }
