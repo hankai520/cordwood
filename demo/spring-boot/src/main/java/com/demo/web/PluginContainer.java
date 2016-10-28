@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 插件容器（用于自启动插件）
+ * 插件容器（用于自启动插件）。
  *
  * @author hankai
  * @version 1.0.0
@@ -33,25 +33,37 @@ public class PluginContainer {
 
   private static final Logger logger = LoggerFactory.getLogger(PluginContainer.class);
 
+  /**
+   * 分发插件请求。
+   *
+   * @param pluginName 插件名称
+   * @param functionName 功能名称
+   * @param request 请求
+   * @param response 响应
+   * @return 响应内容
+   * @author hankai
+   * @since Oct 28, 2016 8:28:52 PM
+   */
   @RequestMapping(value = Pluggable.PLUGIN_BASE_URL + "/{plugin_name}/{function}")
   @ResponseBody
   public ResponseEntity<Object> dispatchPluginRequest(
-      @PathVariable("plugin_name") String pluginName, @PathVariable("function") String function,
-      HttpServletRequest request, HttpServletResponse response) {
+      @PathVariable("plugin_name") String pluginName,
+      @PathVariable("functionName") String functionName, HttpServletRequest request,
+      HttpServletResponse response) {
     try {
       Object result = null;
       if (pluginName.equals(DemoWeb.NAME)) {
         DemoWeb dw = new DemoWeb();
         dw.pluginDidLoad();
-        if (function.equals("hello")) {
+        if (functionName.equals("hello")) {
           result = dw.sayHello(request, response);
         }
         return new ResponseEntity<Object>(result, HttpStatus.OK);
       }
     } catch (Exception e) {
-      logger.error(String.format("Failed to call plugin { %s#%s }", pluginName, function), e);
+      logger.error(String.format("Failed to call plugin { %s#%s }", pluginName, functionName), e);
     } catch (Error e) {
-      logger.error(String.format("Failed to call plugin { %s#%s }", pluginName, function), e);
+      logger.error(String.format("Failed to call plugin { %s#%s }", pluginName, functionName), e);
     }
     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
   }

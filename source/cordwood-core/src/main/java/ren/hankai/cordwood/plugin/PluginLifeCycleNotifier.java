@@ -27,7 +27,7 @@ public class PluginLifeCycleNotifier implements PluginEventListener {
   private String lastEventType;
 
   @PostConstruct
-  public void observePluginEvents() {
+  private void observePluginEvents() {
     eventEmitter.addListener(PluginEventEmitter.PLUGIN_LOADED, this);
     eventEmitter.addListener(PluginEventEmitter.PLUGIN_UNLOADED, this);
     eventEmitter.addListener(PluginEventEmitter.PLUGIN_ACTIVATED, this);

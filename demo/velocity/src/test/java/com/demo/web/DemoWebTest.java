@@ -28,6 +28,7 @@ public class DemoWebTest extends ApplicationTests {
     HttpServletResponse response = EasyMock.createNiceMock(HttpServletResponse.class);
     EasyMock.replay(response);
     DemoWeb dw = new DemoWeb();
+    dw.pluginDidLoad();
     String result = dw.sayHello(request, response);
     Assert.assertTrue(!StringUtils.isEmpty(result));
     EasyMock.verify(request);
