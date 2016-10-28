@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  * @version 1.0.0
  * @since Sep 30, 2016 3:51:07 PM
  */
+@Secure(checkParameterIntegrity = false)
 @Pluggable(name = "demo", version = "1.0.0", description = "test only",
     readme = "http://www.baidu.com")
 public class SomeDemo implements PluginLifeCycleAware {
@@ -34,7 +35,6 @@ public class SomeDemo implements PluginLifeCycleAware {
    * @author hankai
    * @since Oct 25, 2016 2:18:22 PM
    */
-  @Secure
   @Functional(name = "hello", resultType = "text/plain")
   public String sayHello(HttpServletRequest request, HttpServletResponse response) {
     int op1 = Integer.parseInt(request.getParameter("op1"));

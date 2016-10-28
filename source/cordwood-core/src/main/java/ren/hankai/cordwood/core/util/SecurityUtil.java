@@ -155,8 +155,8 @@ public class SecurityUtil {
    */
   public static TokenInfo parseToken(String token) {
     TokenInfo tokenInfo = null;
-    String decrypted = EncryptionUtil.aes(token, Preferences.getSystemSk(), false);
     if (!StringUtils.isEmpty(token)) {
+      String decrypted = EncryptionUtil.aes(token, Preferences.getSystemSk(), false);
       try {
         tokenInfo = objectMapper.readValue(decrypted, TokenInfo.class);
       } catch (Exception e) {
