@@ -1,5 +1,6 @@
 ext {
     mainVersion = "0.0.1.RELEASE"
+    springVersion = "4.3.3.RELEASE"
 }
 
 apply plugin: "eclipse"
@@ -9,6 +10,12 @@ eclipse {
     project {
         name="cordwood"
     }
+}
+
+allprojects {
+	task wrapper(type: Wrapper) {
+	    gradleVersion = "3.1"
+	}
 }
 
 subprojects {
@@ -46,10 +53,17 @@ subprojects {
 
         testCompile "junit:junit:4.12"
         testCompile "com.jayway.jsonpath:json-path-assert:0.8.1"
+        testCompile "org.easymock:easymock:3.1"
+        testCompile "com.google.inject:guice:4.0"
     }
     
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-parameters"
         options.encoding = "UTF-8"
+    }
+
+    task copyDependencies(type: Copy) {
+       from configurations.compile
+       into "dependencies"
     }
 }

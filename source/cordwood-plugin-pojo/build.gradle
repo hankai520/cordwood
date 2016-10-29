@@ -1,0 +1,32 @@
+eclipse {
+    project {
+        name="cordwood-plugin-pojo"
+    }
+}
+
+jar {
+    baseName = "cordwood-plugin-pojo"
+    version = mainVersion
+    manifest {
+        attributes(
+            "Implementation-Version": mainVersion,
+            "Plugin-Packages": "ren.hankai.cordwood.plugin.demo"
+        )
+    }
+}
+
+sourceSets {
+    main.java.srcDirs = ["src/main/java"]
+    main.resources.srcDirs = ["src/main/resources"]
+    test.java.srcDirs = ["src/test/java"]
+    test.resources.srcDirs = ["src/test/resources"]
+}
+
+configurations {
+    
+}
+
+dependencies {
+    compile "javax.servlet:javax.servlet-api:3.1.0"
+    compile project(":cordwood-plugin")
+}

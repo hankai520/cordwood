@@ -1,15 +1,14 @@
 
 package ren.hankai.cordwood.plugin;
 
-import ren.hankai.cordwood.TestSupport;
-import ren.hankai.cordwood.core.Preferences;
-
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.util.ResourceUtils;
+
+import ren.hankai.cordwood.TestSupport;
+import ren.hankai.cordwood.core.Preferences;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,13 +28,11 @@ public class PluginValidatorTest extends TestSupport {
 
   @Test
   public void testValidatePackage() throws Exception {
-    URL url = ResourceUtils.getURL("classpath:pojo-0.0.1.RELEASE.jar");
-    String fileName = FilenameUtils.getName(url.getPath());
+    String fileName = FilenameUtils.getName(testPluginPackageUrl.getPath());
     FileOutputStream fos =
         new FileOutputStream(Preferences.getPluginsDir() + File.separator + fileName);
-    FileCopyUtils.copy(url.openStream(), fos);
-    url = new File(Preferences.getPluginsDir() + File.separator + "pojo-0.0.1.RELEASE.jar").toURI()
-        .toURL();
+    FileCopyUtils.copy(testPluginPackageUrl.openStream(), fos);
+    URL url = new File(Preferences.getPluginsDir() + File.separator + fileName).toURI().toURL();
     Assert.assertTrue(pluginValidator.validatePackage(url));
   }
 }

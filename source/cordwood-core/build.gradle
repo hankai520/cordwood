@@ -29,17 +29,14 @@ dependencies {
     compile "org.springframework:spring-core:${springVersion}"
     compile "org.springframework:spring-context:${springVersion}"
     compile "org.springframework:spring-beans:${springVersion}"
-    
+    compile "javax.servlet:javax.servlet-api:3.1.0"
     compile "org.reflections:reflections:0.9.10"
     compile "commons-io:commons-io:2.2"
     compile "com.fasterxml.jackson.core:jackson-databind:2.4.6"
-    
     compile("commons-codec:commons-codec:1.9")
     compile("commons-lang:commons-lang:2.6")
     
-    compile project(":cordwood-plugin-api")
+    compile project(":cordwood-plugin")
     
     testCompile "org.springframework:spring-test:${springVersion}"
-    testCompile "javax.servlet:javax.servlet-api:3.1.0"
-    testCompile "org.easymock:easymock:3.1"
 }

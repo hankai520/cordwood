@@ -1,17 +1,14 @@
 package ren.hankai.cordwood.plugin;
 
-import ren.hankai.cordwood.TestSupport;
-import ren.hankai.cordwood.core.domain.Plugin;
-import ren.hankai.cordwood.core.domain.PluginFunction;
-import ren.hankai.cordwood.core.domain.PluginPackage;
-
 import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ResourceUtils;
 
-import java.net.URL;
+import ren.hankai.cordwood.TestSupport;
+import ren.hankai.cordwood.core.domain.Plugin;
+import ren.hankai.cordwood.core.domain.PluginFunction;
+import ren.hankai.cordwood.core.domain.PluginPackage;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,10 +36,9 @@ public class ParameterMapperTest extends TestSupport {
     EasyMock.replay(request);
     HttpServletResponse response = EasyMock.createNiceMock(HttpServletResponse.class);
     EasyMock.replay(response);
-    URL url = ResourceUtils.getURL("classpath:pojo-0.0.1.RELEASE.jar");
-    PluginPackage pp = pluginRegistry.register(url);
+    PluginPackage pp = pluginRegistry.register(testPluginPackageUrl);
     Plugin plugin = pp.getPlugins().get(0);
-    PluginFunction fun = plugin.getFunctions().get("hello2");
+    PluginFunction fun = plugin.getFunctions().get("sum2");
     Object[] params = parameterMapper.mapParameters(fun, request, response);
     Assert.assertTrue(params.length == 2);
     Assert.assertEquals(10, params[0]);

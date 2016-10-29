@@ -1,1 +1,5 @@
-include "cordwood-plugin-api", "cordwood-core", "cordwood-console"
+//core projects
+include "cordwood-plugin", "cordwood-core", "cordwood-console"
+
+//demo plugins
+include "cordwood-plugin-advance", "cordwood-plugin-pojo"

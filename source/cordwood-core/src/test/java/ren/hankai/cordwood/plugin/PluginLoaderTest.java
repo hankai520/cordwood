@@ -1,14 +1,12 @@
 
 package ren.hankai.cordwood.plugin;
 
-import ren.hankai.cordwood.TestSupport;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ResourceUtils;
 
-import java.net.URL;
+import ren.hankai.cordwood.TestSupport;
+
 import java.util.List;
 
 /**
@@ -25,8 +23,7 @@ public class PluginLoaderTest extends TestSupport {
 
   @Test
   public void testLoadPlugins() throws Exception {
-    URL url = ResourceUtils.getURL("classpath:pojo-0.0.1.RELEASE.jar");
-    List<Object> objs = pluginLoader.loadPlugins(url);
+    List<Object> objs = pluginLoader.loadPlugins(testPluginPackageUrl);
     Assert.assertNotNull(objs);
     Assert.assertTrue(objs.size() == 1);
     for (Object instance : objs) {

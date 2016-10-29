@@ -14,6 +14,8 @@ import java.util.Map;
  */
 public final class Plugin {
 
+  // 所属插件包ID，用于逆向超照插件所属插件包
+  private String packageId;
   // 插件名称，用作唯一标识符
   private String name;
   private String version;
@@ -21,6 +23,28 @@ public final class Plugin {
   private boolean isActive;
   private Object instance;
   private Map<String, PluginFunction> functions = new HashMap<>();
+
+  /**
+   * 获取插件所属插件包ID。
+   *
+   * @return 插件包ID
+   * @author hankai
+   * @since Oct 29, 2016 7:35:53 PM
+   */
+  public String getPackageId() {
+    return packageId;
+  }
+
+  /**
+   * 设置插件所属插件包ID。
+   *
+   * @param packageId 插件包ID
+   * @author hankai
+   * @since Oct 29, 2016 7:36:08 PM
+   */
+  public void setPackageId(String packageId) {
+    this.packageId = packageId;
+  }
 
   /**
    * 获取插件名。

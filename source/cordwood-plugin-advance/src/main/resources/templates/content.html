@@ -1,0 +1,16 @@
+<html>
+<head>
+    <title>hello</title>
+    <link href="${resourceBaseUrl}/css/style.css" rel="stylesheet">
+</head>
+<body>
+#parse("/header.html")
+<div style="margin-top: 20px; margin-bottom: 20px;">The calculations: </div>
+<ul>
+#foreach( $record in $results )
+    <li>${record.timestamp} -> ${record.exp}</li>
+#end
+</ul>
+#parse("/footer.html")
+</body>
+</html>

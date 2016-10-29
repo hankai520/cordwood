@@ -92,6 +92,7 @@ public final class PluginPackage {
    */
   public void addPlugin(Plugin plugin) {
     if (plugin != null) {
+      plugin.setPackageId(identifier);
       plugins.add(plugin);
     }
   }

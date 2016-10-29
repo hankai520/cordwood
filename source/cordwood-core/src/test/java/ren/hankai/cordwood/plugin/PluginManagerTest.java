@@ -1,19 +1,18 @@
 
 package ren.hankai.cordwood.plugin;
 
-import ren.hankai.cordwood.TestSupport;
-import ren.hankai.cordwood.core.Preferences;
-import ren.hankai.cordwood.core.domain.Plugin;
-import ren.hankai.cordwood.core.domain.PluginFunction;
-import ren.hankai.cordwood.core.domain.PluginPackage;
-
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.util.ResourceUtils;
+
+import ren.hankai.cordwood.TestSupport;
+import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.core.domain.Plugin;
+import ren.hankai.cordwood.core.domain.PluginFunction;
+import ren.hankai.cordwood.core.domain.PluginPackage;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,24 +38,23 @@ public class PluginManagerTest extends TestSupport {
 
   @Test
   public void testActivatePlugin() throws Exception {
-    URL url = ResourceUtils.getURL("classpath:pojo-0.0.1.RELEASE.jar");
-    String checksum = DigestUtils.sha1Hex(url.openStream());
-    PluginPackage pp = pluginRegistry.register(url);
+    String checksum = DigestUtils.sha1Hex(testPluginPackageUrl.openStream());
+    PluginPackage pp = pluginRegistry.register(testPluginPackageUrl);
     Assert.assertNotNull(pp);
-    Assert.assertEquals("pojo-0.0.1.RELEASE.jar", pp.getFileName());
+    String expName = FilenameUtils.getName(testPluginPackageUrl.getFile());
+    Assert.assertEquals(expName, pp.getFileName());
     Assert.assertEquals(checksum, pp.getIdentifier());
-    URL expUrl = new File(Preferences.getPluginsDir() + File.separator + "pojo-0.0.1.RELEASE.jar")
-        .toURI().toURL();
+    URL expUrl = new File(Preferences.getPluginsDir() + File.separator + expName).toURI().toURL();
     Assert.assertEquals(expUrl, pp.getInstallUrl());
     Assert.assertTrue(pp.getPlugins().size() == 1);
     plugin = pp.getPlugins().get(0);
-    Assert.assertEquals("demo", plugin.getName());
+    Assert.assertEquals("pojo", plugin.getName());
     Assert.assertEquals("1.0.0", plugin.getVersion());
-    Assert.assertEquals("test only", plugin.getDescription());
+    Assert.assertEquals("simple pojo plugin", plugin.getDescription());
     Assert.assertNotNull(plugin.getInstance());
     Assert.assertNotNull(plugin.getFunctions());
-    PluginFunction pf = plugin.getFunctions().get("hello");
-    Assert.assertEquals("hello", pf.getName());
+    PluginFunction pf = plugin.getFunctions().get("sum");
+    Assert.assertEquals("sum", pf.getName());
     Assert.assertEquals("text/plain", pf.getResultType());
     pluginManager.deactivatePlugin(plugin.getName());
     Plugin plugin2 = pluginManager.getPlugin(plugin.getName());
@@ -69,24 +67,24 @@ public class PluginManagerTest extends TestSupport {
 
   @Test
   public void testGetPlugin() throws Exception {
-    URL url = ResourceUtils.getURL("classpath:pojo-0.0.1.RELEASE.jar");
-    String checksum = DigestUtils.sha1Hex(url.openStream());
-    PluginPackage pp = pluginRegistry.register(url);
+
+    String checksum = DigestUtils.sha1Hex(testPluginPackageUrl.openStream());
+    PluginPackage pp = pluginRegistry.register(testPluginPackageUrl);
     Assert.assertNotNull(pp);
-    Assert.assertEquals("pojo-0.0.1.RELEASE.jar", pp.getFileName());
+    String expName = FilenameUtils.getName(testPluginPackageUrl.getFile());
+    Assert.assertEquals(expName, pp.getFileName());
     Assert.assertEquals(checksum, pp.getIdentifier());
-    URL expUrl = new File(Preferences.getPluginsDir() + File.separator + "pojo-0.0.1.RELEASE.jar")
-        .toURI().toURL();
+    URL expUrl = new File(Preferences.getPluginsDir() + File.separator + expName).toURI().toURL();
     Assert.assertEquals(expUrl, pp.getInstallUrl());
     Assert.assertTrue(pp.getPlugins().size() == 1);
     plugin = pp.getPlugins().get(0);
-    Assert.assertEquals("demo", plugin.getName());
+    Assert.assertEquals("pojo", plugin.getName());
     Assert.assertEquals("1.0.0", plugin.getVersion());
-    Assert.assertEquals("test only", plugin.getDescription());
+    Assert.assertEquals("simple pojo plugin", plugin.getDescription());
     Assert.assertNotNull(plugin.getInstance());
     Assert.assertNotNull(plugin.getFunctions());
-    PluginFunction pf = plugin.getFunctions().get("hello");
-    Assert.assertEquals("hello", pf.getName());
+    PluginFunction pf = plugin.getFunctions().get("sum");
+    Assert.assertEquals("sum", pf.getName());
     Assert.assertEquals("text/plain", pf.getResultType());
     Plugin plugin2 = pluginManager.getPlugin(plugin.getName());
     Assert.assertEquals(plugin2.getName(), plugin.getName());
@@ -98,19 +96,19 @@ public class PluginManagerTest extends TestSupport {
 
   @Test
   public void testInitializePlugins() throws Exception {
-    URL url = ResourceUtils.getURL("classpath:pojo-0.0.1.RELEASE.jar");
-    String fileName = FilenameUtils.getName(url.getPath());
+    String fileName = FilenameUtils.getName(testPluginPackageUrl.getPath());
     FileOutputStream fos =
         new FileOutputStream(Preferences.getPluginsDir() + File.separator + fileName);
-    FileCopyUtils.copy(url.openStream(), fos);
+    FileCopyUtils.copy(testPluginPackageUrl.openStream(), fos);
     List<String> names = new ArrayList<>();
-    names.add("pojo-0.0.1.RELEASE.jar");
+    String expName = FilenameUtils.getName(testPluginPackageUrl.getFile());
+    names.add(expName);
     pluginManager.initializePlugins(names);
-    Plugin plugin2 = pluginManager.getPlugin("demo");
-    Assert.assertEquals(plugin2.getName(), "demo");
+    Plugin plugin2 = pluginManager.getPlugin("pojo");
+    Assert.assertEquals(plugin2.getName(), "pojo");
     Assert.assertEquals(plugin2.getVersion(), "1.0.0");
-    Assert.assertEquals(plugin2.getDescription(), "test only");
+    Assert.assertEquals(plugin2.getDescription(), "simple pojo plugin");
     Assert.assertNotNull(plugin2.getInstance());
-    pluginRegistry.unregister(DigestUtils.sha1Hex(url.openStream()));
+    pluginRegistry.unregister(DigestUtils.sha1Hex(testPluginPackageUrl.openStream()));
   }
 }

@@ -1,18 +1,17 @@
 package ren.hankai.cordwood.plugin;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import ren.hankai.cordwood.TestSupport;
 import ren.hankai.cordwood.core.domain.Plugin;
 import ren.hankai.cordwood.core.domain.PluginFunction;
 import ren.hankai.cordwood.core.domain.PluginPackage;
 
-import org.apache.commons.codec.digest.DigestUtils;
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ResourceUtils;
-
 import java.lang.reflect.Parameter;
-import java.net.URL;
 
 /**
  * 插件解析器测试。
@@ -30,28 +29,26 @@ public class PluginResolverTest extends TestSupport {
 
   @Test
   public void testResolvePackage() throws Exception {
-    URL url = ResourceUtils.getURL("classpath:pojo-0.0.1.RELEASE.jar");
-    String checksum = DigestUtils.sha1Hex(url.openStream());
-    PluginPackage pp = pluginResolver.resolvePackage(url);
-    Assert.assertEquals("pojo-0.0.1.RELEASE.jar", pp.getFileName());
+    String checksum = DigestUtils.sha1Hex(testPluginPackageUrl.openStream());
+    PluginPackage pp = pluginResolver.resolvePackage(testPluginPackageUrl);
+    String expName = FilenameUtils.getName(testPluginPackageUrl.getFile());
+    Assert.assertEquals(expName, pp.getFileName());
     Assert.assertEquals(checksum, pp.getIdentifier());
-    Assert.assertEquals(url, pp.getInstallUrl());
+    Assert.assertEquals(testPluginPackageUrl, pp.getInstallUrl());
   }
 
   @Test
   public void testResolvePlugin() throws Exception {
-    URL url = ResourceUtils.getURL("classpath:pojo-0.0.1.RELEASE.jar");
-    PluginPackage pp = pluginRegistry.register(url);
+    PluginPackage pp = pluginRegistry.register(testPluginPackageUrl);
     Plugin plugin = pp.getPlugins().get(0);
-
     Plugin resolvedPlugin = pluginResolver.resolvePlugin(plugin.getInstance());
     Assert.assertEquals(plugin.getName(), resolvedPlugin.getName());
     Assert.assertEquals(plugin.getVersion(), resolvedPlugin.getVersion());
     Assert.assertEquals(plugin.getDescription(), resolvedPlugin.getDescription());
     Assert.assertNotNull(resolvedPlugin.getFunctions());
     Assert.assertTrue(resolvedPlugin.getFunctions().size() == 2);
-    PluginFunction resolvedFun = resolvedPlugin.getFunctions().get("hello2");
-    PluginFunction fun = plugin.getFunctions().get("hello2");
+    PluginFunction resolvedFun = resolvedPlugin.getFunctions().get("sum2");
+    PluginFunction fun = plugin.getFunctions().get("sum2");
     Assert.assertNotNull(resolvedFun);
     Assert.assertEquals(fun.getName(), resolvedFun.getName());
     Assert.assertEquals(fun.getResultType(), resolvedFun.getResultType());

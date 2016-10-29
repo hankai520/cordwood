@@ -1,6 +1,15 @@
 
 package ren.hankai.cordwood.plugin.impl;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.FileCopyUtils;
+
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.domain.Plugin;
 import ren.hankai.cordwood.core.domain.PluginPackage;
@@ -10,15 +19,6 @@ import ren.hankai.cordwood.plugin.PluginManager;
 import ren.hankai.cordwood.plugin.PluginRegistry;
 import ren.hankai.cordwood.plugin.PluginResolver;
 import ren.hankai.cordwood.plugin.PluginValidator;
-
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
 import java.io.FileInputStream;

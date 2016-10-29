@@ -1,20 +1,18 @@
 package ren.hankai.cordwood.plugin;
 
-import ren.hankai.cordwood.TestSupport;
-
 import org.apache.commons.io.IOUtils;
 import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ResourceUtils;
 
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.net.URL;
+import ren.hankai.cordwood.TestSupport;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.io.InputStream;
+import java.io.StringWriter;
 
 /**
  * 插件驱动器测试。
@@ -39,9 +37,8 @@ public class PluginDriverTest extends TestSupport {
     EasyMock.replay(request);
     HttpServletResponse response = EasyMock.createNiceMock(HttpServletResponse.class);
     EasyMock.replay(response);
-    URL url = ResourceUtils.getURL("classpath:pojo-0.0.1.RELEASE.jar");
-    pluginRegistry.register(url);
-    Object obj = pluginDriver.handleRequest("demo", "hello", request, response);
+    pluginRegistry.register(testPluginPackageUrl);
+    Object obj = pluginDriver.handleRequest("pojo", "sum", request, response);
     Assert.assertTrue("Hi, the result is: 31".equals(obj));
     EasyMock.verify(request);
     EasyMock.verify(response);
@@ -50,11 +47,10 @@ public class PluginDriverTest extends TestSupport {
   @Test
   public void testGetResource() throws Exception {
     HttpServletRequest request = EasyMock.createMock(HttpServletRequest.class);
-    EasyMock.expect(request.getRequestURI()).andReturn("/resources/demo/testonly.txt").anyTimes();
+    EasyMock.expect(request.getRequestURI()).andReturn("/resources/pojo/testonly.txt").anyTimes();
     EasyMock.replay(request);
-    URL url = ResourceUtils.getURL("classpath:pojo-0.0.1.RELEASE.jar");
-    pluginRegistry.register(url);
-    InputStream is = pluginDriver.getResource("demo", request);
+    pluginRegistry.register(testPluginPackageUrl);
+    InputStream is = pluginDriver.getResource("pojo", request);
     Assert.assertNotNull(is);
     StringWriter writer = new StringWriter();
     IOUtils.copy(is, writer, "UTF-8");

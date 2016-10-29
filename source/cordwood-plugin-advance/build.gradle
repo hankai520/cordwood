@@ -1,0 +1,52 @@
+eclipse {
+    project {
+        name="cordwood-plugin-advance"
+    }
+}
+
+jar {
+    baseName = "cordwood-plugin-advance"
+    version = mainVersion
+    manifest {
+        attributes(
+            "Implementation-Version": mainVersion,
+            "Plugin-Packages": "ren.hankai.cordwood.plugin.advance",
+            "Spring-Config-Class": "ren.hankai.cordwood.plugin.advance.config.PluginBootstrap"
+        )
+    }
+}
+
+sourceSets {
+    main.java.srcDirs = ["src/main/java"]
+    main.resources.srcDirs = ["src/main/resources"]
+    test.java.srcDirs = ["src/test/java"]
+    test.resources.srcDirs = ["src/test/resources"]
+}
+
+configurations {
+	providedRuntime
+    all*.exclude group: "org.hibernate"
+    all*.exclude group: "org.apache.struts"
+    all*.exclude group: "sslext"
+    all*.exclude group: "org.objenesis"
+    all*.exclude group: "log4j"
+}
+
+dependencies {
+	compile("org.springframework.boot:spring-boot-starter-web:1.4.1.RELEASE")
+    
+    compile "org.apache.velocity:velocity:1.7"
+    compile "org.apache.velocity:velocity-tools:2.0"
+
+    compile "org.springframework.data:spring-data-jpa:1.10.4.RELEASE"
+    compile "org.eclipse.persistence:eclipselink:2.5.0"
+    compile "mysql:mysql-connector-java:5.1.35"
+    compile "org.apache.tomcat:tomcat-jdbc:8.5.5"
+
+    compile project(":cordwood-plugin")
+
+    testCompile "org.springframework:spring-test:4.3.3.RELEASE"
+    testCompile("com.jayway.jsonpath:json-path-assert:0.8.1")
+    testCompile ("org.hsqldb:hsqldb:2.3.4")
+}
+

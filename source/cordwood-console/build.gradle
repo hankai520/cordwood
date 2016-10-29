@@ -63,7 +63,7 @@ dependencies {
     providedRuntime "org.apache.tomcat.embed:tomcat-embed-jasper"
     
     compile project(":cordwood-core")
-    compile project(":cordwood-plugin-api")
+    compile project(":cordwood-plugin")
     
     testCompile "org.springframework.boot:spring-boot-starter-test"
 }
