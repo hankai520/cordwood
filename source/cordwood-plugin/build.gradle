@@ -12,7 +12,7 @@ eclipse {
 }
 
 jar {
-    baseName = 'cordwood-plugin-api'
+    baseName = 'cordwood-plugin'
     version = mainVersion
     manifest {
         attributes(
@@ -32,4 +32,6 @@ dependencies {
     compile "javax.servlet:javax.servlet-api:3.1.0"
     compile "org.springframework:spring-core:4.3.3.RELEASE"
     compile("commons-lang:commons-lang:2.6")
+    
+    compile project(":cordwood-core")
 }

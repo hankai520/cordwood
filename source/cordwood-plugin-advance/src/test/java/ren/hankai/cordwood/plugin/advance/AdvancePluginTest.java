@@ -28,6 +28,7 @@ public class AdvancePluginTest extends ApplicationTests {
 
   @Test
   public void testAdd() throws Exception {
+    advancePlugin.pluginDidLoad();
     final String result = advancePlugin.add(12, 11);
     Assert.assertNotNull(result);
     final List<MyTbl1> list = myTbl1Repo.findAll();

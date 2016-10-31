@@ -13,8 +13,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.ResourceUtils;
 
 import ren.hankai.cordwood.core.ApplicationInitializer;
-import ren.hankai.cordwood.core.CoreSpringConfig;
 import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.core.config.CoreSpringConfig;
 
 import java.io.File;
 import java.net.URL;

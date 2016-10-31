@@ -6,12 +6,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ren.hankai.cordwood.core.domain.Plugin;
-import ren.hankai.cordwood.core.domain.PluginPackage;
 import ren.hankai.cordwood.persist.PluginPackageRepository;
 import ren.hankai.cordwood.persist.model.PluginBean;
 import ren.hankai.cordwood.persist.model.PluginPackageBean;
-import ren.hankai.cordwood.plugin.PluginRegistry;
+import ren.hankai.cordwood.plugin.Plugin;
+import ren.hankai.cordwood.plugin.PluginPackage;
+import ren.hankai.cordwood.plugin.api.PluginRegistry;
 
 import java.net.URL;
 
@@ -41,7 +41,7 @@ public class PluginService {
    */
   public boolean installPlugin(URL url) {
     try {
-      final PluginPackage pp = pluginRegistry.register(url);
+      final PluginPackage pp = pluginRegistry.registerPackage(url);
       final PluginPackageBean ppb = new PluginPackageBean();
       ppb.setChecksum(pp.getIdentifier());
       ppb.setFileName(pp.getFileName());

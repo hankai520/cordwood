@@ -13,15 +13,15 @@ import org.springframework.stereotype.Component;
 import ch.qos.logback.classic.Level;
 import ren.hankai.cordwood.console.service.PluginService;
 import ren.hankai.cordwood.core.Preferences;
-import ren.hankai.cordwood.core.domain.Plugin;
 import ren.hankai.cordwood.core.util.LogbackUtil;
 import ren.hankai.cordwood.persist.PluginPackageRepository;
 import ren.hankai.cordwood.persist.model.PluginPackageBean;
 import ren.hankai.cordwood.persist.util.EntitySpecs;
-import ren.hankai.cordwood.plugin.PluginEventEmitter;
-import ren.hankai.cordwood.plugin.PluginEventListener;
-import ren.hankai.cordwood.plugin.PluginManager;
-import ren.hankai.cordwood.plugin.PluginRegistry;
+import ren.hankai.cordwood.plugin.Plugin;
+import ren.hankai.cordwood.plugin.api.PluginEventEmitter;
+import ren.hankai.cordwood.plugin.api.PluginEventListener;
+import ren.hankai.cordwood.plugin.api.PluginManager;
+import ren.hankai.cordwood.plugin.api.PluginRegistry;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -156,8 +156,8 @@ public class PluginInitializer {
   private void uninstallPlugin(String fileName) {
     final PluginPackageBean ppb =
         pluginPackageRepository.findOne(EntitySpecs.field("fileName", fileName));
-    if ((ppb != null) && pluginRegistry.isRegistered(ppb.getChecksum())) {
-      pluginRegistry.unregister(ppb.getChecksum());
+    if ((ppb != null) && pluginRegistry.isPackageRegistered(ppb.getChecksum())) {
+      pluginRegistry.unregisterPackage(ppb.getChecksum());
       pluginPackageRepository.delete(ppb.getId());
     }
   }

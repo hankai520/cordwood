@@ -1,18 +1,16 @@
-package ren.hankai.cordwood.plugin.advance.boot;
+package ren.hankai.cordwood.plugin.pojo.boot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 
 import ren.hankai.cordwood.core.config.CoreSpringConfig;
-import ren.hankai.cordwood.plugin.advance.AdvancePlugin;
-import ren.hankai.cordwood.plugin.advance.config.PluginBootstrap;
 import ren.hankai.cordwood.plugin.api.PluginRegistry;
+import ren.hankai.cordwood.plugin.pojo.PojoPlugin;
 import ren.hankai.cordwood.plugin.support.PluginRequestDispatcher;
 
 /**
@@ -28,14 +26,13 @@ import ren.hankai.cordwood.plugin.support.PluginRequestDispatcher;
  */
 @Profile("ignored")
 @EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
-@Import(PluginBootstrap.class)
 @Controller
 public class PluginContainer extends PluginRequestDispatcher {
 
   /**
    * 要调试的插件类。
    */
-  private static final Class<?>[] pluginClasses = new Class<?>[] {AdvancePlugin.class};
+  private static final Class<?>[] pluginClasses = new Class<?>[] {PojoPlugin.class};
 
   /**
    * 嵌入式插件容器是否以调试模式启动。
@@ -57,7 +54,7 @@ public class PluginContainer extends PluginRequestDispatcher {
     final PluginRegistry pluginRegistry = context.getBean(PluginRegistry.class);
     // 注册插件
     for (final Class<?> clazz : pluginClasses) {
-      pluginRegistry.registerTransientPlugin(context.getBean(clazz));
+      pluginRegistry.registerTransientPlugin(clazz.newInstance());
     }
   }
 
