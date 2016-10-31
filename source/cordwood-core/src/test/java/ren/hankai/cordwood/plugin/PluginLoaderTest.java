@@ -23,10 +23,10 @@ public class PluginLoaderTest extends TestSupport {
 
   @Test
   public void testLoadPlugins() throws Exception {
-    List<Object> objs = pluginLoader.loadPlugins(testPluginPackageUrl);
+    final List<Object> objs = pluginLoader.loadPlugins(testPluginPackageUrl);
     Assert.assertNotNull(objs);
     Assert.assertTrue(objs.size() == 1);
-    for (Object instance : objs) {
+    for (final Object instance : objs) {
       Assert.assertTrue(pluginLoader.unloadPlugin(instance));
     }
   }

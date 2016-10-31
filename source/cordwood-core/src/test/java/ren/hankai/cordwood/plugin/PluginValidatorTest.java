@@ -28,11 +28,12 @@ public class PluginValidatorTest extends TestSupport {
 
   @Test
   public void testValidatePackage() throws Exception {
-    String fileName = FilenameUtils.getName(testPluginPackageUrl.getPath());
-    FileOutputStream fos =
+    final String fileName = FilenameUtils.getName(testPluginPackageUrl.getPath());
+    final FileOutputStream fos =
         new FileOutputStream(Preferences.getPluginsDir() + File.separator + fileName);
     FileCopyUtils.copy(testPluginPackageUrl.openStream(), fos);
-    URL url = new File(Preferences.getPluginsDir() + File.separator + fileName).toURI().toURL();
+    final URL url =
+        new File(Preferences.getPluginsDir() + File.separator + fileName).toURI().toURL();
     Assert.assertTrue(pluginValidator.validatePackage(url));
   }
 }

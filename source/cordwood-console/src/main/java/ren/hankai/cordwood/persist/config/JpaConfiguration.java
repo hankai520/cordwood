@@ -6,8 +6,6 @@
 
 package ren.hankai.cordwood.persist.config;
 
-import ren.hankai.cordwood.persist.util.Slf4jSessionLogger;
-
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +17,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.jta.JtaTransactionManager;
+
+import ren.hankai.cordwood.persist.util.Slf4jSessionLogger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,8 +53,8 @@ public class JpaConfiguration extends JpaBaseConfiguration {
 
   @Override
   protected String[] getPackagesToScan() {
-    String[] packages = super.getPackagesToScan();
-    String[] customPackages = dataSourceInfo.getEntityBasePackages();
+    final String[] packages = super.getPackagesToScan();
+    final String[] customPackages = dataSourceInfo.getEntityBasePackages();
     if ((customPackages != null) && (customPackages.length > 0)) {
       return (String[]) ArrayUtils.addAll(packages, customPackages);
     }
@@ -69,7 +69,7 @@ public class JpaConfiguration extends JpaBaseConfiguration {
    */
   @Override
   protected AbstractJpaVendorAdapter createJpaVendorAdapter() {
-    EclipseLinkJpaVendorAdapter adapter = new EclipseLinkJpaVendorAdapter();
+    final EclipseLinkJpaVendorAdapter adapter = new EclipseLinkJpaVendorAdapter();
     adapter.setDatabasePlatform(dataSourceInfo.getDatabasePlatform());
     adapter.setShowSql(true);
     return adapter;
@@ -82,7 +82,7 @@ public class JpaConfiguration extends JpaBaseConfiguration {
    */
   @Override
   protected Map<String, Object> getVendorProperties() {
-    Map<String, Object> jpaProperties = new HashMap<String, Object>();
+    final Map<String, Object> jpaProperties = new HashMap<>();
     jpaProperties.put("eclipselink.target-database", dataSourceInfo.getDatabasePlatform());
     // jpaProperties.put( "eclipselink.ddl-generation", "drop-and-create-tables" );
     // this controls what will be logged during DDL execution

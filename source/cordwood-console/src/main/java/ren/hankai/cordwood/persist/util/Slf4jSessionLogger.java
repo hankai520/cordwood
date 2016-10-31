@@ -56,7 +56,7 @@ public class Slf4jSessionLogger extends AbstractSessionLog {
   public static final String DEFAULT_ECLIPSELINK_NAMESPACE =
       ECLIPSELINK_NAMESPACE + "." + DEFAULT_CATEGORY;
   private Map<Integer, LogLevel> mapLevels;
-  private final Map<String, Logger> categoryLoggers = new HashMap<String, Logger>();
+  private final Map<String, Logger> categoryLoggers = new HashMap<>();
 
   /**
    * 初始化日志器和日志级别映射。
@@ -78,7 +78,7 @@ public class Slf4jSessionLogger extends AbstractSessionLog {
    * 主动初始化日志器。
    */
   private void createCategoryLoggers() {
-    for (String category : SessionLog.loggerCatagories) {
+    for (final String category : SessionLog.loggerCatagories) {
       addLogger(category, ECLIPSELINK_NAMESPACE + "." + category);
     }
     addLogger(DEFAULT_CATEGORY, DEFAULT_ECLIPSELINK_NAMESPACE);
@@ -109,7 +109,7 @@ public class Slf4jSessionLogger extends AbstractSessionLog {
    * 构造 SLF4J 和 Eclipselink 的日志级别对应关系。
    */
   private void initMapLevels() {
-    mapLevels = new HashMap<Integer, LogLevel>();
+    mapLevels = new HashMap<>();
     mapLevels.put(SessionLog.ALL, LogLevel.TRACE);
     mapLevels.put(SessionLog.FINEST, LogLevel.TRACE);
     mapLevels.put(SessionLog.FINER, LogLevel.DEBUG);
@@ -125,9 +125,9 @@ public class Slf4jSessionLogger extends AbstractSessionLog {
     if (!shouldLog(entry.getLevel(), entry.getNameSpace())) {
       return;
     }
-    Logger logger = getLogger(entry.getNameSpace());
-    LogLevel logLevel = getLogLevel(entry.getLevel());
-    StringBuilder message = new StringBuilder();
+    final Logger logger = getLogger(entry.getNameSpace());
+    final LogLevel logLevel = getLogLevel(entry.getLevel());
+    final StringBuilder message = new StringBuilder();
     message.append(getSupplementDetailString(entry));
     message.append(formatMessage(entry));
     switch (logLevel) {
@@ -167,9 +167,9 @@ public class Slf4jSessionLogger extends AbstractSessionLog {
 
   @Override
   public boolean shouldLog(int level, String category) {
-    Logger logger = getLogger(category);
+    final Logger logger = getLogger(category);
     boolean resp = false;
-    LogLevel logLevel = getLogLevel(level);
+    final LogLevel logLevel = getLogLevel(level);
     switch (logLevel) {
       case TRACE:
         resp = logger.isTraceEnabled();

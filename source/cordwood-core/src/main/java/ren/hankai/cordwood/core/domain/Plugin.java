@@ -180,7 +180,7 @@ public final class Plugin {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("Plugin: \n");
+    final StringBuilder sb = new StringBuilder("Plugin: \n");
     sb.append(String.format("    Name: %s\n", name));
     sb.append(String.format("    Version: %s\n", version));
     sb.append(String.format("    Description: %s\n", description));

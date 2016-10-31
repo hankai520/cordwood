@@ -9,12 +9,12 @@ import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
 import ren.hankai.cordwood.plugin.api.PluginResourceLoader;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 示例插件。
@@ -39,8 +39,8 @@ public class Pojo implements PluginLifeCycleAware, PluginResourceLoader {
    */
   @Functional(name = "sum", resultType = "text/plain")
   public String sum(HttpServletRequest request, HttpServletResponse response) {
-    int op1 = Integer.parseInt(request.getParameter("op1"));
-    int op2 = Integer.parseInt(request.getParameter("op2"));
+    final int op1 = Integer.parseInt(request.getParameter("op1"));
+    final int op2 = Integer.parseInt(request.getParameter("op2"));
     return "Hi, the result is: " + (op1 + op2);
   }
 
@@ -80,11 +80,11 @@ public class Pojo implements PluginLifeCycleAware, PluginResourceLoader {
 
   @Override
   public InputStream getResource(String relativeUrl) {
-    URL url = this.getClass().getResource("/static/" + relativeUrl);
+    final URL url = this.getClass().getResource("/static/" + relativeUrl);
     if (url != null) {
       try {
         return url.openStream();
-      } catch (IOException e) {
+      } catch (final IOException e) {
         logger.error(String.format("Failed to open resource: \"%s\"", relativeUrl), e);
       }
     }

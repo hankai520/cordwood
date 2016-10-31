@@ -1,10 +1,10 @@
 
 package ren.hankai.cordwood.core.util;
 
-import ren.hankai.cordwood.plugin.api.Pluggable;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import ren.hankai.cordwood.plugin.api.Pluggable;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -32,13 +32,13 @@ public class PathUtil {
     try {
       String decodedUrl = URLDecoder.decode(url, "UTF-8");
 
-      int index = decodedUrl.indexOf(Pluggable.PLUGIN_RESOURCE_BASE_URL);
+      final int index = decodedUrl.indexOf(Pluggable.PLUGIN_RESOURCE_BASE_URL);
       if (index >= 0) {
         decodedUrl = decodedUrl.substring(index + 1);
         decodedUrl = decodedUrl.startsWith("/") ? decodedUrl.substring(1) : decodedUrl;
-        String[] parts = decodedUrl.split("/");
+        final String[] parts = decodedUrl.split("/");
         if ((parts != null) && (parts.length > 2)) {
-          StringBuilder sb = new StringBuilder();
+          final StringBuilder sb = new StringBuilder();
           for (int i = 2; i < parts.length; i++) {
             sb.append(parts[i] + "/");
           }
@@ -48,7 +48,7 @@ public class PathUtil {
           return sb.toString();
         }
       }
-    } catch (UnsupportedEncodingException e) {
+    } catch (final UnsupportedEncodingException e) {
       logger.error(String.format("Failed to decode url: \"%s\"", url), e);
     }
     return null;

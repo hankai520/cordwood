@@ -1,9 +1,9 @@
 
 package ren.hankai.cordwood.plugin.impl;
 
-import ren.hankai.cordwood.plugin.PluginValidator;
-
 import org.springframework.stereotype.Component;
+
+import ren.hankai.cordwood.plugin.PluginValidator;
 
 import java.net.URL;
 
@@ -17,11 +17,6 @@ import java.net.URL;
 @Component
 public class DefaultPluginValidator implements PluginValidator {
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see ren.hankai.cordwood.plugin.PluginValidator#validatePackage(java.net.URL)
-   */
   @Override
   public boolean validatePackage(URL jarUrl) {
     return true;

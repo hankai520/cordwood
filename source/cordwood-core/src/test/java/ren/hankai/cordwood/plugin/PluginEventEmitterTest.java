@@ -1,12 +1,12 @@
 
 package ren.hankai.cordwood.plugin;
 
-import ren.hankai.cordwood.TestSupport;
-import ren.hankai.cordwood.core.domain.Plugin;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import ren.hankai.cordwood.TestSupport;
+import ren.hankai.cordwood.core.domain.Plugin;
 
 /**
  * 插件事件发射器测试。

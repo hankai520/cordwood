@@ -22,7 +22,7 @@ public class DefaultController {
 
   /**
    * 控制台首页。
-   * 
+   *
    * @param session 会话
    * @return 页面内容
    * @throws Exception 异常
@@ -34,7 +34,7 @@ public class DefaultController {
   public String home(HttpSession session) throws Exception {
     Object obj = session.getAttribute("time");
     if (obj == null) {
-      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+      final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
       obj = sdf.format(new Date());
       session.setAttribute("time", obj);
     }

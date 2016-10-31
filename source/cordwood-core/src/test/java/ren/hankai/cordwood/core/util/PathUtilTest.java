@@ -1,10 +1,10 @@
 
 package ren.hankai.cordwood.core.util;
 
-import ren.hankai.cordwood.plugin.util.PathUtil;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import ren.hankai.cordwood.plugin.util.PathUtil;
 
 /**
  * 路径工具类测试。

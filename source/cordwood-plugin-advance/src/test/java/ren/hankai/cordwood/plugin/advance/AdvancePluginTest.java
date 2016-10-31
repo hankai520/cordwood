@@ -28,11 +28,11 @@ public class AdvancePluginTest extends ApplicationTests {
 
   @Test
   public void testAdd() throws Exception {
-    String result = advancePlugin.add(12, 11);
+    final String result = advancePlugin.add(12, 11);
     Assert.assertNotNull(result);
-    List<MyTbl1> list = myTbl1Repo.findAll();
+    final List<MyTbl1> list = myTbl1Repo.findAll();
     Assert.assertTrue(list.size() == 1);
-    MyTbl1 record = list.get(0);
+    final MyTbl1 record = list.get(0);
     Assert.assertEquals("12 + 11 = 23", record.getExp());
   }
 }

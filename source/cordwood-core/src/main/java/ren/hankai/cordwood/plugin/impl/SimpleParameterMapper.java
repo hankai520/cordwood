@@ -1,11 +1,11 @@
 package ren.hankai.cordwood.plugin.impl;
 
-import ren.hankai.cordwood.core.domain.PluginFunction;
-import ren.hankai.cordwood.plugin.ParameterMapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
+
+import ren.hankai.cordwood.core.domain.PluginFunction;
+import ren.hankai.cordwood.plugin.ParameterMapper;
 
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
@@ -30,9 +30,9 @@ public class SimpleParameterMapper implements ParameterMapper {
   @Override
   public Object[] mapParameters(PluginFunction function, HttpServletRequest request,
       HttpServletResponse response) {
-    List<Object> args = new ArrayList<>();
+    final List<Object> args = new ArrayList<>();
     if ((function.getParameters() != null) && (function.getParameters().length > 0)) {
-      for (Parameter param : function.getParameters()) {
+      for (final Parameter param : function.getParameters()) {
         if (param.getType().isAssignableFrom(HttpServletRequest.class)) {
           args.add(request);
         } else if (param.getType().isAssignableFrom(HttpServletResponse.class)) {
@@ -40,9 +40,9 @@ public class SimpleParameterMapper implements ParameterMapper {
         } else if (param.getType().isAssignableFrom(String[].class)) {
           args.add(request.getParameterValues(param.getName()));
         } else {
-          String str = request.getParameter(param.getName());
+          final String str = request.getParameter(param.getName());
           if (conversionService.canConvert(String.class, param.getType())) {
-            Object convertedParam = conversionService.convert(str, param.getType());
+            final Object convertedParam = conversionService.convert(str, param.getType());
             args.add(convertedParam);
           }
         }

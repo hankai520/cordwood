@@ -1,11 +1,11 @@
 
 package ren.hankai.cordwood.plugin.impl;
 
+import org.springframework.stereotype.Component;
+
 import ren.hankai.cordwood.core.domain.Plugin;
 import ren.hankai.cordwood.plugin.PluginEventEmitter;
 import ren.hankai.cordwood.plugin.PluginEventListener;
-
-import org.springframework.stereotype.Component;
 
 import java.security.InvalidParameterException;
 import java.util.HashMap;
@@ -45,7 +45,7 @@ public class DefaultPluginEventEmitter implements PluginEventEmitter {
     if ((event == null) || (event.length() == 0)) {
       throw new InvalidParameterException("event name must not be empty!");
     }
-    Set<PluginEventListener> listeners = registry.get(event);
+    final Set<PluginEventListener> listeners = registry.get(event);
     if ((listeners != null) && (listener != null)) {
       listeners.remove(listener);
       if (listeners.size() == 0) {
@@ -60,7 +60,7 @@ public class DefaultPluginEventEmitter implements PluginEventEmitter {
       throw new InvalidParameterException("event listener must not be null!");
     }
     Set<PluginEventListener> listeners = null;
-    for (String event : registry.keySet()) {
+    for (final String event : registry.keySet()) {
       listeners = registry.get(event);
       if ((listeners != null) && (listeners.size() > 0)) {
         if (listeners.contains(listener)) {
@@ -78,9 +78,9 @@ public class DefaultPluginEventEmitter implements PluginEventEmitter {
     if ((event == null) || (event.length() == 0)) {
       throw new InvalidParameterException("event name must not be empty!");
     }
-    Set<PluginEventListener> listeners = registry.get(event);
+    final Set<PluginEventListener> listeners = registry.get(event);
     if (listeners != null) {
-      for (PluginEventListener listener : listeners) {
+      for (final PluginEventListener listener : listeners) {
         if (listener instanceof PluginEventListener) {
           listener.handleEvent(sender, event);
         }

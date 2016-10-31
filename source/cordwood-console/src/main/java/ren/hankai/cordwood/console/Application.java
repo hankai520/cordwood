@@ -1,8 +1,6 @@
 
 package ren.hankai.cordwood.console;
 
-import ren.hankai.cordwood.core.ApplicationInitializer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +13,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import ren.hankai.cordwood.core.ApplicationInitializer;
 
 /**
  * 控制台程序入口。
@@ -44,7 +44,7 @@ public class Application {
    * @since Oct 25, 2016 10:53:27 AM
    */
   public static void main(String[] args) {
-    String[] configs = {"hsql.properties", "system.yml"};
+    final String[] configs = {"hsql.properties", "system.yml"};
     if (ApplicationInitializer.initialize(configs)) {
       if (SpringApplication.run(Application.class, args) != null) {
         logger.info(

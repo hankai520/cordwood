@@ -1,11 +1,11 @@
 
 package ren.hankai.cordwood.persist;
 
-import ren.hankai.cordwood.persist.model.PluginBean;
-import ren.hankai.cordwood.persist.util.CustomJpaRepository;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
+
+import ren.hankai.cordwood.persist.model.PluginBean;
+import ren.hankai.cordwood.persist.util.CustomJpaRepository;
 
 /**
  * 插件仓库。

@@ -32,9 +32,9 @@ public class TokenInfo {
    * @since Oct 27, 2016 6:15:42 PM
    */
   public static TokenInfo withinMinutes(int uid, int minutes) {
-    TokenInfo ti = new TokenInfo();
+    final TokenInfo ti = new TokenInfo();
     ti.setUid(uid);
-    long time = System.currentTimeMillis() + (minutes * 60 * 1000);
+    final long time = System.currentTimeMillis() + (minutes * 60 * 1000);
     ti.setExpiryTime(time);
     return ti;
   }

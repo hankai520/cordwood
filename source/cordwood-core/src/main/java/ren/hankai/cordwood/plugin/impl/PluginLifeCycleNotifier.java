@@ -1,11 +1,13 @@
 
-package ren.hankai.cordwood.plugin;
-
-import ren.hankai.cordwood.core.domain.Plugin;
-import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
+package ren.hankai.cordwood.plugin.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import ren.hankai.cordwood.core.domain.Plugin;
+import ren.hankai.cordwood.plugin.PluginEventEmitter;
+import ren.hankai.cordwood.plugin.PluginEventListener;
+import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
 
 import javax.annotation.PostConstruct;
 
@@ -39,7 +41,7 @@ public class PluginLifeCycleNotifier implements PluginEventListener {
     lastEventSender = plugin;
     lastEventType = eventType;
     if (plugin.getInstance() instanceof PluginLifeCycleAware) {
-      PluginLifeCycleAware plca = (PluginLifeCycleAware) plugin.getInstance();
+      final PluginLifeCycleAware plca = (PluginLifeCycleAware) plugin.getInstance();
       if (eventType == PluginEventEmitter.PLUGIN_LOADED) {
         plca.pluginDidLoad();
       } else if (eventType == PluginEventEmitter.PLUGIN_UNLOADED) {

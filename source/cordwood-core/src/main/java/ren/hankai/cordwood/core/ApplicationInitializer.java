@@ -55,9 +55,9 @@ public class ApplicationInitializer {
    */
   private static void printClassPaths() {
     logger.info("Class paths:");
-    URLClassLoader cl = (URLClassLoader) ClassLoader.getSystemClassLoader();
-    URL[] urls = cl.getURLs();
-    for (URL url : urls) {
+    final URLClassLoader cl = (URLClassLoader) ClassLoader.getSystemClassLoader();
+    final URL[] urls = cl.getURLs();
+    for (final URL url : urls) {
       logger.info(url.getPath());
     }
   }
@@ -75,12 +75,12 @@ public class ApplicationInitializer {
       return true;
     }
     try {
-      for (String file : files) {
-        InputStream is = ApplicationInitializer.class.getResourceAsStream("/support/" + file);
+      for (final String file : files) {
+        final InputStream is = ApplicationInitializer.class.getResourceAsStream("/support/" + file);
         if (is != null) {
-          File destFile = new File(Preferences.getConfigDir() + File.separator + file);
+          final File destFile = new File(Preferences.getConfigDir() + File.separator + file);
           if (!destFile.exists()) {
-            FileOutputStream fos = new FileOutputStream(destFile);
+            final FileOutputStream fos = new FileOutputStream(destFile);
             FileCopyUtils.copy(is, fos);
             logger.info(String.format("Copied support file: %s", file));
           }
@@ -89,7 +89,7 @@ public class ApplicationInitializer {
         }
       }
       return true;
-    } catch (IOException e) {
+    } catch (final IOException e) {
       logger.error("Error occurred while copying support files.", e);
       return false;
     }
@@ -104,12 +104,12 @@ public class ApplicationInitializer {
    */
   private static boolean checkHome() {
     logger.info(String.format("Application home is: \"%s\"", Preferences.getHomeDir()));
-    String[] subDirs = { Preferences.getConfigDir(), Preferences.getDataDir(),
+    final String[] subDirs = {Preferences.getConfigDir(), Preferences.getDataDir(),
         Preferences.getCacheDir(), Preferences.getLogDir(), Preferences.getTempDir(),
         Preferences.getAttachmentDir(), Preferences.getBackupDir(), Preferences.getDbDir(),
-        Preferences.getPluginsDir(), Preferences.getLibsDir() };
-    for (String dir : subDirs) {
-      File file = new File(dir);
+        Preferences.getPluginsDir(), Preferences.getLibsDir()};
+    for (final String dir : subDirs) {
+      final File file = new File(dir);
       if (!file.exists()) {
         logger.info(String.format("Creating \"%s\"...", dir));
         if (!file.mkdirs()) {

@@ -90,7 +90,7 @@ public final class Preferences {
   private static Map<String, Object> getSystemPrefs() {
     if (parameters == null) {
       parameters = new HashMap<>();
-      YamlMapFactoryBean bean = new YamlMapFactoryBean();
+      final YamlMapFactoryBean bean = new YamlMapFactoryBean();
       bean.setResources(new FileSystemResource(Preferences.getConfigDir() + "/system.yml"));
       parameters.putAll(bean.getObject());
     }
@@ -131,7 +131,7 @@ public final class Preferences {
    * @since Jul 28, 2015 10:52:19 AM
    */
   public static String getCacheDir() {
-    String dir = getHomeDir() + File.separator + "cache";
+    final String dir = getHomeDir() + File.separator + "cache";
     System.setProperty("app.cache", dir);
     return dir;
   }
@@ -143,7 +143,7 @@ public final class Preferences {
    * @since Jul 28, 2015 10:52:44 AM
    */
   public static String getConfigDir() {
-    String dir = getHomeDir() + File.separator + "config";
+    final String dir = getHomeDir() + File.separator + "config";
     System.setProperty("app.config", dir);
     return dir;
   }
@@ -167,7 +167,7 @@ public final class Preferences {
    * @since Jul 28, 2015 10:53:05 AM
    */
   public static String getDataDir() {
-    String dir = getHomeDir() + File.separator + "data";
+    final String dir = getHomeDir() + File.separator + "data";
     System.setProperty("app.data", dir);
     return dir;
   }
@@ -216,7 +216,7 @@ public final class Preferences {
    * @since Jul 28, 2015 10:53:49 AM
    */
   public static String getLogDir() {
-    String dir = getHomeDir() + File.separator + "logs";
+    final String dir = getHomeDir() + File.separator + "logs";
     System.setProperty("app.log", dir);
     return dir;
   }
@@ -228,7 +228,7 @@ public final class Preferences {
    * @since Jul 28, 2015 10:54:02 AM
    */
   public static String getTempDir() {
-    String dir = getHomeDir() + File.separator + "temp";
+    final String dir = getHomeDir() + File.separator + "temp";
     System.setProperty("app.temp", dir);
     return dir;
   }
@@ -240,7 +240,7 @@ public final class Preferences {
    * @since Jul 28, 2015 10:54:16 AM
    */
   public static String getAttachmentDir() {
-    String dir = getDataDir() + File.separator + "attachment";
+    final String dir = getDataDir() + File.separator + "attachment";
     System.setProperty("app.attachment", dir);
     return dir;
   }
@@ -253,7 +253,7 @@ public final class Preferences {
    * @since Aug 18, 2016 5:09:38 PM
    */
   public static String getBackupDir() {
-    String dir = getDataDir() + File.separator + "backups";
+    final String dir = getDataDir() + File.separator + "backups";
     System.setProperty("app.backup", dir);
     return dir;
   }
@@ -266,7 +266,7 @@ public final class Preferences {
    * @since Sep 30, 2016 3:37:19 PM
    */
   public static String getPluginsDir() {
-    String dir = getDataDir() + File.separator + "plugins";
+    final String dir = getDataDir() + File.separator + "plugins";
     System.setProperty("app.plugins", dir);
     return dir;
   }
@@ -279,7 +279,7 @@ public final class Preferences {
    * @since Oct 18, 2016 2:45:39 PM
    */
   public static String getLibsDir() {
-    String dir = getHomeDir() + File.separator + "libs";
+    final String dir = getHomeDir() + File.separator + "libs";
     System.setProperty("app.libs", dir);
     return dir;
   }
@@ -293,18 +293,18 @@ public final class Preferences {
    * @since Oct 18, 2016 3:09:42 PM
    */
   public static URL[] getLibUrls(URL... extraUrls) {
-    List<URL> list = new ArrayList<>();
+    final List<URL> list = new ArrayList<>();
     if ((extraUrls != null) && (extraUrls.length > 0)) {
       list.addAll(Arrays.asList(extraUrls));
     }
-    File file = new File(getLibsDir());
-    File[] files = file.listFiles();
+    final File file = new File(getLibsDir());
+    final File[] files = file.listFiles();
     if (files != null) {
-      for (File libFile : files) {
+      for (final File libFile : files) {
         if (FilenameUtils.isExtension(libFile.getName(), "jar")) {
           try {
             list.add(libFile.toURI().toURL());
-          } catch (MalformedURLException e) {
+          } catch (final MalformedURLException e) {
             throw new RuntimeException(
                 String.format("Failed to get url from lib path: %s", libFile.getAbsolutePath()), e);
           }
@@ -312,7 +312,7 @@ public final class Preferences {
       }
     }
     if (list.size() > 0) {
-      URL[] urls = new URL[list.size()];
+      final URL[] urls = new URL[list.size()];
       list.toArray(urls);
       return urls;
     }
@@ -327,7 +327,7 @@ public final class Preferences {
    * @since Jun 28, 2016 1:27:31 PM
    */
   public static String getSystemSk() {
-    Object obj = getSystemPrefs().get("systemSk");
+    final Object obj = getSystemPrefs().get("systemSk");
     if (obj != null) {
       return obj.toString();
     }
@@ -342,7 +342,7 @@ public final class Preferences {
    * @since Jun 28, 2016 1:49:49 PM
    */
   public static String getTransferKey() {
-    Object obj = getSystemPrefs().get("transferKey");
+    final Object obj = getSystemPrefs().get("transferKey");
     if (obj != null) {
       return obj.toString();
     }
@@ -357,7 +357,7 @@ public final class Preferences {
    * @since Jun 29, 2016 9:48:43 PM
    */
   public static Integer getApiAccessTokenExpiry() {
-    Object obj = getSystemPrefs().get("apiAccessTokenExpiry");
+    final Object obj = getSystemPrefs().get("apiAccessTokenExpiry");
     if (obj != null) {
       return Integer.parseInt(obj.toString());
     }

@@ -46,7 +46,7 @@ public class PageUtil {
    */
   public static Pageable pageWithIndexAndSize(int index, int size, String orderBy, Boolean asc) {
     if (!StringUtils.isEmpty(orderBy) && (asc != null)) {
-      Direction direction = asc ? Direction.ASC : Direction.DESC;
+      final Direction direction = asc ? Direction.ASC : Direction.DESC;
       return new PageRequest(index - 1, size, direction, orderBy);
     }
     return new PageRequest(index - 1, size);
@@ -79,7 +79,7 @@ public class PageUtil {
   public static Pageable pageWithOffsetAndCount(int offset, int count, String orderBy,
       Boolean asc) {
     if (!StringUtils.isEmpty(orderBy) && (asc != null)) {
-      Direction direction = asc ? Direction.ASC : Direction.DESC;
+      final Direction direction = asc ? Direction.ASC : Direction.DESC;
       if (count > 0) {
         // 避免0为除数导致异常
         return new PageRequest((offset / count), count, direction, orderBy);

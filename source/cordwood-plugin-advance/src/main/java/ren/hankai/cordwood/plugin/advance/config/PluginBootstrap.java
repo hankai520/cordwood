@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import ren.hankai.cordwood.plugin.advance.util.Slf4jSessionLogger;
 
-import javax.sql.DataSource;
-
 import java.util.Properties;
+
+import javax.sql.DataSource;
 
 /**
  * 插件 spring 配置。
@@ -41,7 +41,7 @@ public class PluginBootstrap {
    */
   @Bean
   public DataSource dataSource() {
-    DriverManagerDataSource ds = new DriverManagerDataSource();
+    final DriverManagerDataSource ds = new DriverManagerDataSource();
     ds.setDriverClassName("org.hsqldb.jdbcDriver");
     ds.setUrl("jdbc:hsqldb:mem:ut-db");
     ds.setUsername("sa");
@@ -59,15 +59,16 @@ public class PluginBootstrap {
    */
   @Bean(name = "entityManagerFactory")
   public LocalContainerEntityManagerFactoryBean getEntityManagerFactory(DataSource dataSource) {
-    LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+    final LocalContainerEntityManagerFactoryBean factory =
+        new LocalContainerEntityManagerFactoryBean();
     factory.setPersistenceUnitName("defaultUnit");
     factory.setDataSource(dataSource);
-    EclipseLinkJpaVendorAdapter adapter = new EclipseLinkJpaVendorAdapter();
+    final EclipseLinkJpaVendorAdapter adapter = new EclipseLinkJpaVendorAdapter();
     adapter.setDatabasePlatform(HSQLPlatform.class.getName());
     adapter.setShowSql(true);
     factory.setJpaVendorAdapter(adapter);
     factory.setPackagesToScan("ren.hankai.cordwood.plugin");
-    Properties jpaProperties = new Properties();
+    final Properties jpaProperties = new Properties();
     jpaProperties.setProperty("eclipselink.target-database", HSQLPlatform.class.getName());
     jpaProperties.setProperty("eclipselink.ddl-generation", "drop-and-create-tables");
     // this controls what will be logged during DDL execution

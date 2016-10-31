@@ -1,11 +1,11 @@
 
 package ren.hankai.cordwood.core;
 
-import ren.hankai.cordwood.TestSupport;
-
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
+
+import ren.hankai.cordwood.TestSupport;
 
 import java.io.File;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ public class RuntimeVariablesTest extends TestSupport {
     Assert.assertTrue(ApplicationInitializer.initialize());
     RuntimeVariables.setVariable("testKey", "testValue");
     RuntimeVariables.saveVariables();
-    File file = RuntimeVariables.getVariablesFile();
+    final File file = RuntimeVariables.getVariablesFile();
     Assert.assertTrue(file.exists() && file.isFile());
     RuntimeVariables.setAllVariables(new HashMap<>());
     RuntimeVariables.reloadVariables();
@@ -59,7 +59,7 @@ public class RuntimeVariablesTest extends TestSupport {
   public void testSetAllParams() {
     RuntimeVariables.setVariable("shouldNotExist", "value");
     Assert.assertTrue("value".equals(RuntimeVariables.getVariable("shouldNotExist")));
-    Map<String, String> map = new HashMap<>();
+    final Map<String, String> map = new HashMap<>();
     map.put("exist", "value");
     RuntimeVariables.setAllVariables(map);
     Assert.assertNull(RuntimeVariables.getVariable("shouldNotExist"));

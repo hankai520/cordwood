@@ -132,7 +132,7 @@ public final class PluginFunction {
 
   /**
    * 插件功能需要的参数。
-   * 
+   *
    * @return 参数数组
    * @author hankai
    * @since Oct 28, 2016 9:30:49 AM
@@ -143,7 +143,7 @@ public final class PluginFunction {
 
   /**
    * 设置插件功能需要的参数。
-   * 
+   *
    * @param parameters 参数数组
    * @author hankai
    * @since Oct 28, 2016 9:30:51 AM

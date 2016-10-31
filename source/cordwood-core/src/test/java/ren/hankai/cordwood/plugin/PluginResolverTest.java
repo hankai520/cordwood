@@ -29,9 +29,9 @@ public class PluginResolverTest extends TestSupport {
 
   @Test
   public void testResolvePackage() throws Exception {
-    String checksum = DigestUtils.sha1Hex(testPluginPackageUrl.openStream());
-    PluginPackage pp = pluginResolver.resolvePackage(testPluginPackageUrl);
-    String expName = FilenameUtils.getName(testPluginPackageUrl.getFile());
+    final String checksum = DigestUtils.sha1Hex(testPluginPackageUrl.openStream());
+    final PluginPackage pp = pluginResolver.resolvePackage(testPluginPackageUrl);
+    final String expName = FilenameUtils.getName(testPluginPackageUrl.getFile());
     Assert.assertEquals(expName, pp.getFileName());
     Assert.assertEquals(checksum, pp.getIdentifier());
     Assert.assertEquals(testPluginPackageUrl, pp.getInstallUrl());
@@ -39,23 +39,23 @@ public class PluginResolverTest extends TestSupport {
 
   @Test
   public void testResolvePlugin() throws Exception {
-    PluginPackage pp = pluginRegistry.register(testPluginPackageUrl);
-    Plugin plugin = pp.getPlugins().get(0);
-    Plugin resolvedPlugin = pluginResolver.resolvePlugin(plugin.getInstance());
+    final PluginPackage pp = pluginRegistry.register(testPluginPackageUrl);
+    final Plugin plugin = pp.getPlugins().get(0);
+    final Plugin resolvedPlugin = pluginResolver.resolvePlugin(plugin.getInstance());
     Assert.assertEquals(plugin.getName(), resolvedPlugin.getName());
     Assert.assertEquals(plugin.getVersion(), resolvedPlugin.getVersion());
     Assert.assertEquals(plugin.getDescription(), resolvedPlugin.getDescription());
     Assert.assertNotNull(resolvedPlugin.getFunctions());
     Assert.assertTrue(resolvedPlugin.getFunctions().size() == 2);
-    PluginFunction resolvedFun = resolvedPlugin.getFunctions().get("sum2");
-    PluginFunction fun = plugin.getFunctions().get("sum2");
+    final PluginFunction resolvedFun = resolvedPlugin.getFunctions().get("sum2");
+    final PluginFunction fun = plugin.getFunctions().get("sum2");
     Assert.assertNotNull(resolvedFun);
     Assert.assertEquals(fun.getName(), resolvedFun.getName());
     Assert.assertEquals(fun.getResultType(), resolvedFun.getResultType());
     Assert.assertEquals(fun.getMethod().getName(), resolvedFun.getMethod().getName());
 
-    Parameter[] resolvedParams = resolvedFun.getParameters();
-    Parameter[] params = fun.getParameters();
+    final Parameter[] resolvedParams = resolvedFun.getParameters();
+    final Parameter[] params = fun.getParameters();
     Assert.assertTrue(resolvedParams.length == 2);
     for (int i = 0; i < resolvedParams.length; i++) {
       Assert.assertEquals(params[i].getName(), resolvedParams[i].getName());

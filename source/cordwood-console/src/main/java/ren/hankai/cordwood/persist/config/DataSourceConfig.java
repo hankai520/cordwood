@@ -6,8 +6,6 @@
 
 package ren.hankai.cordwood.persist.config;
 
-import ren.hankai.cordwood.core.Preferences;
-
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;
 import org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer;
@@ -20,6 +18,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
+import ren.hankai.cordwood.core.Preferences;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,7 +53,7 @@ public class DataSourceConfig {
     try {
       props = new Properties();
       props.load(new FileInputStream(Preferences.getDbConfigFile(fileName)));
-    } catch (IOException e) {
+    } catch (final IOException e) {
       logger.warn("Failed to load external database configuration file for production profile.", e);
     }
     if ((props != null) && (props.size() > 0)) {
@@ -75,10 +75,10 @@ public class DataSourceConfig {
      */
     @Bean
     public DataSource dataSource() {
-      Properties props = loadExternalConfig("hsql.properties");
-      DriverManagerDataSource ds = new DriverManagerDataSource();
+      final Properties props = loadExternalConfig("hsql.properties");
+      final DriverManagerDataSource ds = new DriverManagerDataSource();
       ds.setDriverClassName(props.getProperty("driverClassName"));
-      String dbPath = Preferences.getDbDir() + File.separator + "application";
+      final String dbPath = Preferences.getDbDir() + File.separator + "application";
       ds.setUrl(String.format(props.getProperty("url"), dbPath));
       ds.setUsername(props.getProperty("username"));
       ds.setPassword(props.getProperty("password"));
@@ -111,8 +111,8 @@ public class DataSourceConfig {
      */
     @Bean
     public DataSource dataSource() {
-      Properties props = loadExternalConfig("mysql.properties");
-      PoolProperties pp = new PoolProperties();
+      final Properties props = loadExternalConfig("mysql.properties");
+      final PoolProperties pp = new PoolProperties();
       pp.setUrl(props.getProperty("url"));
       pp.setDriverClassName(props.getProperty("driverClassName"));
       pp.setUsername(props.getProperty("username"));
@@ -134,7 +134,8 @@ public class DataSourceConfig {
       pp.setRemoveAbandoned(true);
       pp.setJdbcInterceptors(
           ConnectionState.class.getName() + ";" + StatementFinalizer.class.getName());
-      org.apache.tomcat.jdbc.pool.DataSource ds = new org.apache.tomcat.jdbc.pool.DataSource();
+      final org.apache.tomcat.jdbc.pool.DataSource ds =
+          new org.apache.tomcat.jdbc.pool.DataSource();
       ds.setPoolProperties(pp);
       return ds;
     }
@@ -158,8 +159,8 @@ public class DataSourceConfig {
      */
     @Bean
     public DataSource dataSource() {
-      Properties props = loadExternalConfig("oracle.properties");
-      PoolProperties pp = new PoolProperties();
+      final Properties props = loadExternalConfig("oracle.properties");
+      final PoolProperties pp = new PoolProperties();
       pp.setUrl(props.getProperty("url"));
       pp.setDriverClassName(props.getProperty("driverClassName"));
       pp.setUsername(props.getProperty("userName"));
@@ -181,7 +182,8 @@ public class DataSourceConfig {
       pp.setRemoveAbandoned(true);
       pp.setJdbcInterceptors(
           ConnectionState.class.getName() + ";" + StatementFinalizer.class.getName());
-      org.apache.tomcat.jdbc.pool.DataSource ds = new org.apache.tomcat.jdbc.pool.DataSource();
+      final org.apache.tomcat.jdbc.pool.DataSource ds =
+          new org.apache.tomcat.jdbc.pool.DataSource();
       ds.setPoolProperties(pp);
       return ds;
     }

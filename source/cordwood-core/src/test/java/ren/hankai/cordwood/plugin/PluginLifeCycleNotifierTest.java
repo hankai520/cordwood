@@ -1,11 +1,12 @@
 package ren.hankai.cordwood.plugin;
 
-import ren.hankai.cordwood.TestSupport;
-import ren.hankai.cordwood.core.domain.Plugin;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import ren.hankai.cordwood.TestSupport;
+import ren.hankai.cordwood.core.domain.Plugin;
+import ren.hankai.cordwood.plugin.impl.PluginLifeCycleNotifier;
 
 /**
  * 插件生命周期通知器测试。

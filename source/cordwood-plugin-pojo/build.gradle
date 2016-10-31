@@ -29,4 +29,7 @@ configurations {
 dependencies {
     compile "javax.servlet:javax.servlet-api:3.1.0"
     compile project(":cordwood-plugin")
+    
+    compile "org.apache.velocity:velocity:1.7"
+    compile "org.apache.velocity:velocity-tools:2.0"
 }

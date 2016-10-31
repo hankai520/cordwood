@@ -1,14 +1,14 @@
 package ren.hankai.cordwood.core.util;
 
-import ren.hankai.cordwood.core.Preferences;
-import ren.hankai.cordwood.core.domain.TokenInfo;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
+
+import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.core.domain.TokenInfo;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -39,19 +39,19 @@ public class SecurityUtil {
    * @since Jun 28, 2016 4:00:45 PM
    */
   public static String generateSign(Map<String, ?> params) {
-    StringBuffer toBeSigned = new StringBuffer();
-    List<String> paramNames = new ArrayList<>();
+    final StringBuffer toBeSigned = new StringBuffer();
+    final List<String> paramNames = new ArrayList<>();
     paramNames.addAll(params.keySet());
     Collections.sort(paramNames);
-    for (String param : paramNames) {
+    for (final String param : paramNames) {
       if (param.equalsIgnoreCase(Preferences.API_ACCESS_TOKEN)
           || param.equalsIgnoreCase(Preferences.API_REQUEST_SIGN)) {
         continue;
       }
-      Object objValue = params.get(param);
+      final Object objValue = params.get(param);
       String value = null;
       if (objValue instanceof String[]) {
-        String[] array = (String[]) objValue;
+        final String[] array = (String[]) objValue;
         if (array.length > 0) {
           value = array[0];
         }
@@ -61,7 +61,7 @@ public class SecurityUtil {
       if (value != null) {
         try {
           value = URLEncoder.encode(value, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
+        } catch (final UnsupportedEncodingException e) {
           logger.warn(String.format("Failed to url encode request parameter: %s = ", param, value));
         }
         toBeSigned.append(param + "=" + value + "&");
@@ -71,7 +71,7 @@ public class SecurityUtil {
       toBeSigned.deleteCharAt(toBeSigned.length() - 1);
     }
     toBeSigned.append(Preferences.getTransferKey());
-    String expSign = DigestUtils.sha1Hex(toBeSigned.toString());
+    final String expSign = DigestUtils.sha1Hex(toBeSigned.toString());
     return expSign;
   }
 
@@ -85,10 +85,10 @@ public class SecurityUtil {
    */
   public static boolean verifyParameters(Map<String, ?> params) {
     boolean hasParams = false;
-    Iterator<String> it = params.keySet().iterator();
+    final Iterator<String> it = params.keySet().iterator();
     // 检查是否有入参，若无，则不会验证
     while (it.hasNext()) {
-      String key = it.next();
+      final String key = it.next();
       // 忽略白名单字段
       if (key.equalsIgnoreCase(Preferences.API_ACCESS_TOKEN)
           || key.equalsIgnoreCase(Preferences.API_REQUEST_SIGN)) {
@@ -100,8 +100,8 @@ public class SecurityUtil {
     if (!hasParams) {
       return true;
     }
-    String expSign = generateSign(params);
-    Object sign = params.get(Preferences.API_REQUEST_SIGN);
+    final String expSign = generateSign(params);
+    final Object sign = params.get(Preferences.API_REQUEST_SIGN);
     if ((sign instanceof String) && expSign.equalsIgnoreCase((String) sign)) {
       return true;
     }
@@ -121,7 +121,7 @@ public class SecurityUtil {
       String token = objectMapper.writeValueAsString(ti);
       token = EncryptionUtil.aes(token, Preferences.getSystemSk(), true);
       return token;
-    } catch (Exception e) {
+    } catch (final Exception e) {
       logger.error("Failed to generate api access token!", e);
     }
     return null;
@@ -136,7 +136,7 @@ public class SecurityUtil {
    * @since Jun 29, 2016 9:17:15 PM
    */
   public static int verifyToken(String rawToken) {
-    TokenInfo tokenInfo = parseToken(rawToken);
+    final TokenInfo tokenInfo = parseToken(rawToken);
     if (tokenInfo == null) {
       return TokenInfo.TOKEN_ERROR_INVALID;
     } else if (tokenInfo.getExpiryTime() < System.currentTimeMillis()) {
@@ -156,10 +156,10 @@ public class SecurityUtil {
   public static TokenInfo parseToken(String token) {
     TokenInfo tokenInfo = null;
     if (!StringUtils.isEmpty(token)) {
-      String decrypted = EncryptionUtil.aes(token, Preferences.getSystemSk(), false);
+      final String decrypted = EncryptionUtil.aes(token, Preferences.getSystemSk(), false);
       try {
         tokenInfo = objectMapper.readValue(decrypted, TokenInfo.class);
-      } catch (Exception e) {
+      } catch (final Exception e) {
         logger.error(String.format("Failed to parse token: \"%s\"", token), e);
         logger.error(String.format("Decrypted data is: %s", decrypted));
       }

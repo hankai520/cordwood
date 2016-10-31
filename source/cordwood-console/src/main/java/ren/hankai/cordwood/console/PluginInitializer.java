@@ -1,6 +1,15 @@
 
 package ren.hankai.cordwood.console;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
 import ch.qos.logback.classic.Level;
 import ren.hankai.cordwood.console.service.PluginService;
 import ren.hankai.cordwood.core.Preferences;
@@ -13,15 +22,6 @@ import ren.hankai.cordwood.plugin.PluginEventEmitter;
 import ren.hankai.cordwood.plugin.PluginEventListener;
 import ren.hankai.cordwood.plugin.PluginManager;
 import ren.hankai.cordwood.plugin.PluginRegistry;
-
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -78,7 +78,7 @@ public class PluginInitializer {
 
       @Override
       public void handleEvent(Plugin plugin, String eventType) {
-        String clazz = plugin.getInstance().getClass().getName();
+        final String clazz = plugin.getInstance().getClass().getName();
         LogbackUtil.setupFileLoggerFor(clazz, Level.WARN, plugin.getName() + ".txt");
       }
     });
@@ -106,7 +106,7 @@ public class PluginInitializer {
     try {
       fis = new FileInputStream(file);
       return DigestUtils.sha1Hex(fis);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       logger.error(
           String.format("Failed to calculate checksum of file \"%s\"", file.getAbsolutePath()));
     } finally {
@@ -125,11 +125,11 @@ public class PluginInitializer {
    */
   private void installPlugin(File file, String checksum) {
     try {
-      PluginPackageBean ppb =
+      final PluginPackageBean ppb =
           pluginPackageRepository.findOne(EntitySpecs.field("checksum", checksum));
       if (ppb == null) {
         // TODO: 在安装插件时，用插件的文件名作了补充判断，去更新数据库中已有的插件信息，这是否会有潜在风险？
-        PluginPackageBean possiblePpb =
+        final PluginPackageBean possiblePpb =
             pluginPackageRepository.findOne(EntitySpecs.field("fileName", file.getName()));
         if (possiblePpb != null) {
           pluginPackageRepository.delete(possiblePpb.getId());
@@ -141,7 +141,7 @@ public class PluginInitializer {
             "Found duplicate plugin package: \"%s\" and \"%s\" which have same checksum \"%s\"!",
             file.getName(), ppb.getFileName(), checksum));
       }
-    } catch (Exception e) {
+    } catch (final Exception e) {
       logger.error("Failed to install plugin: " + file.getPath(), e);
     }
   }
@@ -154,7 +154,7 @@ public class PluginInitializer {
    * @since Oct 21, 2016 4:24:02 PM
    */
   private void uninstallPlugin(String fileName) {
-    PluginPackageBean ppb =
+    final PluginPackageBean ppb =
         pluginPackageRepository.findOne(EntitySpecs.field("fileName", fileName));
     if ((ppb != null) && pluginRegistry.isRegistered(ppb.getChecksum())) {
       pluginRegistry.unregister(ppb.getChecksum());
@@ -169,13 +169,13 @@ public class PluginInitializer {
    * @since Oct 14, 2016 11:53:38 AM
    */
   private void installCopiedPlugins() {
-    File file = new File(Preferences.getPluginsDir());
+    final File file = new File(Preferences.getPluginsDir());
     File[] files = null;
     if (file.exists() && file.isDirectory()) {
       files = file.listFiles();
     }
     if ((files != null) && (files.length > 0)) {
-      for (File pluginFile : files) {
+      for (final File pluginFile : files) {
         if (!FilenameUtils.isExtension(pluginFile.getName(), "jar")) {
           continue;
         }
@@ -192,10 +192,10 @@ public class PluginInitializer {
    */
   @Scheduled(fixedRate = 1000 * 60, initialDelay = 1000 * 2)
   public void initializeInstalledPlugins() {
-    List<PluginPackageBean> list = pluginPackageRepository.findAll();
+    final List<PluginPackageBean> list = pluginPackageRepository.findAll();
     if (list != null) {
-      List<String> names = new ArrayList<>();
-      for (PluginPackageBean ppb : list) {
+      final List<String> names = new ArrayList<>();
+      for (final PluginPackageBean ppb : list) {
         names.add(ppb.getFileName());
       }
       pluginManager.initializePlugins(names);
@@ -226,10 +226,10 @@ public class PluginInitializer {
       setName("Plugin home watcher");
       try {
         watchService = FileSystems.getDefault().newWatchService();
-        Path pluginFolder = Paths.get(Preferences.getPluginsDir());
+        final Path pluginFolder = Paths.get(Preferences.getPluginsDir());
         pluginFolder.register(watchService, StandardWatchEventKinds.ENTRY_CREATE,
             StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_MODIFY);
-      } catch (IOException e) {
+      } catch (final IOException e) {
         logger.warn("Failed to start plugin home watcher!", e);
       }
     }
@@ -250,20 +250,20 @@ public class PluginInitializer {
     }
 
     private void handleCreation(String path) {
-      File file = new File(path);
+      final File file = new File(path);
       if (file.exists() && !file.isDirectory()) {
         logger.info("Detected new plugin package: " + file.getName());
-        String checksum = getChecksum(file);
+        final String checksum = getChecksum(file);
         installPlugin(file, checksum);
       }
     }
 
     private void handleDeletion(String path) {
-      File file = new File(path);
+      final File file = new File(path);
       logger.info("Detected deletion of plugin package: " + file.getName());
       if (!file.exists()) {
-        String fileName = FilenameUtils.getName(path);
-        PluginPackageBean ppb =
+        final String fileName = FilenameUtils.getName(path);
+        final PluginPackageBean ppb =
             pluginPackageRepository.findOne(EntitySpecs.field("fileName", fileName));
         if (ppb != null) {
           uninstallPlugin(ppb.getFileName());
@@ -272,11 +272,11 @@ public class PluginInitializer {
     }
 
     private void handleModification(String path) {
-      File file = new File(path);
+      final File file = new File(path);
       logger.info("Detected modification of plugin package: " + file.getName());
       if (file.exists()) {
         uninstallPlugin(file.getName());
-        String checksum = getChecksum(file);
+        final String checksum = getChecksum(file);
         installPlugin(file, checksum);
       }
     }
@@ -286,21 +286,21 @@ public class PluginInitializer {
       while (!shouldStop) {
         try {
           boolean valid = true;
-          String pluginHome = Preferences.getPluginsDir();
+          final String pluginHome = Preferences.getPluginsDir();
           do {
-            WatchKey watchKey = watchService.take();
-            Map<String, Kind<?>> changes = new HashMap<>();
-            for (WatchEvent<?> event : watchKey.pollEvents()) {
-              String fileName = event.context().toString();
+            final WatchKey watchKey = watchService.take();
+            final Map<String, Kind<?>> changes = new HashMap<>();
+            for (final WatchEvent<?> event : watchKey.pollEvents()) {
+              final String fileName = event.context().toString();
               if (!FilenameUtils.isExtension(fileName, "jar")) {
                 continue;
               }
-              Kind<?> kind = event.kind();
+              final Kind<?> kind = event.kind();
               changes.put(fileName, kind);
             }
-            for (String fileName : changes.keySet()) {
-              String path = pluginHome + File.separator + fileName;
-              Kind<?> kind = changes.get(fileName);
+            for (final String fileName : changes.keySet()) {
+              final String path = pluginHome + File.separator + fileName;
+              final Kind<?> kind = changes.get(fileName);
               if (kind.equals(StandardWatchEventKinds.ENTRY_CREATE)) {
                 handleCreation(path);
               } else if (kind.equals(StandardWatchEventKinds.ENTRY_DELETE)) {
@@ -311,7 +311,7 @@ public class PluginInitializer {
             }
             valid = watchKey.reset();
           } while (valid);
-        } catch (Exception e) {
+        } catch (final Exception e) {
           logger.error("Plugin home watcher error!", e);
         }
       }

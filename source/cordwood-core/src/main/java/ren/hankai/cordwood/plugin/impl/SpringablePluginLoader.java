@@ -1,10 +1,6 @@
 
 package ren.hankai.cordwood.plugin.impl;
 
-import ren.hankai.cordwood.core.Preferences;
-import ren.hankai.cordwood.plugin.PluginLoader;
-import ren.hankai.cordwood.plugin.api.Pluggable;
-
 import org.apache.commons.io.IOUtils;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -18,6 +14,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
+import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.plugin.PluginLoader;
+import ren.hankai.cordwood.plugin.api.Pluggable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,7 +56,7 @@ public class SpringablePluginLoader implements PluginLoader {
   @PostConstruct
   private void internalInit() {
     if (sharedClassLoader == null) {
-      URL[] urls = Preferences.getLibUrls();
+      final URL[] urls = Preferences.getLibUrls();
       if ((urls != null) && (urls.length != 0)) {
         sharedClassLoader = new URLClassLoader(urls, context.getClassLoader());
       } else {
@@ -78,15 +78,15 @@ public class SpringablePluginLoader implements PluginLoader {
     JarInputStream jarStream = null;
     URL url = null;
     try {
-      URL[] urls = loader.getURLs();
+      final URL[] urls = loader.getURLs();
       if ((urls != null) && (urls.length > 0)) {
         url = urls[0];
-        InputStream is = url.openStream();
+        final InputStream is = url.openStream();
         jarStream = new JarInputStream(is);
-        Manifest manifest = jarStream.getManifest();
+        final Manifest manifest = jarStream.getManifest();
         attrs = manifest.getMainAttributes();
       }
-    } catch (IOException e) {
+    } catch (final IOException e) {
       logger.error(String.format("Failed to read manifest of plugin at urls: %s", url.toString()));
     } finally {
       IOUtils.closeQuietly(jarStream);
@@ -106,19 +106,19 @@ public class SpringablePluginLoader implements PluginLoader {
   private AnnotationConfigApplicationContext loadSpringContext(Attributes attrs,
       URLClassLoader loader) {
     if ((attrs != null) && !attrs.isEmpty()) {
-      String bootClassName = attrs.getValue(PluginLoader.PLUGIN_SPRING_CONFIG_CLASS);
+      final String bootClassName = attrs.getValue(PluginLoader.PLUGIN_SPRING_CONFIG_CLASS);
       if (!StringUtils.isEmpty(bootClassName)) {
         try {
-          Class<?> bootClass = Class.forName(bootClassName, true, loader);
+          final Class<?> bootClass = Class.forName(bootClassName, true, loader);
           if (bootClass != null) {
-            AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+            final AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
             ctx.setParent(context);
             ctx.setClassLoader(loader);
             ctx.register(bootClass);
             ctx.refresh();
             return ctx;
           }
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
           logger.error("Boot class not found in plugin!");
         }
       }
@@ -135,11 +135,11 @@ public class SpringablePluginLoader implements PluginLoader {
    * @since Oct 25, 2016 10:24:21 AM
    */
   private String[] resolvePluginBasePackages(Attributes attrs) {
-    String str = attrs.getValue(PluginLoader.PLUGIN_BASE_PACKAGES);
+    final String str = attrs.getValue(PluginLoader.PLUGIN_BASE_PACKAGES);
     if (StringUtils.isEmpty(str)) {
       throw new RuntimeException("Invalid plugin package: no base packages found in manifest!");
     }
-    String[] packages = str.split(",");
+    final String[] packages = str.split(",");
     return packages;
   }
 
@@ -152,20 +152,20 @@ public class SpringablePluginLoader implements PluginLoader {
    * @since Oct 13, 2016 1:16:57 PM
    */
   private List<Object> loadPluginInstances(URLClassLoader loader) {
-    List<Object> instances = new ArrayList<>();
+    final List<Object> instances = new ArrayList<>();
     // 解析jar包的 MANIFEST.MF 文件中的属性
-    Attributes attrs = parseJarManifest(loader);
+    final Attributes attrs = parseJarManifest(loader);
     // 插件基包
-    String[] packages = resolvePluginBasePackages(attrs);
+    final String[] packages = resolvePluginBasePackages(attrs);
     Reflections reflections = null;
     // 尝试根据插件包属性构建 spring 上下文
-    AnnotationConfigApplicationContext ctx = loadSpringContext(attrs, loader);
+    final AnnotationConfigApplicationContext ctx = loadSpringContext(attrs, loader);
     // 遍历基包来扫描插件
-    for (String packageName : packages) {
+    for (final String packageName : packages) {
       reflections = new Reflections(packageName, loader);
-      Set<Class<?>> pluginClasses = reflections.getTypesAnnotatedWith(Pluggable.class);
+      final Set<Class<?>> pluginClasses = reflections.getTypesAnnotatedWith(Pluggable.class);
       Object obj = null;
-      for (Class<?> clazz : pluginClasses) {
+      for (final Class<?> clazz : pluginClasses) {
         if (ctx != null) {
           obj = ctx.getBean(clazz);// 基于spring的插件包，从spring上下文获取装配好的插件实例
         }
@@ -177,12 +177,12 @@ public class SpringablePluginLoader implements PluginLoader {
           }
           try {
             obj = clazz.newInstance();// 非spring的插件包，通过反射直接构造插件实例
-          } catch (Exception e) {
+          } catch (final Exception e) {
             throw new RuntimeException(
                 "Failed to instantiate plugin instance for class: " + clazz.toString(), e);
           }
         }
-        Pluggable pluggable = clazz.getAnnotation(Pluggable.class);
+        final Pluggable pluggable = clazz.getAnnotation(Pluggable.class);
         plugins.put(pluggable.name(), ctx);
         instances.add(obj);
       }
@@ -192,7 +192,7 @@ public class SpringablePluginLoader implements PluginLoader {
 
   @Override
   public List<Object> loadPlugins(URL jarFileUrl) {
-    URLClassLoader loader = new URLClassLoader(new URL[] {jarFileUrl}, sharedClassLoader);
+    final URLClassLoader loader = new URLClassLoader(new URL[] {jarFileUrl}, sharedClassLoader);
     /*
      * 设置线程的上下文类加载器，这样，由此加载的插件都会使用此类加载器，这样 就能在运行时动态加载需要的依赖包，同时不同插件不共享类加载器，甚至能实现 同一个依赖包的不同版本同时被载入
      */
@@ -202,28 +202,28 @@ public class SpringablePluginLoader implements PluginLoader {
 
   @Override
   public boolean unloadPlugin(Object instance) {
-    Pluggable pluggable = instance.getClass().getAnnotation(Pluggable.class);
-    GenericApplicationContext ctx = plugins.get(pluggable.name());
+    final Pluggable pluggable = instance.getClass().getAnnotation(Pluggable.class);
+    final GenericApplicationContext ctx = plugins.get(pluggable.name());
     if (ctx == null) {
       return true;
     }
     try {
       plugins.remove(pluggable.name());
-      BeanDefinitionRegistry registry = ctx;
-      String[] names = ctx.getBeanNamesForType(instance.getClass());
+      final BeanDefinitionRegistry registry = ctx;
+      final String[] names = ctx.getBeanNamesForType(instance.getClass());
       if ((names != null) && (names.length > 0)) {
-        for (String beanName : names) {
+        for (final String beanName : names) {
           registry.removeBeanDefinition(beanName);
         }
       }
-      Map<String, Object> beans = ctx.getBeansWithAnnotation(Pluggable.class);
+      final Map<String, Object> beans = ctx.getBeansWithAnnotation(Pluggable.class);
       if ((beans == null) || (beans.size() == 0)) {
         ctx.close();
       }
       return true;
-    } catch (NoSuchBeanDefinitionException e) {
+    } catch (final NoSuchBeanDefinitionException e) {
       logger.warn("No plugin bean definition was found in spring context!", e);
-    } catch (BeansException e) {
+    } catch (final BeansException e) {
       logger.warn("Failed to remove plugin bean from spring context!", e);
     }
     return false;

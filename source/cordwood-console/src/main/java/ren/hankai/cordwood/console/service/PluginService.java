@@ -1,17 +1,17 @@
 
 package ren.hankai.cordwood.console.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import ren.hankai.cordwood.core.domain.Plugin;
 import ren.hankai.cordwood.core.domain.PluginPackage;
 import ren.hankai.cordwood.persist.PluginPackageRepository;
 import ren.hankai.cordwood.persist.model.PluginBean;
 import ren.hankai.cordwood.persist.model.PluginPackageBean;
 import ren.hankai.cordwood.plugin.PluginRegistry;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.net.URL;
 
@@ -41,12 +41,12 @@ public class PluginService {
    */
   public boolean installPlugin(URL url) {
     try {
-      PluginPackage pp = pluginRegistry.register(url);
-      PluginPackageBean ppb = new PluginPackageBean();
+      final PluginPackage pp = pluginRegistry.register(url);
+      final PluginPackageBean ppb = new PluginPackageBean();
       ppb.setChecksum(pp.getIdentifier());
       ppb.setFileName(pp.getFileName());
-      for (Plugin plugin : pp.getPlugins()) {
-        PluginBean pb = new PluginBean();
+      for (final Plugin plugin : pp.getPlugins()) {
+        final PluginBean pb = new PluginBean();
         pb.setActive(plugin.isActive());
         pb.setDescription(plugin.getDescription());
         pb.setName(plugin.getName());
@@ -55,7 +55,7 @@ public class PluginService {
         ppb.getPlugins().add(pb);
       }
       pluginPackageRepository.save(ppb);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       logger.error(String.format("Failed to install plugin from: %s", url.toString()), e);
     }
     return false;

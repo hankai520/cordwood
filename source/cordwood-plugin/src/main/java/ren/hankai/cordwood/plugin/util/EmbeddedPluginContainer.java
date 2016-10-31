@@ -14,9 +14,6 @@ import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
 import ren.hankai.cordwood.plugin.api.PluginResourceLoader;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -24,6 +21,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 嵌入式插件容器，用于脱离 cordwood 控制台，单独启动插件。提供基础的基于插件实例，而不是插件包的注册机制。
@@ -39,21 +39,21 @@ public class EmbeddedPluginContainer {
   private static final Logger logger = LoggerFactory.getLogger(EmbeddedPluginContainer.class);
   private static final Map<String, Plugin> plugins = new HashMap<>();
 
-  protected final boolean register(Object pluginInstance) {
+  public static final boolean register(Object pluginInstance) {
     final Class<?> clazz = pluginInstance.getClass();
-    Pluggable pluggable = clazz.getAnnotation(Pluggable.class);
+    final Pluggable pluggable = clazz.getAnnotation(Pluggable.class);
     if (pluggable == null) {
       logger.error(
           "Failed to register plugin due to invalid instance! Plugin instance class must be marked with @Pluggable.");
       return false;
     }
-    Plugin plugin = new Plugin();
+    final Plugin plugin = new Plugin();
     plugin.setName(pluggable.name());
     plugin.setInstance(pluginInstance);
-    Method[] methods = clazz.getMethods();
+    final Method[] methods = clazz.getMethods();
     Functional functional = null;
     PluginFunction function = null;
-    for (Method method : methods) {
+    for (final Method method : methods) {
       functional = method.getAnnotation(Functional.class);
       if (functional != null) {
         function = new PluginFunction();
@@ -73,23 +73,23 @@ public class EmbeddedPluginContainer {
     return true;
   }
 
-  protected final Object handleRequest(String pluginName, String functionName,
+  public static final Object handleRequest(String pluginName, String functionName,
       HttpServletRequest request, HttpServletResponse response) {
-    Plugin plugin = plugins.get(pluginName);
+    final Plugin plugin = plugins.get(pluginName);
     if (plugin == null) {
       logger.error(String.format("Plugin \"%s\" not found!", pluginName));
       return null;
     }
-    PluginFunction function = plugin.getFunctions().get(functionName);
+    final PluginFunction function = plugin.getFunctions().get(functionName);
     if (function == null) {
       logger.error(String.format("Plugin function \"%s\" not found!", functionName));
       return null;
     }
-    ConversionService cs = new DefaultConversionService();
-    List<Object> args = new ArrayList<>();
-    Parameter[] params = function.getMethod().getParameters();
+    final ConversionService cs = new DefaultConversionService();
+    final List<Object> args = new ArrayList<>();
+    final Parameter[] params = function.getMethod().getParameters();
     if ((params != null) && (params.length > 0)) {
-      for (Parameter param : params) {
+      for (final Parameter param : params) {
         if (param.getType().isAssignableFrom(HttpServletRequest.class)) {
           args.add(request);
         } else if (param.getType().isAssignableFrom(HttpServletResponse.class)) {
@@ -97,9 +97,9 @@ public class EmbeddedPluginContainer {
         } else if (param.getType().isAssignableFrom(String[].class)) {
           args.add(request.getParameterValues(param.getName()));
         } else {
-          String str = request.getParameter(param.getName());
+          final String str = request.getParameter(param.getName());
           if (cs.canConvert(String.class, param.getType())) {
-            Object convertedParam = cs.convert(str, param.getType());
+            final Object convertedParam = cs.convert(str, param.getType());
             args.add(convertedParam);
           }
         }
@@ -107,15 +107,15 @@ public class EmbeddedPluginContainer {
     }
     try {
       return function.getMethod().invoke(plugin.getInstance(), args.toArray());
-    } catch (Exception e) {
+    } catch (final Exception e) {
       logger.error(String.format("Failed to call \"%s -> %s\"", pluginName, functionName), e);
     }
     return null;
   }
 
-  protected final InputStream getResource(String pluginName, HttpServletRequest request) {
-    String resourcePath = PathUtil.parseResourcePath(request.getRequestURI());
-    Plugin plugin = plugins.get(pluginName);
+  public static final InputStream getResource(String pluginName, HttpServletRequest request) {
+    final String resourcePath = PathUtil.parseResourcePath(request.getRequestURI());
+    final Plugin plugin = plugins.get(pluginName);
     if (plugin == null) {
       logger.error(String.format("Plugin \"%s\" not found!", pluginName));
       return null;
@@ -123,8 +123,8 @@ public class EmbeddedPluginContainer {
       logger.error("Plugin does not provide any resource!");
       return null;
     } else {
-      PluginResourceLoader resourceLoader = (PluginResourceLoader) plugin.getInstance();
-      InputStream is = resourceLoader.getResource(resourcePath);
+      final PluginResourceLoader resourceLoader = (PluginResourceLoader) plugin.getInstance();
+      final InputStream is = resourceLoader.getResource(resourcePath);
       if (is == null) {
         logger.error(String.format("Plugin resource \"%s\" not found!", resourcePath));
         return null;
@@ -136,7 +136,7 @@ public class EmbeddedPluginContainer {
   private static class Plugin {
     private String name;
     private Object instance;
-    private Map<String, PluginFunction> functions = new HashMap<>();
+    private final Map<String, PluginFunction> functions = new HashMap<>();
 
     public String getName() {
       return name;

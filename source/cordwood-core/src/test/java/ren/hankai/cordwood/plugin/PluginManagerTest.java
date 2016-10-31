@@ -38,13 +38,14 @@ public class PluginManagerTest extends TestSupport {
 
   @Test
   public void testActivatePlugin() throws Exception {
-    String checksum = DigestUtils.sha1Hex(testPluginPackageUrl.openStream());
-    PluginPackage pp = pluginRegistry.register(testPluginPackageUrl);
+    final String checksum = DigestUtils.sha1Hex(testPluginPackageUrl.openStream());
+    final PluginPackage pp = pluginRegistry.register(testPluginPackageUrl);
     Assert.assertNotNull(pp);
-    String expName = FilenameUtils.getName(testPluginPackageUrl.getFile());
+    final String expName = FilenameUtils.getName(testPluginPackageUrl.getFile());
     Assert.assertEquals(expName, pp.getFileName());
     Assert.assertEquals(checksum, pp.getIdentifier());
-    URL expUrl = new File(Preferences.getPluginsDir() + File.separator + expName).toURI().toURL();
+    final URL expUrl =
+        new File(Preferences.getPluginsDir() + File.separator + expName).toURI().toURL();
     Assert.assertEquals(expUrl, pp.getInstallUrl());
     Assert.assertTrue(pp.getPlugins().size() == 1);
     plugin = pp.getPlugins().get(0);
@@ -53,7 +54,7 @@ public class PluginManagerTest extends TestSupport {
     Assert.assertEquals("simple pojo plugin", plugin.getDescription());
     Assert.assertNotNull(plugin.getInstance());
     Assert.assertNotNull(plugin.getFunctions());
-    PluginFunction pf = plugin.getFunctions().get("sum");
+    final PluginFunction pf = plugin.getFunctions().get("sum");
     Assert.assertEquals("sum", pf.getName());
     Assert.assertEquals("text/plain", pf.getResultType());
     pluginManager.deactivatePlugin(plugin.getName());
@@ -68,13 +69,14 @@ public class PluginManagerTest extends TestSupport {
   @Test
   public void testGetPlugin() throws Exception {
 
-    String checksum = DigestUtils.sha1Hex(testPluginPackageUrl.openStream());
-    PluginPackage pp = pluginRegistry.register(testPluginPackageUrl);
+    final String checksum = DigestUtils.sha1Hex(testPluginPackageUrl.openStream());
+    final PluginPackage pp = pluginRegistry.register(testPluginPackageUrl);
     Assert.assertNotNull(pp);
-    String expName = FilenameUtils.getName(testPluginPackageUrl.getFile());
+    final String expName = FilenameUtils.getName(testPluginPackageUrl.getFile());
     Assert.assertEquals(expName, pp.getFileName());
     Assert.assertEquals(checksum, pp.getIdentifier());
-    URL expUrl = new File(Preferences.getPluginsDir() + File.separator + expName).toURI().toURL();
+    final URL expUrl =
+        new File(Preferences.getPluginsDir() + File.separator + expName).toURI().toURL();
     Assert.assertEquals(expUrl, pp.getInstallUrl());
     Assert.assertTrue(pp.getPlugins().size() == 1);
     plugin = pp.getPlugins().get(0);
@@ -83,10 +85,10 @@ public class PluginManagerTest extends TestSupport {
     Assert.assertEquals("simple pojo plugin", plugin.getDescription());
     Assert.assertNotNull(plugin.getInstance());
     Assert.assertNotNull(plugin.getFunctions());
-    PluginFunction pf = plugin.getFunctions().get("sum");
+    final PluginFunction pf = plugin.getFunctions().get("sum");
     Assert.assertEquals("sum", pf.getName());
     Assert.assertEquals("text/plain", pf.getResultType());
-    Plugin plugin2 = pluginManager.getPlugin(plugin.getName());
+    final Plugin plugin2 = pluginManager.getPlugin(plugin.getName());
     Assert.assertEquals(plugin2.getName(), plugin.getName());
     Assert.assertEquals(plugin2.getVersion(), plugin.getVersion());
     Assert.assertEquals(plugin2.getDescription(), plugin.getDescription());
@@ -96,15 +98,15 @@ public class PluginManagerTest extends TestSupport {
 
   @Test
   public void testInitializePlugins() throws Exception {
-    String fileName = FilenameUtils.getName(testPluginPackageUrl.getPath());
-    FileOutputStream fos =
+    final String fileName = FilenameUtils.getName(testPluginPackageUrl.getPath());
+    final FileOutputStream fos =
         new FileOutputStream(Preferences.getPluginsDir() + File.separator + fileName);
     FileCopyUtils.copy(testPluginPackageUrl.openStream(), fos);
-    List<String> names = new ArrayList<>();
-    String expName = FilenameUtils.getName(testPluginPackageUrl.getFile());
+    final List<String> names = new ArrayList<>();
+    final String expName = FilenameUtils.getName(testPluginPackageUrl.getFile());
     names.add(expName);
     pluginManager.initializePlugins(names);
-    Plugin plugin2 = pluginManager.getPlugin("pojo");
+    final Plugin plugin2 = pluginManager.getPlugin("pojo");
     Assert.assertEquals(plugin2.getName(), "pojo");
     Assert.assertEquals(plugin2.getVersion(), "1.0.0");
     Assert.assertEquals(plugin2.getDescription(), "simple pojo plugin");

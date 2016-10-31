@@ -31,12 +31,12 @@ public class EncryptionUtil {
    */
   public static String aes(String value, String sk, boolean encrypt) {
     try {
-      IvParameterSpec iv = new IvParameterSpec("RandomInitVector".getBytes("UTF-8"));
-      SecretKeySpec skeySpec = new SecretKeySpec(sk.getBytes("UTF-8"), "AES");
-      Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+      final IvParameterSpec iv = new IvParameterSpec("RandomInitVector".getBytes("UTF-8"));
+      final SecretKeySpec skeySpec = new SecretKeySpec(sk.getBytes("UTF-8"), "AES");
+      final Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
       if (encrypt) {
         cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
-        byte[] encrypted = cipher.doFinal(value.getBytes());
+        final byte[] encrypted = cipher.doFinal(value.getBytes());
         String result = Base64.encodeBase64String(encrypted);
         result = result.replaceAll("\\+", "-");
         result = result.replaceAll("/", "_");
@@ -45,10 +45,10 @@ public class EncryptionUtil {
         cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
         value = value.replaceAll("-", "+");
         value = value.replaceAll("_", "/");
-        byte[] original = cipher.doFinal(Base64.decodeBase64(value));
+        final byte[] original = cipher.doFinal(Base64.decodeBase64(value));
         return new String(original);
       }
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       logger.error("Error occurred while encrypting/decrypting data.", ex);
     }
     return null;

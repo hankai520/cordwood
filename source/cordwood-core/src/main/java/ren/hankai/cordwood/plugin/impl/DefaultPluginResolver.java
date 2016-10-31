@@ -1,13 +1,5 @@
 package ren.hankai.cordwood.plugin.impl;
 
-import ren.hankai.cordwood.core.domain.Plugin;
-import ren.hankai.cordwood.core.domain.PluginFunction;
-import ren.hankai.cordwood.core.domain.PluginPackage;
-import ren.hankai.cordwood.plugin.PluginResolver;
-import ren.hankai.cordwood.plugin.api.Functional;
-import ren.hankai.cordwood.plugin.api.Pluggable;
-import ren.hankai.cordwood.plugin.api.Secure;
-
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -17,6 +9,14 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
+
+import ren.hankai.cordwood.core.domain.Plugin;
+import ren.hankai.cordwood.core.domain.PluginFunction;
+import ren.hankai.cordwood.core.domain.PluginPackage;
+import ren.hankai.cordwood.plugin.PluginResolver;
+import ren.hankai.cordwood.plugin.api.Functional;
+import ren.hankai.cordwood.plugin.api.Pluggable;
+import ren.hankai.cordwood.plugin.api.Secure;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,13 +39,13 @@ public class DefaultPluginResolver implements PluginResolver {
   public PluginPackage resolvePackage(URL packageUrl) {
     InputStream is = null;
     try {
-      PluginPackage pluginPackage = new PluginPackage();
+      final PluginPackage pluginPackage = new PluginPackage();
       pluginPackage.setFileName(FilenameUtils.getName(packageUrl.getPath()));
       pluginPackage.setInstallUrl(packageUrl);
       is = packageUrl.openStream();
       pluginPackage.setIdentifier(DigestUtils.sha1Hex(is));
       return pluginPackage;
-    } catch (IOException e) {
+    } catch (final IOException e) {
       logger.error(String.format("Failed to calculate the checksum of package \"%s\"", packageUrl),
           e);
     } finally {
@@ -57,7 +57,7 @@ public class DefaultPluginResolver implements PluginResolver {
   @Override
   public Plugin resolvePlugin(Object pluginInstance) {
     final Class<?> clazz = pluginInstance.getClass();
-    Pluggable pluggable = clazz.getAnnotation(Pluggable.class);
+    final Pluggable pluggable = clazz.getAnnotation(Pluggable.class);
     final Plugin plugin = new Plugin();
     plugin.setName(pluggable.name());
     plugin.setVersion(pluggable.version());
@@ -65,15 +65,15 @@ public class DefaultPluginResolver implements PluginResolver {
     plugin.setInstance(pluginInstance);
     plugin.setActive(true);
     // 扫描插件标记的功能
-    Secure pluginSecure = clazz.getAnnotation(Secure.class);
+    final Secure pluginSecure = clazz.getAnnotation(Secure.class);
     ReflectionUtils.doWithMethods(clazz, new ReflectionUtils.MethodCallback() {
 
       @Override
       public void doWith(final Method method)
           throws IllegalArgumentException, IllegalAccessException {
-        Functional functional = AnnotationUtils.getAnnotation(method, Functional.class);
+        final Functional functional = AnnotationUtils.getAnnotation(method, Functional.class);
         if (functional != null) {
-          PluginFunction function = new PluginFunction();
+          final PluginFunction function = new PluginFunction();
           function.setMethod(method);
           if (!StringUtils.isEmpty(functional.name())) {
             function.setName(functional.name());

@@ -23,10 +23,10 @@ public final class RuntimeInfo {
     props = System.getProperties();
     props.putAll(System.getenv());
     try {
-      InetAddress addr = InetAddress.getLocalHost();
+      final InetAddress addr = InetAddress.getLocalHost();
       props.put("hostName", addr.getHostName());
       props.put("hostIp", addr.getHostAddress());
-    } catch (UnknownHostException e) {
+    } catch (final UnknownHostException e) {
       throw new RuntimeException("Failed to initialize runtime info.", e);
     }
   }

@@ -67,7 +67,7 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
    * @since Oct 13, 2016 1:08:57 PM
    */
   private boolean changeActivationStatus(String pluginName, boolean active) {
-    Plugin plugin = plugins.get(pluginName);
+    final Plugin plugin = plugins.get(pluginName);
     if (plugin != null) {
       plugin.setActive(active);
       plugins.put(plugin.getName(), plugin);
@@ -94,24 +94,24 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
    */
   private URL copyPackage(URL tempUrl) {
     URL url = null;
-    String protocal = tempUrl.getProtocol().toLowerCase();
+    final String protocal = tempUrl.getProtocol().toLowerCase();
     if (protocal.equals("file")) {
-      String name = FilenameUtils.getName(tempUrl.getPath());
-      String localPath = Preferences.getPluginsDir() + File.separator + name;
+      final String name = FilenameUtils.getName(tempUrl.getPath());
+      final String localPath = Preferences.getPluginsDir() + File.separator + name;
       InputStream is = null;
       OutputStream os = null;
       try {
-        File localFile = new File(localPath);
+        final File localFile = new File(localPath);
         if (!localFile.exists() || localFile.isDirectory()) {
           is = tempUrl.openStream();
           os = new FileOutputStream(localFile);
           FileCopyUtils.copy(is, os);
         }
         url = localFile.toURI().toURL();
-      } catch (MalformedURLException e) {
+      } catch (final MalformedURLException e) {
         logger.error(
             String.format("Failed to convert package url to local: %s", tempUrl.toString()), e);
-      } catch (IOException e) {
+      } catch (final IOException e) {
         logger.error(String.format("Failed to copy plugin package file: %s", tempUrl.toString()),
             e);
       } finally {
@@ -127,18 +127,18 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
     if (!pluginValidator.validatePackage(packageUrl)) {
       logger.error(String.format("Failed to verify plugin package at %s", packageUrl.toString()));
     } else {
-      URL localPath = copyPackage(packageUrl);
+      final URL localPath = copyPackage(packageUrl);
       if (localPath != null) {
-        PluginPackage pack = pluginResolver.resolvePackage(localPath);
-        PluginPackage loadedPack = packages.get(pack.getIdentifier());
+        final PluginPackage pack = pluginResolver.resolvePackage(localPath);
+        final PluginPackage loadedPack = packages.get(pack.getIdentifier());
         if (loadedPack != null) {
           unregister(loadedPack.getIdentifier());
         }
-        String name = FilenameUtils.getName(localPath.getPath());
-        List<Object> instances = pluginLoader.loadPlugins(localPath);
+        final String name = FilenameUtils.getName(localPath.getPath());
+        final List<Object> instances = pluginLoader.loadPlugins(localPath);
         if ((instances != null) && !instances.isEmpty()) {
-          for (Object instance : instances) {
-            Plugin plugin = pluginResolver.resolvePlugin(instance);
+          for (final Object instance : instances) {
+            final Plugin plugin = pluginResolver.resolvePlugin(instance);
             pack.addPlugin(plugin);
             plugins.put(plugin.getName(), plugin);
             pluginEventEmitter.emitEvent(PluginEventEmitter.PLUGIN_LOADED, plugin);
@@ -156,9 +156,9 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
 
   @Override
   public synchronized boolean unregister(String packageId) {
-    PluginPackage pp = packages.get(packageId);
+    final PluginPackage pp = packages.get(packageId);
     if (pp != null) {
-      for (Plugin p : pp.getPlugins()) {
+      for (final Plugin p : pp.getPlugins()) {
         pluginLoader.unloadPlugin(p.getInstance());
         plugins.remove(p.getName());
         pluginEventEmitter.emitEvent(PluginEventEmitter.PLUGIN_UNLOADED, p);
@@ -177,9 +177,9 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
 
   @Override
   public synchronized void initializePlugins(List<String> packageNames) {
-    File dir = new File(Preferences.getPluginsDir());
+    final File dir = new File(Preferences.getPluginsDir());
     if (dir.exists() && dir.isDirectory()) {
-      File[] plugins = dir.listFiles(new FilenameFilter() {
+      final File[] plugins = dir.listFiles(new FilenameFilter() {
 
         @Override
         public boolean accept(File dir, String name) {
@@ -188,7 +188,7 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
         }
       });
       if ((plugins != null) && (plugins.length > 0)) {
-        for (File file : plugins) {
+        for (final File file : plugins) {
           FileInputStream fis = null;
           String checksum = null;
           try {
@@ -197,7 +197,7 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
             if (packages.get(checksum) == null) {
               register(file.toURI().toURL());
             }
-          } catch (Exception e) {
+          } catch (final Exception e) {
             logger.warn(String.format("Failed to register plugin package at url: \"%s\"",
                 file.getAbsolutePath()), e);
           } finally {
@@ -220,7 +220,7 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
 
   @Override
   public Plugin getPlugin(String pluginName) {
-    Plugin plugin = plugins.get(pluginName);
+    final Plugin plugin = plugins.get(pluginName);
     if (plugin == null) {
       logger.error(String.format("Plugin with name \"%s\" not found!", pluginName));
     }

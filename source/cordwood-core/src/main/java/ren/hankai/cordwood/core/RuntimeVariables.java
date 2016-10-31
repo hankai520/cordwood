@@ -33,18 +33,18 @@ public final class RuntimeVariables {
 
   private static Map<String, String> getVariables() {
     if (variables == null) {
-      variables = new HashMap<String, String>();
+      variables = new HashMap<>();
       try {
-        DefaultPropertiesPersister dpp = new DefaultPropertiesPersister();
-        Properties props = new Properties();
+        final DefaultPropertiesPersister dpp = new DefaultPropertiesPersister();
+        final Properties props = new Properties();
         dpp.load(props, new FileReader(getVariablesFile()));
-        Set<String> keyset = props.stringPropertyNames();
-        for (String key : keyset) {
+        final Set<String> keyset = props.stringPropertyNames();
+        for (final String key : keyset) {
           variables.put(key, props.getProperty(key));
         }
-      } catch (FileNotFoundException e) {
+      } catch (final FileNotFoundException e) {
         logger.error(String.format("Runtime variables file \"%s\" not found!", savePath), e);
-      } catch (IOException e) {
+      } catch (final IOException e) {
         logger.error(String.format("Failed to load runtime variables from file \"%s\"!", savePath),
             e);
       }
@@ -64,13 +64,13 @@ public final class RuntimeVariables {
    */
   public static void saveVariables() {
     try {
-      DefaultPropertiesPersister dpp = new DefaultPropertiesPersister();
-      String header =
+      final DefaultPropertiesPersister dpp = new DefaultPropertiesPersister();
+      final String header =
           "These are the runtime variables for the application, do not change it manually!";
-      Properties props = new Properties();
+      final Properties props = new Properties();
       props.putAll(variables);
       dpp.store(props, new FileWriter(savePath), header);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       logger.error(String.format("Failed to save runtime variables to file \"%s\"!", savePath), e);
     }
   }
@@ -92,10 +92,10 @@ public final class RuntimeVariables {
    * @since Oct 25, 2016 10:45:33 AM
    */
   public static boolean getBool(String key) {
-    String value = getVariable(key);
+    final String value = getVariable(key);
     try {
       return Boolean.parseBoolean(value);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       logger.warn(String.format("Failed to get boolean variable \"%s\"", key), e);
     }
     return false;
@@ -110,10 +110,10 @@ public final class RuntimeVariables {
    * @since Oct 25, 2016 10:46:11 AM
    */
   public static int getInt(String key) {
-    String value = getVariable(key);
+    final String value = getVariable(key);
     try {
       return Integer.parseInt(value);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       logger.warn(String.format("Failed to get int variable \"%s\"", key), e);
     }
     return 0;
@@ -127,7 +127,7 @@ public final class RuntimeVariables {
    * @since Oct 25, 2016 10:46:40 AM
    */
   public static Map<String, String> getAllVariables() {
-    Map<String, String> map = new HashMap<>();
+    final Map<String, String> map = new HashMap<>();
     map.putAll(variables);
     return map;
   }
