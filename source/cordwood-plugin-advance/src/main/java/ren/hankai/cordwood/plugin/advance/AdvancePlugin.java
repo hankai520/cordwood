@@ -50,7 +50,7 @@ public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader
   private MyTbl1Repository tbl1Repo;
 
   private VelocityContext buildVelcityContext() {
-    VelocityContext vc = new VelocityContext();
+    final VelocityContext vc = new VelocityContext();
     vc.put("pluginBaseUrl", String.format("%s/%s", Pluggable.PLUGIN_BASE_URL, NAME));
     vc.put("resourceBaseUrl", String.format("%s/%s", Pluggable.PLUGIN_RESOURCE_BASE_URL, NAME));
     return vc;
@@ -67,21 +67,21 @@ public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader
    */
   @Functional(name = "add", resultType = "text/html")
   public String add(Integer op1, Integer op2) {
-    MyTbl1 mt = new MyTbl1();
+    final MyTbl1 mt = new MyTbl1();
     mt.setTimestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-    int sum = op1 + op2;
+    final int sum = op1 + op2;
     mt.setExp(op1 + " + " + op2 + " = " + sum);
     tbl1Repo.save(mt);
-    VelocityContext vc = buildVelcityContext();
-    List<MyTbl1> results = tbl1Repo.findAll();
+    final VelocityContext vc = buildVelcityContext();
+    final List<MyTbl1> results = tbl1Repo.findAll();
     vc.put("results", results);
     Template tmpl = null;
     try {
       tmpl = engine.getTemplate("/content.html", "utf-8");
-      StringWriter sw = new StringWriter();
+      final StringWriter sw = new StringWriter();
       tmpl.merge(vc, sw);
       return sw.toString();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       logger.error("Failed to render template!", e);
     }
     return "error";
@@ -100,8 +100,8 @@ public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader
   @Override
   public void pluginDidLoad() {
     try {
-      URL url = AdvancePlugin.class.getClassLoader().getResource("templates");
-      String templatePath = url.toString();
+      final URL url = AdvancePlugin.class.getClassLoader().getResource("templates");
+      final String templatePath = url.toString();
       logger.info("Velocity template root: " + templatePath);
       if (engine == null) {
         engine = new VelocityEngine();
@@ -111,7 +111,7 @@ public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader
       engine.setProperty("url.resource.loader.class", URLResourceLoader.class.getName());
       engine.setProperty("url.resource.loader.cache", "true");
       engine.setProperty("url.resource.loader.modificationCheckInterval", "60");
-      String logDir = System.getProperty("app.log");
+      final String logDir = System.getProperty("app.log");
       if (!StringUtils.isEmpty(logDir)) {
         logger.info("Velocity run time log: " + logDir);
         engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM,
@@ -123,7 +123,7 @@ public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader
       // 模板中所有符号都原样输出
       engine.setProperty("eventhandler.escape.html.match", "/.*/");
       engine.init();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       logger.error("Failed to initialize velocity!", e);
     }
   }
@@ -135,11 +135,11 @@ public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader
 
   @Override
   public InputStream getResource(String relativeUrl) {
-    URL url = this.getClass().getResource("/static/" + relativeUrl);
+    final URL url = this.getClass().getResource("/static/" + relativeUrl);
     if (url != null) {
       try {
         return url.openStream();
-      } catch (IOException e) {
+      } catch (final IOException e) {
         logger.error(String.format("Failed to open resource: \"%s\"", relativeUrl), e);
       }
     }

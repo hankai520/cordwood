@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.core.convert.support.DefaultConversionService;
 
 /**
  * Spring 核心配置类，用于定义 cordwood-core 所必要的组件。
@@ -21,19 +18,6 @@ import org.springframework.core.convert.support.DefaultConversionService;
 public class CoreSpringConfig {
 
   /**
-   * 类型转换服务。
-   *
-   * @return 类型转换服务实例
-   * @author hankai
-   * @since Oct 31, 2016 11:03:46 PM
-   */
-  @Bean
-  @Primary
-  public ConversionService getConversionService() {
-    return new DefaultConversionService();
-  }
-
-  /**
    * JSON 序列化/反序列化。
    *
    * @return Jackson 核心对象
@@ -42,7 +26,7 @@ public class CoreSpringConfig {
    */
   @Bean
   public ObjectMapper getObjectMapper() {
-    ObjectMapper om = new ObjectMapper();
+    final ObjectMapper om = new ObjectMapper();
     om.enable(SerializationFeature.INDENT_OUTPUT);
     return om;
   }
@@ -56,7 +40,7 @@ public class CoreSpringConfig {
    */
   @Bean(name = "messageSource")
   public ReloadableResourceBundleMessageSource getMessageSource() {
-    ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
+    final ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
     ms.setBasenames("WEB-INF/i18n/messages", "WEB-INF/i18n/validation");
     ms.setDefaultEncoding("UTF-8");
     ms.setCacheSeconds(0);

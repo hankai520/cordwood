@@ -7,18 +7,22 @@ import org.junit.runner.RunWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import ren.hankai.cordwood.plugin.advance.util.Slf4jSessionLogger;
+import ren.hankai.cordwood.plugin.config.PluginConfig;
+import ren.hankai.cordwood.plugin.support.PluginRequestDispatcher;
 
 import java.util.Properties;
 
@@ -33,9 +37,11 @@ import javax.sql.DataSource;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {ApplicationTests.class})
-@EnableJpaRepositories(basePackages = {"ren.hankai.cordwood.plugin"})
+@EnableJpaRepositories(basePackages = {"ren.hankai.cordwood"})
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"ren.hankai.cordwood.plugin"})
+@ComponentScan(basePackages = {"ren.hankai.cordwood"})
+@ActiveProfiles(PluginRequestDispatcher.PROFILE_STANDALONE_MODE)
+@Import({PluginConfig.class})
 @Configuration
 public abstract class ApplicationTests {
 

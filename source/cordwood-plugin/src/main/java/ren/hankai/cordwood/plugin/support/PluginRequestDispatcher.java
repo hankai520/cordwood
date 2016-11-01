@@ -42,6 +42,11 @@ public abstract class PluginRequestDispatcher {
   protected PluginDriver pluginDriver;
 
   /**
+   * 将插件以单机形式启动。
+   */
+  public static final String PROFILE_STANDALONE_MODE = "standalone-plugin-mode";
+
+  /**
    * 分发插件访问请求。
    *
    * @param pluginName 插件名

@@ -4,12 +4,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 
-import ren.hankai.cordwood.core.config.CoreSpringConfig;
 import ren.hankai.cordwood.plugin.advance.AdvancePlugin;
 import ren.hankai.cordwood.plugin.advance.config.PluginBootstrap;
 import ren.hankai.cordwood.plugin.api.PluginRegistry;
@@ -26,9 +25,10 @@ import ren.hankai.cordwood.plugin.support.PluginRequestDispatcher;
  * 将此配置标记为仅在单机容器模式下载入，因为 @EnableAutoConfiguration 注解会尝试从类路径中包含的类来自动 配置需要的
  * bean，而这一过程所使用的类加载器并不是由插件容器提供的，因此无法加载到插件所依赖的 jar 包，因而会 导致类加载问题。
  */
-@Profile("ignored")
+@Profile(PluginRequestDispatcher.PROFILE_STANDALONE_MODE)
 @EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
-@Import(PluginBootstrap.class)
+@Import({PluginBootstrap.class})
+@ComponentScan(basePackages = "ren.hankai.cordwood")
 @Controller
 public class PluginContainer extends PluginRequestDispatcher {
 
@@ -52,16 +52,12 @@ public class PluginContainer extends PluginRequestDispatcher {
       System.setProperty("debug", "true");
     }
     final SpringApplication app = new SpringApplication(PluginContainer.class);
-    app.setAdditionalProfiles("ignored");
+    app.setAdditionalProfiles(PluginRequestDispatcher.PROFILE_STANDALONE_MODE);
     final ApplicationContext context = app.run(args);
     final PluginRegistry pluginRegistry = context.getBean(PluginRegistry.class);
     // 注册插件
     for (final Class<?> clazz : pluginClasses) {
       pluginRegistry.registerTransientPlugin(context.getBean(clazz));
     }
-  }
-
-  @Configuration
-  public static class InternalConfig extends CoreSpringConfig {
   }
 }
