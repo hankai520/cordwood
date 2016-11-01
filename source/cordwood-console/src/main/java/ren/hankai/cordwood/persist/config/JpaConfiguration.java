@@ -61,12 +61,6 @@ public class JpaConfiguration extends JpaBaseConfiguration {
     return packages;
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see
-   * org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration#createJpaVendorAdapter()
-   */
   @Override
   protected AbstractJpaVendorAdapter createJpaVendorAdapter() {
     final EclipseLinkJpaVendorAdapter adapter = new EclipseLinkJpaVendorAdapter();
@@ -75,18 +69,18 @@ public class JpaConfiguration extends JpaBaseConfiguration {
     return adapter;
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration#getVendorProperties()
-   */
   @Override
   protected Map<String, Object> getVendorProperties() {
     final Map<String, Object> jpaProperties = new HashMap<>();
     jpaProperties.put("eclipselink.target-database", dataSourceInfo.getDatabasePlatform());
-    // jpaProperties.put( "eclipselink.ddl-generation", "drop-and-create-tables" );
-    // this controls what will be logged during DDL execution
-    // jpaProperties.put("eclipselink.ddl-generation.output-mode", "both");
+    /*
+     * create-tables, create-or-extend-tables, drop-and-create-tables, none
+     */
+    jpaProperties.put("eclipselink.ddl-generation", "create-or-extend-tables");
+    /*
+     * both, database, sql-script
+     */
+    jpaProperties.put("eclipselink.ddl-generation.output-mode", "database");
     jpaProperties.put("eclipselink.weaving", "static");
     jpaProperties.put("eclipselink.logging.level", "FINE");
     jpaProperties.put("eclipselink.logging.parameters", "true");

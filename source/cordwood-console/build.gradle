@@ -46,6 +46,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-cache"
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
     compile "org.springframework.boot:spring-boot-configuration-processor"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
     //compile "org.springframework.security:spring-security-web"
     //compile "org.springframework.security:spring-security-config"
     compile "org.springframework.session:spring-session-jdbc"
