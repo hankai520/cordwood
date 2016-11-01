@@ -5,9 +5,9 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ren.hankai.cordwood.TestSupport;
 import ren.hankai.cordwood.core.ApplicationInitializer;
 import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.core.test.CoreTestSupport;
 import ren.hankai.cordwood.core.util.RuntimeVariables;
 
 import java.io.File;
@@ -21,7 +21,7 @@ import java.util.Map;
  * @version 1.0.0
  * @since Oct 21, 2016 1:16:46 PM
  */
-public class RuntimeVariablesTest extends TestSupport {
+public class RuntimeVariablesTest extends CoreTestSupport {
 
   @Test
   public void testSaveParameters() throws Exception {

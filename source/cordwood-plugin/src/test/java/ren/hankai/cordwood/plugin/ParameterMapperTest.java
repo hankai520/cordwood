@@ -5,9 +5,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import ren.hankai.cordwood.TestSupport;
 import ren.hankai.cordwood.plugin.api.ParameterMapper;
 import ren.hankai.cordwood.plugin.api.PluginRegistry;
+import ren.hankai.cordwood.plugin.test.PluginTestSupport;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  * @version 1.0.0
  * @since Oct 28, 2016 11:27:47 AM
  */
-public class ParameterMapperTest extends TestSupport {
+public class ParameterMapperTest extends PluginTestSupport {
 
   @Autowired
   private ParameterMapper parameterMapper;

@@ -34,4 +34,6 @@ dependencies {
     compile("commons-lang:commons-lang:2.6")
     
     compile project(":cordwood-core")
+    
+    testCompile "org.springframework:spring-test:${springVersion}"
 }

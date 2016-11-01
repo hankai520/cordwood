@@ -6,9 +6,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import ren.hankai.cordwood.TestSupport;
 import ren.hankai.cordwood.plugin.api.PluginDriver;
 import ren.hankai.cordwood.plugin.api.PluginRegistry;
+import ren.hankai.cordwood.plugin.test.PluginTestSupport;
 
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  * @version 1.0.0
  * @since Oct 28, 2016 11:27:12 AM
  */
-public class PluginDriverTest extends TestSupport {
+public class PluginDriverTest extends PluginTestSupport {
 
   @Autowired
   private PluginDriver pluginDriver;

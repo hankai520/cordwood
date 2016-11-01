@@ -8,11 +8,11 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
 
-import ren.hankai.cordwood.TestSupport;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.api.PluginManager;
 import ren.hankai.cordwood.plugin.api.PluginRegistry;
+import ren.hankai.cordwood.plugin.test.PluginTestSupport;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,7 +27,7 @@ import java.util.List;
  * @version 1.0.0
  * @since Oct 21, 2016 2:46:01 PM
  */
-public class PluginManagerTest extends TestSupport {
+public class PluginManagerTest extends PluginTestSupport {
 
   private Plugin plugin;
 
@@ -116,7 +116,7 @@ public class PluginManagerTest extends TestSupport {
 
   @Test
   public void testRegisterTransientPlugin() throws Exception {
-    Plugin plugin = pluginRegistry.registerTransientPlugin(new TestPlugin());
+    final Plugin plugin = pluginRegistry.registerTransientPlugin(new TestPlugin());
     Assert.assertNotNull(plugin);
     Assert.assertEquals("TestPlugin", plugin.getName());
     Assert.assertEquals("1.2.1", plugin.getVersion());
@@ -126,7 +126,7 @@ public class PluginManagerTest extends TestSupport {
 
   @Test
   public void testUnregisterTransientPlugin() throws Exception {
-    Plugin plugin = pluginRegistry.registerTransientPlugin(new TestPlugin());
+    final Plugin plugin = pluginRegistry.registerTransientPlugin(new TestPlugin());
     Assert.assertNotNull(plugin);
     Assert.assertTrue(pluginRegistry.isPluginRegistered(plugin.getName()));
     Assert.assertTrue(pluginRegistry.unregisterTransientPlugin(plugin.getName()));

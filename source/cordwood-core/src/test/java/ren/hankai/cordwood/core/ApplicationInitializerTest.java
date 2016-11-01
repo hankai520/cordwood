@@ -4,7 +4,7 @@ package ren.hankai.cordwood.core;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ren.hankai.cordwood.TestSupport;
+import ren.hankai.cordwood.core.test.CoreTestSupport;
 
 import java.io.File;
 
@@ -15,7 +15,7 @@ import java.io.File;
  * @version 1.0.0
  * @since Oct 21, 2016 1:02:16 PM
  */
-public class ApplicationInitializerTest extends TestSupport {
+public class ApplicationInitializerTest extends CoreTestSupport {
 
   @Test
   public void testInitialize() throws Exception {

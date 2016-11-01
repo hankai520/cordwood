@@ -5,8 +5,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import ren.hankai.cordwood.TestSupport;
 import ren.hankai.cordwood.plugin.api.PluginLoader;
+import ren.hankai.cordwood.plugin.test.PluginTestSupport;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * @version 1.0.0
  * @since Oct 21, 2016 3:25:46 PM
  */
-public class PluginLoaderTest extends TestSupport {
+public class PluginLoaderTest extends PluginTestSupport {
 
   @Autowired
   protected PluginLoader pluginLoader;

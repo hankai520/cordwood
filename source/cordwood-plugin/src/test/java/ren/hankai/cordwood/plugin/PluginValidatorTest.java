@@ -7,9 +7,9 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
 
-import ren.hankai.cordwood.TestSupport;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.api.PluginValidator;
+import ren.hankai.cordwood.plugin.test.PluginTestSupport;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,7 +22,7 @@ import java.net.URL;
  * @version 1.0.0
  * @since Oct 21, 2016 3:26:43 PM
  */
-public class PluginValidatorTest extends TestSupport {
+public class PluginValidatorTest extends PluginTestSupport {
 
   @Autowired
   protected PluginValidator pluginValidator;

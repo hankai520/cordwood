@@ -4,9 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import ren.hankai.cordwood.TestSupport;
 import ren.hankai.cordwood.plugin.api.PluginEventEmitter;
 import ren.hankai.cordwood.plugin.support.PluginLifeCycleNotifier;
+import ren.hankai.cordwood.plugin.test.PluginTestSupport;
 
 /**
  * 插件生命周期通知器测试。
@@ -15,7 +15,7 @@ import ren.hankai.cordwood.plugin.support.PluginLifeCycleNotifier;
  * @version 1.0.0
  * @since Oct 28, 2016 11:31:52 AM
  */
-public class PluginLifeCycleNotifierTest extends TestSupport {
+public class PluginLifeCycleNotifierTest extends PluginTestSupport {
 
   @Autowired
   private PluginEventEmitter pluginEventEmitter;

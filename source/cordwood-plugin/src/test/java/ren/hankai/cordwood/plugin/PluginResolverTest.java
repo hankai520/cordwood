@@ -6,9 +6,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import ren.hankai.cordwood.TestSupport;
 import ren.hankai.cordwood.plugin.api.PluginRegistry;
 import ren.hankai.cordwood.plugin.api.PluginResolver;
+import ren.hankai.cordwood.plugin.test.PluginTestSupport;
 
 import java.lang.reflect.Parameter;
 
@@ -19,7 +19,7 @@ import java.lang.reflect.Parameter;
  * @version 1.0.0
  * @since Oct 28, 2016 11:28:46 AM
  */
-public class PluginResolverTest extends TestSupport {
+public class PluginResolverTest extends PluginTestSupport {
 
   @Autowired
   private PluginResolver pluginResolver;
