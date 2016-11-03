@@ -43,7 +43,7 @@ public class SidebarController {
    */
   @GetMapping(Route.BG_SIDEBAR_JS)
   public ModelAndView sidebar() {
-    final ModelAndView mav = new ModelAndView("sidebar");
+    final ModelAndView mav = new ModelAndView("admin_sidebar.js");
     final List<String> items = new ArrayList<>();
     items.add("dashboard");
     items.add("plugins");

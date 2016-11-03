@@ -18,7 +18,7 @@ public class DashboardController {
 
   @RequestMapping(Route.BACKGROUND_PREFIX)
   public ModelAndView index() {
-    return new ModelAndView("admin/dashboard");
+    return new ModelAndView("admin_dashboard.html");
   }
 
 }

@@ -36,7 +36,7 @@ public class FriendlyErrorController implements ErrorController {
   public ModelAndView handleError(HttpServletRequest request, HttpServletResponse response) {
     final RequestAttributes requestAttributes = new ServletRequestAttributes(request);
     final Map<String, Object> attrs = errorAttributes.getErrorAttributes(requestAttributes, debug);
-    final ModelAndView mav = new ModelAndView("error");
+    final ModelAndView mav = new ModelAndView("error.html");
     mav.addObject("errors", attrs);
     return mav;
   }

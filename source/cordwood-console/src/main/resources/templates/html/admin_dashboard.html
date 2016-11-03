@@ -8,20 +8,21 @@
     content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
 <meta name="description" content="">
 <meta name="author" content="">
-<link rel="stylesheet" type="text/css" href="/css/cloud-admin.css">
-<link rel="stylesheet" type="text/css" href="/css/themes/default.css" id="skin-switcher">
-<link rel="stylesheet" type="text/css" href="/css/responsive.css">
-<link rel="stylesheet" type="text/css" href="/font-awesome/css/font-awesome.min.css" />
-<link rel="stylesheet" type="text/css" href="/css/animatecss/animate.min.css" />
-<link rel="stylesheet" type="text/css" href="/js/bootstrap-daterangepicker/daterangepicker-bs3.css" />
-<link rel="stylesheet" type="text/css" href="/js/jquery-todo/css/styles.css" />
-<link rel="stylesheet" type="text/css" href="/js/fullcalendar/fullcalendar.min.css" />
-<link rel="stylesheet" type="text/css" href="/js/gritter/css/jquery.gritter.css" />
+<base href="../../static/" th:href="@{~/}" />
+<link rel="stylesheet" type="text/css" href="css/cloud-admin.css">
+<link rel="stylesheet" type="text/css" href="css/themes/default.css" id="skin-switcher">
+<link rel="stylesheet" type="text/css" href="css/responsive.css">
+<link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="css/animatecss/animate.min.css" />
+<link rel="stylesheet" type="text/css" href="js/bootstrap-daterangepicker/daterangepicker-bs3.css" />
+<link rel="stylesheet" type="text/css" href="js/jquery-todo/css/styles.css" />
+<link rel="stylesheet" type="text/css" href="js/fullcalendar/fullcalendar.min.css" />
+<link rel="stylesheet" type="text/css" href="js/gritter/css/jquery.gritter.css" />
 </head>
 <body>
     <!-- HEADER -->
     <header class="navbar clearfix" id="header">
-        <div class="container" th:replace="fragments/admin_header :: header"></div>
+        <div class="container" th:replace="admin_header.html :: header"></div>
         <div class="container team-status" id="team-status">
             <div id="scrollbar">
                 <div class="handle"></div>
@@ -30,7 +31,7 @@
                 <ul class="team-list">
                     <li class="current">
                         <a href="javascript:void(0);">
-                            <span class="image"> <img src="/images/avatars/avatar3.jpg"
+                            <span class="image"> <img src="images/avatars/avatar3.jpg"
                                 alt="" />
                             </span> <span class="title"> You </span>
                             <div class="progress">
@@ -62,7 +63,7 @@
                     </li>
                     <li>
                         <a href="javascript:void(0);">
-                            <span class="image"> <img src="/images/avatars/avatar1.jpg"
+                            <span class="image"> <img src="images/avatars/avatar1.jpg"
                                 alt="" />
                             </span> <span class="title"> Max Doe </span>
                             <div class="progress">
@@ -94,7 +95,7 @@
                     </li>
                     <li>
                         <a href="javascript:void(0);">
-                            <span class="image"> <img src="/images/avatars/avatar2.jpg"
+                            <span class="image"> <img src="images/avatars/avatar2.jpg"
                                 alt="" />
                             </span> <span class="title"> Jane Doe </span>
                             <div class="progress">
@@ -126,7 +127,7 @@
                     </li>
                     <li>
                         <a href="javascript:void(0);">
-                            <span class="image"> <img src="/images/avatars/avatar4.jpg"
+                            <span class="image"> <img src="images/avatars/avatar4.jpg"
                                 alt="" />
                             </span> <span class="title"> Ellie Doe </span>
                             <div class="progress">
@@ -158,7 +159,7 @@
                     </li>
                     <li>
                         <a href="javascript:void(0);">
-                            <span class="image"> <img src="/images/avatars/avatar5.jpg"
+                            <span class="image"> <img src="images/avatars/avatar5.jpg"
                                 alt="" />
                             </span> <span class="title"> Lisa Doe </span>
                             <div class="progress">
@@ -190,7 +191,7 @@
                     </li>
                     <li>
                         <a href="javascript:void(0);">
-                            <span class="image"> <img src="/images/avatars/avatar6.jpg"
+                            <span class="image"> <img src="images/avatars/avatar6.jpg"
                                 alt="" />
                             </span> <span class="title"> Kelly Doe </span>
                             <div class="progress">
@@ -222,7 +223,7 @@
                     </li>
                     <li>
                         <a href="javascript:void(0);">
-                            <span class="image"> <img src="/images/avatars/avatar7.jpg"
+                            <span class="image"> <img src="images/avatars/avatar7.jpg"
                                 alt="" />
                             </span> <span class="title"> Jessy Doe </span>
                             <div class="progress">
@@ -254,7 +255,7 @@
                     </li>
                     <li>
                         <a href="javascript:void(0);">
-                            <span class="image"> <img src="/images/avatars/avatar8.jpg"
+                            <span class="image"> <img src="images/avatars/avatar8.jpg"
                                 alt="" />
                             </span> <span class="title"> Debby Doe </span>
                             <div class="progress">
@@ -294,7 +295,7 @@
     <section id="page">
         <!-- SIDEBAR -->
         <div id="sidebar" class="sidebar">
-            <div class="sidebar-menu nav-collapse" th:replace="fragments/admin_sidebar :: sidebar"></div>
+            <div class="sidebar-menu nav-collapse" th:replace="admin_sidebar.html :: sidebar"></div>
         </div>
         <!-- /SIDEBAR -->
         <div id="main-content">
@@ -328,7 +329,7 @@
                                     <!-- /STYLER -->
                                     <!-- BREADCRUMBS -->
                                     <ul class="breadcrumb"
-                                        th:replace="fragments/admin_navbar :: navbar">
+                                        th:replace="admin_navbar.html :: navbar">
                                     </ul>
                                     <!-- /BREADCRUMBS -->
                                     <div class="clearfix">
@@ -1280,7 +1281,7 @@
                                                     <a class="pull-left" href="#">
                                                         <img class="media-object"
                                                             alt="Generic placeholder image"
-                                                            src="/images/chat/headshot1.jpg">
+                                                            src="images/chat/headshot1.jpg">
                                                     </a>
                                                     <div class="media-body chat-pop">
                                                         <h4 class="media-heading">
@@ -1300,7 +1301,7 @@
                                                     <a class="pull-right" href="#">
                                                         <img class="media-object"
                                                             alt="Generic placeholder image"
-                                                            src="/images/chat/headshot2.jpg">
+                                                            src="images/chat/headshot2.jpg">
                                                     </a>
                                                     <div class="pull-right media-body chat-pop mod">
                                                         <h4 class="media-heading">
@@ -1321,7 +1322,7 @@
                                                     <a class="pull-left" href="#">
                                                         <img class="media-object"
                                                             alt="Generic placeholder image"
-                                                            src="/images/chat/headshot3.jpg">
+                                                            src="images/chat/headshot3.jpg">
                                                     </a>
                                                     <div class="media-body chat-pop">
                                                         <h4 class="media-heading">
@@ -1342,7 +1343,7 @@
                                                     <a class="pull-left" href="#">
                                                         <img class="media-object"
                                                             alt="Generic placeholder image"
-                                                            src="/images/chat/headshot5.jpg">
+                                                            src="images/chat/headshot5.jpg">
                                                     </a>
                                                     <div class="media-body chat-pop">
                                                         <h4 class="media-heading">
@@ -1363,7 +1364,7 @@
                                                     <a class="pull-right" href="#">
                                                         <img class="media-object"
                                                             alt="Generic placeholder image"
-                                                            src="/images/chat/headshot2.jpg">
+                                                            src="images/chat/headshot2.jpg">
                                                     </a>
                                                     <div class="pull-right media-body chat-pop mod">
                                                         <h4 class="media-heading">
@@ -1384,7 +1385,7 @@
                                                     <a class="pull-left" href="#">
                                                         <img class="media-object"
                                                             alt="Generic placeholder image"
-                                                            src="/images/chat/headshot4.jpg">
+                                                            src="images/chat/headshot4.jpg">
                                                     </a>
                                                     <div class="media-body chat-pop">
                                                         <h4 class="media-heading">
@@ -1405,7 +1406,7 @@
                                                     <a class="pull-right" href="#">
                                                         <img class="media-object"
                                                             alt="Generic placeholder image"
-                                                            src="/images/chat/headshot2.jpg">
+                                                            src="images/chat/headshot2.jpg">
                                                     </a>
                                                     <div class="pull-right media-body chat-pop mod">
                                                         <h4 class="media-heading">
@@ -1457,46 +1458,46 @@
     <!-- JAVASCRIPTS -->
     <!-- Placed at the end of the document so the pages load faster -->
     <!-- JQUERY -->
-    <script src="/js/jquery/jquery-2.0.3.min.js"></script>
+    <script src="js/jquery/jquery-2.0.3.min.js"></script>
     <!-- JQUERY UI-->
-    <script src="/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
     <!-- BOOTSTRAP -->
     <script src="bootstrap-dist/js/bootstrap.min.js"></script>
     <!-- DATE RANGE PICKER -->
-    <script src="/js/bootstrap-daterangepicker/moment.min.js"></script>
-    <script src="/js/bootstrap-daterangepicker/daterangepicker.min.js"></script>
+    <script src="js/bootstrap-daterangepicker/moment.min.js"></script>
+    <script src="js/bootstrap-daterangepicker/daterangepicker.min.js"></script>
     <!-- SLIMSCROLL -->
-    <script type="text/javascript" src="/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js"></script>
+    <script type="text/javascript" src="js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js"></script>
     <!-- SLIMSCROLL -->
-    <script type="text/javascript" src="/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js"></script>
-    <script type="text/javascript" src="/js/jQuery-slimScroll-1.3.0/slimScrollHorizontal.min.js"></script>
+    <script type="text/javascript" src="js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js"></script>
+    <script type="text/javascript" src="js/jQuery-slimScroll-1.3.0/slimScrollHorizontal.min.js"></script>
     <!-- BLOCK UI -->
-    <script type="text/javascript" src="/js/jQuery-BlockUI/jquery.blockUI.min.js"></script>
+    <script type="text/javascript" src="js/jQuery-BlockUI/jquery.blockUI.min.js"></script>
     <!-- SPARKLINES -->
-    <script type="text/javascript" src="/js/sparklines/jquery.sparkline.min.js"></script>
+    <script type="text/javascript" src="js/sparklines/jquery.sparkline.min.js"></script>
     <!-- EASY PIE CHART -->
-    <script src="/js/jquery-easing/jquery.easing.min.js"></script>
-    <script type="text/javascript" src="/js/easypiechart/jquery.easypiechart.min.js"></script>
+    <script src="js/jquery-easing/jquery.easing.min.js"></script>
+    <script type="text/javascript" src="js/easypiechart/jquery.easypiechart.min.js"></script>
     <!-- FLOT CHARTS -->
-    <script src="/js/flot/jquery.flot.min.js"></script>
-    <script src="/js/flot/jquery.flot.time.min.js"></script>
-    <script src="/js/flot/jquery.flot.selection.min.js"></script>
-    <script src="/js/flot/jquery.flot.resize.min.js"></script>
-    <script src="/js/flot/jquery.flot.pie.min.js"></script>
-    <script src="/js/flot/jquery.flot.stack.min.js"></script>
-    <script src="/js/flot/jquery.flot.crosshair.min.js"></script>
+    <script src="js/flot/jquery.flot.min.js"></script>
+    <script src="js/flot/jquery.flot.time.min.js"></script>
+    <script src="js/flot/jquery.flot.selection.min.js"></script>
+    <script src="js/flot/jquery.flot.resize.min.js"></script>
+    <script src="js/flot/jquery.flot.pie.min.js"></script>
+    <script src="js/flot/jquery.flot.stack.min.js"></script>
+    <script src="js/flot/jquery.flot.crosshair.min.js"></script>
     <!-- TODO -->
-    <script type="text/javascript" src="/js/jquery-todo/js/paddystodolist.js"></script>
+    <script type="text/javascript" src="js/jquery-todo/js/paddystodolist.js"></script>
     <!-- TIMEAGO -->
-    <script type="text/javascript" src="/js/timeago/jquery.timeago.min.js"></script>
+    <script type="text/javascript" src="js/timeago/jquery.timeago.min.js"></script>
     <!-- FULL CALENDAR -->
-    <script type="text/javascript" src="/js/fullcalendar/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="js/fullcalendar/fullcalendar.min.js"></script>
     <!-- COOKIE -->
-    <script type="text/javascript" src="/js/jQuery-Cookie/jquery.cookie.min.js"></script>
+    <script type="text/javascript" src="js/jQuery-Cookie/jquery.cookie.min.js"></script>
     <!-- GRITTER -->
-    <script type="text/javascript" src="/js/gritter/js/jquery.gritter.min.js"></script>
+    <script type="text/javascript" src="js/gritter/js/jquery.gritter.min.js"></script>
     <!-- CUSTOM SCRIPT -->
-    <script src="/js/script.js"></script>
+    <script src="js/script.js"></script>
     <script type="text/javascript" src="/admin/sidebar.js"></script>
     <script>
         jQuery(document).ready(function() {

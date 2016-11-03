@@ -42,14 +42,14 @@ public class SecurityConfig {
     }
   }
 
-  // @Configuration
-  // @Order(3)
-  // public static class CommonWebSecurityConfigurationAdapter extends BaseSecurityConfig {
-  //
-  // @Override
-  // protected void configure(HttpSecurity http) throws Exception {
-  // http.authorizeRequests().anyRequest().permitAll();
-  // }
-  // }
+  @Configuration
+  @Order(3)
+  public static class CommonWebSecurityConfigurationAdapter extends BaseSecurityConfig {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+      http.authorizeRequests().anyRequest().permitAll();
+    }
+  }
 
 }

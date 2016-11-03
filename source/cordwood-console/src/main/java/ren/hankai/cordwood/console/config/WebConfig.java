@@ -27,6 +27,7 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,8 +46,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   public ITemplateResolver htmlTemplateResolver(ApplicationContext applicationContext) {
     final SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
     templateResolver.setApplicationContext(applicationContext);
-    templateResolver.setPrefix("/WEB-INF/templates/html/");
-    templateResolver.setSuffix(".html");
+    templateResolver.setPrefix("classpath:/templates/html/");
     templateResolver.setTemplateMode(TemplateMode.HTML);
     templateResolver.setCacheable(false);
     templateResolver.setCheckExistence(true);
@@ -58,8 +58,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   public ITemplateResolver jsTemplateResolver(ApplicationContext applicationContext) {
     final SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
     templateResolver.setApplicationContext(applicationContext);
-    templateResolver.setPrefix("/WEB-INF/templates/js/");
-    templateResolver.setSuffix(".js");
+    templateResolver.setPrefix("classpath:/templates/js/");
     templateResolver.setTemplateMode(TemplateMode.JAVASCRIPT);
     templateResolver.setCacheable(false);
     templateResolver.setCheckExistence(true);
@@ -71,8 +70,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   public ITemplateResolver cssTemplateResolver(ApplicationContext applicationContext) {
     final SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
     templateResolver.setApplicationContext(applicationContext);
-    templateResolver.setPrefix("/WEB-INF/templates/css/");
-    templateResolver.setSuffix(".css");
+    templateResolver.setPrefix("classpath:/templates/css/");
     templateResolver.setTemplateMode(TemplateMode.CSS);
     templateResolver.setCacheable(false);
     templateResolver.setCheckExistence(true);
@@ -101,12 +99,15 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     viewResolver.setTemplateEngine(templateEngine);
     viewResolver.setOrder(1);
     viewResolver.setViewNames(new String[] {"*.html", "*.js", "*.css"});
+    viewResolver.setCharacterEncoding("UTF-8");
     return viewResolver;
   }
 
   @Bean
   public MappingJackson2HttpMessageConverter jackson2HttpMessageConverter(ObjectMapper om) {
-    return new MappingJackson2HttpMessageConverter(om);
+    final MappingJackson2HttpMessageConverter cvt = new MappingJackson2HttpMessageConverter(om);
+    cvt.setDefaultCharset(Charset.forName("UTF-8"));
+    return cvt;
   }
 
   @Autowired
@@ -115,7 +116,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   @Override
   public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
     converters.add(new ByteArrayHttpMessageConverter());
-    converters.add(new StringHttpMessageConverter());
+    converters.add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
     converters.add(new ResourceHttpMessageConverter());
     converters.add(new SourceHttpMessageConverter<>());
     converters.add(new AllEncompassingFormHttpMessageConverter());
