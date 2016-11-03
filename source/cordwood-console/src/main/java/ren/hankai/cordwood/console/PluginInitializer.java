@@ -11,12 +11,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import ch.qos.logback.classic.Level;
+import ren.hankai.cordwood.console.persist.PluginPackageRepository;
+import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
+import ren.hankai.cordwood.console.persist.util.EntitySpecs;
 import ren.hankai.cordwood.console.service.PluginService;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.util.LogbackUtil;
-import ren.hankai.cordwood.persist.PluginPackageRepository;
-import ren.hankai.cordwood.persist.model.PluginPackageBean;
-import ren.hankai.cordwood.persist.util.EntitySpecs;
 import ren.hankai.cordwood.plugin.Plugin;
 import ren.hankai.cordwood.plugin.api.PluginEventEmitter;
 import ren.hankai.cordwood.plugin.api.PluginEventListener;

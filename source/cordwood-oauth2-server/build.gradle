@@ -1,0 +1,33 @@
+ext {
+    springVersion = "4.3.3.RELEASE"
+}
+
+eclipse {
+    project {
+        name="cordwood-oauth2-server"
+    }
+}
+
+jar {
+    baseName = "cordwood-oauth2-server"
+    version = mainVersion
+    manifest {
+        attributes(
+            "Implementation-Version": mainVersion
+        )
+    }
+}
+
+sourceSets {
+    main.java.srcDirs = ["src/main/java"]
+    main.resources.srcDirs = ["src/main/resources"]
+    test.java.srcDirs = ["src/test/java"]
+    test.resources.srcDirs = ["src/test/resources"]
+}
+
+dependencies {
+    
+    compile project(":cordwood-core")
+    
+    testCompile "org.springframework:spring-test:${springVersion}"
+}

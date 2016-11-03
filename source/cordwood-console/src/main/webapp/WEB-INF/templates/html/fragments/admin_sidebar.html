@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>Cloud Admin | Dashboard</title>
+<meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no"
+>
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="stylesheet" type="text/css" href="../../../../../resources/static/css/cloud-admin.css">
+<link rel="stylesheet" type="text/css" href="../../../../../resources/static/css/themes/default.css" id="skin-switcher">
+<link rel="stylesheet" type="text/css" href="../../../../../resources/static/css/responsive.css">
+<link rel="stylesheet" type="text/css" href="../../../../../resources/static/font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="../../../../../resources/static/css/animatecss/animate.min.css" />
+<link rel="stylesheet" type="text/css" href="../../../../../resources/static/js/bootstrap-daterangepicker/daterangepicker-bs3.css" />
+<link rel="stylesheet" type="text/css" href="../../../../../resources/static/js/jquery-todo/css/styles.css" />
+<link rel="stylesheet" type="text/css" href="../../../../../resources/static/js/fullcalendar/fullcalendar.min.css" />
+<link rel="stylesheet" type="text/css" href="../../../../../resources/static/js/gritter/css/jquery.gritter.css" />
+</head>
+<body>
+    <section id="page">
+        <div id="sidebar" class="sidebar">
+            <div class="sidebar-menu nav-collapse" th:fragment="sidebar">
+                <div class="divide-20"></div>
+                <div id="search-bar">
+                    <input class="search" type="text" placeholder="Search"><i
+                        class="fa fa-search search-icon"
+                    ></i>
+                </div>
+                <ul id="sidebar-items">
+                    <li class="active">
+                        <a href="#">
+                            <i class="fa fa-tachometer fa-fw"></i> <span class="menu-text">Dashboard</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

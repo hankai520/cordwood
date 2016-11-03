@@ -1,7 +1,6 @@
 package ren.hankai.cordwood.core.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -27,7 +26,6 @@ public class CoreSpringConfig {
   @Bean
   public ObjectMapper getObjectMapper() {
     final ObjectMapper om = new ObjectMapper();
-    om.enable(SerializationFeature.INDENT_OUTPUT);
     return om;
   }
 

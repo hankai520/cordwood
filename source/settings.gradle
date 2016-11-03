@@ -1,5 +1,8 @@
 //core projects
 include "cordwood-plugin", "cordwood-core", "cordwood-console"
 
+//security
+include "cordwood-oauth2-server"
+
 //demo plugins
 include "cordwood-plugin-advance", "cordwood-plugin-pojo"

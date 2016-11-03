@@ -4,16 +4,17 @@ package ren.hankai.cordwood.console.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import ren.hankai.cordwood.persist.PluginPackageRepository;
-import ren.hankai.cordwood.persist.model.PluginBean;
-import ren.hankai.cordwood.persist.model.PluginPackageBean;
+import ren.hankai.cordwood.console.persist.PluginPackageRepository;
+import ren.hankai.cordwood.console.persist.model.PluginBean;
+import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
 import ren.hankai.cordwood.plugin.Plugin;
 import ren.hankai.cordwood.plugin.PluginPackage;
 import ren.hankai.cordwood.plugin.api.PluginRegistry;
 
 import java.net.URL;
+import java.util.Date;
 
 /**
  * 插件业务逻辑。
@@ -22,7 +23,7 @@ import java.net.URL;
  * @version 1.0.0
  * @since Oct 13, 2016 1:20:47 PM
  */
-@Component
+@Service
 public class PluginService {
 
   private static final Logger logger = LoggerFactory.getLogger(PluginService.class);
@@ -52,6 +53,7 @@ public class PluginService {
         pb.setName(plugin.getName());
         pb.setVersion(plugin.getVersion());
         pb.setPluginPackage(ppb);
+        pb.setCreateTime(new Date());
         ppb.getPlugins().add(pb);
       }
       pluginPackageRepository.save(ppb);
