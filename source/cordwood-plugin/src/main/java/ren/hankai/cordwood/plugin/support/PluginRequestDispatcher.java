@@ -1,6 +1,3 @@
-/**
- *
- */
 package ren.hankai.cordwood.plugin.support;
 
 import org.slf4j.Logger;

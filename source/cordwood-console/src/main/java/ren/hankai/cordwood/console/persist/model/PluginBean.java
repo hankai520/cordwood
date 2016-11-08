@@ -1,8 +1,14 @@
 
 package ren.hankai.cordwood.console.persist.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import ren.hankai.cordwood.plugin.PluginFunction;
+import ren.hankai.cordwood.plugin.api.Pluggable;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
@@ -16,6 +22,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  * 插件实体。
@@ -38,16 +45,22 @@ public final class PluginBean implements Serializable {
   private PluginPackageBean pluginPackage;
   @Column(length = 45, unique = true)
   private String name;
+  @Column(length = 120)
+  private String displayName;
   @Column(length = 100)
   private String version;
   @Column(length = 800)
   private String description;
+  @Column(length = 100)
+  private String developer;
   private boolean isActive;
   @Column(nullable = false)
-  @Temporal(TemporalType.DATE)
+  @Temporal(TemporalType.TIMESTAMP)
   private Date createTime;
-  @Temporal(TemporalType.DATE)
+  @Temporal(TemporalType.TIMESTAMP)
   private Date updateTime;
+  @Transient
+  private List<PluginFunction> features;
 
   /**
    * 获取 id 字段的值。
@@ -104,6 +117,24 @@ public final class PluginBean implements Serializable {
   }
 
   /**
+   * 获取 displayName 字段的值。
+   *
+   * @return displayName 字段值
+   */
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  /**
+   * 设置 displayName 字段的值。
+   *
+   * @param displayName displayName 字段的值
+   */
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
+  }
+
+  /**
    * 获取 version 字段的值。
    *
    * @return version 字段值
@@ -140,11 +171,39 @@ public final class PluginBean implements Serializable {
   }
 
   /**
+   * 获取 developer 字段的值。
+   *
+   * @return developer 字段值
+   */
+  public String getDeveloper() {
+    return developer;
+  }
+
+  /**
+   * 设置 developer 字段的值。
+   *
+   * @param developer developer 字段的值
+   */
+  public void setDeveloper(String developer) {
+    this.developer = developer;
+  }
+
+  /**
    * 获取 isActive 字段的值。
    *
    * @return isActive 字段值
    */
   public boolean isActive() {
+    return isActive;
+  }
+
+  /**
+   * 获取 isActive 字段的值（适用于使用传统getter命名的代码，目前是为了解决 thymeleaf 无法找到属性的问题）。
+   *
+   * @return isActive 字段值
+   */
+  @JsonIgnore
+  public boolean getIsActive() {
     return isActive;
   }
 
@@ -191,6 +250,36 @@ public final class PluginBean implements Serializable {
    */
   public void setUpdateTime(Date updateTime) {
     this.updateTime = updateTime;
+  }
+
+  /**
+   * 获取 features 字段的值。
+   *
+   * @return features 字段值
+   */
+  public List<PluginFunction> getFeatures() {
+    return features;
+  }
+
+  /**
+   * 设置 features 字段的值。
+   *
+   * @param features features 字段的值
+   */
+  public void setFeatures(List<PluginFunction> features) {
+    this.features = features;
+  }
+
+  /**
+   * 获取插件功能访问地址。
+   *
+   * @param featureName 插件功能名
+   * @return 插件功能访问地址
+   * @author hankai
+   * @since Nov 8, 2016 4:56:11 PM
+   */
+  public String getFeatureUrl(String featureName) {
+    return String.format("%s/%s/%s", Pluggable.PLUGIN_BASE_URL, name, featureName);
   }
 
   public static long getSerialversionuid() {

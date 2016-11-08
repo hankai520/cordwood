@@ -1,5 +1,7 @@
 package ren.hankai.cordwood.console.persist.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -42,6 +45,8 @@ public class SidebarItemBean implements Serializable {
   private String iconClasses; // 边栏项的图标样式
   private String displayText; // 边栏项在界面上显示的文本
   private int sink; // 边栏项排序（按值升序排列）
+  @ManyToMany(mappedBy = "sidebarItems", fetch = FetchType.LAZY)
+  private List<RoleBean> roles;
 
   /**
    * 获取 id 字段的值。
@@ -66,6 +71,7 @@ public class SidebarItemBean implements Serializable {
    *
    * @return parentItem 字段值
    */
+  @JsonIgnore
   public SidebarItemBean getParentItem() {
     return parentItem;
   }
@@ -185,6 +191,25 @@ public class SidebarItemBean implements Serializable {
    */
   public void setSink(int sink) {
     this.sink = sink;
+  }
+
+  /**
+   * 获取 roles 字段的值。
+   *
+   * @return roles 字段值
+   */
+  @JsonIgnore
+  public List<RoleBean> getRoles() {
+    return roles;
+  }
+
+  /**
+   * 设置 roles 字段的值。
+   *
+   * @param roles roles 字段的值
+   */
+  public void setRoles(List<RoleBean> roles) {
+    this.roles = roles;
   }
 
   /**

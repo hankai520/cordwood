@@ -37,6 +37,13 @@ public abstract class PluginTestSupport {
 
   protected URL testPluginPackageUrl;
 
+  /**
+   * 单元测试用例初始化。
+   *
+   * @throws Exception 异常
+   * @author hankai
+   * @since Nov 8, 2016 8:48:22 AM
+   */
   @Before
   public void setup() throws Exception {
     System.setProperty(Preferences.ENV_APP_HOME_DIR, "./test-home");
@@ -44,6 +51,13 @@ public abstract class PluginTestSupport {
     testPluginPackageUrl = ResourceUtils.getURL("classpath:cordwood-plugin-pojo-0.0.1.RELEASE.jar");
   }
 
+  /**
+   * 单元测试用例资源销毁。
+   *
+   * @throws Exception 异常
+   * @author hankai
+   * @since Nov 8, 2016 8:48:49 AM
+   */
   @After
   public void teardown() throws Exception {
     FileUtils.deleteDirectory(new File(Preferences.getHomeDir()));

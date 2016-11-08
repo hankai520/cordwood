@@ -1,6 +1,3 @@
-/**
- *
- */
 package ren.hankai.cordwood.console.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +15,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
 import org.springframework.http.converter.xml.SourceHttpMessageConverter;
+import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.thymeleaf.TemplateEngine;
@@ -42,6 +40,14 @@ import java.util.Set;
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
+  /**
+   * HTML 模板解析器。
+   *
+   * @param applicationContext spring 上下文
+   * @return 模板解析器
+   * @author hankai
+   * @since Nov 8, 2016 8:44:56 AM
+   */
   @Bean
   public ITemplateResolver htmlTemplateResolver(ApplicationContext applicationContext) {
     final SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
@@ -54,6 +60,14 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     return templateResolver;
   }
 
+  /**
+   * JS 模板解析器。
+   *
+   * @param applicationContext spring 上下文
+   * @return 模板解析器
+   * @author hankai
+   * @since Nov 8, 2016 8:45:24 AM
+   */
   @Bean
   public ITemplateResolver jsTemplateResolver(ApplicationContext applicationContext) {
     final SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
@@ -66,6 +80,14 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     return templateResolver;
   }
 
+  /**
+   * CSS 模板解析器。
+   *
+   * @param applicationContext spring 上下文
+   * @return 模板解析器
+   * @author hankai
+   * @since Nov 8, 2016 8:45:38 AM
+   */
   @Bean
   public ITemplateResolver cssTemplateResolver(ApplicationContext applicationContext) {
     final SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
@@ -78,6 +100,16 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     return templateResolver;
   }
 
+  /**
+   * 模板引擎。
+   *
+   * @param htmlTemplateResolver HTML模板解析器
+   * @param jsTemplateResolver JS模板解析器
+   * @param cssTemplateResolver CSS模板解析器
+   * @return 模板引擎
+   * @author hankai
+   * @since Nov 8, 2016 8:45:51 AM
+   */
   @Bean
   public TemplateEngine templateEngine(
       @Autowired @Qualifier("htmlTemplateResolver") ITemplateResolver htmlTemplateResolver,
@@ -93,8 +125,16 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     return templateEngine;
   }
 
+  /**
+   * Thymeleaf 视图解析器。
+   *
+   * @param templateEngine 模板引擎
+   * @return 视图解析器
+   * @author hankai
+   * @since Nov 8, 2016 8:46:30 AM
+   */
   @Bean
-  public ThymeleafViewResolver viewResolver(TemplateEngine templateEngine) {
+  public ViewResolver viewResolver(TemplateEngine templateEngine) {
     final ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
     viewResolver.setTemplateEngine(templateEngine);
     viewResolver.setOrder(1);
@@ -103,6 +143,14 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     return viewResolver;
   }
 
+  /**
+   * HTTP JSON 消息转换器。
+   *
+   * @param om jackson json 核心对象
+   * @return HTTP JSON 消息转换器
+   * @author hankai
+   * @since Nov 8, 2016 8:47:02 AM
+   */
   @Bean
   public MappingJackson2HttpMessageConverter jackson2HttpMessageConverter(ObjectMapper om) {
     final MappingJackson2HttpMessageConverter cvt = new MappingJackson2HttpMessageConverter(om);

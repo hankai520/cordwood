@@ -2465,10 +2465,10 @@ var App = function () {
 	/*-----------------------------------------------------------------------------------*/
 	var handleBackstretch = function () {
 		 $.backstretch([
-		"/images/login/1.jpg"
-		, "/images/login/2.jpg"
-		, "/images/login/3.jpg"
-		, "/images/login/4.jpg"
+		"img/login/1.jpg"
+		, "img/login/2.jpg"
+		, "img/login/3.jpg"
+		, "img/login/4.jpg"
 		], {duration: 3000, fade: 750});
 	}
 	/*-----------------------------------------------------------------------------------*/
@@ -2489,7 +2489,7 @@ var App = function () {
 			var msg = '';
                 msg +='<li class="animated fadeInLeft media">';
 				msg +=  '<a class="pull-right" href="#">';
-				msg +=	'<img class="media-object" alt="Generic placeholder image" src="/images/chat/headshot2.jpg">';
+				msg +=	'<img class="media-object" alt="Generic placeholder image" src="img/chat/headshot2.jpg">';
 				msg +=  '</a>';
 				msg +=  '<div class="pull-right media-body chat-pop mod">';
 				msg +=	'<h4 class="media-heading">You <span class="pull-left"><abbr id="curr-time" class="timeago" title="'+curr_time+'" >'+curr_time+'</abbr> <i class="fa fa-clock-o"></i></span></h4>';
@@ -3355,7 +3355,7 @@ var App = function () {
         blockUI: function (el, loaderOnTop) {
             lastBlockedUI = el;
             jQuery(el).block({
-                message: '<img src="/images/loaders/12.gif" align="absmiddle">',
+                message: '<img src="./img/loaders/12.gif" align="absmiddle">',
                 css: {
                     border: 'none',
                     padding: '2px',

@@ -15,6 +15,7 @@ import java.lang.reflect.Parameter;
 public final class PluginFunction {
 
   private String name;
+  private String description;
   private Method method;
   private String resultType;
   private boolean checkInboundParameters = false;
@@ -41,6 +42,24 @@ public final class PluginFunction {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * 获取 description 字段的值。
+   *
+   * @return description 字段值
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
+   * 设置 description 字段的值。
+   *
+   * @param description description 字段的值
+   */
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   /**

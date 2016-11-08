@@ -16,6 +16,7 @@ import java.util.List;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -57,7 +58,7 @@ public class UserBean implements Serializable, UserDetails {
   @Temporal(TemporalType.TIMESTAMP)
   private Date updateTime;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "users_roles",
       joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"))
@@ -289,14 +290,22 @@ public class UserBean implements Serializable, UserDetails {
    */
   public enum UserStatus {
     /**
-     * 禁用
+     * 禁用。
      */
     Disabled(0),
     /**
-     * 启用
+     * 启用。
      */
     Enabled(1),;
 
+    /**
+     * 将整型转换为用户状态枚举。
+     * 
+     * @param value 整型值
+     * @return 用户状态
+     * @author hankai
+     * @since Nov 8, 2016 8:43:21 AM
+     */
     @JsonCreator
     public static UserStatus fromInteger(Integer value) {
       if (value == Disabled.value) {
@@ -314,7 +323,7 @@ public class UserBean implements Serializable, UserDetails {
     }
 
     /**
-     * 获取用于国际化的键名
+     * 获取用于国际化的键名。
      */
     public String i18nKey() {
       return String.format("operator.status.%d", value);

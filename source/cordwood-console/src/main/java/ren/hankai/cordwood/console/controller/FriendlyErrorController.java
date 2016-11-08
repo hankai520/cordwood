@@ -32,6 +32,15 @@ public class FriendlyErrorController implements ErrorController {
   @Autowired
   private ErrorAttributes errorAttributes;
 
+  /**
+   * 处理 HTTP 错误。
+   * 
+   * @param request HTTP请求
+   * @param response HTTP响应
+   * @return 错误页面
+   * @author hankai
+   * @since Nov 8, 2016 8:47:46 AM
+   */
   @RequestMapping(value = PATH)
   public ModelAndView handleError(HttpServletRequest request, HttpServletResponse response) {
     final RequestAttributes requestAttributes = new ServletRequestAttributes(request);

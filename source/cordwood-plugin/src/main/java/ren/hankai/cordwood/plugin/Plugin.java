@@ -18,8 +18,10 @@ public final class Plugin {
   private String packageId;
   // 插件名称，用作唯一标识符
   private String name;
+  private String displayName;
   private String version;
   private String description;
+  private String developer;
   private boolean isActive;
   private Object instance;
   private Map<String, PluginFunction> functions = new HashMap<>();
@@ -69,6 +71,24 @@ public final class Plugin {
   }
 
   /**
+   * 获取 displayName 字段的值。
+   *
+   * @return displayName 字段值
+   */
+  public String getDisplayName() {
+    return displayName;
+  }
+
+  /**
+   * 设置 displayName 字段的值。
+   *
+   * @param displayName displayName 字段的值
+   */
+  public void setDisplayName(String displayName) {
+    this.displayName = displayName;
+  }
+
+  /**
    * 获取插件版本。
    *
    * @return 插件版本号
@@ -110,6 +130,24 @@ public final class Plugin {
    */
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  /**
+   * 获取 developer 字段的值。
+   *
+   * @return developer 字段值
+   */
+  public String getDeveloper() {
+    return developer;
+  }
+
+  /**
+   * 设置 developer 字段的值。
+   *
+   * @param developer developer 字段的值
+   */
+  public void setDeveloper(String developer) {
+    this.developer = developer;
   }
 
   /**
@@ -182,8 +220,10 @@ public final class Plugin {
   public String toString() {
     final StringBuilder sb = new StringBuilder("Plugin: \n");
     sb.append(String.format("    Name: %s\n", name));
+    sb.append(String.format("    Display Name: %s\n", displayName));
     sb.append(String.format("    Version: %s\n", version));
     sb.append(String.format("    Description: %s\n", description));
+    sb.append(String.format("    Developer: %s\n", developer));
     sb.append(String.format("    Is active? %s\n", isActive));
     sb.append(String.format("    Instance: %s\n", instance.getClass().getName()));
     sb.append(String.format("    Functions: %s\n", functions.toString()));

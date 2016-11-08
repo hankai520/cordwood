@@ -23,7 +23,8 @@ import javax.servlet.http.HttpServletResponse;
  * @version 1.0.0
  * @since Sep 30, 2016 3:51:07 PM
  */
-@Pluggable(name = "pojo", version = "1.0.0", description = "simple pojo plugin")
+@Pluggable(name = "pojo", displayName = "示例POJO插件", version = "1.0.0",
+    description = "POJO 插件，适用于不依赖于第三方框架的纯业务逻辑。", developer = "sparksoft co., ltd")
 public class PojoPlugin implements PluginLifeCycleAware, PluginResourceLoader {
 
   private static final Logger logger = LoggerFactory.getLogger(PojoPlugin.class);
@@ -37,7 +38,7 @@ public class PojoPlugin implements PluginLifeCycleAware, PluginResourceLoader {
    * @author hankai
    * @since Oct 25, 2016 2:18:22 PM
    */
-  @Functional(name = "sum", resultType = "text/plain")
+  @Functional(name = "sum", resultType = "text/plain", description = "求两个数字的和。")
   public String sum(HttpServletRequest request, HttpServletResponse response) {
     final int op1 = Integer.parseInt(request.getParameter("op1"));
     final int op2 = Integer.parseInt(request.getParameter("op2"));
@@ -53,7 +54,7 @@ public class PojoPlugin implements PluginLifeCycleAware, PluginResourceLoader {
    * @author hankai
    * @since Oct 29, 2016 1:05:04 AM
    */
-  @Functional(name = "sum2", resultType = "text/plain")
+  @Functional(name = "sum2", resultType = "text/plain", description = "求两个数字的和。")
   public String sum2(Integer op1, Integer op2) {
     return "Hi, the result is: " + (op1 + op2);
   }

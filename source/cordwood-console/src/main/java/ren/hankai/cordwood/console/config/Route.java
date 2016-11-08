@@ -1,6 +1,3 @@
-/**
- *
- */
 package ren.hankai.cordwood.console.config;
 
 /**
@@ -12,10 +9,10 @@ package ren.hankai.cordwood.console.config;
  */
 public final class Route {
 
-  /*** API根地址 ***/
+  /*** API根地址。 ***/
   public static final String API_PREFIX = "/api";
   public static final String API_LOGIN = API_PREFIX + "/login";
-  /*** 后台根地址 ***/
+  /*** 后台根地址。 ***/
   public static final String BACKGROUND_PREFIX = "/admin";
   public static final String BG_SYS_SETTINGS = BACKGROUND_PREFIX + "/settings";
   public static final String BG_USERS = BACKGROUND_PREFIX + "/users";
@@ -25,7 +22,8 @@ public final class Route {
   public static final String BG_DELETE_USER = BACKGROUND_PREFIX + "/users/{user_id}/delete";
   public static final String BG_CHANGE_USER_PWD = BACKGROUND_PREFIX + "/users/{user_id}/change_pwd";
   public static final String BG_SIDEBAR_JS = BACKGROUND_PREFIX + "/sidebar.js";
-  /*** 前台根地址 ***/
+  public static final String BG_PLUGINS = BACKGROUND_PREFIX + "/plugins";
+  /*** 前台根地址。 ***/
   public static final String FOREGROUND_PREFIX = "/home";
   public static final String FG_LOGIN = FOREGROUND_PREFIX + "/login";
 }

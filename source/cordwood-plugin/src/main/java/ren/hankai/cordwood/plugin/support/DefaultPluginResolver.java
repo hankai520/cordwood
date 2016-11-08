@@ -60,8 +60,10 @@ public class DefaultPluginResolver implements PluginResolver {
     final Pluggable pluggable = clazz.getAnnotation(Pluggable.class);
     final Plugin plugin = new Plugin();
     plugin.setName(pluggable.name());
+    plugin.setDisplayName(pluggable.displayName());
     plugin.setVersion(pluggable.version());
     plugin.setDescription(pluggable.description());
+    plugin.setDeveloper(pluggable.developer());
     plugin.setInstance(pluginInstance);
     plugin.setActive(true);
     // 扫描插件标记的功能
@@ -80,6 +82,7 @@ public class DefaultPluginResolver implements PluginResolver {
           } else {
             function.setName(method.getName());
           }
+          function.setDescription(functional.description());
           function.setResultType(functional.resultType());
           Secure secure = AnnotationUtils.getAnnotation(method, Secure.class);
           if (secure == null) {

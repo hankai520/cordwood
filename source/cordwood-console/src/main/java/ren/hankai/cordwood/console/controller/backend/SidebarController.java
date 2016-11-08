@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import ren.hankai.cordwood.console.config.Route;
-import ren.hankai.cordwood.console.persist.SidebarRepository;
+import ren.hankai.cordwood.console.persist.model.SidebarItemBean;
+import ren.hankai.cordwood.console.service.SidebarService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +32,7 @@ public class SidebarController {
   private ObjectMapper objectMapper;
 
   @Autowired
-  private SidebarRepository sidebarRepository;
+  private SidebarService sidebarService;
 
   /**
    * 渲染边栏菜单。
@@ -44,10 +44,7 @@ public class SidebarController {
   @GetMapping(Route.BG_SIDEBAR_JS)
   public ModelAndView sidebar() {
     final ModelAndView mav = new ModelAndView("admin_sidebar.js");
-    final List<String> items = new ArrayList<>();
-    items.add("dashboard");
-    items.add("plugins");
-    items.add("users");
+    final List<SidebarItemBean> items = sidebarService.getAvailableBarItems();
     try {
       final String json = objectMapper.writeValueAsString(items);
       mav.addObject("visibleItems", json);

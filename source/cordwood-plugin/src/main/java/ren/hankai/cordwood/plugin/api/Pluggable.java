@@ -38,6 +38,15 @@ public @interface Pluggable {
   String name() default "";
 
   /**
+   * 插件显示名称，用于提供可读性更高的名称。
+   * 
+   * @return 插件名称
+   * @author hankai
+   * @since Nov 8, 2016 4:06:41 PM
+   */
+  String displayName() default "Unkown Plugin Name";
+
+  /**
    * 插件的版本。
    *
    * @return 插件版本。
@@ -54,4 +63,13 @@ public @interface Pluggable {
    * @since Oct 13, 2016 9:14:15 AM
    */
   String description() default "";
+
+  /**
+   * 开发者。
+   *
+   * @return 开发者
+   * @author hankai
+   * @since Nov 8, 2016 3:31:47 PM
+   */
+  String developer() default "";
 }

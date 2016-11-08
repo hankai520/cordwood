@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,7 +23,7 @@ import javax.persistence.Table;
  * @since Nov 2, 2016 2:39:44 PM
  */
 @Entity
-@Table(name = "privileges")
+@Table(name = "roles")
 @Cacheable(false)
 public class RoleBean implements Serializable {
 
@@ -32,11 +33,16 @@ public class RoleBean implements Serializable {
   private Integer id;
   @Column(length = 100, nullable = false, unique = true)
   private String name;
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "roles_privileges",
       joinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "privilegeId", referencedColumnName = "id"))
   private List<PrivilegeBean> privileges;
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "sidebar_items_roles",
+      joinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "sidebarItemId", referencedColumnName = "id"))
+  private List<SidebarItemBean> sidebarItems;
 
   /**
    * 获取 id 字段的值。
@@ -90,6 +96,24 @@ public class RoleBean implements Serializable {
    */
   public void setPrivileges(List<PrivilegeBean> privileges) {
     this.privileges = privileges;
+  }
+
+  /**
+   * 获取 sidebarItems 字段的值。
+   *
+   * @return sidebarItems 字段值
+   */
+  public List<SidebarItemBean> getSidebarItems() {
+    return sidebarItems;
+  }
+
+  /**
+   * 设置 sidebarItems 字段的值。
+   *
+   * @param sidebarItems sidebarItems 字段的值
+   */
+  public void setSidebarItems(List<SidebarItemBean> sidebarItems) {
+    this.sidebarItems = sidebarItems;
   }
 
   /**

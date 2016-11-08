@@ -1,6 +1,3 @@
-/**
- *
- */
 package ren.hankai.cordwood.core.util;
 
 import org.junit.Assert;
@@ -18,8 +15,8 @@ public class EncryptionUtilTest {
 
   @Test
   public void testAes() {
-    String sk = "123321";
-    String encrypted = EncryptionUtil.aes("oh yeah!", sk, true);
+    final String sk = "123321";
+    final String encrypted = EncryptionUtil.aes("oh yeah!", sk, true);
     Assert.assertNotEquals("oh yeah!", encrypted);
     Assert.assertNotEquals("oh yeah!", EncryptionUtil.aes(encrypted, sk, false));
   }

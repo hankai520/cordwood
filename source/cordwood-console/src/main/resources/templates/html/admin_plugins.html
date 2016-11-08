@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>Cordwood Admin | 插件管理</title>
+<meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="stylesheet" type="text/css" href="../../static/css/cloud-admin.css"
+    th:href="@{~/css/cloud-admin.css}" />
+<link rel="stylesheet" type="text/css" href="../../static/css/themes/default.css" id="skin-switcher"
+    th:href="@{~/css/themes/default.css}" />
+<link rel="stylesheet" type="text/css" href="../../static/css/responsive.css"
+    th:href="@{~/css/responsive.css}" />
+<link rel="stylesheet" type="text/css" href="../../static/font-awesome/css/font-awesome.min.css"
+    th:href="@{~/font-awesome/css/font-awesome.min.css}" />
+    <link rel="stylesheet" type="text/css" href="../../static/cordwood/css/cordwood.css"
+    th:href="@{~/cordwood/css/cordwood.css}" />
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="navbar clearfix" id="header">
+        <div class="container" th:replace="admin_header.html :: header"></div>
+        <!-- /TEAM STATUS -->
+    </header>
+    <!--/HEADER -->
+    <!-- PAGE -->
+    <section id="page">
+        <!-- SIDEBAR -->
+        <div id="sidebar" class="sidebar">
+            <div class="sidebar-menu nav-collapse" th:replace="admin_sidebar.html :: sidebar"></div>
+        </div>
+        <!-- /SIDEBAR -->
+        <div id="main-content">
+            <div class="container">
+                <div class="row">
+                    <div id="content" class="col-lg-12">
+                        <div class="page-header" style="overflow: visible;">
+                            <ul class="breadcrumb">
+                                <li>插件管理</li>
+                            </ul>
+                            <div class="clearfix" style="margin-top: 20px;">
+                                <h3 class="content-title pull-left">插件管理</h3>
+                                <div class="btn-group pull-right">
+                                    <button class="btn btn-default">
+                                        <i class="fa fa-anchor"></i> 已安装
+                                    </button>
+                                    <button class="btn btn-default">
+                                        <i class="fa fa-anchor"></i> 禁用的
+                                    </button>
+                                    <button class="btn btn-default">
+                                        <i class="fa fa-cubes"></i> 全部
+                                    </button>
+                                    <button class="btn btn-default dropdown-toggle"
+                                        data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu context pull-right"
+                                        style="text-align: left;">
+                                        <li>
+                                            <a href="#">
+                                                <i class="fa fa-cloud-download"></i> 插件商店
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button class="btn btn-link pull-right mr-3"><i class="fa fa-cloud-upload"></i> 上传插件</button>
+                            </div>
+                            <div class="description">安装、更新、卸载或启用和禁用插件</div>
+                        </div>
+                        <div class="row" th:each="plugin : ${plugins}">
+                            <div class="col-md-12">
+                                <div class="box border" th:classappend="${plugin.isActive} ? primary : ''">
+                                    <div class="box-title">
+                                        <h4 th:text="${plugin.displayName}" th:switch="${plugin.isActive}">
+                                            <i class="fa fa-ban" th:case="false"></i> <small th:case="false">（已禁用）</small>
+                                            <i class="fa fa-check-circle-o" th:case="true"></i>
+                                        </h4>
+                                        <div class="pull-right">
+                                            <div class="tools">
+                                                <a href="javascript:;" class="collapse">
+                                                    <i class="fa fa-chevron-up"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="box-body">
+                                        <p th:text="${plugin.description}">
+                                            插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息
+                                            插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息
+                                            插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息
+                                        </p>
+                                        <hr/>
+                                        <dl class="dl-horizontal">
+                                            <dt>插件标识</dt>
+                                            <dd th:text="${plugin.name}">advancePlugin</dd>
+                                            <dt>插件包版本</dt>
+                                            <dd th:text="${plugin.version}">4.3.7</dd>
+                                            <dt>开发者</dt>
+                                            <dd th:text="${plugin.developer}">江苏星网软件有限公司</dd>
+                                            <dt>安装时间</dt>
+                                            <dd th:text="${#calendars.format(plugin.createTime,'yyyy-MM-dd HH:mm:ss')}">2016-11-08 14:32:20</dd>
+                                            <dt>插件所属插件包</dt>
+                                            <dd th:text="${plugin.pluginPackage.fileName}">
+                                                cordwood-plugin-advance-0.0.1.RELEASE.jar
+                                            </dd>
+                                            <dt>插件包校验和</dt>
+                                            <dd th:text="${'sha1: ' + plugin.pluginPackage.checksum}">
+                                                sha1: c3db615003fb225432126eaeee0a4c058e8e0c0d
+                                            </dd>
+                                        </dl>
+                                        <hr/>
+                                        <h5>插件功能</h5>
+                                       <div class="panel-group">
+                                            <div class="panel panel-default" th:each="feature : ${plugin.features}">
+                                                <div class="panel-heading">
+                                                    <h3 class="panel-title">
+                                                        <span class="pull-right">
+                                                            <i class="fa fa-eye mr-1" title="启用入参防篡改" th:if="${feature.checkInboundParameters}"></i>
+                                                            <i class="fa fa-lock" title="启用访问授权检查" th:if="${feature.checkAccessToken}"></i>
+                                                        </span>
+                                                        <a class="accordion-toggle"
+                                                            data-toggle="collapse"
+                                                            href="#collapseOne"
+                                                            th:href="${'#pf' + feature.name}"
+                                                            th:text="${feature.description}"></a>
+                                                    </h3>
+                                                </div>
+                                                <div id="collapseOne"
+                                                    class="panel-collapse collapse in"
+                                                    th:id="${'pf' + feature.name}">
+                                                    <div class="panel-body">
+                                                        <ul class="list-unstyled">
+                                                            <li th:text="${ '地址：'+#httpServletRequest.scheme+'://'+
+                                                                                    #httpServletRequest.serverName+':'+
+                                                                                    #httpServletRequest.serverPort+
+                                                                                    plugin.getFeatureUrl(feature.name)}">
+                                                                地址：http://...
+                                                            </li>
+                                                            <li th:text="${'响应：' + feature.resultType}">响应：text/html</li>
+                                                            <li th:if="${feature.checkInboundParameters}">检查入参一致性：是</li>
+                                                            <li th:if="${feature.checkAccessToken}">检查访问授权：是</li>
+                                                            <li>入参：</li>
+                                                            <li>
+                                                                <ul class="list-unstyled" style="text-indent: 20px;">
+                                                                    <li th:each="inputParam : ${feature.parameters}">
+                                                                        <span th:text="${inputParam.name +' : '+inputParam.type.name}"></span>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script type="text/javascript" src="../../static/js/jquery/jquery-2.0.3.min.js"
+        th:src="@{~/js/jquery/jquery-2.0.3.min.js}"></script>
+    <script type="text/javascript"
+        src="../../static/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"
+        th:src="@{~/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js}"></script>
+    <script type="text/javascript" src="../../static/bootstrap/js/bootstrap.min.js"
+        th:src="@{~/bootstrap/js/bootstrap.min.js}"></script>
+    <script type="text/javascript"
+        src="../../static/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js"
+        th:src="@{~/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js}"></script>
+    <script type="text/javascript"
+        src="../../static/js/jQuery-slimScroll-1.3.0/slimScrollHorizontal.min.js"
+        th:src="@{~/js/jQuery-slimScroll-1.3.0/slimScrollHorizontal.min.js}"></script>
+    <script type="text/javascript" src="../../static/js/jQuery-BlockUI/jquery.blockUI.min.js"
+        th:src="@{~/js/jQuery-BlockUI/jquery.blockUI.min.js}"></script>
+    <script type="text/javascript" src="../../static/js/jQuery-Cookie/jquery.cookie.min.js"
+        th:src="@{~/js/jQuery-Cookie/jquery.cookie.min.js}"></script>
+    <script type="text/javascript" src="../../static/cordwood/js/common-init.js"
+        th:src="@{~/cordwood/js/common-init.js}"></script>
+    <script type="text/javascript" src="/admin/sidebar.js"></script>
+    <script>
+        jQuery(document).ready(function() {
+          loadSidebarItems('plugins');
+        });
+    </script>
+    <!-- /JAVASCRIPTS -->
+</body>
+</html>

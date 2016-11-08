@@ -43,6 +43,14 @@ public class PluginContainer extends PluginRequestDispatcher {
    */
   private static final String serverPort = "8000";
 
+  /**
+   * 插件容器启动入口。
+   *
+   * @param args 命令行参数
+   * @throws Exception 异常
+   * @author hankai
+   * @since Nov 8, 2016 8:49:59 AM
+   */
   public static void main(String[] args) throws Exception {
     System.setProperty("server.port", serverPort);
     if (enableDebug) {

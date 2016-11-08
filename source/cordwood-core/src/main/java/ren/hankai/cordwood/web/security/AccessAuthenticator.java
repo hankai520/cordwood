@@ -1,6 +1,3 @@
-/**
- *
- */
 package ren.hankai.cordwood.web.security;
 
 /**

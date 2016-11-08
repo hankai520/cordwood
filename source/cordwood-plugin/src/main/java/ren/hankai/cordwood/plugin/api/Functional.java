@@ -31,6 +31,15 @@ public @interface Functional {
   String name() default "";
 
   /**
+   * 功能简介。
+   * 
+   * @return 功能简介
+   * @author hankai
+   * @since Nov 8, 2016 5:27:50 PM
+   */
+  String description() default "";
+
+  /**
    * 插件功能返回的 HTTP 数据类型，即 content-type。
    *
    * @return 插件功能的返回的 HTTP 数据类型

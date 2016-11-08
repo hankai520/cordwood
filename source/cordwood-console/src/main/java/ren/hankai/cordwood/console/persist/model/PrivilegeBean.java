@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,7 +31,7 @@ public class PrivilegeBean implements Serializable {
   private Integer id;
   @Column(length = 100, nullable = false, unique = true)
   private String name;
-  @ManyToMany(mappedBy = "privileges")
+  @ManyToMany(mappedBy = "privileges", fetch = FetchType.LAZY)
   private List<RoleBean> roles;
 
   /**
