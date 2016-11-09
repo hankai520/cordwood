@@ -11,6 +11,7 @@
 
 # app generated files
 **/home-not-set
+**/test-home
 
 # common generated files
 **/.DS_Store
