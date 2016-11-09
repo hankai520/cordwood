@@ -1,10 +1,13 @@
-package ren.hankai.cordwood.plugin;
+package ren.hankai.cordwood.plugin.support;
 
 import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import ren.hankai.cordwood.plugin.Plugin;
+import ren.hankai.cordwood.plugin.PluginFunction;
+import ren.hankai.cordwood.plugin.PluginPackage;
 import ren.hankai.cordwood.plugin.api.ParameterMapper;
 import ren.hankai.cordwood.plugin.api.PluginRegistry;
 import ren.hankai.cordwood.plugin.test.PluginTestSupport;
@@ -42,6 +45,7 @@ public class ParameterMapperTest extends PluginTestSupport {
     Assert.assertTrue(params.length == 2);
     Assert.assertEquals(10, params[0]);
     Assert.assertEquals(15, params[1]);
+    pluginRegistry.unregisterPackage(pp.getIdentifier());
   }
 
 }

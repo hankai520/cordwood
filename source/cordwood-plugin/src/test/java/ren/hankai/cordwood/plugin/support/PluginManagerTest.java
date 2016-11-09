@@ -1,5 +1,5 @@
 
-package ren.hankai.cordwood.plugin;
+package ren.hankai.cordwood.plugin.support;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
 
 import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.plugin.Plugin;
+import ren.hankai.cordwood.plugin.PluginFunction;
+import ren.hankai.cordwood.plugin.PluginPackage;
 import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.api.PluginManager;
 import ren.hankai.cordwood.plugin.api.PluginRegistry;
@@ -65,6 +68,7 @@ public class PluginManagerTest extends PluginTestSupport {
     plugin2 = pluginManager.getPlugin(plugin.getName());
     Assert.assertTrue(plugin2.isActive());
     pluginRegistry.unregisterPackage(checksum);
+    pluginRegistry.unregisterPackage(pp.getIdentifier());
   }
 
   @Test
@@ -95,7 +99,7 @@ public class PluginManagerTest extends PluginTestSupport {
     Assert.assertEquals(plugin2.getVersion(), plugin.getVersion());
     Assert.assertEquals(plugin2.getDescription(), plugin.getDescription());
     Assert.assertEquals(plugin2.getInstance(), plugin.getInstance());
-    pluginRegistry.unregisterPackage(checksum);
+    pluginRegistry.unregisterPackage(pp.getIdentifier());
   }
 
   @Test

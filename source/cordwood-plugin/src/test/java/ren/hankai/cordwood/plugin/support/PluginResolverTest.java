@@ -1,4 +1,4 @@
-package ren.hankai.cordwood.plugin;
+package ren.hankai.cordwood.plugin.support;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -6,6 +6,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import ren.hankai.cordwood.plugin.FunctionParameter;
+import ren.hankai.cordwood.plugin.Plugin;
+import ren.hankai.cordwood.plugin.PluginFunction;
+import ren.hankai.cordwood.plugin.PluginPackage;
 import ren.hankai.cordwood.plugin.api.PluginRegistry;
 import ren.hankai.cordwood.plugin.api.PluginResolver;
 import ren.hankai.cordwood.plugin.test.PluginTestSupport;
@@ -61,6 +65,7 @@ public class PluginResolverTest extends PluginTestSupport {
       Assert.assertEquals(params[i].getType(), resolvedParams[i].getType());
       Assert.assertEquals(params[i].getDescription(), resolvedParams[i].getDescription());
     }
+    pluginRegistry.unregisterPackage(pp.getIdentifier());
   }
 
 }

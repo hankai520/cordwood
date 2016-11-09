@@ -1,4 +1,4 @@
-package ren.hankai.cordwood.plugin;
+package ren.hankai.cordwood.plugin.support;
 
 import org.apache.commons.io.IOUtils;
 import org.easymock.EasyMock;
@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import ren.hankai.cordwood.plugin.PluginPackage;
 import ren.hankai.cordwood.plugin.api.PluginDriver;
 import ren.hankai.cordwood.plugin.api.PluginRegistry;
 import ren.hankai.cordwood.plugin.test.PluginTestSupport;
@@ -39,11 +40,12 @@ public class PluginDriverTest extends PluginTestSupport {
     EasyMock.replay(request);
     final HttpServletResponse response = EasyMock.createNiceMock(HttpServletResponse.class);
     EasyMock.replay(response);
-    pluginRegistry.registerPackage(testPluginPackageUrl);
+    final PluginPackage pp = pluginRegistry.registerPackage(testPluginPackageUrl);
     final Object obj = pluginDriver.handleRequest("pojo", "sum", request, response);
     Assert.assertTrue("Hi, the result is: 31".equals(obj));
     EasyMock.verify(request);
     EasyMock.verify(response);
+    pluginRegistry.unregisterPackage(pp.getIdentifier());
   }
 
   @Test
@@ -51,7 +53,7 @@ public class PluginDriverTest extends PluginTestSupport {
     final HttpServletRequest request = EasyMock.createMock(HttpServletRequest.class);
     EasyMock.expect(request.getRequestURI()).andReturn("/resources/pojo/testonly.txt").anyTimes();
     EasyMock.replay(request);
-    pluginRegistry.registerPackage(testPluginPackageUrl);
+    final PluginPackage pp = pluginRegistry.registerPackage(testPluginPackageUrl);
     final InputStream is = pluginDriver.getResource("pojo", request);
     Assert.assertNotNull(is);
     final StringWriter writer = new StringWriter();
@@ -60,6 +62,7 @@ public class PluginDriverTest extends PluginTestSupport {
     Assert.assertTrue(
         "this file is used as plugin resource, just for test and demonstration.".equals(expString));
     EasyMock.verify(request);
+    pluginRegistry.unregisterPackage(pp.getIdentifier());
   }
 
 }

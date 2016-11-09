@@ -1,5 +1,5 @@
 
-package ren.hankai.cordwood.plugin;
+package ren.hankai.cordwood.plugin.support;
 
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Assert;
