@@ -15,10 +15,11 @@ public class EncryptionUtilTest {
 
   @Test
   public void testAes() {
-    final String sk = "123321";
+    final String sk = "1234432112344321";// 必须为 16, 24 或 32 字节
     final String encrypted = EncryptionUtil.aes("oh yeah!", sk, true);
     Assert.assertNotEquals("oh yeah!", encrypted);
-    Assert.assertNotEquals("oh yeah!", EncryptionUtil.aes(encrypted, sk, false));
+    final String decrypted = EncryptionUtil.aes(encrypted, sk, false);
+    Assert.assertEquals("oh yeah!", decrypted);
   }
 
 }

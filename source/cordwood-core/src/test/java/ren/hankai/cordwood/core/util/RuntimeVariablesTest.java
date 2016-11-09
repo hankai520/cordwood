@@ -1,14 +1,11 @@
 
 package ren.hankai.cordwood.core.util;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
 import ren.hankai.cordwood.core.ApplicationInitializer;
-import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.test.CoreTestSupport;
-import ren.hankai.cordwood.core.util.RuntimeVariables;
 
 import java.io.File;
 import java.util.HashMap;
@@ -34,7 +31,6 @@ public class RuntimeVariablesTest extends CoreTestSupport {
     RuntimeVariables.reloadVariables();
     Assert.assertTrue("testValue".equals(RuntimeVariables.getVariable("testKey")));
     RuntimeVariables.setAllVariables(new HashMap<>());
-    FileUtils.deleteDirectory(new File(Preferences.getHomeDir()));
   }
 
   @Test
