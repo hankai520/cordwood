@@ -19,6 +19,13 @@ public class FunctionParameter {
 
   public FunctionParameter() {}
 
+  /**
+   * 构造插件功能参数。
+   * 
+   * @param plugin 插件
+   * @param function 插件功能
+   * @param actualParameter 功能对应的方法参数
+   */
   public FunctionParameter(Plugin plugin, PluginFunction function, Parameter actualParameter) {
     required = (actualParameter.getAnnotation(Optional.class) == null);
     final String code =

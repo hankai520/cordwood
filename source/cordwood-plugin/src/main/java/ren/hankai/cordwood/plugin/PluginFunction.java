@@ -27,6 +27,13 @@ public final class PluginFunction {
 
   public PluginFunction() {}
 
+  /**
+   * 构造插件功能模型。
+   * 
+   * @param owner 所属插件
+   * @param functional 功能元数据
+   * @param method 功能对应方法
+   */
   public PluginFunction(Plugin owner, Functional functional, Method method) {
     if (!StringUtils.isEmpty(functional.name())) {
       name = functional.name();

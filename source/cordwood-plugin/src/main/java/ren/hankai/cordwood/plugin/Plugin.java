@@ -34,6 +34,12 @@ public final class Plugin {
 
   public Plugin() {}
 
+  /**
+   * 构造插件模型。
+   * 
+   * @param name 插件唯一限定名
+   * @param pluginInstance 插件实例
+   */
   public Plugin(String name, Object pluginInstance) {
     final ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
     ms.setDefaultEncoding("UTF-8");

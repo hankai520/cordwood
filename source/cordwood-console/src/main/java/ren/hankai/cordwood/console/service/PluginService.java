@@ -41,7 +41,7 @@ public class PluginService {
   @Autowired
   private PluginPackageRepository pluginPackageRepo;
   @Autowired
-  private PluginRepository PluginRepo;
+  private PluginRepository pluginRepo;
 
   /**
    * 安装插件包。
@@ -98,7 +98,7 @@ public class PluginService {
    */
   public List<PluginBean> getInstalledPlugins() {
     final Sort sort = new Sort(Direction.DESC, "createTime");
-    final List<PluginBean> list = PluginRepo.findAll(sort);
+    final List<PluginBean> list = pluginRepo.findAll(sort);
     if (list != null) {
       Plugin plugin = null;
       for (final PluginBean pluginBean : list) {

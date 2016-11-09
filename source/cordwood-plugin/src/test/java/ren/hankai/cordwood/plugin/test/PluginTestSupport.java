@@ -62,7 +62,11 @@ public abstract class PluginTestSupport {
    * @since Nov 8, 2016 8:48:49 AM
    */
   @After
-  public void teardown() throws Exception {
-    FileUtils.deleteDirectory(new File(Preferences.getHomeDir()));
+  public void teardown() {
+    try {
+      FileUtils.deleteDirectory(new File(Preferences.getHomeDir()));
+    } catch (final Exception e) {
+      e.printStackTrace();
+    }
   }
 }
