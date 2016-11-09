@@ -72,21 +72,21 @@
                         </div>
                         <div class="row" th:each="plugin : ${plugins}">
                             <div class="col-md-12">
-                                <div class="box border" th:classappend="${plugin.isActive} ? primary : ''">
+                                <div class="box border" th:classappend="${plugin.active} ? primary : ''">
                                     <div class="box-title">
-                                        <h4 th:text="${plugin.displayName}" th:switch="${plugin.isActive}">
+                                        <h4 th:text="${plugin.displayName}" th:switch="${plugin.active}">
                                             <i class="fa fa-ban" th:case="false"></i> <small th:case="false">（已禁用）</small>
                                             <i class="fa fa-check-circle-o" th:case="true"></i>
                                         </h4>
                                         <div class="pull-right">
                                             <div class="tools">
-                                                <a href="javascript:;" class="collapse">
-                                                    <i class="fa fa-chevron-up"></i>
+                                                <a href="javascript:;" class="expand">
+                                                    <i class="fa fa-chevron-down"></i>
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="box-body">
+                                    <div class="box-body" style="display: none;">
                                         <p th:text="${plugin.description}">
                                             插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息
                                             插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息
@@ -140,13 +140,16 @@
                                                                 地址：http://...
                                                             </li>
                                                             <li th:text="${'响应：' + feature.resultType}">响应：text/html</li>
-                                                            <li th:if="${feature.checkInboundParameters}">检查入参一致性：是</li>
-                                                            <li th:if="${feature.checkAccessToken}">检查访问授权：是</li>
+                                                            <li>启用入参防篡改：<span th:text="${feature.checkInboundParameters ? '是' : '否'}">是</span></li>
+                                                            <li>启用访问授权检查：<span th:text="${feature.checkAccessToken ? '是' : '否'}">是</span></li>
                                                             <li>入参：</li>
                                                             <li>
                                                                 <ul class="list-unstyled" style="text-indent: 20px;">
                                                                     <li th:each="inputParam : ${feature.parameters}">
-                                                                        <span th:text="${inputParam.name +' : '+inputParam.type.name}"></span>
+                                                                        <span style="font-weight: bold;" th:text="${inputParam.name}">参数名</span>: 
+                                                                        <span th:text="${inputParam.type.name}">参数类型</span> | 
+                                                                        <span th:text="${inputParam.required ? '必传' : '可选'}">是否必传</span> | 
+                                                                        <span th:text="${inputParam.description}">参数简介</span> | 
                                                                     </li>
                                                                 </ul>
                                                             </li>

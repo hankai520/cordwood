@@ -21,6 +21,11 @@ import java.lang.annotation.Target;
 public @interface Functional {
 
   /**
+   * 插件功能简介的国际化键名。
+   */
+  public static final String FUNCTION_DESCRIPTION_I18N_KEY = "description";
+
+  /**
    * 插件功能的名称，此名称将被映射为 web service URL 的一部分，因此为其赋值时，需要考虑 其是否兼容 HTTP URL
    * 规范。若不设置此属性，则会使用被其标记的方法的方法名作为名称，否则 就使用指定的名称。建议采用下划线分割英文单词的命名方法。
    *
@@ -29,15 +34,6 @@ public @interface Functional {
    * @since Oct 13, 2016 8:54:28 AM
    */
   String name() default "";
-
-  /**
-   * 功能简介。
-   * 
-   * @return 功能简介
-   * @author hankai
-   * @since Nov 8, 2016 5:27:50 PM
-   */
-  String description() default "";
 
   /**
    * 插件功能返回的 HTTP 数据类型，即 content-type。

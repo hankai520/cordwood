@@ -1,8 +1,6 @@
 
 package ren.hankai.cordwood.console.persist.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import ren.hankai.cordwood.plugin.PluginFunction;
 import ren.hankai.cordwood.plugin.api.Pluggable;
 
@@ -194,16 +192,6 @@ public final class PluginBean implements Serializable {
    * @return isActive 字段值
    */
   public boolean isActive() {
-    return isActive;
-  }
-
-  /**
-   * 获取 isActive 字段的值（适用于使用传统getter命名的代码，目前是为了解决 thymeleaf 无法找到属性的问题）。
-   *
-   * @return isActive 字段值
-   */
-  @JsonIgnore
-  public boolean getIsActive() {
     return isActive;
   }
 

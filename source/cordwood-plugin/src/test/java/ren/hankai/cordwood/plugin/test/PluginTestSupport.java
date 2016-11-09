@@ -37,6 +37,10 @@ public abstract class PluginTestSupport {
 
   protected URL testPluginPackageUrl;
 
+  static {
+    System.setProperty(Preferences.ENV_APP_HOME_DIR, "./test-home");
+  }
+
   /**
    * 单元测试用例初始化。
    *
@@ -46,7 +50,6 @@ public abstract class PluginTestSupport {
    */
   @Before
   public void setup() throws Exception {
-    System.setProperty(Preferences.ENV_APP_HOME_DIR, "./test-home");
     Assert.assertTrue(ApplicationInitializer.initialize("testSupport.txt"));
     testPluginPackageUrl = ResourceUtils.getURL("classpath:cordwood-plugin-pojo-0.0.1.RELEASE.jar");
   }

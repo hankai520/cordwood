@@ -17,6 +17,7 @@ import ren.hankai.cordwood.plugin.advance.model.MyTbl1;
 import ren.hankai.cordwood.plugin.advance.persist.MyTbl1Repository;
 import ren.hankai.cordwood.plugin.advance.util.MyLogChute;
 import ren.hankai.cordwood.plugin.api.Functional;
+import ren.hankai.cordwood.plugin.api.Optional;
 import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
 import ren.hankai.cordwood.plugin.api.PluginResourceLoader;
@@ -38,8 +39,7 @@ import java.util.List;
  * @since Sep 30, 2016 3:51:07 PM
  */
 @Component
-@Pluggable(name = AdvancePlugin.NAME, displayName = "示例高级插件", version = "1.0.0",
-    description = "Cordwood 示例高级插件，实现数据库访问以及通过模板引擎 velocity 实现HTML内容渲染。", developer = "韩凯")
+@Pluggable(name = AdvancePlugin.NAME, version = "1.0.0")
 public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader {
 
   private static final Logger logger = LoggerFactory.getLogger(AdvancePlugin.class);
@@ -68,8 +68,8 @@ public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader
    * @since Nov 8, 2016 8:55:38 AM
    */
   @Secure
-  @Functional(name = "add", resultType = "text/html", description = "计算两个整型的算数和。")
-  public String add(Integer op1, Integer op2) {
+  @Functional(name = "add", resultType = "text/html")
+  public String add(Integer op1, Integer op2, @Optional String echo) {
     final MyTbl1 mt = new MyTbl1();
     mt.setTimestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
     final int sum = op1 + op2;
@@ -99,7 +99,7 @@ public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader
    * @author hankai
    * @since Nov 8, 2016 5:30:30 PM
    */
-  @Functional(name = "subtract", resultType = "text/plain", description = "计算两个整型的算数差。")
+  @Functional(name = "subtract", resultType = "text/plain")
   public String subtract(Integer op1, Integer op2) {
     return (op1 - op2) + "";
   }

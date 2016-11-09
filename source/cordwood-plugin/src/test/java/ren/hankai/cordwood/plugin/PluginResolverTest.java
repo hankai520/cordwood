@@ -10,8 +10,6 @@ import ren.hankai.cordwood.plugin.api.PluginRegistry;
 import ren.hankai.cordwood.plugin.api.PluginResolver;
 import ren.hankai.cordwood.plugin.test.PluginTestSupport;
 
-import java.lang.reflect.Parameter;
-
 /**
  * 插件解析器测试。
  *
@@ -42,6 +40,7 @@ public class PluginResolverTest extends PluginTestSupport {
     final Plugin plugin = pp.getPlugins().get(0);
     final Plugin resolvedPlugin = pluginResolver.resolvePlugin(plugin.getInstance());
     Assert.assertEquals(plugin.getName(), resolvedPlugin.getName());
+    Assert.assertEquals(plugin.getDisplayName(), resolvedPlugin.getDisplayName());
     Assert.assertEquals(plugin.getVersion(), resolvedPlugin.getVersion());
     Assert.assertEquals(plugin.getDescription(), resolvedPlugin.getDescription());
     Assert.assertNotNull(resolvedPlugin.getFunctions());
@@ -50,15 +49,17 @@ public class PluginResolverTest extends PluginTestSupport {
     final PluginFunction fun = plugin.getFunctions().get("sum2");
     Assert.assertNotNull(resolvedFun);
     Assert.assertEquals(fun.getName(), resolvedFun.getName());
+    Assert.assertEquals(fun.getDescription(), resolvedFun.getDescription());
     Assert.assertEquals(fun.getResultType(), resolvedFun.getResultType());
     Assert.assertEquals(fun.getMethod().getName(), resolvedFun.getMethod().getName());
 
-    final Parameter[] resolvedParams = resolvedFun.getParameters();
-    final Parameter[] params = fun.getParameters();
+    final FunctionParameter[] resolvedParams = resolvedFun.getParameters();
+    final FunctionParameter[] params = fun.getParameters();
     Assert.assertTrue(resolvedParams.length == 2);
     for (int i = 0; i < resolvedParams.length; i++) {
       Assert.assertEquals(params[i].getName(), resolvedParams[i].getName());
       Assert.assertEquals(params[i].getType(), resolvedParams[i].getType());
+      Assert.assertEquals(params[i].getDescription(), resolvedParams[i].getDescription());
     }
   }
 

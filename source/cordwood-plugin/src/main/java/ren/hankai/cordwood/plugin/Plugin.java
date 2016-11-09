@@ -1,6 +1,11 @@
 
 package ren.hankai.cordwood.plugin;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+
+import ren.hankai.cordwood.plugin.api.Pluggable;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +30,32 @@ public final class Plugin {
   private boolean isActive;
   private Object instance;
   private Map<String, PluginFunction> functions = new HashMap<>();
+  private MessageSource messageSource;
+
+  public Plugin() {}
+
+  public Plugin(String name, Object pluginInstance) {
+    final ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
+    ms.setDefaultEncoding("UTF-8");
+    String path = pluginInstance.getClass().getPackage().getName();
+    path = path.replaceAll("\\.", "/");
+    final String baseName = String.format("classpath:%s/%s", path, name);
+    ms.setBasename(baseName);
+    ms.setUseCodeAsDefaultMessage(true);
+
+    String code = String.format("%s.%s", name, Pluggable.PLUGIN_DISPLAY_NAME_I18N_KEY);
+    displayName = ms.getMessage(code, null, null);
+
+    code = String.format("%s.%s", name, Pluggable.PLUGIN_DEVELOPER_I18N_KEY);
+    developer = ms.getMessage(code, null, null);
+
+    code = String.format("%s.%s", name, Pluggable.PLUGIN_DESCRIPTION_I18N_KEY);
+    description = ms.getMessage(code, null, null);
+
+    this.name = name;
+    instance = pluginInstance;
+    messageSource = ms;
+  }
 
   /**
    * 获取插件所属插件包ID。
@@ -80,15 +111,6 @@ public final class Plugin {
   }
 
   /**
-   * 设置 displayName 字段的值。
-   *
-   * @param displayName displayName 字段的值
-   */
-  public void setDisplayName(String displayName) {
-    this.displayName = displayName;
-  }
-
-  /**
    * 获取插件版本。
    *
    * @return 插件版本号
@@ -122,32 +144,12 @@ public final class Plugin {
   }
 
   /**
-   * 设置插件简介。
-   *
-   * @param description 插件简介
-   * @author hankai
-   * @since Oct 13, 2016 9:58:44 AM
-   */
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  /**
    * 获取 developer 字段的值。
    *
    * @return developer 字段值
    */
   public String getDeveloper() {
     return developer;
-  }
-
-  /**
-   * 设置 developer 字段的值。
-   *
-   * @param developer developer 字段的值
-   */
-  public void setDeveloper(String developer) {
-    this.developer = developer;
   }
 
   /**
@@ -214,6 +216,15 @@ public final class Plugin {
    */
   public void setFunctions(Map<String, PluginFunction> functions) {
     this.functions = functions;
+  }
+
+  /**
+   * 获取 messageSource 字段的值。
+   *
+   * @return messageSource 字段值
+   */
+  public MessageSource getMessageSource() {
+    return messageSource;
   }
 
   @Override

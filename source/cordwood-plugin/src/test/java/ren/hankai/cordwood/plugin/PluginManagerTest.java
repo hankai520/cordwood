@@ -50,8 +50,9 @@ public class PluginManagerTest extends PluginTestSupport {
     Assert.assertTrue(pp.getPlugins().size() == 1);
     plugin = pp.getPlugins().get(0);
     Assert.assertEquals("pojo", plugin.getName());
+    Assert.assertEquals("示例POJO插件", plugin.getDisplayName());
     Assert.assertEquals("1.0.0", plugin.getVersion());
-    Assert.assertEquals("simple pojo plugin", plugin.getDescription());
+    Assert.assertEquals("POJO 插件，适用于不依赖于第三方框架的纯业务逻辑。", plugin.getDescription());
     Assert.assertNotNull(plugin.getInstance());
     Assert.assertNotNull(plugin.getFunctions());
     final PluginFunction pf = plugin.getFunctions().get("sum");
@@ -81,8 +82,9 @@ public class PluginManagerTest extends PluginTestSupport {
     Assert.assertTrue(pp.getPlugins().size() == 1);
     plugin = pp.getPlugins().get(0);
     Assert.assertEquals("pojo", plugin.getName());
+    Assert.assertEquals("示例POJO插件", plugin.getDisplayName());
     Assert.assertEquals("1.0.0", plugin.getVersion());
-    Assert.assertEquals("simple pojo plugin", plugin.getDescription());
+    Assert.assertEquals("POJO 插件，适用于不依赖于第三方框架的纯业务逻辑。", plugin.getDescription());
     Assert.assertNotNull(plugin.getInstance());
     Assert.assertNotNull(plugin.getFunctions());
     final PluginFunction pf = plugin.getFunctions().get("sum");
@@ -107,9 +109,10 @@ public class PluginManagerTest extends PluginTestSupport {
     names.add(expName);
     pluginManager.initializePlugins(names);
     final Plugin plugin2 = pluginManager.getPlugin("pojo");
-    Assert.assertEquals(plugin2.getName(), "pojo");
-    Assert.assertEquals(plugin2.getVersion(), "1.0.0");
-    Assert.assertEquals(plugin2.getDescription(), "simple pojo plugin");
+    Assert.assertEquals("pojo", plugin2.getName());
+    Assert.assertEquals("示例POJO插件", plugin2.getDisplayName());
+    Assert.assertEquals("1.0.0", plugin2.getVersion());
+    Assert.assertEquals("POJO 插件，适用于不依赖于第三方框架的纯业务逻辑。", plugin2.getDescription());
     Assert.assertNotNull(plugin2.getInstance());
     pluginRegistry.unregisterPackage(DigestUtils.sha1Hex(testPluginPackageUrl.openStream()));
   }
@@ -120,7 +123,6 @@ public class PluginManagerTest extends PluginTestSupport {
     Assert.assertNotNull(plugin);
     Assert.assertEquals("TestPlugin", plugin.getName());
     Assert.assertEquals("1.2.1", plugin.getVersion());
-    Assert.assertEquals("test only", plugin.getDescription());
     Assert.assertTrue(pluginRegistry.isPluginRegistered(plugin.getName()));
   }
 
@@ -133,7 +135,7 @@ public class PluginManagerTest extends PluginTestSupport {
     Assert.assertFalse(pluginRegistry.isPluginRegistered(plugin.getName()));
   }
 
-  @Pluggable(name = "TestPlugin", version = "1.2.1", description = "test only")
+  @Pluggable(name = "TestPlugin", version = "1.2.1")
   private static final class TestPlugin {
 
   }

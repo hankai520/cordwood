@@ -29,6 +29,21 @@ public @interface Pluggable {
   public static final String PLUGIN_RESOURCE_BASE_URL = "/resources";
 
   /**
+   * 插件显示名的国际化键名。
+   */
+  public static final String PLUGIN_DISPLAY_NAME_I18N_KEY = "displayName";
+
+  /**
+   * 插件开发者的国际化键名。
+   */
+  public static final String PLUGIN_DEVELOPER_I18N_KEY = "developer";
+
+  /**
+   * 插件简介的国际化键名。
+   */
+  public static final String PLUGIN_DESCRIPTION_I18N_KEY = "description";
+
+  /**
    * 插件的名称，此名称将被映射为 web service URL 的一部分，因此需要考虑其值是否 满足 HTTP URL 的规范。插件名称将用于唯一区分插件。
    *
    * @return 插件名称
@@ -38,15 +53,6 @@ public @interface Pluggable {
   String name() default "";
 
   /**
-   * 插件显示名称，用于提供可读性更高的名称。
-   * 
-   * @return 插件名称
-   * @author hankai
-   * @since Nov 8, 2016 4:06:41 PM
-   */
-  String displayName() default "Unkown Plugin Name";
-
-  /**
    * 插件的版本。
    *
    * @return 插件版本。
@@ -54,22 +60,4 @@ public @interface Pluggable {
    * @since Oct 13, 2016 9:13:46 AM
    */
   String version() default "";
-
-  /**
-   * 插件简介。
-   *
-   * @return 插件简介
-   * @author hankai
-   * @since Oct 13, 2016 9:14:15 AM
-   */
-  String description() default "";
-
-  /**
-   * 开发者。
-   *
-   * @return 开发者
-   * @author hankai
-   * @since Nov 8, 2016 3:31:47 PM
-   */
-  String developer() default "";
 }

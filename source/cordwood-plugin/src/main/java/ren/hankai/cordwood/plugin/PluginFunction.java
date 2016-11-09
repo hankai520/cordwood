@@ -1,8 +1,11 @@
 
 package ren.hankai.cordwood.plugin;
 
+import org.springframework.util.StringUtils;
+
+import ren.hankai.cordwood.plugin.api.Functional;
+
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 
 /**
  * 用于封装插件功能。
@@ -20,7 +23,21 @@ public final class PluginFunction {
   private String resultType;
   private boolean checkInboundParameters = false;
   private boolean checkAccessToken = false;
-  private Parameter[] parameters;
+  private FunctionParameter[] parameters;
+
+  public PluginFunction() {}
+
+  public PluginFunction(Plugin owner, Functional functional, Method method) {
+    if (!StringUtils.isEmpty(functional.name())) {
+      name = functional.name();
+    } else {
+      name = method.getName();
+    }
+    final String code =
+        String.format("%s.%s.%s", owner.getName(), name, Functional.FUNCTION_DESCRIPTION_I18N_KEY);
+    description = owner.getMessageSource().getMessage(code, null, null);
+    this.method = method;
+  }
 
   /**
    * 获取功能名。
@@ -156,7 +173,7 @@ public final class PluginFunction {
    * @author hankai
    * @since Oct 28, 2016 9:30:49 AM
    */
-  public Parameter[] getParameters() {
+  public FunctionParameter[] getParameters() {
     return parameters;
   }
 
@@ -167,7 +184,7 @@ public final class PluginFunction {
    * @author hankai
    * @since Oct 28, 2016 9:30:51 AM
    */
-  public void setParameters(Parameter[] parameters) {
+  public void setParameters(FunctionParameter[] parameters) {
     this.parameters = parameters;
   }
 
