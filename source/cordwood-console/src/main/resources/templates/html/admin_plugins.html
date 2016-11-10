@@ -19,7 +19,9 @@
     th:href="@{~/css/responsive.css}" />
 <link rel="stylesheet" type="text/css" href="../../static/font-awesome/css/font-awesome.min.css"
     th:href="@{~/font-awesome/css/font-awesome.min.css}" />
-    <link rel="stylesheet" type="text/css" href="../../static/cordwood/css/cordwood.css"
+<link rel="stylesheet" type="text/css" href="../../static/js/dropzone/dropzone.min.css"
+    th:href="@{~/js/dropzone/dropzone.min.css}" />    
+<link rel="stylesheet" type="text/css" href="../../static/cordwood/css/cordwood.css"
     th:href="@{~/cordwood/css/cordwood.css}" />
 </head>
 <body>
@@ -63,7 +65,11 @@
                                         </li>
                                     </ul>
                                 </div> -->
-                                <button class="btn btn-link pull-right mr-2"><i class="fa fa-cloud-upload"></i> 上传插件</button>
+                                <a href="#uploadPlugin" data-toggle="modal" class="config">
+                                    <button class="btn btn-link pull-right mr-2">
+                                        <i class="fa fa-cloud-upload"></i>上传插件
+                                    </button>
+                                </a>
                             </div>
                             <div class="description">安装、更新、卸载或启用和禁用插件</div>
                         </div>
@@ -171,6 +177,31 @@
             </div>
         </div>
     </section>
+    <div class="modal fade" id="uploadPlugin" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">上传新插件</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="//file-arrow-circle-o-up" class="dropzone"
+                        id="uploadPluginForm">
+                        <div class="fallback">
+                            <input name="file" type="file" multiple="multiple" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="startUpload();">上传</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script type="text/javascript" src="../../static/js/jquery/jquery-2.0.3.min.js"
         th:src="@{~/js/jquery/jquery-2.0.3.min.js}"></script>
     <script type="text/javascript"
@@ -188,16 +219,18 @@
         th:src="@{~/js/jQuery-BlockUI/jquery.blockUI.min.js}"></script>
     <script type="text/javascript" src="../../static/js/bootstrap-switch/bootstrap-switch.min.js"
         th:src="@{~/js/bootstrap-switch/bootstrap-switch.min.js}"></script>
+    <script type="text/javascript" src="../../static/js/dropzone/dropzone.min.js"
+        th:src="@{~/js/dropzone/dropzone.min.js}"></script>    
     <script type="text/javascript" src="../../static/js/jQuery-Cookie/jquery.cookie.min.js"
         th:src="@{~/js/jQuery-Cookie/jquery.cookie.min.js}"></script>
     <script type="text/javascript" src="../../static/cordwood/js/common-init.js"
         th:src="@{~/cordwood/js/common-init.js}"></script>
     <script type="text/javascript" src="/admin/sidebar.js"></script>
     <script>
+
           jQuery(document).ready(function() {
             loadSidebarItems('plugins');
           });
-
           $('.make-switch').on('switch-change', function(e, data) {
             var sender = $(data.el);
             var pid = sender.val();
@@ -205,11 +238,11 @@
             var url = '/admin/plugins/' + pid + '/' + (enabled ? 'on' : 'off');
             var senderId = '#pluginSwitch' + pid;
             $(senderId).bootstrapSwitch('setActive', false);
-            $.get( url, function( data, textStatus, jqXHR ) {
-              if(jqXHR.status == 200) {
+            $.get(url, function(data, textStatus, jqXHR) {
+              if (jqXHR.status == 200) {
                 $(senderId).bootstrapSwitch('setActive', true);
                 var boxId = '#pluginBox' + pid;
-                if(enabled) {
+                if (enabled) {
                   $(boxId).addClass('primary');
                 } else {
                   $(boxId).removeClass('primary');
@@ -217,7 +250,34 @@
               }
             });
           });
-    </script>
+          
+          Dropzone.autoDiscover = false;
+          Dropzone.options.uploadPluginForm = {
+                  paramName: "file",
+                  acceptedFiles: '.jar,.JAR',
+                  parallelUploads: 2,
+                  maxFiles: 5,
+                  autoProcessQueue: false,
+                  uploadMultiple: true,
+                  maxFilesize: 10, // MB
+                  addRemoveLinks: true,
+                  dictInvalidFileType: '文件格式不正确，请上传 .jar 格式的插件包文件！',
+                  dictRemoveFile: '删除文件',
+                  dictResponseError: '上传出现错误！',
+                  dictFileTooBig: '文件太大！',
+                  dictFallbackMessage: '您的浏览器不支持拖拽上传！',
+                  dictDefaultMessage: '拖拽文件来上传',
+                  dictMaxFilesExceeded: '文件个数超出限制！',
+                  // change the previewTemplate to use Bootstrap
+                  // progress bars
+                  previewTemplate: "<div class=\"dz-preview dz-file-preview\">\n  <div class=\"dz-details\">\n    <div class=\"dz-filename\"><span data-dz-name></span></div>\n    <div class=\"dz-size\" data-dz-size></div>\n    <img data-dz-thumbnail />\n  </div>\n  <div class=\"progress progress-sm progress-striped active\"><div class=\"progress-bar progress-bar-success\" data-dz-uploadprogress></div></div>\n  <div class=\"dz-success-mark\"><span></span></div>\n  <div class=\"dz-error-mark\"><span></span></div>\n  <div class=\"dz-error-message\"><span data-dz-errormessage></span></div>\n</div>"
+                };
+          $("#uploadPluginForm").dropzone();
+          function startUpload() {
+            var aa = Dropzone;
+            myDropzone.processQueue();
+          }
+        </script>
     <!-- /JAVASCRIPTS -->
 </body>
 </html>

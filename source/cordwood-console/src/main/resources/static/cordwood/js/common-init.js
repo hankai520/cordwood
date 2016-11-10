@@ -1,9 +1,10 @@
-
 /*-----------------------------------------------------------------------------------*/
-/* Box tools
-/*-----------------------------------------------------------------------------------*/
+/*
+ * Box tools
+ * /*-----------------------------------------------------------------------------------
+ */
 var handleBoxTools = function() {
-  //Collapse
+  // Collapse
   jQuery('.box .tools .collapse, .box .tools .expand').click(function() {
     var el = jQuery(this).parents(".box").children(".box-body");
     if (jQuery(this).hasClass("collapse")) {
