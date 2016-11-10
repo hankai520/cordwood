@@ -23,6 +23,8 @@ public final class Route {
   public static final String BG_CHANGE_USER_PWD = BACKGROUND_PREFIX + "/users/{user_id}/change_pwd";
   public static final String BG_SIDEBAR_JS = BACKGROUND_PREFIX + "/sidebar.js";
   public static final String BG_PLUGINS = BACKGROUND_PREFIX + "/plugins";
+  public static final String BG_PLUGINS_ON = BACKGROUND_PREFIX + "/plugins/{plugin_id}/on";
+  public static final String BG_PLUGINS_OFF = BACKGROUND_PREFIX + "/plugins/{plugin_id}/off";
   /*** 前台根地址。 ***/
   public static final String FOREGROUND_PREFIX = "/home";
   public static final String FG_LOGIN = FOREGROUND_PREFIX + "/login";

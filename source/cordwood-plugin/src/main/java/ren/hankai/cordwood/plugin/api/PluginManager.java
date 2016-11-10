@@ -3,6 +3,7 @@ package ren.hankai.cordwood.plugin.api;
 
 import ren.hankai.cordwood.plugin.Plugin;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -52,4 +53,13 @@ public interface PluginManager {
    * @since Oct 9, 2016 10:56:22 AM
    */
   void initializePlugins(List<String> packageNames);
+
+  /**
+   * 获取插件迭代器。
+   * 
+   * @return 迭代器
+   * @author hankai
+   * @since Nov 10, 2016 10:41:26 AM
+   */
+  Iterator<Plugin> getPluginIterator();
 }

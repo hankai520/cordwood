@@ -30,6 +30,7 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -183,10 +184,10 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
 
   @Override
   public boolean unregisterTransientPlugin(String pluginName) {
-    Plugin plugin = plugins.get(pluginName);
+    final Plugin plugin = plugins.get(pluginName);
     if (plugin != null) {
       if (plugin.getPackageId() != null) {
-        PluginPackage pack = packages.get(plugin.getPackageId());
+        final PluginPackage pack = packages.get(plugin.getPackageId());
         pack.getPlugins().remove(plugin);
       }
       plugins.remove(pluginName);
@@ -256,5 +257,10 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
       logger.error(String.format("Plugin with name \"%s\" not found!", pluginName));
     }
     return plugin;
+  }
+
+  @Override
+  public Iterator<Plugin> getPluginIterator() {
+    return plugins.values().iterator();
   }
 }

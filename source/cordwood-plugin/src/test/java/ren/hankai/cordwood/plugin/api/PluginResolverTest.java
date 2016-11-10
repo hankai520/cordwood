@@ -1,4 +1,4 @@
-package ren.hankai.cordwood.plugin.support;
+package ren.hankai.cordwood.plugin.api;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;

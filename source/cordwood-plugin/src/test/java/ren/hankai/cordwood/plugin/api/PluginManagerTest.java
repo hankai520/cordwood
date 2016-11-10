@@ -1,5 +1,5 @@
 
-package ren.hankai.cordwood.plugin.support;
+package ren.hankai.cordwood.plugin.api;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -12,15 +12,13 @@ import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.Plugin;
 import ren.hankai.cordwood.plugin.PluginFunction;
 import ren.hankai.cordwood.plugin.PluginPackage;
-import ren.hankai.cordwood.plugin.api.Pluggable;
-import ren.hankai.cordwood.plugin.api.PluginManager;
-import ren.hankai.cordwood.plugin.api.PluginRegistry;
 import ren.hankai.cordwood.plugin.test.PluginTestSupport;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -137,6 +135,16 @@ public class PluginManagerTest extends PluginTestSupport {
     Assert.assertTrue(pluginRegistry.isPluginRegistered(plugin.getName()));
     Assert.assertTrue(pluginRegistry.unregisterTransientPlugin(plugin.getName()));
     Assert.assertFalse(pluginRegistry.isPluginRegistered(plugin.getName()));
+  }
+
+  @Test
+  public void testGetPluginIterator() throws Exception {
+    final Plugin plugin = pluginRegistry.registerTransientPlugin(new TestPlugin());
+    final Iterator<Plugin> it = pluginManager.getPluginIterator();
+    Assert.assertTrue(it.hasNext());
+    it.next();
+    Assert.assertFalse(it.hasNext());
+    Assert.assertTrue(pluginRegistry.unregisterTransientPlugin(plugin.getName()));
   }
 
   @Pluggable(name = "TestPlugin", version = "1.2.1")

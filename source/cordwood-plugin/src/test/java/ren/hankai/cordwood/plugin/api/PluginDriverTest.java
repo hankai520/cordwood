@@ -1,4 +1,4 @@
-package ren.hankai.cordwood.plugin.support;
+package ren.hankai.cordwood.plugin.api;
 
 import org.apache.commons.io.IOUtils;
 import org.easymock.EasyMock;

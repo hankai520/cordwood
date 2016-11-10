@@ -11,9 +11,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import ch.qos.logback.classic.Level;
-import ren.hankai.cordwood.console.persist.PluginPackageRepository;
+import ren.hankai.cordwood.console.persist.model.PluginBean;
 import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
-import ren.hankai.cordwood.console.persist.util.EntitySpecs;
 import ren.hankai.cordwood.console.service.PluginService;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.util.LogbackUtil;
@@ -36,6 +35,7 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -53,9 +53,6 @@ import javax.annotation.PreDestroy;
 public class PluginInitializer {
 
   private static final Logger logger = LoggerFactory.getLogger(PluginInitializer.class);
-
-  @Autowired
-  private PluginPackageRepository pluginPackageRepository;
 
   @Autowired
   private PluginManager pluginManager;
@@ -125,16 +122,13 @@ public class PluginInitializer {
    */
   private void installPlugin(File file, String checksum) {
     try {
-      final PluginPackageBean ppb =
-          pluginPackageRepository.findOne(EntitySpecs.field("checksum", checksum));
+      final PluginPackageBean ppb = pluginService.getPackageByChecksum(checksum);
       if (ppb == null) {
         // TODO: 在安装插件时，用插件的文件名作了补充判断，去更新数据库中已有的插件信息，这是否会有潜在风险？
-        final PluginPackageBean possiblePpb =
-            pluginPackageRepository.findOne(EntitySpecs.field("fileName", file.getName()));
+        final PluginPackageBean possiblePpb = pluginService.getPackageByFileName(file.getName());
         if (possiblePpb != null) {
-          pluginPackageRepository.delete(possiblePpb.getId());
+          pluginService.deletePackageById(possiblePpb.getId());
         }
-
         pluginService.installPlugin(file.toURI().toURL());
       } else if (!file.getName().equals(ppb.getFileName())) {
         logger.info(String.format(
@@ -154,11 +148,10 @@ public class PluginInitializer {
    * @since Oct 21, 2016 4:24:02 PM
    */
   private void uninstallPlugin(String fileName) {
-    final PluginPackageBean ppb =
-        pluginPackageRepository.findOne(EntitySpecs.field("fileName", fileName));
+    final PluginPackageBean ppb = pluginService.getPackageByFileName(fileName);
     if ((ppb != null) && pluginRegistry.isPackageRegistered(ppb.getChecksum())) {
       pluginRegistry.unregisterPackage(ppb.getChecksum());
-      pluginPackageRepository.delete(ppb.getId());
+      pluginService.deletePackageById(ppb.getId());
     }
   }
 
@@ -192,7 +185,7 @@ public class PluginInitializer {
    */
   @Scheduled(fixedRate = 1000 * 60, initialDelay = 1000 * 2)
   public void initializeInstalledPlugins() {
-    final List<PluginPackageBean> list = pluginPackageRepository.findAll();
+    final List<PluginPackageBean> list = pluginService.getInstalledPluginPackages();
     if (list != null) {
       final List<String> names = new ArrayList<>();
       for (final PluginPackageBean ppb : list) {
@@ -201,6 +194,12 @@ public class PluginInitializer {
       pluginManager.initializePlugins(names);
     }
     installCopiedPlugins();
+    final Iterator<Plugin> it = pluginManager.getPluginIterator();
+    while (it.hasNext()) {
+      final Plugin plugin = it.next();
+      final PluginBean pb = pluginService.getInstalledPluginByName(plugin.getName());
+      plugin.setActive(pb.isActive());
+    }
   }
 
   /**
@@ -263,8 +262,7 @@ public class PluginInitializer {
       logger.info("Detected deletion of plugin package: " + file.getName());
       if (!file.exists()) {
         final String fileName = FilenameUtils.getName(path);
-        final PluginPackageBean ppb =
-            pluginPackageRepository.findOne(EntitySpecs.field("fileName", fileName));
+        final PluginPackageBean ppb = pluginService.getPackageByFileName(fileName);
         if (ppb != null) {
           uninstallPlugin(ppb.getFileName());
         }

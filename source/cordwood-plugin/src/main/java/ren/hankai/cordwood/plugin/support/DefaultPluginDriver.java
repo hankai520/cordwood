@@ -59,7 +59,7 @@ public class DefaultPluginDriver implements PluginDriver {
       throw new PluginNotFoundException(String.format("Plugin \"%s\" not found!", pluginName));
     } else if (!plugin.isActive()) {
       throw new PluginStatusException(
-          String.format("Plugin has been \"%s\" disabled!", pluginName));
+          String.format("Plugin \"%s\" has been disabled!", pluginName));
     } else {
       final PluginFunction function = plugin.getFunctions().get(functionName);
       if (function == null) {

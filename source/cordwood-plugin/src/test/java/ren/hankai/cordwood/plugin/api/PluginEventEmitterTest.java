@@ -1,5 +1,5 @@
 
-package ren.hankai.cordwood.plugin.support;
+package ren.hankai.cordwood.plugin.api;
 
 import org.junit.Assert;
 import org.junit.Test;

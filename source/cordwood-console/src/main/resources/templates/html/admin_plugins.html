@@ -8,6 +8,9 @@
     content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
 <meta name="description" content="">
 <meta name="author" content="">
+
+<link rel="stylesheet" type="text/css" href="../../static/js/bootstrap-switch/bootstrap-switch.min.css"
+    th:href="@{~/js/bootstrap-switch/bootstrap-switch.min.css}" />
 <link rel="stylesheet" type="text/css" href="../../static/css/cloud-admin.css"
     th:href="@{~/css/cloud-admin.css}" />
 <link rel="stylesheet" type="text/css" href="../../static/css/themes/default.css" id="skin-switcher"
@@ -43,15 +46,9 @@
                             </ul>
                             <div class="clearfix" style="margin-top: 20px;">
                                 <h3 class="content-title pull-left">插件管理</h3>
-                                <div class="btn-group pull-right">
+                                <!-- <div class="btn-group pull-right">
                                     <button class="btn btn-default">
-                                        <i class="fa fa-anchor"></i> 已安装
-                                    </button>
-                                    <button class="btn btn-default">
-                                        <i class="fa fa-anchor"></i> 禁用的
-                                    </button>
-                                    <button class="btn btn-default">
-                                        <i class="fa fa-cubes"></i> 全部
+                                        <i class="fa fa-anchor"></i> 已安装的
                                     </button>
                                     <button class="btn btn-default dropdown-toggle"
                                         data-toggle="dropdown">
@@ -65,33 +62,40 @@
                                             </a>
                                         </li>
                                     </ul>
-                                </div>
-                                <button class="btn btn-link pull-right mr-3"><i class="fa fa-cloud-upload"></i> 上传插件</button>
+                                </div> -->
+                                <button class="btn btn-link pull-right mr-2"><i class="fa fa-cloud-upload"></i> 上传插件</button>
                             </div>
                             <div class="description">安装、更新、卸载或启用和禁用插件</div>
                         </div>
                         <div class="row" th:each="plugin : ${plugins}">
                             <div class="col-md-12">
-                                <div class="box border" th:classappend="${plugin.active} ? primary : ''">
+                                <div th:id="${'pluginBox'+plugin.id}" class="box border" th:classappend="${plugin.active} ? primary : ''">
                                     <div class="box-title">
-                                        <h4 th:text="${plugin.displayName}" th:switch="${plugin.active}">
-                                            <i class="fa fa-ban" th:case="false"></i> <small th:case="false">（已禁用）</small>
-                                            <i class="fa fa-check-circle-o" th:case="true"></i>
-                                        </h4>
+                                        <h4 th:text="${plugin.displayName}"></h4>
                                         <div class="pull-right">
                                             <div class="tools">
-                                                <a href="javascript:;" class="expand">
-                                                    <i class="fa fa-chevron-down"></i>
+                                                <a href="javascript:;" class="collapse">
+                                                    <i class="fa fa-chevron-up"></i>
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="box-body" style="display: none;">
-                                        <p th:text="${plugin.description}">
-                                            插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息
-                                            插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息
-                                            插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息
-                                        </p>
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <p th:text="${plugin.description}">
+                                                    插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息
+                                                    插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息
+                                                    插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息
+                                                </p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div th:id="${'pluginSwitch' + plugin.id}" class="make-switch switch-small pull-right"
+                                                    data-on="success" data-off="warning" data-on-label="启用" data-off-label="禁用">
+                                                    <input type="checkbox" th:checked="${plugin.active}" th:value="${plugin.id}" />
+                                                </div>
+                                            </div>
+                                        </div>
                                         <hr/>
                                         <dl class="dl-horizontal">
                                             <dt>插件标识</dt>
@@ -129,7 +133,7 @@
                                                     </h3>
                                                 </div>
                                                 <div id="collapseOne"
-                                                    class="panel-collapse collapse in"
+                                                    class="panel-collapse collapse"
                                                     th:id="${'pf' + feature.name}">
                                                     <div class="panel-body">
                                                         <ul class="list-unstyled">
@@ -182,15 +186,37 @@
         th:src="@{~/js/jQuery-slimScroll-1.3.0/slimScrollHorizontal.min.js}"></script>
     <script type="text/javascript" src="../../static/js/jQuery-BlockUI/jquery.blockUI.min.js"
         th:src="@{~/js/jQuery-BlockUI/jquery.blockUI.min.js}"></script>
+    <script type="text/javascript" src="../../static/js/bootstrap-switch/bootstrap-switch.min.js"
+        th:src="@{~/js/bootstrap-switch/bootstrap-switch.min.js}"></script>
     <script type="text/javascript" src="../../static/js/jQuery-Cookie/jquery.cookie.min.js"
         th:src="@{~/js/jQuery-Cookie/jquery.cookie.min.js}"></script>
     <script type="text/javascript" src="../../static/cordwood/js/common-init.js"
         th:src="@{~/cordwood/js/common-init.js}"></script>
     <script type="text/javascript" src="/admin/sidebar.js"></script>
     <script>
-        jQuery(document).ready(function() {
-          loadSidebarItems('plugins');
-        });
+          jQuery(document).ready(function() {
+            loadSidebarItems('plugins');
+          });
+
+          $('.make-switch').on('switch-change', function(e, data) {
+            var sender = $(data.el);
+            var pid = sender.val();
+            var enabled = data.value;
+            var url = '/admin/plugins/' + pid + '/' + (enabled ? 'on' : 'off');
+            var senderId = '#pluginSwitch' + pid;
+            $(senderId).bootstrapSwitch('setActive', false);
+            $.get( url, function( data, textStatus, jqXHR ) {
+              if(jqXHR.status == 200) {
+                $(senderId).bootstrapSwitch('setActive', true);
+                var boxId = '#pluginBox' + pid;
+                if(enabled) {
+                  $(boxId).addClass('primary');
+                } else {
+                  $(boxId).removeClass('primary');
+                }
+              }
+            });
+          });
     </script>
     <!-- /JAVASCRIPTS -->
 </body>

@@ -13,6 +13,7 @@ import ren.hankai.cordwood.console.persist.PluginPackageRepository;
 import ren.hankai.cordwood.console.persist.PluginRepository;
 import ren.hankai.cordwood.console.persist.model.PluginBean;
 import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
+import ren.hankai.cordwood.console.persist.util.EntitySpecs;
 import ren.hankai.cordwood.plugin.Plugin;
 import ren.hankai.cordwood.plugin.PluginPackage;
 import ren.hankai.cordwood.plugin.api.PluginManager;
@@ -78,6 +79,18 @@ public class PluginService {
   }
 
   /**
+   * 按名称查找已安装的插件信息。
+   * 
+   * @param name 插件名
+   * @return 插件信息
+   * @author hankai
+   * @since Nov 10, 2016 11:40:21 AM
+   */
+  public PluginBean getInstalledPluginByName(String name) {
+    return pluginRepo.findOne(EntitySpecs.field("name", name));
+  }
+
+  /**
    * 获取已安装的插件包。
    *
    * @return 插件包集合
@@ -87,6 +100,41 @@ public class PluginService {
   public List<PluginPackageBean> getInstalledPluginPackages() {
     final Sort sort = new Sort(Direction.DESC, "id");
     return pluginPackageRepo.findAll(sort);
+  }
+
+  /**
+   * 根据文件校验和查找插件包。
+   *
+   * @param checksum 插件包校验和
+   * @return 插件包
+   * @author hankai
+   * @since Nov 10, 2016 11:32:33 AM
+   */
+  public PluginPackageBean getPackageByChecksum(String checksum) {
+    return pluginPackageRepo.findOne(EntitySpecs.field("checksum", checksum));
+  }
+
+  /**
+   * 根据文件名查找插件包。
+   *
+   * @param fileName 文件名
+   * @return 插件包
+   * @author hankai
+   * @since Nov 10, 2016 11:34:58 AM
+   */
+  public PluginPackageBean getPackageByFileName(String fileName) {
+    return pluginPackageRepo.findOne(EntitySpecs.field("fileName", fileName));
+  }
+
+  /**
+   * 根据ID删除插件包信息。
+   *
+   * @param packageId 插件包ID
+   * @author hankai
+   * @since Nov 10, 2016 11:36:32 AM
+   */
+  public void deletePackageById(Integer packageId) {
+    pluginPackageRepo.delete(packageId);
   }
 
   /**
@@ -107,5 +155,26 @@ public class PluginService {
       }
     }
     return list;
+  }
+
+  /**
+   * 启用或禁用插件。
+   *
+   * @param pluginId 插件ID
+   * @param enabled 是否启用
+   * @author hankai
+   * @since Nov 10, 2016 9:57:48 AM
+   */
+  public void disableOrEnablePlugin(Integer pluginId, boolean enabled) {
+    final PluginBean pb = pluginRepo.findOne(pluginId);
+    if (pb != null) {
+      pb.setActive(enabled);
+      pluginRepo.save(pb);
+      if (enabled) {
+        pluginManager.activatePlugin(pb.getName());
+      } else {
+        pluginManager.deactivatePlugin(pb.getName());
+      }
+    }
   }
 }
