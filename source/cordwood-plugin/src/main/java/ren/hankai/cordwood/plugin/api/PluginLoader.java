@@ -1,7 +1,8 @@
 
 package ren.hankai.cordwood.plugin.api;
 
-import java.net.URL;
+import ren.hankai.cordwood.plugin.PluginPackage;
+
 import java.util.List;
 
 /**
@@ -12,6 +13,21 @@ import java.util.List;
  * @since Sep 29, 2016 5:45:01 PM
  */
 public interface PluginLoader {
+
+  /**
+   * 插件包所属分组ID。
+   */
+  public static final String GROUP_ID = "Group-Id";
+
+  /**
+   * 插件包 build ID。
+   */
+  public static final String ARTIFACT_ID = "Artifact-Id";
+
+  /**
+   * 插件包版本。
+   */
+  public static final String PACKAGE_VERSION = "Implementation-Version";
 
   /**
    * 插件基包。例如：所有插件都在 com.example.demo 包中，则基包为 com.example.demo、或 com.example 或 com。多个基包用逗号分隔。
@@ -27,17 +43,17 @@ public interface PluginLoader {
   public static final String PLUGIN_SPRING_CONFIG_CLASS = "Spring-Config-Class";
 
   /**
-   * 载入插件集合。
+   * 将插件包中的插件实例载入内存。
    *
-   * @param jarFileUrl 插件本地路径
+   * @param pluginPackage 插件包信息
    * @return 插件实例，返回 null 表示加载失败
    * @author hankai
    * @since Sep 30, 2016 10:43:38 AM
    */
-  List<Object> loadPlugins(URL jarFileUrl);
+  List<Object> loadPlugins(PluginPackage pluginPackage);
 
   /**
-   * 卸载插件，插件载出后，将无法在程序中使用该插件。载出只针对内存，不会影响插件包物理文件。
+   * 从内存中卸载指定插件实例。
    *
    * @param instance 插件实例
    * @return 是否载出成功

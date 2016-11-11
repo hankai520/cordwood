@@ -1,7 +1,12 @@
 
 package ren.hankai.cordwood.console.persist.model;
 
+import ren.hankai.cordwood.core.Preferences;
+
+import java.io.File;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,38 +33,89 @@ public final class PluginPackageBean implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
+  private String id; // 插件包标识符，e.g. org.example:calculator:1.3.2
   @Column(length = 100, nullable = false, unique = true)
   private String fileName;
-  @Column(length = 100)
-  private String checksum;
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pluginPackage")
   private List<PluginBean> plugins = new ArrayList<>();
 
-  public String getChecksum() {
-    return checksum;
+  /**
+   * 获取 id 字段的值。
+   *
+   * @return id 字段值
+   */
+  public String getId() {
+    return id;
   }
 
-  public void setChecksum(String checksum) {
-    this.checksum = checksum;
+  /**
+   * 设置 id 字段的值。
+   *
+   * @param id id 字段的值
+   */
+  public void setId(String id) {
+    this.id = id;
   }
 
+  /**
+   * 获取 fileName 字段的值。
+   *
+   * @return fileName 字段值
+   */
   public String getFileName() {
     return fileName;
   }
 
+  /**
+   * 设置 fileName 字段的值。
+   *
+   * @param fileName fileName 字段的值
+   */
   public void setFileName(String fileName) {
     this.fileName = fileName;
   }
 
+  /**
+   * 获取 plugins 字段的值。
+   *
+   * @return plugins 字段值
+   */
   public List<PluginBean> getPlugins() {
     return plugins;
   }
 
+  /**
+   * 设置 plugins 字段的值。
+   *
+   * @param plugins plugins 字段的值
+   */
   public void setPlugins(List<PluginBean> plugins) {
     this.plugins = plugins;
   }
 
+  /**
+   * 获取插件包安装路径。
+   * 
+   * @return 安装路径
+   * @author hankai
+   * @since Nov 12, 2016 12:36:34 AM
+   */
+  public URL getInstallationUrl() {
+    final String path = Preferences.getPluginsDir() + File.separator + fileName;
+    try {
+      return new File(path).toURI().toURL();
+    } catch (final MalformedURLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * 获取 serialversionuid 字段的值。
+   *
+   * @return serialversionuid 字段值
+   */
   public static long getSerialversionuid() {
     return serialVersionUID;
   }
+
 }

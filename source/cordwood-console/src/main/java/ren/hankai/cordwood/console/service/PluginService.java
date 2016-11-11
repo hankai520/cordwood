@@ -107,46 +107,34 @@ public class PluginService {
   @Transactional
   public boolean installPluginPackage(URL url, boolean overwrite) {
     try {
-      final PluginPackage pp = pluginRegistry.registerPackage(url, overwrite);
-      if (pp != null) {
-        final URL installUrl = copyPackage(url, overwrite);
-        if (installUrl == null) {
-          pluginRegistry.unregisterPackage(pp.getIdentifier());
-        } else {
-          pp.setInstallUrl(installUrl);
-          final PluginPackageBean ppb = getInstalledPackage(pp.getIdentifier(), pp.getFileName());
-          // 如果覆盖，
-          if ((ppb != null) && overwrite) {
-            pluginPackageRepo.delete(ppb.getChecksum());
-          } else {
-
-          }
-          if (ppb == null) {
-
-          }
-          ppb.setChecksum(pp.getIdentifier());
-          ppb.setFileName(pp.getFileName());
-          ppb.getPlugins().clear();
-          for (final Plugin plugin : pp.getPlugins()) {
-            PluginBean pb = pluginRepo.findOne(plugin.getName());
-            if (pb == null) {
-              pb = new PluginBean();
+      final URL installUrl = copyPackage(url, overwrite);
+      if (installUrl != null) {
+        final PluginPackage pp = pluginRegistry.registerPackage(url, overwrite);
+        if (pp != null) {
+          PluginPackageBean ppb = pluginPackageRepo.findOne(pp.getIdentifier());
+          if ((ppb == null) || overwrite) {
+            if (ppb == null) {
+              ppb = new PluginPackageBean();
             }
-            pb.setActive(plugin.isActive());
-            pb.setDescription(plugin.getDescription());
-            pb.setDeveloper(plugin.getDeveloper());
-            pb.setName(plugin.getName());
-            pb.setDisplayName(plugin.getDisplayName());
-            pb.setVersion(plugin.getVersion());
-            pb.setPluginPackage(ppb);
-            pb.setCreateTime(new Date());
-            ppb.getPlugins().add(pb);
+            ppb.setFileName(pp.getFileName());
+            ppb.setId(pp.getIdentifier());
+            ppb.setFileName(pp.getFileName());
+            for (final Plugin plugin : pp.getPlugins()) {
+              final PluginBean pb = new PluginBean();
+              pb.setPluginPackage(ppb);
+              pb.setActive(plugin.isActive());
+              pb.setDescription(plugin.getDescription());
+              pb.setDeveloper(plugin.getDeveloper());
+              pb.setName(plugin.getName());
+              pb.setDisplayName(plugin.getDisplayName());
+              pb.setVersion(plugin.getVersion());
+              pb.setCreateTime(new Date());
+              ppb.getPlugins().add(pb);
+            }
+            pluginPackageRepo.save(ppb);
           }
-          pluginPackageRepo.save(ppb);
           return true;
         }
-      } else {
-        logger.error("Plugin package installation failed due to file copy error.");
       }
     } catch (final Exception e) {
       logger.error(String.format("Failed to install plugin from: %s", url.toString()), e);
@@ -179,30 +167,27 @@ public class PluginService {
   }
 
   /**
-   * 根据文件校验和查找插件包。
+   * 根据文件名获取已安装的插件包。
    *
-   * @param checksum 插件包校验和
+   * @param fileName 插件包文件名
    * @return 插件包
    * @author hankai
-   * @since Nov 10, 2016 11:32:33 AM
+   * @since Nov 12, 2016 12:09:52 AM
    */
-  public PluginPackageBean getInstalledPackage(String checksum, String fileName) {
-    PluginPackageBean ppb = pluginPackageRepo.findOne(EntitySpecs.field("checksum", checksum));
-    if (ppb == null) {
-      ppb = pluginPackageRepo.findOne(EntitySpecs.field("fileName", fileName));
-    }
-    return ppb;
+  public PluginPackageBean getInstalledPackageByFileName(String fileName) {
+    return pluginPackageRepo.findOne(EntitySpecs.field("fileName", fileName));
   }
 
   /**
-   * 根据校验和删除插件包信息。
+   * 根据标识删除插件包登记信息。
    *
-   * @param checksum 插件包ID
+   * @param id 插件包标识
    * @author hankai
-   * @since Nov 10, 2016 11:36:32 AM
+   * @since Nov 12, 2016 12:13:22 AM
    */
-  public void deletePackageByChecksum(String checksum) {
-    pluginPackageRepo.delete(checksum);
+  @Transactional
+  public void deletePackageById(String id) {
+    pluginPackageRepo.delete(id);
   }
 
   /**

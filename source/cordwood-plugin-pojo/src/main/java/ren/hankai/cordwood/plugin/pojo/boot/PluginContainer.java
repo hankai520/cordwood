@@ -62,7 +62,7 @@ public class PluginContainer extends PluginRequestDispatcher {
     final PluginRegistry pluginRegistry = context.getBean(PluginRegistry.class);
     // 注册插件
     for (final Class<?> clazz : pluginClasses) {
-      pluginRegistry.registerTransientPlugin(clazz.newInstance());
+      pluginRegistry.registerTransientPlugin(clazz.newInstance(), true);
     }
   }
 

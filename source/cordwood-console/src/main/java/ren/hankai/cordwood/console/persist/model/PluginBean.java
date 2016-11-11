@@ -52,7 +52,7 @@ public final class PluginBean implements Serializable {
   @Temporal(TemporalType.TIMESTAMP)
   private Date updateTime;
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "packageChecksum", referencedColumnName = "checksum", nullable = false)
+  @JoinColumn(name = "packageId", referencedColumnName = "id", nullable = false)
   private PluginPackageBean pluginPackage;
   @Transient
   private List<PluginFunction> features;

@@ -2,10 +2,10 @@
 package ren.hankai.cordwood.plugin.support;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
+import ren.hankai.cordwood.plugin.PluginPackage;
 import ren.hankai.cordwood.plugin.api.PluginValidator;
-
-import java.net.URL;
 
 /**
  * 默认插件文件验证器。
@@ -18,11 +18,22 @@ import java.net.URL;
 public class DefaultPluginValidator implements PluginValidator {
 
   @Override
-  public boolean validatePackage(URL jarUrl) {
-    final String protocal = jarUrl.getProtocol().toLowerCase();
-    if (protocal.equals("file")) {
-      return true;
+  public boolean validatePackage(PluginPackage pluginPackage) {
+    if (pluginPackage == null) {
+      return false;
+    } else if (StringUtils.isEmpty(pluginPackage.getGroupId())) {
+      return false;
+    } else if (StringUtils.isEmpty(pluginPackage.getArtifactId())) {
+      return false;
+    } else if (StringUtils.isEmpty(pluginPackage.getVersion())) {
+      return false;
+    } else if (StringUtils.isEmpty(pluginPackage.getIdentifier())) {
+      return false;
+    } else if (StringUtils.isEmpty(pluginPackage.getFileName())) {
+      return false;
+    } else if (StringUtils.isEmpty(pluginPackage.getSourceUrl())) {
+      return false;
     }
-    return false;
+    return true;
   }
 }

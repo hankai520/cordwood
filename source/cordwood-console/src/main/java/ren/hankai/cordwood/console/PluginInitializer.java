@@ -1,9 +1,7 @@
 
 package ren.hankai.cordwood.console;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +15,13 @@ import ren.hankai.cordwood.console.service.PluginService;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.util.LogbackUtil;
 import ren.hankai.cordwood.plugin.Plugin;
+import ren.hankai.cordwood.plugin.PluginPackage;
 import ren.hankai.cordwood.plugin.api.PluginEventEmitter;
 import ren.hankai.cordwood.plugin.api.PluginEventListener;
 import ren.hankai.cordwood.plugin.api.PluginManager;
 import ren.hankai.cordwood.plugin.api.PluginRegistry;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -91,41 +89,14 @@ public class PluginInitializer {
   }
 
   /**
-   * 获取文件 SHA1 校验和。
-   *
-   * @param file 文件
-   * @return 校验和(16进制字符串)
-   * @author hankai
-   * @since Oct 21, 2016 4:25:28 PM
-   */
-  private String getChecksum(File file) {
-    FileInputStream fis = null;
-    try {
-      fis = new FileInputStream(file);
-      return DigestUtils.sha1Hex(fis);
-    } catch (final Exception e) {
-      logger.error(
-          String.format("Failed to calculate checksum of file \"%s\"", file.getAbsolutePath()));
-    } finally {
-      IOUtils.closeQuietly(fis);
-    }
-    return null;
-  }
-
-  /**
    * 安装插件包文件。
    *
    * @param file 文件
-   * @param checksum SHA1 校验和
    * @author hankai
    * @since Oct 21, 2016 4:25:06 PM
    */
-  private void installPlugin(File file, String checksum) {
+  private void installPlugin(File file) {
     try {
-      final PluginPackageBean ppb = pluginService.getInstalledPackage(checksum, file.getName());
-      if (ppb != null) {
-        pluginService.deletePackageByChecksum(ppb.getChecksum());
-      }
       pluginService.installPluginPackage(file.toURI().toURL(), false);
     } catch (final Exception e) {
       logger.error("Failed to install plugin: " + file.getPath(), e);
@@ -133,17 +104,17 @@ public class PluginInitializer {
   }
 
   /**
-   * 在内存中注销插件，然后在数据库中删除插件信息。注意，本方法不会删除插件包物理文件
+   * 在内存中注销插件，然后在数据库中删除插件信息。
    *
    * @param fileName 插件包文件名
    * @author hankai
    * @since Oct 21, 2016 4:24:02 PM
    */
   private void uninstallPlugin(String fileName) {
-    final PluginPackageBean ppb = pluginService.getInstalledPackage(null, fileName);
-    if ((ppb != null) && pluginRegistry.isPackageRegistered(ppb.getChecksum())) {
-      pluginRegistry.unregisterPackage(ppb.getChecksum());
-      pluginService.deletePackageByChecksum(ppb.getChecksum());
+    final PluginPackageBean ppb = pluginService.getInstalledPackageByFileName(fileName);
+    if ((ppb != null) && pluginRegistry.isPackageRegistered(ppb.getId())) {
+      pluginRegistry.unregisterPackage(ppb.getId());
+      pluginService.deletePackageById(ppb.getId());
     }
   }
 
@@ -164,7 +135,7 @@ public class PluginInitializer {
         if (!FilenameUtils.isExtension(pluginFile.getName(), "jar")) {
           continue;
         }
-        installPlugin(pluginFile, getChecksum(pluginFile));
+        installPlugin(pluginFile);
       }
     }
   }
@@ -179,11 +150,12 @@ public class PluginInitializer {
   public void initializeInstalledPlugins() {
     final List<PluginPackageBean> list = pluginService.getInstalledPackages();
     if (list != null) {
-      final List<String> names = new ArrayList<>();
+      final List<PluginPackage> packages = new ArrayList<>();
       for (final PluginPackageBean ppb : list) {
-        names.add(ppb.getFileName());
+        final PluginPackage pp = new PluginPackage(ppb.getInstallationUrl());
+        packages.add(pp);
       }
-      pluginManager.initializePlugins(names);
+      pluginManager.initializePlugins(packages);
     }
     installCopiedPlugins();
     final Iterator<Plugin> it = pluginManager.getPluginIterator();
@@ -244,8 +216,7 @@ public class PluginInitializer {
       final File file = new File(path);
       if (file.exists() && !file.isDirectory()) {
         logger.info("Detected new plugin package: " + file.getName());
-        final String checksum = getChecksum(file);
-        installPlugin(file, checksum);
+        installPlugin(file);
       }
     }
 
@@ -254,7 +225,7 @@ public class PluginInitializer {
       logger.info("Detected deletion of plugin package: " + file.getName());
       if (!file.exists()) {
         final String fileName = FilenameUtils.getName(path);
-        final PluginPackageBean ppb = pluginService.getInstalledPackage(null, fileName);
+        final PluginPackageBean ppb = pluginService.getInstalledPackageByFileName(fileName);
         if (ppb != null) {
           uninstallPlugin(ppb.getFileName());
         }
@@ -266,8 +237,7 @@ public class PluginInitializer {
       logger.info("Detected modification of plugin package: " + file.getName());
       if (file.exists()) {
         uninstallPlugin(file.getName());
-        final String checksum = getChecksum(file);
-        installPlugin(file, checksum);
+        installPlugin(file);
       }
     }
 

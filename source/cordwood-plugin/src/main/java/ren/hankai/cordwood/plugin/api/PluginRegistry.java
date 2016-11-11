@@ -16,7 +16,7 @@ import java.net.URL;
 public interface PluginRegistry {
 
   /**
-   * 注册插件包。根据传入的插件包地址，下载或复制插件包文件到程序插件目录，然后载入插件到内存中。
+   * 注册插件包。必须先将插件包安装到插件目录，然后才能注册。否则插件类加载器指向的地址就是 安装前的地址，这将导致在部分操作系统中，该地址对应的文件无法删除。
    *
    * @param packageUrl 插件包本地路径，即 file://... 这种形式
    * @param overwrite 是否覆盖已有插件包
@@ -30,11 +30,12 @@ public interface PluginRegistry {
    * 注册内存中已有的插件（注册信息不回被持久化）。
    *
    * @param pluginInstance 插件实例
+   * @param overwrite 是否覆盖内存中已注册的同名插件
    * @return 插件信息
    * @author hankai
    * @since Oct 31, 2016 11:27:47 PM
    */
-  Plugin registerTransientPlugin(Object pluginInstance);
+  Plugin registerTransientPlugin(Object pluginInstance, boolean overwrite);
 
   /**
    * 注销插件包。根据传入的插件包注册号，从内存中卸载插件包中所有的插件，然后将插件包文件删除。
@@ -57,7 +58,7 @@ public interface PluginRegistry {
   boolean unregisterTransientPlugin(String pluginName);
 
   /**
-   * 检查插件表是否已注册。
+   * 检查插件包是否已被注册。
    *
    * @param packageId 插件包 SHA1 校验和
    * @return 是否已注册

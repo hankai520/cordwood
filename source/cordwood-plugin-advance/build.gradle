@@ -9,6 +9,8 @@ jar {
     version = mainVersion
     manifest {
         attributes(
+            "Group-Id": "ren.hankai.cordwood",
+            "Artifact-Id": "plugin.advance",
             "Implementation-Version": mainVersion,
             "Plugin-Packages": "ren.hankai.cordwood.plugin.advance",
             "Spring-Config-Class": "ren.hankai.cordwood.plugin.advance.config.PluginBootstrap"

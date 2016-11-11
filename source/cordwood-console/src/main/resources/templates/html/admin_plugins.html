@@ -117,10 +117,6 @@
                                             <dd th:text="${plugin.pluginPackage.fileName}">
                                                 cordwood-plugin-advance-0.0.1.RELEASE.jar
                                             </dd>
-                                            <dt>插件包校验和</dt>
-                                            <dd th:text="${'sha1: ' + plugin.pluginPackage.checksum}">
-                                                sha1: c3db615003fb225432126eaeee0a4c058e8e0c0d
-                                            </dd>
                                         </dl>
                                         <hr/>
                                         <h5>插件功能</h5>
@@ -275,8 +271,9 @@
                 data.append(param, token);
               });
               this.on("success", function(file) {
-                alert('插件上传成功!');
                 $("#uploadPlugin").modal('hide');
+                alert('插件上传成功!');
+                location.reload();
               });
             }
           });

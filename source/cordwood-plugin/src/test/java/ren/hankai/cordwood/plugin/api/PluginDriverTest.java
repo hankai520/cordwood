@@ -40,7 +40,7 @@ public class PluginDriverTest extends PluginTestSupport {
     EasyMock.replay(response);
     final PluginPackage pp = pluginRegistry.registerPackage(testPluginPackageUrl, true);
     final Object obj = pluginDriver.handleRequest("pojo", "sum", request, response);
-    Assert.assertTrue("Hi, the result is: 31".equals(obj));
+    Assert.assertTrue("Hello, the result is: 31".equals(obj));
     EasyMock.verify(request);
     EasyMock.verify(response);
     pluginRegistry.unregisterPackage(pp.getIdentifier());

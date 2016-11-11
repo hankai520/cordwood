@@ -1,7 +1,5 @@
 package ren.hankai.cordwood.plugin.api;
 
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +23,6 @@ public class PluginResolverTest extends PluginTestSupport {
   private PluginResolver pluginResolver;
   @Autowired
   private PluginRegistry pluginRegistry;
-
-  @Test
-  public void testResolvePackage() throws Exception {
-    final String checksum = DigestUtils.sha1Hex(testPluginPackageUrl.openStream());
-    final PluginPackage pp = pluginResolver.resolvePackage(testPluginPackageUrl);
-    final String expName = FilenameUtils.getName(testPluginPackageUrl.getFile());
-    Assert.assertEquals(expName, pp.getFileName());
-    Assert.assertEquals(checksum, pp.getIdentifier());
-    Assert.assertEquals(testPluginPackageUrl, pp.getInstallUrl());
-  }
 
   @Test
   public void testResolvePlugin() throws Exception {

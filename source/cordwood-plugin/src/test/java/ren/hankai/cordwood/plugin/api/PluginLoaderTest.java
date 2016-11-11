@@ -5,7 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import ren.hankai.cordwood.plugin.api.PluginLoader;
+import ren.hankai.cordwood.plugin.PluginPackage;
 import ren.hankai.cordwood.plugin.test.PluginTestSupport;
 
 import java.util.List;
@@ -24,7 +24,8 @@ public class PluginLoaderTest extends PluginTestSupport {
 
   @Test
   public void testLoadPlugins() throws Exception {
-    final List<Object> objs = pluginLoader.loadPlugins(testPluginPackageUrl);
+    final PluginPackage pp = new PluginPackage(testPluginPackageUrl);
+    final List<Object> objs = pluginLoader.loadPlugins(pp);
     Assert.assertNotNull(objs);
     Assert.assertTrue(objs.size() == 1);
     for (final Object instance : objs) {

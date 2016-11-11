@@ -9,6 +9,8 @@ jar {
     version = mainVersion
     manifest {
         attributes(
+            "Group-Id": "ren.hankai.cordwood",
+            "Artifact-Id": "plugin.pojo",
             "Implementation-Version": mainVersion,
             "Plugin-Packages": "ren.hankai.cordwood.plugin"
         )

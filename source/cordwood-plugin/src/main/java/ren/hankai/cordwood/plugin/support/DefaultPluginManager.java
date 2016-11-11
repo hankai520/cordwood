@@ -1,9 +1,6 @@
 
 package ren.hankai.cordwood.plugin.support;
 
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +17,7 @@ import ren.hankai.cordwood.plugin.api.PluginResolver;
 import ren.hankai.cordwood.plugin.api.PluginValidator;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FilenameFilter;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -80,51 +74,62 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
     return false;
   }
 
-  @Override
-  public synchronized PluginPackage registerPackage(URL packageUrl, boolean overwrite) {
-    if (!pluginValidator.validatePackage(packageUrl)) {
-      logger.error(String.format("Failed to verify plugin package at %s", packageUrl.toString()));
+  /**
+   * 注册插件包。
+   *
+   * @param pluginPackage 插件包
+   * @param overwrite 是否覆盖已注册的插件包
+   * @return 注册后的插件包
+   * @author hankai
+   * @since Nov 12, 2016 12:33:25 AM
+   */
+  private PluginPackage registerPackage(PluginPackage pluginPackage, boolean overwrite) {
+    final PluginPackage loadedPack = packages.get(pluginPackage.getIdentifier());
+    if ((loadedPack != null) && !overwrite) {
+      return loadedPack;
+    }
+    if (loadedPack != null) {
+      unregisterPackage(loadedPack.getIdentifier());
+    }
+    final List<Object> instances = pluginLoader.loadPlugins(pluginPackage);
+    if ((instances != null) && !instances.isEmpty()) {
+      for (final Object instance : instances) {
+        final Plugin plugin = pluginResolver.resolvePlugin(instance);
+        pluginPackage.addPlugin(plugin);
+        plugins.put(plugin.getName(), plugin);
+        pluginEventEmitter.emitEvent(PluginEventEmitter.PLUGIN_LOADED, plugin);
+      }
+      packages.put(pluginPackage.getIdentifier(), pluginPackage);
+      logger.info(String.format("Loaded plugin package [ %s ]", pluginPackage.getFileName()));
+      return pluginPackage;
     } else {
-      final PluginPackage pack = pluginResolver.resolvePackage(packageUrl);
-      final PluginPackage loadedPack = packages.get(pack.getIdentifier());
-      if ((loadedPack != null) && !overwrite) {
-        return loadedPack;
-      }
-      if (loadedPack != null) {
-        unregisterPackage(loadedPack.getIdentifier());
-      }
-      final String name = FilenameUtils.getName(packageUrl.getPath());
-      final List<Object> instances = pluginLoader.loadPlugins(packageUrl);
-      if ((instances != null) && !instances.isEmpty()) {
-        final List<Plugin> pluginsToPut = new ArrayList<>();
-        for (final Object instance : instances) {
-          final Plugin plugin = pluginResolver.resolvePlugin(instance);
-          pack.addPlugin(plugin);
-          pluginsToPut.add(plugin);
-        }
-        pack.setInstallUrl(packageUrl);
-        for (final Plugin plugin : pluginsToPut) {
-          plugins.put(plugin.getName(), plugin);
-          pluginEventEmitter.emitEvent(PluginEventEmitter.PLUGIN_LOADED, plugin);
-        }
-        packages.put(pack.getIdentifier(), pack);
-        logger.info(String.format("Loaded plugin package [ %s ]", name));
-        return pack;
-      } else {
-        logger.error(String.format("No plugin definitions found in package \"%s\" !", name));
-      }
+      logger.error(String.format("No plugin definitions found in package [ %s ]",
+          pluginPackage.getFileName()));
     }
     return null;
   }
 
   @Override
-  public Plugin registerTransientPlugin(Object pluginInstance) {
+  public synchronized PluginPackage registerPackage(URL packageUrl, boolean overwrite) {
+    final PluginPackage pluginPackage = new PluginPackage(packageUrl);
+    if (!pluginValidator.validatePackage(pluginPackage)) {
+      logger.error(String.format("Invalid plugin package at %s", packageUrl.toString()));
+      return null;
+    } else {
+      return registerPackage(pluginPackage, overwrite);
+    }
+  }
+
+  @Override
+  public Plugin registerTransientPlugin(Object pluginInstance, boolean overwrite) {
     if (pluginInstance == null) {
       return null;
     }
     final Plugin plugin = pluginResolver.resolvePlugin(pluginInstance);
-    plugins.put(plugin.getName(), plugin);
-    pluginEventEmitter.emitEvent(PluginEventEmitter.PLUGIN_LOADED, plugin);
+    if (overwrite || (plugins.get(plugin.getName()) == null)) {
+      plugins.put(plugin.getName(), plugin);
+      pluginEventEmitter.emitEvent(PluginEventEmitter.PLUGIN_LOADED, plugin);
+    }
     return plugin;
   }
 
@@ -170,32 +175,17 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
   }
 
   @Override
-  public synchronized void initializePlugins(List<String> packageNames) {
+  public synchronized void initializePlugins(List<PluginPackage> installedPackages) {
     final File dir = new File(Preferences.getPluginsDir());
     if (dir.exists() && dir.isDirectory()) {
-      final File[] plugins = dir.listFiles(new FilenameFilter() {
-
-        @Override
-        public boolean accept(File dir, String name) {
-          // TODO: 优化一下，每次都判断是否包含。当插件数量大时，性能会降低
-          return packageNames.contains(name);
-        }
-      });
+      final File[] plugins = dir.listFiles();
       if ((plugins != null) && (plugins.length > 0)) {
         for (final File file : plugins) {
-          FileInputStream fis = null;
-          String checksum = null;
-          try {
-            fis = new FileInputStream(file);
-            checksum = DigestUtils.sha1Hex(fis);
-            if (packages.get(checksum) == null) {
-              registerPackage(file.toURI().toURL(), false);
+          for (final PluginPackage pp : installedPackages) {
+            if (file.getName().equals(pp.getFileName())) {
+              registerPackage(pp, false);
+              break;
             }
-          } catch (final Exception e) {
-            logger.warn(String.format("Failed to register plugin package at url: \"%s\"",
-                file.getAbsolutePath()), e);
-          } finally {
-            IOUtils.closeQuietly(fis);
           }
         }
       }
@@ -216,9 +206,18 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
   public Plugin getPlugin(String pluginName) {
     final Plugin plugin = plugins.get(pluginName);
     if (plugin == null) {
-      logger.error(String.format("Plugin with name \"%s\" not found!", pluginName));
+      logger.debug(String.format("Plugin with name \"%s\" not found!", pluginName));
     }
     return plugin;
+  }
+
+  @Override
+  public PluginPackage getPluginPackage(String identifier) {
+    final PluginPackage pp = packages.get(identifier);
+    if (pp == null) {
+      logger.debug(String.format("Plugin package [ %s ] not found!", identifier));
+    }
+    return pp;
   }
 
   @Override

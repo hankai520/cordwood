@@ -2,6 +2,7 @@
 package ren.hankai.cordwood.plugin.api;
 
 import ren.hankai.cordwood.plugin.Plugin;
+import ren.hankai.cordwood.plugin.PluginPackage;
 
 import java.util.Iterator;
 import java.util.List;
@@ -36,27 +37,37 @@ public interface PluginManager {
   boolean deactivatePlugin(String pluginName);
 
   /**
-   * 获取插件。
+   * 获取插件模型。
    *
    * @param pluginName 插件标识符
-   * @return 插件
+   * @return 插件模型
    * @author hankai
    * @since Sep 30, 2016 10:46:53 AM
    */
   Plugin getPlugin(String pluginName);
 
   /**
+   * 获取插件包模型。
+   *
+   * @param identifier 插件表标识
+   * @return 插件包模型
+   * @author hankai
+   * @since Nov 11, 2016 11:39:30 PM
+   */
+  PluginPackage getPluginPackage(String identifier);
+
+  /**
    * 初始化已安装的插件。
    *
-   * @param packageNames 插件包文件名
+   * @param installedPackages 已登记的插件包集合
    * @author hankai
    * @since Oct 9, 2016 10:56:22 AM
    */
-  void initializePlugins(List<String> packageNames);
+  void initializePlugins(List<PluginPackage> installedPackages);
 
   /**
    * 获取插件迭代器。
-   * 
+   *
    * @return 迭代器
    * @author hankai
    * @since Nov 10, 2016 10:41:26 AM

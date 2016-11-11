@@ -1,8 +1,5 @@
 package ren.hankai.cordwood.plugin.support;
 
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -12,17 +9,13 @@ import org.springframework.util.ReflectionUtils;
 import ren.hankai.cordwood.plugin.FunctionParameter;
 import ren.hankai.cordwood.plugin.Plugin;
 import ren.hankai.cordwood.plugin.PluginFunction;
-import ren.hankai.cordwood.plugin.PluginPackage;
 import ren.hankai.cordwood.plugin.api.Functional;
 import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.api.PluginResolver;
 import ren.hankai.cordwood.plugin.api.Secure;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,25 +56,6 @@ public class DefaultPluginResolver implements PluginResolver {
       function.setCheckInboundParameters(secure.checkParameterIntegrity());
     }
     resolveParameters(function, plugin);
-  }
-
-  @Override
-  public PluginPackage resolvePackage(URL packageUrl) {
-    InputStream is = null;
-    try {
-      final PluginPackage pluginPackage = new PluginPackage();
-      pluginPackage.setFileName(FilenameUtils.getName(packageUrl.getPath()));
-      pluginPackage.setInstallUrl(packageUrl);
-      is = packageUrl.openStream();
-      pluginPackage.setIdentifier(DigestUtils.sha1Hex(is));
-      return pluginPackage;
-    } catch (final IOException e) {
-      logger.error(String.format("Failed to calculate the checksum of package \"%s\"", packageUrl),
-          e);
-    } finally {
-      IOUtils.closeQuietly(is);
-    }
-    return null;
   }
 
   @Override

@@ -2,6 +2,7 @@
 package ren.hankai.cordwood.plugin.test;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.ResourceUtils;
 
 import ren.hankai.cordwood.core.ApplicationInitializer;
@@ -19,6 +21,9 @@ import ren.hankai.cordwood.core.config.CoreSpringConfig;
 import ren.hankai.cordwood.plugin.config.PluginConfig;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 
 /**
@@ -51,7 +56,20 @@ public abstract class PluginTestSupport {
   @Before
   public void setup() throws Exception {
     Assert.assertTrue(ApplicationInitializer.initialize("testSupport.txt"));
-    testPluginPackageUrl = ResourceUtils.getURL("classpath:cordwood-plugin-pojo-0.0.1.RELEASE.jar");
+    final String fileName = "cordwood-plugin-pojo-0.0.1.RELEASE.jar";
+    testPluginPackageUrl = ResourceUtils.getURL("classpath:" + fileName);
+    InputStream input = null;
+    OutputStream output = null;
+    try {
+      input = testPluginPackageUrl.openStream();
+      output = new FileOutputStream(Preferences.getPluginsDir() + File.separator + fileName);
+      FileCopyUtils.copy(input, output);
+    } catch (final Exception e) {
+      throw new RuntimeException(e);
+    } finally {
+      IOUtils.closeQuietly(output);
+      IOUtils.closeQuietly(input);
+    }
   }
 
   /**

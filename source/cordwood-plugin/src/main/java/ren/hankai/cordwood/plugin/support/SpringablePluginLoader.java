@@ -1,7 +1,6 @@
 
 package ren.hankai.cordwood.plugin.support;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -24,11 +23,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.util.SystemPropertyUtils;
 
 import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.plugin.PluginPackage;
 import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.api.PluginLoader;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -36,9 +34,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.jar.Attributes;
-import java.util.jar.JarInputStream;
-import java.util.jar.Manifest;
 
 import javax.annotation.PostConstruct;
 
@@ -74,35 +69,6 @@ public class SpringablePluginLoader implements PluginLoader {
   }
 
   /**
-   * 解析 jar 文件的 manifest。
-   *
-   * @param loader 类加载器
-   * @return manifest 属性
-   * @author hankai
-   * @since Oct 13, 2016 1:15:51 PM
-   */
-  private Attributes parseJarManifest(URLClassLoader loader) {
-    Attributes attrs = null;
-    JarInputStream jarStream = null;
-    URL url = null;
-    try {
-      final URL[] urls = loader.getURLs();
-      if ((urls != null) && (urls.length > 0)) {
-        url = urls[0];
-        final InputStream is = url.openStream();
-        jarStream = new JarInputStream(is);
-        final Manifest manifest = jarStream.getManifest();
-        attrs = manifest.getMainAttributes();
-      }
-    } catch (final IOException e) {
-      logger.error(String.format("Failed to read manifest of plugin at urls: %s", url.toString()));
-    } finally {
-      IOUtils.closeQuietly(jarStream);
-    }
-    return attrs;
-  }
-
-  /**
    * 加载插件包的 spring 上下文。
    *
    * @param attrs 插件包 manifest 属性
@@ -111,44 +77,24 @@ public class SpringablePluginLoader implements PluginLoader {
    * @author hankai
    * @since Oct 13, 2016 1:16:18 PM
    */
-  private AnnotationConfigApplicationContext loadSpringContext(Attributes attrs,
-      URLClassLoader loader) {
-    if ((attrs != null) && !attrs.isEmpty()) {
-      final String bootClassName = attrs.getValue(PluginLoader.PLUGIN_SPRING_CONFIG_CLASS);
-      if (!StringUtils.isEmpty(bootClassName)) {
-        try {
-          final Class<?> bootClass = Class.forName(bootClassName, true, loader);
-          if (bootClass != null) {
-            final AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
-            ctx.setParent(context);
-            ctx.setClassLoader(loader);
-            ctx.register(bootClass);
-            ctx.refresh();
-            return ctx;
-          }
-        } catch (final ClassNotFoundException e) {
-          logger.error("Boot class not found in plugin!");
+  private AnnotationConfigApplicationContext loadSpringContext(PluginPackage pluginPackage) {
+    if (!StringUtils.isEmpty(pluginPackage.getConfigClass())) {
+      try {
+        final Class<?> bootClass =
+            Class.forName(pluginPackage.getConfigClass(), true, pluginPackage.getClassLoader());
+        if (bootClass != null) {
+          final AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+          ctx.setParent(context);
+          ctx.setClassLoader(pluginPackage.getClassLoader());
+          ctx.register(bootClass);
+          ctx.refresh();
+          return ctx;
         }
+      } catch (final ClassNotFoundException e) {
+        logger.error("Plugin config class not found!", e);
       }
     }
     return null;
-  }
-
-  /**
-   * 解析 jar 包中设置的插件基包。
-   *
-   * @param attrs jar 包的 manifest 属性
-   * @return 基包数组
-   * @author hankai
-   * @since Oct 25, 2016 10:24:21 AM
-   */
-  private String[] resolvePluginBasePackages(Attributes attrs) {
-    final String str = attrs.getValue(PluginLoader.PLUGIN_BASE_PACKAGES);
-    if (StringUtils.isEmpty(str)) {
-      throw new RuntimeException("Invalid plugin package: no base packages found in manifest!");
-    }
-    final String[] packages = str.split(",");
-    return packages;
   }
 
   /**
@@ -205,16 +151,12 @@ public class SpringablePluginLoader implements PluginLoader {
    * @author hankai
    * @since Oct 13, 2016 1:16:57 PM
    */
-  private List<Object> loadPluginInstances(URLClassLoader loader) {
+  private List<Object> loadPluginInstances(PluginPackage pluginPackage) {
     final List<Object> instances = new ArrayList<>();
-    // 解析jar包的 MANIFEST.MF 文件中的属性
-    final Attributes attrs = parseJarManifest(loader);
-    // 插件基包
-    final String[] packages = resolvePluginBasePackages(attrs);
     // 尝试根据插件包属性构建 spring 上下文
-    final AnnotationConfigApplicationContext ctx = loadSpringContext(attrs, loader);
+    final AnnotationConfigApplicationContext ctx = loadSpringContext(pluginPackage);
     // 遍历基包来扫描插件
-    for (final String packageName : packages) {
+    for (final String packageName : pluginPackage.getBasePackages()) {
       final List<Object> objs = instantiatePluginClasses(packageName, ctx);
       instances.addAll(objs);
     }
@@ -222,13 +164,14 @@ public class SpringablePluginLoader implements PluginLoader {
   }
 
   @Override
-  public List<Object> loadPlugins(URL jarFileUrl) {
-    final URLClassLoader loader = new URLClassLoader(new URL[] {jarFileUrl}, sharedClassLoader);
+  public List<Object> loadPlugins(PluginPackage pluginPackage) {
+    final URL[] urls = new URL[] {pluginPackage.getInstallationUrl()};
+    pluginPackage.setClassLoader(new URLClassLoader(urls, sharedClassLoader));
     /*
-     * 设置线程的上下文类加载器，这样，由此加载的插件都会使用此类加载器，这样 就能在运行时动态加载需要的依赖包，同时不同插件不共享类加载器，甚至能实现 同一个依赖包的不同版本同时被载入
+     * 设置线程的上下文类加载器，以便在运行时能动态加载插件需要的依赖包，不同插件不共享类加载器。
      */
-    Thread.currentThread().setContextClassLoader(loader);
-    return loadPluginInstances(loader);
+    Thread.currentThread().setContextClassLoader(pluginPackage.getClassLoader());
+    return loadPluginInstances(pluginPackage);
   }
 
   @Override

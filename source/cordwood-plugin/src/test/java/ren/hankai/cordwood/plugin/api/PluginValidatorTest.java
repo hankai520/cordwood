@@ -5,14 +5,12 @@ import org.apache.commons.io.FilenameUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.FileCopyUtils;
 
 import ren.hankai.cordwood.core.Preferences;
-import ren.hankai.cordwood.plugin.api.PluginValidator;
+import ren.hankai.cordwood.plugin.PluginPackage;
 import ren.hankai.cordwood.plugin.test.PluginTestSupport;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.net.URL;
 
 /**
@@ -30,11 +28,9 @@ public class PluginValidatorTest extends PluginTestSupport {
   @Test
   public void testValidatePackage() throws Exception {
     final String fileName = FilenameUtils.getName(testPluginPackageUrl.getPath());
-    final FileOutputStream fos =
-        new FileOutputStream(Preferences.getPluginsDir() + File.separator + fileName);
-    FileCopyUtils.copy(testPluginPackageUrl.openStream(), fos);
     final URL url =
         new File(Preferences.getPluginsDir() + File.separator + fileName).toURI().toURL();
-    Assert.assertTrue(pluginValidator.validatePackage(url));
+    final PluginPackage pp = new PluginPackage(url);
+    Assert.assertTrue(pluginValidator.validatePackage(pp));
   }
 }

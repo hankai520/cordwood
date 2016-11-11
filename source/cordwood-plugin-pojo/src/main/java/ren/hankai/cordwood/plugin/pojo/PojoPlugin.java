@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  * @version 1.0.0
  * @since Sep 30, 2016 3:51:07 PM
  */
-@Pluggable(name = "pojo", version = "1.0.5")
+@Pluggable(name = "pojo", version = "1.0.7")
 public class PojoPlugin implements PluginLifeCycleAware, PluginResourceLoader {
 
   private static final Logger logger = LoggerFactory.getLogger(PojoPlugin.class);
