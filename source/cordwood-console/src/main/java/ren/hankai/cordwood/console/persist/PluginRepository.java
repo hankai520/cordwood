@@ -16,5 +16,6 @@ import ren.hankai.cordwood.console.persist.util.CustomJpaRepository;
  */
 @Transactional
 public interface PluginRepository
-    extends CustomJpaRepository<PluginBean>, JpaRepository<PluginBean, Integer> {
+    extends CustomJpaRepository<PluginBean>, JpaRepository<PluginBean, String> {
+
 }

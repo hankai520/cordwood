@@ -40,7 +40,7 @@ public class PluginManagerTest extends PluginTestSupport {
   @Test
   public void testActivatePlugin() throws Exception {
     final String checksum = DigestUtils.sha1Hex(testPluginPackageUrl.openStream());
-    final PluginPackage pp = pluginRegistry.registerPackage(testPluginPackageUrl);
+    final PluginPackage pp = pluginRegistry.registerPackage(testPluginPackageUrl, true);
     Assert.assertNotNull(pp);
     final String expName = FilenameUtils.getName(testPluginPackageUrl.getFile());
     Assert.assertEquals(expName, pp.getFileName());
@@ -71,9 +71,8 @@ public class PluginManagerTest extends PluginTestSupport {
 
   @Test
   public void testGetPlugin() throws Exception {
-
     final String checksum = DigestUtils.sha1Hex(testPluginPackageUrl.openStream());
-    final PluginPackage pp = pluginRegistry.registerPackage(testPluginPackageUrl);
+    final PluginPackage pp = pluginRegistry.registerPackage(testPluginPackageUrl, true);
     Assert.assertNotNull(pp);
     final String expName = FilenameUtils.getName(testPluginPackageUrl.getFile());
     Assert.assertEquals(expName, pp.getFileName());

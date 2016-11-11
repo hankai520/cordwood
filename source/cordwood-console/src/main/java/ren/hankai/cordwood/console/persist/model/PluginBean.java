@@ -12,8 +12,6 @@ import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -35,13 +33,9 @@ import javax.persistence.Transient;
 public final class PluginBean implements Serializable {
 
   private static final long serialVersionUID = 1L;
+
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "packageId", referencedColumnName = "id", nullable = false)
-  private PluginPackageBean pluginPackage;
-  @Column(length = 45, unique = true)
+  @Column(length = 45)
   private String name;
   @Column(length = 120)
   private String displayName;
@@ -57,26 +51,11 @@ public final class PluginBean implements Serializable {
   private Date createTime;
   @Temporal(TemporalType.TIMESTAMP)
   private Date updateTime;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "packageChecksum", referencedColumnName = "checksum", nullable = false)
+  private PluginPackageBean pluginPackage;
   @Transient
   private List<PluginFunction> features;
-
-  /**
-   * 获取 id 字段的值。
-   *
-   * @return id 字段值
-   */
-  public Integer getId() {
-    return id;
-  }
-
-  /**
-   * 设置 id 字段的值。
-   *
-   * @param id id 字段的值
-   */
-  public void setId(Integer id) {
-    this.id = id;
-  }
 
   /**
    * 获取 pluginPackage 字段的值。

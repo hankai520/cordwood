@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.FileCopyUtils;
 
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.Plugin;
@@ -22,13 +21,9 @@ import ren.hankai.cordwood.plugin.api.PluginValidator;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -85,71 +80,38 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
     return false;
   }
 
-  /**
-   * 将临时插件包文件复制到插件包安装路径，如果插件包已安装过了，则不会覆盖。
-   *
-   * @param tempUrl 临时插件包路径
-   * @return 安装后的本地插件包路径
-   * @author hankai
-   * @since Oct 13, 2016 1:59:07 PM
-   */
-  private URL copyPackage(URL tempUrl) {
-    URL url = null;
-    final String protocal = tempUrl.getProtocol().toLowerCase();
-    if (protocal.equals("file")) {
-      final String name = FilenameUtils.getName(tempUrl.getPath());
-      final String localPath = Preferences.getPluginsDir() + File.separator + name;
-      InputStream is = null;
-      OutputStream os = null;
-      try {
-        final File localFile = new File(localPath);
-        if (!localFile.exists() || localFile.isDirectory()) {
-          is = tempUrl.openStream();
-          os = new FileOutputStream(localFile);
-          FileCopyUtils.copy(is, os);
-        }
-        url = localFile.toURI().toURL();
-      } catch (final MalformedURLException e) {
-        logger.error(
-            String.format("Failed to convert package url to local: %s", tempUrl.toString()), e);
-      } catch (final IOException e) {
-        logger.error(String.format("Failed to copy plugin package file: %s", tempUrl.toString()),
-            e);
-      } finally {
-        IOUtils.closeQuietly(is);
-        IOUtils.closeQuietly(os);
-      }
-    }
-    return url;
-  }
-
   @Override
-  public synchronized PluginPackage registerPackage(URL packageUrl) {
+  public synchronized PluginPackage registerPackage(URL packageUrl, boolean overwrite) {
     if (!pluginValidator.validatePackage(packageUrl)) {
       logger.error(String.format("Failed to verify plugin package at %s", packageUrl.toString()));
     } else {
-      final URL localPath = copyPackage(packageUrl);
-      if (localPath != null) {
-        final PluginPackage pack = pluginResolver.resolvePackage(localPath);
-        final PluginPackage loadedPack = packages.get(pack.getIdentifier());
-        if (loadedPack != null) {
-          unregisterPackage(loadedPack.getIdentifier());
+      final PluginPackage pack = pluginResolver.resolvePackage(packageUrl);
+      final PluginPackage loadedPack = packages.get(pack.getIdentifier());
+      if ((loadedPack != null) && !overwrite) {
+        return loadedPack;
+      }
+      if (loadedPack != null) {
+        unregisterPackage(loadedPack.getIdentifier());
+      }
+      final String name = FilenameUtils.getName(packageUrl.getPath());
+      final List<Object> instances = pluginLoader.loadPlugins(packageUrl);
+      if ((instances != null) && !instances.isEmpty()) {
+        final List<Plugin> pluginsToPut = new ArrayList<>();
+        for (final Object instance : instances) {
+          final Plugin plugin = pluginResolver.resolvePlugin(instance);
+          pack.addPlugin(plugin);
+          pluginsToPut.add(plugin);
         }
-        final String name = FilenameUtils.getName(localPath.getPath());
-        final List<Object> instances = pluginLoader.loadPlugins(localPath);
-        if ((instances != null) && !instances.isEmpty()) {
-          for (final Object instance : instances) {
-            final Plugin plugin = pluginResolver.resolvePlugin(instance);
-            pack.addPlugin(plugin);
-            plugins.put(plugin.getName(), plugin);
-            pluginEventEmitter.emitEvent(PluginEventEmitter.PLUGIN_LOADED, plugin);
-          }
-          packages.put(pack.getIdentifier(), pack);
-          logger.info(String.format("Loaded plugin package %s !", name));
-          return pack;
-        } else {
-          logger.error(String.format("No plugin definitions found in package \"%s\" !", name));
+        pack.setInstallUrl(packageUrl);
+        for (final Plugin plugin : pluginsToPut) {
+          plugins.put(plugin.getName(), plugin);
+          pluginEventEmitter.emitEvent(PluginEventEmitter.PLUGIN_LOADED, plugin);
         }
+        packages.put(pack.getIdentifier(), pack);
+        logger.info(String.format("Loaded plugin package [ %s ]", name));
+        return pack;
+      } else {
+        logger.error(String.format("No plugin definitions found in package \"%s\" !", name));
       }
     }
     return null;
@@ -176,7 +138,7 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
         pluginEventEmitter.emitEvent(PluginEventEmitter.PLUGIN_UNLOADED, p);
       }
       packages.remove(packageId);
-      logger.info(String.format("Unloaded Plugin package %s !", pp.getFileName()));
+      logger.info(String.format("Unloaded Plugin package [ %s ]", pp.getFileName()));
       return true;
     }
     return false;
@@ -227,7 +189,7 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
             fis = new FileInputStream(file);
             checksum = DigestUtils.sha1Hex(fis);
             if (packages.get(checksum) == null) {
-              registerPackage(file.toURI().toURL());
+              registerPackage(file.toURI().toURL(), false);
             }
           } catch (final Exception e) {
             logger.warn(String.format("Failed to register plugin package at url: \"%s\"",

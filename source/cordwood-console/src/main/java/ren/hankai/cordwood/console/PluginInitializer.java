@@ -122,19 +122,11 @@ public class PluginInitializer {
    */
   private void installPlugin(File file, String checksum) {
     try {
-      final PluginPackageBean ppb = pluginService.getPackageByChecksum(checksum);
-      if (ppb == null) {
-        // TODO: 在安装插件时，用插件的文件名作了补充判断，去更新数据库中已有的插件信息，这是否会有潜在风险？
-        final PluginPackageBean possiblePpb = pluginService.getPackageByFileName(file.getName());
-        if (possiblePpb != null) {
-          pluginService.deletePackageById(possiblePpb.getId());
-        }
-        pluginService.installPlugin(file.toURI().toURL());
-      } else if (!file.getName().equals(ppb.getFileName())) {
-        logger.info(String.format(
-            "Found duplicate plugin package: \"%s\" and \"%s\" which have same checksum \"%s\"!",
-            file.getName(), ppb.getFileName(), checksum));
+      final PluginPackageBean ppb = pluginService.getInstalledPackage(checksum, file.getName());
+      if (ppb != null) {
+        pluginService.deletePackageByChecksum(ppb.getChecksum());
       }
+      pluginService.installPluginPackage(file.toURI().toURL(), false);
     } catch (final Exception e) {
       logger.error("Failed to install plugin: " + file.getPath(), e);
     }
@@ -148,10 +140,10 @@ public class PluginInitializer {
    * @since Oct 21, 2016 4:24:02 PM
    */
   private void uninstallPlugin(String fileName) {
-    final PluginPackageBean ppb = pluginService.getPackageByFileName(fileName);
+    final PluginPackageBean ppb = pluginService.getInstalledPackage(null, fileName);
     if ((ppb != null) && pluginRegistry.isPackageRegistered(ppb.getChecksum())) {
       pluginRegistry.unregisterPackage(ppb.getChecksum());
-      pluginService.deletePackageById(ppb.getId());
+      pluginService.deletePackageByChecksum(ppb.getChecksum());
     }
   }
 
@@ -185,7 +177,7 @@ public class PluginInitializer {
    */
   @Scheduled(fixedRate = 1000 * 60, initialDelay = 1000 * 2)
   public void initializeInstalledPlugins() {
-    final List<PluginPackageBean> list = pluginService.getInstalledPluginPackages();
+    final List<PluginPackageBean> list = pluginService.getInstalledPackages();
     if (list != null) {
       final List<String> names = new ArrayList<>();
       for (final PluginPackageBean ppb : list) {
@@ -262,7 +254,7 @@ public class PluginInitializer {
       logger.info("Detected deletion of plugin package: " + file.getName());
       if (!file.exists()) {
         final String fileName = FilenameUtils.getName(path);
-        final PluginPackageBean ppb = pluginService.getPackageByFileName(fileName);
+        final PluginPackageBean ppb = pluginService.getInstalledPackage(null, fileName);
         if (ppb != null) {
           uninstallPlugin(ppb.getFileName());
         }

@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  * @version 1.0.0
  * @since Sep 30, 2016 3:51:07 PM
  */
-@Pluggable(name = "pojo", version = "1.0.0")
+@Pluggable(name = "pojo", version = "1.0.5")
 public class PojoPlugin implements PluginLifeCycleAware, PluginResourceLoader {
 
   private static final Logger logger = LoggerFactory.getLogger(PojoPlugin.class);
@@ -41,7 +41,7 @@ public class PojoPlugin implements PluginLifeCycleAware, PluginResourceLoader {
   public String sum(HttpServletRequest request, HttpServletResponse response) {
     final int op1 = Integer.parseInt(request.getParameter("op1"));
     final int op2 = Integer.parseInt(request.getParameter("op2"));
-    return "Hi, the result is: " + (op1 + op2);
+    return "Hello, the result is: " + (op1 + op2);
   }
 
   /**

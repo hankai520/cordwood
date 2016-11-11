@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ren.hankai.cordwood.plugin.Plugin;
 import ren.hankai.cordwood.plugin.PluginFunction;
 import ren.hankai.cordwood.plugin.PluginPackage;
-import ren.hankai.cordwood.plugin.api.ParameterMapper;
-import ren.hankai.cordwood.plugin.api.PluginRegistry;
 import ren.hankai.cordwood.plugin.test.PluginTestSupport;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +36,7 @@ public class ParameterMapperTest extends PluginTestSupport {
     EasyMock.replay(request);
     final HttpServletResponse response = EasyMock.createNiceMock(HttpServletResponse.class);
     EasyMock.replay(response);
-    final PluginPackage pp = pluginRegistry.registerPackage(testPluginPackageUrl);
+    final PluginPackage pp = pluginRegistry.registerPackage(testPluginPackageUrl, false);
     final Plugin plugin = pp.getPlugins().get(0);
     final PluginFunction fun = plugin.getFunctions().get("sum2");
     final Object[] params = parameterMapper.mapParameters(fun, request, response);

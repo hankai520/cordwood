@@ -5,8 +5,6 @@ import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ren.hankai.cordwood.plugin.pojo.PojoPlugin;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,7 +27,7 @@ public class PojoPluginTest {
     EasyMock.replay(response);
     final PojoPlugin sd = new PojoPlugin();
     final String result = sd.sum(request, response);
-    Assert.assertTrue(result.equals("Hi, the result is: 25"));
+    Assert.assertTrue(result.equals("Hello, the result is: 25"));
     EasyMock.verify(request);
   }
 }

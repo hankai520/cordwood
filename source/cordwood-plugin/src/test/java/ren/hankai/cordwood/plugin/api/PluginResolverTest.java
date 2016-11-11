@@ -10,8 +10,6 @@ import ren.hankai.cordwood.plugin.FunctionParameter;
 import ren.hankai.cordwood.plugin.Plugin;
 import ren.hankai.cordwood.plugin.PluginFunction;
 import ren.hankai.cordwood.plugin.PluginPackage;
-import ren.hankai.cordwood.plugin.api.PluginRegistry;
-import ren.hankai.cordwood.plugin.api.PluginResolver;
 import ren.hankai.cordwood.plugin.test.PluginTestSupport;
 
 /**
@@ -40,7 +38,7 @@ public class PluginResolverTest extends PluginTestSupport {
 
   @Test
   public void testResolvePlugin() throws Exception {
-    final PluginPackage pp = pluginRegistry.registerPackage(testPluginPackageUrl);
+    final PluginPackage pp = pluginRegistry.registerPackage(testPluginPackageUrl, true);
     final Plugin plugin = pp.getPlugins().get(0);
     final Plugin resolvedPlugin = pluginResolver.resolvePlugin(plugin.getInstance());
     Assert.assertEquals(plugin.getName(), resolvedPlugin.getName());

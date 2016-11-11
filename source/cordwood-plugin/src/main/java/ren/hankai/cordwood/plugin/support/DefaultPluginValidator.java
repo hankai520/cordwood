@@ -19,7 +19,10 @@ public class DefaultPluginValidator implements PluginValidator {
 
   @Override
   public boolean validatePackage(URL jarUrl) {
-    // TODO: 未实现
-    return true;
+    final String protocal = jarUrl.getProtocol().toLowerCase();
+    if (protocal.equals("file")) {
+      return true;
+    }
+    return false;
   }
 }

@@ -1,6 +1,7 @@
 
 package ren.hankai.cordwood.console.controller.backend;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +10,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import ren.hankai.cordwood.console.config.Route;
 import ren.hankai.cordwood.console.persist.model.PluginBean;
 import ren.hankai.cordwood.console.service.PluginService;
+import ren.hankai.cordwood.core.Preferences;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,30 +60,69 @@ public class PluginController {
 
   @GetMapping(Route.BG_PLUGINS_ON)
   @ResponseBody
-  public ResponseEntity<String> enablePlugin(@PathVariable("plugin_id") Integer pluginId) {
+  public ResponseEntity<String> enablePlugin(@PathVariable("plugin_name") String pluginName) {
     try {
-      pluginService.disableOrEnablePlugin(pluginId, true);
+      pluginService.disableOrEnablePlugin(pluginName, true);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (final Exception e) {
-      logger.error(String.format("Failed to enable plugin \"%d\".", pluginId), e);
+      logger.error(String.format("Failed to enable plugin \"%d\".", pluginName), e);
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     } catch (final Error e) {
-      logger.error(String.format("Failed to enable plugin \"%d\".", pluginId), e);
+      logger.error(String.format("Failed to enable plugin \"%d\".", pluginName), e);
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @GetMapping(Route.BG_PLUGINS_OFF)
   @ResponseBody
-  public ResponseEntity<String> disablePlugin(@PathVariable("plugin_id") Integer pluginId) {
+  public ResponseEntity<String> disablePlugin(@PathVariable("plugin_name") String pluginName) {
     try {
-      pluginService.disableOrEnablePlugin(pluginId, false);
+      pluginService.disableOrEnablePlugin(pluginName, false);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (final Exception e) {
-      logger.error(String.format("Failed to disable plugin \"%d\".", pluginId), e);
+      logger.error(String.format("Failed to disable plugin \"%d\".", pluginName), e);
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     } catch (final Error e) {
-      logger.error(String.format("Failed to enable plugin \"%d\".", pluginId), e);
+      logger.error(String.format("Failed to enable plugin \"%d\".", pluginName), e);
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @PostMapping(Route.BG_PLUGINS_UPLOAD)
+  @ResponseBody
+  public ResponseEntity<String> uploadPlugins(@RequestParam("files[]") MultipartFile[] files) {
+    try {
+      if ((files != null) && (files.length > 0)) {
+        String tempPath = null;
+        OutputStream output = null;
+        InputStream input = null;
+        final List<File> copiedFiles = new ArrayList<>(files.length);
+        for (final MultipartFile file : files) {
+          try {
+            tempPath = Preferences.getTempDir() + File.separator + file.getOriginalFilename();
+            input = file.getInputStream();
+            output = new FileOutputStream(tempPath);
+            IOUtils.copy(input, output);
+            copiedFiles.add(new File(tempPath));
+          } catch (final Exception e) {
+            throw e;
+          } finally {
+            IOUtils.closeQuietly(output);
+            IOUtils.closeQuietly(input);
+          }
+        }
+        if (copiedFiles.size() > 0) {
+          for (final File file : copiedFiles) {
+            pluginService.installPluginPackage(file.toURI().toURL(), true);
+          }
+        }
+      }
+      return new ResponseEntity<>(HttpStatus.OK);
+    } catch (final Exception e) {
+      logger.error("Failed to upload plugins.", e);
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    } catch (final Error e) {
+      logger.error("Failed to upload plugins.", e);
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
