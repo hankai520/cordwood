@@ -116,6 +116,7 @@ public class PluginService {
             if (ppb == null) {
               ppb = new PluginPackageBean();
             }
+            ppb.setCreateTime(new Date());
             ppb.setFileName(pp.getFileName());
             ppb.setId(pp.getIdentifier());
             ppb.setFileName(pp.getFileName());
@@ -128,7 +129,6 @@ public class PluginService {
               pb.setName(plugin.getName());
               pb.setDisplayName(plugin.getDisplayName());
               pb.setVersion(plugin.getVersion());
-              pb.setCreateTime(new Date());
               ppb.getPlugins().add(pb);
             }
             pluginPackageRepo.save(ppb);
@@ -163,7 +163,18 @@ public class PluginService {
    */
   public List<PluginPackageBean> getInstalledPackages() {
     final Sort sort = new Sort(Direction.DESC, "fileName");
-    return pluginPackageRepo.findAll(sort);
+    final List<PluginPackageBean> list = pluginPackageRepo.findAll(sort);
+    if (list != null) {
+      for (final PluginPackageBean ppb : list) {
+        for (final PluginBean pluginBean : ppb.getPlugins()) {
+          final Plugin plugin = pluginManager.getPlugin(pluginBean.getName());
+          if (plugin != null) {// 为空时可能正在加载
+            pluginBean.setFeatures(new ArrayList<>(plugin.getFunctions().values()));
+          }
+        }
+      }
+    }
+    return list;
   }
 
   /**
@@ -188,28 +199,6 @@ public class PluginService {
   @Transactional
   public void deletePackageById(String id) {
     pluginPackageRepo.delete(id);
-  }
-
-  /**
-   * 获取已安装的插件。
-   *
-   * @return 插件集合
-   * @author hankai
-   * @since Nov 8, 2016 3:28:11 PM
-   */
-  public List<PluginBean> getInstalledPlugins() {
-    final Sort sort = new Sort(Direction.ASC, "name");
-    final List<PluginBean> list = pluginRepo.findAll(sort);
-    if (list != null) {
-      Plugin plugin = null;
-      for (final PluginBean pluginBean : list) {
-        plugin = pluginManager.getPlugin(pluginBean.getName());
-        if (plugin != null) {// 可能正在加载
-          pluginBean.setFeatures(new ArrayList<>(plugin.getFunctions().values()));
-        }
-      }
-    }
-    return list;
   }
 
   /**

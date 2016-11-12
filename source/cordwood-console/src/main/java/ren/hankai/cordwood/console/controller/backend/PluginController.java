@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import ren.hankai.cordwood.console.config.Route;
-import ren.hankai.cordwood.console.persist.model.PluginBean;
+import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
 import ren.hankai.cordwood.console.service.PluginService;
 import ren.hankai.cordwood.core.Preferences;
 
@@ -51,10 +51,10 @@ public class PluginController {
    * @since Nov 8, 2016 10:14:55 AM
    */
   @GetMapping(Route.BG_PLUGINS)
-  public ModelAndView plugins() {
+  public ModelAndView pluginPackages() {
     final ModelAndView mav = new ModelAndView("admin_plugins.html");
-    final List<PluginBean> list = pluginService.getInstalledPlugins();
-    mav.addObject("plugins", list);
+    final List<PluginPackageBean> list = pluginService.getInstalledPackages();
+    mav.addObject("packages", list);
     return mav;
   }
 

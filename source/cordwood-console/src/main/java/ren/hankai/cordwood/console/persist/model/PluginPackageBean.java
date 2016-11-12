@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Cacheable;
@@ -18,6 +19,8 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * 插件包实体。
@@ -36,6 +39,9 @@ public final class PluginPackageBean implements Serializable {
   private String id; // 插件包标识符，e.g. org.example:calculator:1.3.2
   @Column(length = 100, nullable = false, unique = true)
   private String fileName;
+  @Column(nullable = false)
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date createTime;
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pluginPackage")
   private List<PluginBean> plugins = new ArrayList<>();
 
@@ -76,6 +82,24 @@ public final class PluginPackageBean implements Serializable {
   }
 
   /**
+   * 获取 createTime 字段的值。
+   *
+   * @return createTime 字段值
+   */
+  public Date getCreateTime() {
+    return createTime;
+  }
+
+  /**
+   * 设置 createTime 字段的值。
+   *
+   * @param createTime createTime 字段的值
+   */
+  public void setCreateTime(Date createTime) {
+    this.createTime = createTime;
+  }
+
+  /**
    * 获取 plugins 字段的值。
    *
    * @return plugins 字段值
@@ -95,7 +119,7 @@ public final class PluginPackageBean implements Serializable {
 
   /**
    * 获取插件包安装路径。
-   * 
+   *
    * @return 安装路径
    * @author hankai
    * @since Nov 12, 2016 12:36:34 AM

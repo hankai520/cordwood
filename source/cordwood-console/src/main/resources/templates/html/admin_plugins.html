@@ -74,11 +74,11 @@
                             </div>
                             <div class="description">安装、更新、卸载或启用和禁用插件</div>
                         </div>
-                        <div class="row" th:each="plugin : ${plugins}">
+                        <div class="row" th:each="pluginPackage : ${packages}">
                             <div class="col-md-12">
-                                <div th:id="${'plugin-box-'+plugin.name}" class="box border" th:classappend="${plugin.active} ? primary : ''">
+                                <div class="box border primary">
                                     <div class="box-title">
-                                        <h4 th:text="${plugin.displayName}"></h4>
+                                        <h4 th:text="${pluginPackage.id}"></h4>
                                         <div class="pull-right">
                                             <div class="tools">
                                                 <a href="javascript:;" class="collapse">
@@ -88,79 +88,77 @@
                                         </div>
                                     </div>
                                     <div class="box-body">
-                                        <div class="row">
-                                            <div class="col-md-10">
-                                                <p th:text="${plugin.description}">
-                                                    插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息
-                                                    插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息
-                                                    插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息插件介绍信息
-                                                </p>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div th:id="${'pluginSwitch' + plugin.name}" class="make-switch switch-small pull-right"
-                                                    data-on="success" data-off="warning" data-on-label="启用" data-off-label="禁用">
-                                                    <input type="checkbox" th:checked="${plugin.active}" th:value="${plugin.name}" />
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <p>
+                                            <i class="fa fa-plug"></i>
+                                            <span th:text="${pluginPackage.fileName}">插件包文件名</span>
+                                        </p>
+                                        <h6>
+                                            <i class="fa fa-clock-o"></i> 
+                                            <span th:text="${#calendars.format(pluginPackage.createTime,'yyyy-MM-dd HH:mm:ss')}">
+                                                2016-11-08 14:32:20
+                                            </span>
+                                        </h6>
                                         <hr/>
-                                        <dl class="dl-horizontal">
-                                            <dt>插件标识</dt>
-                                            <dd th:text="${plugin.name}">advancePlugin</dd>
-                                            <dt>插件包版本</dt>
-                                            <dd th:text="${plugin.version}">4.3.7</dd>
-                                            <dt>开发者</dt>
-                                            <dd th:text="${plugin.developer}">江苏星网软件有限公司</dd>
-                                            <dt>安装时间</dt>
-                                            <dd th:text="${#calendars.format(plugin.createTime,'yyyy-MM-dd HH:mm:ss')}">2016-11-08 14:32:20</dd>
-                                            <dt>插件所属插件包</dt>
-                                            <dd th:text="${plugin.pluginPackage.fileName}">
-                                                cordwood-plugin-advance-0.0.1.RELEASE.jar
-                                            </dd>
-                                        </dl>
-                                        <hr/>
-                                        <h5>插件功能</h5>
-                                       <div class="panel-group">
-                                            <div class="panel panel-default" th:each="feature : ${plugin.features}">
+                                        <div class="panel-group">
+                                            <div class="panel panel-default" th:each="plugin : ${pluginPackage.plugins}">
                                                 <div class="panel-heading">
                                                     <h3 class="panel-title">
-                                                        <span class="pull-right">
-                                                            <i class="fa fa-eye mr-1" title="启用入参防篡改" th:if="${feature.checkInboundParameters}"></i>
-                                                            <i class="fa fa-lock" title="启用访问授权检查" th:if="${feature.checkAccessToken}"></i>
+                                                        <span th:id="${'pluginSwitch' + plugin.name}" class="make-switch switch-mini pull-right"
+                                                            data-on="success" data-off="warning" data-on-label="启用" data-off-label="禁用">
+                                                            <input type="checkbox" th:checked="${plugin.active}" th:value="${plugin.name}" />
                                                         </span>
                                                         <a class="accordion-toggle"
                                                             data-toggle="collapse"
                                                             href="#collapseOne"
-                                                            th:href="${'#pf' + feature.name}"
-                                                            th:text="${feature.description}"></a>
+                                                            th:href="${'#' + plugin.name}"
+                                                            th:text="${plugin.displayName}"></a>
                                                     </h3>
                                                 </div>
                                                 <div id="collapseOne"
                                                     class="panel-collapse collapse"
-                                                    th:id="${'pf' + feature.name}">
+                                                    th:id="${plugin.name}">
                                                     <div class="panel-body">
+                                                        <p th:text="${plugin.description}">插件简介</p>
                                                         <ul class="list-unstyled">
-                                                            <li th:text="${ '地址：'+#httpServletRequest.scheme+'://'+
-                                                                                    #httpServletRequest.serverName+':'+
-                                                                                    #httpServletRequest.serverPort+
-                                                                                    plugin.getFeatureUrl(feature.name)}">
-                                                                地址：http://...
-                                                            </li>
-                                                            <li th:text="${'响应：' + feature.resultType}">响应：text/html</li>
-                                                            <li>启用入参防篡改：<span th:text="${feature.checkInboundParameters ? '是' : '否'}">是</span></li>
-                                                            <li>启用访问授权检查：<span th:text="${feature.checkAccessToken ? '是' : '否'}">是</span></li>
-                                                            <li>入参：</li>
-                                                            <li>
-                                                                <ul class="list-unstyled" style="text-indent: 20px;">
-                                                                    <li th:each="inputParam : ${feature.parameters}">
-                                                                        <span style="font-weight: bold;" th:text="${inputParam.name}">参数名</span>: 
-                                                                        <span th:text="${inputParam.type.name}">参数类型</span> | 
-                                                                        <span th:text="${inputParam.required ? '必传' : '可选'}">是否必传</span> | 
-                                                                        <span th:text="${inputParam.description}">参数简介</span> | 
-                                                                    </li>
-                                                                </ul>
-                                                            </li>
+                                                            <li><strong>标识：</strong><span th:text="${plugin.name}">XXX</span></li>
+                                                            <li><strong>版本：</strong><span th:text="${plugin.version}">XXX</span></li>
+                                                            <li><strong>开发者：</strong><span th:text="${plugin.developer}">XXX</span></li>
                                                         </ul>
+                                                        <hr/>
+                                                        <div class="well" th:each="feature : ${plugin.features}">
+                                                            <h5><strong th:text="${feature.description}">功能简介</strong></h5>
+                                                            <ul class="list-unstyled">
+                                                                <li class="text-primary" th:text="${#httpServletRequest.scheme+'://'+
+                                                                                        #httpServletRequest.serverName+':'+
+                                                                                        #httpServletRequest.serverPort+
+                                                                                        plugin.getFeatureUrl(feature.name)}">
+                                                                    http://...
+                                                                </li>
+                                                                <li th:text="${'响应：' + feature.resultType}">响应：text/html</li>
+                                                                <li>入参防篡改：
+                                                                    <i class="fa fa-check-circle text-success" 
+                                                                       th:if="${feature.checkInboundParameters}"></i>
+                                                                   <i class="fa fa-times-circle text-warning" 
+                                                                       th:if="${!feature.checkInboundParameters}"></i>
+                                                                <li>访问需授权：
+                                                                    <i class="fa fa-check-circle text-success" 
+                                                                       th:if="${feature.checkAccessToken}"></i>
+                                                                   <i class="fa fa-times-circle text-warning" 
+                                                                       th:if="${!feature.checkAccessToken}"></i>
+                                                                </li>
+                                                                <li>入参：</li>
+                                                                <li>
+                                                                    <ul class="list-unstyled" style="text-indent: 20px;">
+                                                                        <li th:each="inputParam : ${feature.parameters}">
+                                                                            <span style="font-weight: bold;" th:text="${inputParam.name}">参数名</span>: 
+                                                                            <span th:text="${inputParam.type.name}">参数类型</span> | 
+                                                                            <span th:text="${inputParam.required ? '必传' : '可选'}">是否必传</span> | 
+                                                                            <span th:text="${inputParam.description}">参数简介</span>
+                                                                        </li>
+                                                                    </ul>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -220,7 +218,6 @@
         th:src="@{~/cordwood/js/common-init.js}"></script>
     <script type="text/javascript" src="/admin/sidebar.js"></script>
     <script>
-
           jQuery(document).ready(function() {
             loadSidebarItems('plugins');
           });
@@ -234,12 +231,6 @@
             $.get(url, function(data, textStatus, jqXHR) {
               if (jqXHR.status == 200) {
                 $(senderId).bootstrapSwitch('setActive', true);
-                var boxId = '#plugin-box-' + pname;
-                if (enabled) {
-                  $(boxId).addClass('primary');
-                } else {
-                  $(boxId).removeClass('primary');
-                }
               }
             });
           });

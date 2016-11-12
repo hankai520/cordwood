@@ -5,7 +5,6 @@ import ren.hankai.cordwood.plugin.PluginFunction;
 import ren.hankai.cordwood.plugin.api.Pluggable;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Cacheable;
@@ -16,8 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 /**
@@ -46,11 +43,6 @@ public final class PluginBean implements Serializable {
   @Column(length = 100)
   private String developer;
   private boolean isActive;
-  @Column(nullable = false)
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date createTime;
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date updateTime;
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "packageId", referencedColumnName = "id", nullable = false)
   private PluginPackageBean pluginPackage;
@@ -181,42 +173,6 @@ public final class PluginBean implements Serializable {
    */
   public void setActive(boolean isActive) {
     this.isActive = isActive;
-  }
-
-  /**
-   * 获取 createTime 字段的值。
-   *
-   * @return createTime 字段值
-   */
-  public Date getCreateTime() {
-    return createTime;
-  }
-
-  /**
-   * 设置 createTime 字段的值。
-   *
-   * @param createTime createTime 字段的值
-   */
-  public void setCreateTime(Date createTime) {
-    this.createTime = createTime;
-  }
-
-  /**
-   * 获取 updateTime 字段的值。
-   *
-   * @return updateTime 字段值
-   */
-  public Date getUpdateTime() {
-    return updateTime;
-  }
-
-  /**
-   * 设置 updateTime 字段的值。
-   *
-   * @param updateTime updateTime 字段的值
-   */
-  public void setUpdateTime(Date updateTime) {
-    this.updateTime = updateTime;
   }
 
   /**
