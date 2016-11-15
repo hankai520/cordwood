@@ -1,7 +1,7 @@
 package ren.hankai.cordwood.console.controller.backend;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import ren.hankai.cordwood.console.config.Route;
@@ -16,7 +16,7 @@ import ren.hankai.cordwood.console.config.Route;
 @Controller
 public class DashboardController {
 
-  @RequestMapping(Route.BACKGROUND_PREFIX)
+  @GetMapping({Route.BACKGROUND_PREFIX, Route.BG_DASHBOARD})
   public ModelAndView index() {
     return new ModelAndView("admin_dashboard.html");
   }

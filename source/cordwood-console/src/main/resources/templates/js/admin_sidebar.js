@@ -1,4 +1,7 @@
-function loadSidebarItems(selectedItemName, sidebarId='#sidebar-items') {
+function loadSidebarItems(selectedItemName, sidebarId) {
+  if(!sidebarId) {
+    sidebarId = '#sidebar-items';
+  }
   $(sidebarId).empty();
   var itemTemplate = '<li id="##item_name##-item"><a href="##item_href##"><i class="##item_icon##"></i> <span class="menu-text">##item_text##</span></a></li>';
   var visibleItems = JSON.parse('[# th:utext="${visibleItems}" /]');
@@ -10,7 +13,7 @@ function loadSidebarItems(selectedItemName, sidebarId='#sidebar-items') {
                            .replace('##item_text##', item.displayText);
     $(sidebarId).append(html);
     if(item.name == selectedItemName) {
-      $(item.name).addClass('active');
+      $('#'+item.name+'-item').addClass('active');
     }
   }
 }

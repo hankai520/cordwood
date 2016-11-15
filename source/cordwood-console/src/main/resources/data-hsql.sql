@@ -10,15 +10,15 @@ MERGE INTO PUBLIC.USERS t
   AS vals(c1,c2,c3,c4,c5,c6,c7) ON t.id = vals.c1
 WHEN NOT MATCHED THEN
     INSERT (ID,LOGINID,NAME,PASSWORD,STATUS,ROLE,CREATETIME) 
-    VALUES (vals.c1,vals.c2,vals.c3,vals.c4,vals.c5,vals.c6,vals.c7);
+    VALUES (vals.c1,trim(vals.c2),trim(vals.c3),trim(vals.c4),vals.c5,vals.c6,trim(vals.c7));
 
 -- 內建的角色
 MERGE INTO PUBLIC.ROLES t
   USING ( VALUES (1, 'ROLE_ADMIN'), (2, 'ROLE_CONFIG') )
-  AS vals(c1, c2) ON t.NAME = vals.c2
+  AS vals(c1, c2) ON t.NAME = trim(vals.c2)
 WHEN NOT MATCHED THEN
     INSERT (ID, NAME) 
-    VALUES (vals.c1, vals.c2);
+    VALUES (vals.c1, trim(vals.c2));
     
 -- 内建的菜单项
 MERGE INTO PUBLIC.SIDEBAR_ITEMS t
@@ -27,10 +27,10 @@ MERGE INTO PUBLIC.SIDEBAR_ITEMS t
             (2,'插件管理','fa fa-plug fa-fw','plugins',2,'/admin/plugins',null),
             (3,'用户管理','fa fa-user-circle-o fa-fw','users',3, '/admin/users',null),
             (4,'权限管理','fa fa-key fa-fw','privileges',4,'/admin/privileges',null))
-  AS vals(c1,c2,c3,c4,c5,c6,c7) ON t.URL = vals.c6
+  AS vals(c1,c2,c3,c4,c5,c6,c7) ON t.URL = trim(vals.c6)
 WHEN NOT MATCHED THEN
     INSERT (ID,DISPLAYTEXT,ICONCLASSES,NAME,SINK,URL,PARENTID) 
-    VALUES (vals.c1,vals.c2,vals.c3,vals.c4,vals.c5,vals.c6,vals.c7);
+    VALUES (vals.c1,trim(vals.c2),trim(vals.c3),trim(vals.c4),vals.c5,trim(vals.c6),trim(vals.c7));
 
 -- 向內建用户授权
 MERGE INTO PUBLIC.USERS_ROLES t
