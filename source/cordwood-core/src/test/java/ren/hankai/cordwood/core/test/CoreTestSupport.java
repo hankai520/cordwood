@@ -30,18 +30,28 @@ import java.io.File;
 @ComponentScan(basePackages = {"ren.hankai"})
 public abstract class CoreTestSupport {
 
+  static {
+    System.setProperty(Preferences.ENV_APP_HOME_DIR, "./test-home");
+    Assert.assertTrue(ApplicationInitializer.initialize("testSupport.txt", "ehcache.xml"));
+    Runtime.getRuntime().addShutdownHook(new Thread() {
+      @Override
+      public void run() {
+        try {
+          FileUtils.deleteDirectory(new File(Preferences.getHomeDir()));
+        } catch (final Exception e) {
+          e.printStackTrace();
+        }
+      }
+    });
+  }
+
   @Before
   public void setup() throws Exception {
-    System.setProperty(Preferences.ENV_APP_HOME_DIR, "./test-home");
-    Assert.assertTrue(ApplicationInitializer.initialize("testSupport.txt"));
+
   }
 
   @After
   public void teardown() {
-    try {
-      FileUtils.deleteDirectory(new File(Preferences.getHomeDir()));
-    } catch (final Exception e) {
-      e.printStackTrace();
-    }
+
   }
 }

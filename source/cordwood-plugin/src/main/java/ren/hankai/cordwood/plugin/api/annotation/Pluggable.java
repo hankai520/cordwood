@@ -1,5 +1,5 @@
 
-package ren.hankai.cordwood.plugin.api;
+package ren.hankai.cordwood.plugin.api.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

@@ -69,6 +69,7 @@ public final class PluginPackage {
     if (StringUtils.isEmpty(basePackages)) {
       throw new RuntimeException("Invalid plugin package: no base packages specified in manifest!");
     }
+    configClass = attributes.getValue(PluginLoader.PLUGIN_SPRING_CONFIG_CLASS);
     this.basePackages = basePackages.split(",");
   }
 

@@ -44,6 +44,17 @@ public abstract class PluginTestSupport {
 
   static {
     System.setProperty(Preferences.ENV_APP_HOME_DIR, "./test-home");
+    Assert.assertTrue(ApplicationInitializer.initialize("ehcache.xml"));
+    Runtime.getRuntime().addShutdownHook(new Thread() {
+      @Override
+      public void run() {
+        try {
+          FileUtils.deleteDirectory(new File(Preferences.getHomeDir()));
+        } catch (final Exception e) {
+          e.printStackTrace();
+        }
+      }
+    });
   }
 
   /**
@@ -55,15 +66,17 @@ public abstract class PluginTestSupport {
    */
   @Before
   public void setup() throws Exception {
-    Assert.assertTrue(ApplicationInitializer.initialize("testSupport.txt"));
     final String fileName = "cordwood-plugin-pojo-0.0.1.RELEASE.jar";
     testPluginPackageUrl = ResourceUtils.getURL("classpath:" + fileName);
     InputStream input = null;
     OutputStream output = null;
     try {
       input = testPluginPackageUrl.openStream();
-      output = new FileOutputStream(Preferences.getPluginsDir() + File.separator + fileName);
-      FileCopyUtils.copy(input, output);
+      final File file = new File(Preferences.getPluginsDir() + File.separator + fileName);
+      if (!file.exists()) {
+        output = new FileOutputStream(file);
+        FileCopyUtils.copy(input, output);
+      }
     } catch (final Exception e) {
       throw new RuntimeException(e);
     } finally {
@@ -81,10 +94,6 @@ public abstract class PluginTestSupport {
    */
   @After
   public void teardown() {
-    try {
-      FileUtils.deleteDirectory(new File(Preferences.getHomeDir()));
-    } catch (final Exception e) {
-      e.printStackTrace();
-    }
+
   }
 }

@@ -146,6 +146,12 @@
                                                                    <i class="fa fa-times-circle text-warning" 
                                                                        th:if="${!feature.checkAccessToken}"></i>
                                                                 </li>
+                                                                <li>已启用缓存：
+                                                                    <i class="fa fa-check-circle text-success" 
+                                                                       th:if="${feature.cacheable}"></i>
+                                                                   <i class="fa fa-times-circle text-warning" 
+                                                                       th:if="${!feature.cacheable}"></i>
+                                                                </li>
                                                                 <li>入参：</li>
                                                                 <li>
                                                                     <ul class="list-unstyled" style="text-indent: 20px;">

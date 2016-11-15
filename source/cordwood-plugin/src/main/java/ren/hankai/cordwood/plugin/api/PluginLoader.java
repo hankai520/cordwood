@@ -33,7 +33,7 @@ public interface PluginLoader {
    * 插件基包。例如：所有插件都在 com.example.demo 包中，则基包为 com.example.demo、或 com.example 或 com。多个基包用逗号分隔。
    * 插件加载器会扫描这些包中的所有类，并加载含有 Pluggable 注解的类。
    *
-   * @see ren.hankai.cordwood.plugin.api.Pluggable
+   * @see ren.hankai.cordwood.plugin.api.annotation.Pluggable
    */
   public static final String PLUGIN_BASE_PACKAGES = "Plugin-Packages";
   /**

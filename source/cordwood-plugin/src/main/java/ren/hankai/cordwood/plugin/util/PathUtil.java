@@ -1,10 +1,10 @@
 
 package ren.hankai.cordwood.plugin.util;
 
-import ren.hankai.cordwood.plugin.api.Pluggable;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

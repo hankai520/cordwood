@@ -39,10 +39,13 @@ public final class RuntimeVariables {
       try {
         final DefaultPropertiesPersister dpp = new DefaultPropertiesPersister();
         final Properties props = new Properties();
-        dpp.load(props, new FileReader(getVariablesFile()));
-        final Set<String> keyset = props.stringPropertyNames();
-        for (final String key : keyset) {
-          variables.put(key, props.getProperty(key));
+        final File file = getVariablesFile();
+        if (file.exists()) {
+          dpp.load(props, new FileReader(file));
+          final Set<String> keyset = props.stringPropertyNames();
+          for (final String key : keyset) {
+            variables.put(key, props.getProperty(key));
+          }
         }
       } catch (final FileNotFoundException e) {
         logger.error(String.format("Runtime variables file \"%s\" not found!", savePath), e);

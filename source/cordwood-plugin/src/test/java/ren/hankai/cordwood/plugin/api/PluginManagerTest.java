@@ -11,6 +11,7 @@ import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.Plugin;
 import ren.hankai.cordwood.plugin.PluginFunction;
 import ren.hankai.cordwood.plugin.PluginPackage;
+import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 import ren.hankai.cordwood.plugin.test.PluginTestSupport;
 
 import java.io.File;

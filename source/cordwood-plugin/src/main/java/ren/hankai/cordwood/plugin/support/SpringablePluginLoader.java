@@ -3,12 +3,18 @@ package ren.hankai.cordwood.plugin.support;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.support.GenericBeanDefinition;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -24,9 +30,10 @@ import org.springframework.util.SystemPropertyUtils;
 
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.PluginPackage;
-import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.api.PluginLoader;
+import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 
+import java.beans.Introspector;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -49,7 +56,7 @@ public class SpringablePluginLoader implements PluginLoader {
 
   private static final Logger logger = LoggerFactory.getLogger(SpringablePluginLoader.class);
   @Autowired
-  private ApplicationContext context;
+  private AbstractApplicationContext context;
   private final Map<String, GenericApplicationContext> plugins = new HashMap<>();
   /**
    * 共享的类加载器，用于加载插件所依赖的包。
@@ -78,23 +85,27 @@ public class SpringablePluginLoader implements PluginLoader {
    * @since Oct 13, 2016 1:16:18 PM
    */
   private AnnotationConfigApplicationContext loadSpringContext(PluginPackage pluginPackage) {
+    final AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+    ctx.setParent(context);
+    ctx.setClassLoader(pluginPackage.getClassLoader());
+    final List<Class<?>> configClasses = new ArrayList<>();
     if (!StringUtils.isEmpty(pluginPackage.getConfigClass())) {
       try {
         final Class<?> bootClass =
             Class.forName(pluginPackage.getConfigClass(), true, pluginPackage.getClassLoader());
         if (bootClass != null) {
-          final AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
-          ctx.setParent(context);
-          ctx.setClassLoader(pluginPackage.getClassLoader());
-          ctx.register(bootClass);
-          ctx.refresh();
-          return ctx;
+          configClasses.add(bootClass);
         }
       } catch (final ClassNotFoundException e) {
         logger.error("Plugin config class not found!", e);
       }
     }
-    return null;
+    configClasses.add(PluginCacheConfig.class);
+    final Class<?>[] classes = new Class<?>[configClasses.size()];
+    configClasses.toArray(classes);
+    ctx.register(classes);
+    ctx.refresh();
+    return ctx;
   }
 
   /**
@@ -122,14 +133,19 @@ public class SpringablePluginLoader implements PluginLoader {
           final Class<?> clazz = cl.loadClass(metadataReader.getClassMetadata().getClassName());
           final Pluggable pluggable = clazz.getAnnotation(Pluggable.class);
           if ((pluggable != null) && (Modifier.PUBLIC == clazz.getModifiers())) {
-            Object obj = (ctx != null) ? ctx.getBean(clazz) : null;
+            String beanName = ClassUtils.getShortName(clazz.getName());
+            beanName = Introspector.decapitalize(beanName);
+            if (!ctx.containsBeanDefinition(beanName)) {
+              final GenericBeanDefinition gb = new GenericBeanDefinition();
+              gb.setBeanClass(clazz);
+              gb.setAutowireCandidate(true);
+              gb.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
+              ctx.registerBeanDefinition(beanName, gb);
+            }
+            final Object obj = ctx.getBean(beanName);
             if (obj == null) {
-              if (ctx != null) {
-                logger.debug(String.format(
-                    "No bean with type \"%s\" was found. Will try to instantiate it directly.",
-                    clazz.toString()));
-              }
-              obj = clazz.newInstance();// 非spring的插件包，通过反射直接构造插件实例
+              logger.error(
+                  String.format("Could not instantiate plugin class \"%s\"", clazz.getName()));
             }
             plugins.put(pluggable.name(), ctx);
             instances.add(obj);
@@ -138,7 +154,7 @@ public class SpringablePluginLoader implements PluginLoader {
       }
     } catch (final Exception e) {
       throw new RuntimeException(
-          "Failed to instantiate plugin in base package \"%s\"" + basePackage, e);
+          String.format("Failed to instantiate plugin in base package \"%s\"", basePackage), e);
     }
     return instances;
   }
@@ -176,7 +192,8 @@ public class SpringablePluginLoader implements PluginLoader {
 
   @Override
   public boolean unloadPlugin(Object instance) {
-    final Pluggable pluggable = instance.getClass().getAnnotation(Pluggable.class);
+    final Class<?> targetClass = AopUtils.getTargetClass(instance);
+    final Pluggable pluggable = targetClass.getAnnotation(Pluggable.class);
     final GenericApplicationContext ctx = plugins.get(pluggable.name());
     if (ctx == null) {
       return true;
@@ -184,7 +201,7 @@ public class SpringablePluginLoader implements PluginLoader {
     try {
       plugins.remove(pluggable.name());
       final BeanDefinitionRegistry registry = ctx;
-      final String[] names = ctx.getBeanNamesForType(instance.getClass());
+      final String[] names = ctx.getBeanNamesForType(targetClass);
       if ((names != null) && (names.length > 0)) {
         for (final String beanName : names) {
           registry.removeBeanDefinition(beanName);
@@ -201,5 +218,10 @@ public class SpringablePluginLoader implements PluginLoader {
       logger.warn("Failed to remove plugin bean from spring context!", e);
     }
     return false;
+  }
+
+  @EnableCaching(mode = AdviceMode.ASPECTJ)
+  @EnableAspectJAutoProxy(proxyTargetClass = true)
+  public static class PluginCacheConfig {
   }
 }

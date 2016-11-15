@@ -73,7 +73,7 @@ public class PluginInitializer {
 
       @Override
       public void handleEvent(Plugin plugin, String eventType) {
-        final String clazz = plugin.getInstance().getClass().getName();
+        final String clazz = plugin.getInstanceClass().getName();
         LogbackUtil.setupFileLoggerFor(clazz, Level.WARN, plugin.getName() + ".txt");
       }
     });

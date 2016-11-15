@@ -2,7 +2,7 @@
 package ren.hankai.cordwood.console.persist.model;
 
 import ren.hankai.cordwood.plugin.PluginFunction;
-import ren.hankai.cordwood.plugin.api.Pluggable;
+import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 
 import java.io.Serializable;
 import java.util.List;

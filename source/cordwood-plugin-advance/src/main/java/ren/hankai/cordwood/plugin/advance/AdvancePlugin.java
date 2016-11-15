@@ -16,12 +16,13 @@ import org.springframework.stereotype.Component;
 import ren.hankai.cordwood.plugin.advance.model.MyTbl1;
 import ren.hankai.cordwood.plugin.advance.persist.MyTbl1Repository;
 import ren.hankai.cordwood.plugin.advance.util.MyLogChute;
-import ren.hankai.cordwood.plugin.api.Functional;
-import ren.hankai.cordwood.plugin.api.Optional;
-import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
 import ren.hankai.cordwood.plugin.api.PluginResourceLoader;
-import ren.hankai.cordwood.plugin.api.Secure;
+import ren.hankai.cordwood.plugin.api.annotation.Functional;
+import ren.hankai.cordwood.plugin.api.annotation.LightWeight;
+import ren.hankai.cordwood.plugin.api.annotation.Optional;
+import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
+import ren.hankai.cordwood.plugin.api.annotation.Secure;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -99,8 +100,10 @@ public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader
    * @author hankai
    * @since Nov 8, 2016 5:30:30 PM
    */
+  @LightWeight
   @Functional(name = "subtract", resultType = "text/plain")
   public String subtract(Integer op1, Integer op2) {
+    logger.error("Not from cache");
     return (op1 - op2) + "";
   }
 

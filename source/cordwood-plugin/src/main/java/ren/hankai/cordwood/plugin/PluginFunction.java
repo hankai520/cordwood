@@ -3,7 +3,10 @@ package ren.hankai.cordwood.plugin;
 
 import org.springframework.util.StringUtils;
 
-import ren.hankai.cordwood.plugin.api.Functional;
+import ren.hankai.cordwood.plugin.api.annotation.Functional;
+import ren.hankai.cordwood.plugin.api.annotation.HeavyWeight;
+import ren.hankai.cordwood.plugin.api.annotation.LightWeight;
+import ren.hankai.cordwood.plugin.api.annotation.MiddleWeight;
 
 import java.lang.reflect.Method;
 
@@ -13,7 +16,7 @@ import java.lang.reflect.Method;
  * @author hankai
  * @version 1.0.0
  * @since Sep 30, 2016 1:41:55 PM
- * @see ren.hankai.cordwood.plugin.api.Functional
+ * @see ren.hankai.cordwood.plugin.api.annotation.Functional
  */
 public final class PluginFunction {
 
@@ -21,6 +24,7 @@ public final class PluginFunction {
   private String description;
   private Method method;
   private String resultType;
+  private boolean cacheable = false;
   private boolean checkInboundParameters = false;
   private boolean checkAccessToken = false;
   private FunctionParameter[] parameters;
@@ -29,7 +33,7 @@ public final class PluginFunction {
 
   /**
    * 构造插件功能模型。
-   * 
+   *
    * @param owner 所属插件
    * @param functional 功能元数据
    * @param method 功能对应方法
@@ -39,6 +43,12 @@ public final class PluginFunction {
       name = functional.name();
     } else {
       name = method.getName();
+    }
+    resultType = functional.resultType();
+    if ((method.getAnnotation(LightWeight.class) != null)
+        || (method.getAnnotation(MiddleWeight.class) != null)
+        || (method.getAnnotation(HeavyWeight.class) != null)) {
+      cacheable = true;
     }
     final String code =
         String.format("%s.%s.%s", owner.getName(), name, Functional.FUNCTION_DESCRIPTION_I18N_KEY);
@@ -127,6 +137,24 @@ public final class PluginFunction {
    */
   public void setResultType(String resultType) {
     this.resultType = resultType;
+  }
+
+  /**
+   * 获取 cacheable 字段的值。
+   *
+   * @return cacheable 字段值
+   */
+  public boolean isCacheable() {
+    return cacheable;
+  }
+
+  /**
+   * 设置 cacheable 字段的值。
+   *
+   * @param cacheable cacheable 字段的值
+   */
+  public void setCacheable(boolean cacheable) {
+    this.cacheable = cacheable;
   }
 
   /**

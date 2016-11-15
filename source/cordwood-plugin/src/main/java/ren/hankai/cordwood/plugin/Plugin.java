@@ -1,10 +1,11 @@
 
 package ren.hankai.cordwood.plugin;
 
+import org.springframework.aop.support.AopUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
-import ren.hankai.cordwood.plugin.api.Pluggable;
+import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +16,7 @@ import java.util.Map;
  * @author hankai
  * @version 1.0.0
  * @since Sep 30, 2016 11:04:40 AM
- * @see ren.hankai.cordwood.plugin.api.Pluggable
+ * @see ren.hankai.cordwood.plugin.api.annotation.Pluggable
  */
 public final class Plugin {
 
@@ -29,6 +30,7 @@ public final class Plugin {
   private String developer;
   private boolean isActive;
   private Object instance;
+  private Class<?> instanceClass;
   private Map<String, PluginFunction> functions = new HashMap<>();
   private MessageSource messageSource;
 
@@ -36,14 +38,15 @@ public final class Plugin {
 
   /**
    * 构造插件模型。
-   * 
+   *
    * @param name 插件唯一限定名
    * @param pluginInstance 插件实例
    */
   public Plugin(String name, Object pluginInstance) {
     final ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
     ms.setDefaultEncoding("UTF-8");
-    String path = pluginInstance.getClass().getPackage().getName();
+    instanceClass = AopUtils.getTargetClass(pluginInstance);
+    String path = instanceClass.getPackage().getName();
     path = path.replaceAll("\\.", "/");
     final String baseName = String.format("classpath:%s/%s", path, name);
     ms.setBasename(baseName);
@@ -203,6 +206,15 @@ public final class Plugin {
   }
 
   /**
+   * 获取 instanceClass 字段的值。
+   *
+   * @return instanceClass 字段值
+   */
+  public Class<?> getInstanceClass() {
+    return instanceClass;
+  }
+
+  /**
    * 获取插件功能集合。
    *
    * @return 插件功能
@@ -242,7 +254,7 @@ public final class Plugin {
     sb.append(String.format("    Description: %s\n", description));
     sb.append(String.format("    Developer: %s\n", developer));
     sb.append(String.format("    Is active? %s\n", isActive));
-    sb.append(String.format("    Instance: %s\n", instance.getClass().getName()));
+    sb.append(String.format("    Instance: %s\n", AopUtils.getTargetClass(instance).getName()));
     sb.append(String.format("    Functions: %s\n", functions.toString()));
     return sb.toString();
   }

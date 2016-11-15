@@ -27,5 +27,4 @@ public class PluginConfig {
   public ConversionService getConversionService() {
     return new DefaultConversionService();
   }
-
 }

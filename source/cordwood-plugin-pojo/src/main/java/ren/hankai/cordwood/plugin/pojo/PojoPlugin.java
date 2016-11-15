@@ -4,17 +4,15 @@ package ren.hankai.cordwood.plugin.pojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ren.hankai.cordwood.plugin.api.Functional;
-import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
 import ren.hankai.cordwood.plugin.api.PluginResourceLoader;
+import ren.hankai.cordwood.plugin.api.annotation.Functional;
+import ren.hankai.cordwood.plugin.api.annotation.LightWeight;
+import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * 示例插件。
@@ -23,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  * @version 1.0.0
  * @since Sep 30, 2016 3:51:07 PM
  */
-@Pluggable(name = "pojo", version = "1.0.7")
+@Pluggable(name = "pojo", version = "1.0.5")
 public class PojoPlugin implements PluginLifeCycleAware, PluginResourceLoader {
 
   private static final Logger logger = LoggerFactory.getLogger(PojoPlugin.class);
@@ -38,9 +36,8 @@ public class PojoPlugin implements PluginLifeCycleAware, PluginResourceLoader {
    * @since Oct 25, 2016 2:18:22 PM
    */
   @Functional(name = "sum", resultType = "text/plain")
-  public String sum(HttpServletRequest request, HttpServletResponse response) {
-    final int op1 = Integer.parseInt(request.getParameter("op1"));
-    final int op2 = Integer.parseInt(request.getParameter("op2"));
+  public String sum(Integer op1, Integer op2) {
+    logger.error("Not from cache");
     return "Hello, the result is: " + (op1 + op2);
   }
 
@@ -53,8 +50,10 @@ public class PojoPlugin implements PluginLifeCycleAware, PluginResourceLoader {
    * @author hankai
    * @since Oct 29, 2016 1:05:04 AM
    */
+  @LightWeight
   @Functional(name = "sum2", resultType = "text/plain")
   public String sum2(Integer op1, Integer op2) {
+    logger.error("Not from cache");
     return "Hi, the result is: " + (op1 + op2);
   }
 

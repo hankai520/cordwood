@@ -1,5 +1,5 @@
 
-package ren.hankai.cordwood.plugin.api;
+package ren.hankai.cordwood.plugin.api.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * @author hankai
  * @version 1.0.0
  * @since Sep 30, 2016 1:44:55 PM
- * @see ren.hankai.cordwood.plugin.api.Pluggable
+ * @see ren.hankai.cordwood.plugin.api.annotation.Pluggable
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

@@ -2,6 +2,7 @@ package ren.hankai.cordwood.plugin.support;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
@@ -9,10 +10,10 @@ import org.springframework.util.ReflectionUtils;
 import ren.hankai.cordwood.plugin.FunctionParameter;
 import ren.hankai.cordwood.plugin.Plugin;
 import ren.hankai.cordwood.plugin.PluginFunction;
-import ren.hankai.cordwood.plugin.api.Functional;
-import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.api.PluginResolver;
-import ren.hankai.cordwood.plugin.api.Secure;
+import ren.hankai.cordwood.plugin.api.annotation.Functional;
+import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
+import ren.hankai.cordwood.plugin.api.annotation.Secure;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -46,7 +47,6 @@ public class DefaultPluginResolver implements PluginResolver {
   private void resolvePluginFunction(Plugin plugin, Secure pluginSecure, Functional functional,
       Method method) {
     final PluginFunction function = new PluginFunction(plugin, functional, method);
-    function.setResultType(functional.resultType());
     Secure secure = AnnotationUtils.getAnnotation(method, Secure.class);
     if (secure == null) {
       secure = pluginSecure;
@@ -60,7 +60,7 @@ public class DefaultPluginResolver implements PluginResolver {
 
   @Override
   public Plugin resolvePlugin(Object pluginInstance) {
-    final Class<?> clazz = pluginInstance.getClass();
+    final Class<?> clazz = AopUtils.getTargetClass(pluginInstance);
     final Pluggable pluggable = clazz.getAnnotation(Pluggable.class);
     final Plugin plugin = new Plugin(pluggable.name(), pluginInstance);
     plugin.setVersion(pluggable.version());

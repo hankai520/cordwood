@@ -30,10 +30,12 @@ sourceSets {
 
 dependencies {
     compile "javax.servlet:javax.servlet-api:3.1.0"
-    compile "org.springframework:spring-core:4.3.3.RELEASE"
+    compile "org.springframework:spring-core:${springVersion}"
     compile "commons-lang:commons-lang:2.6"
-    
+    compile "net.sf.ehcache:ehcache:2.10.3"
     compile project(":cordwood-core")
     
+    compile "org.springframework:spring-context-support:${springVersion}"
+    testCompile "org.springframework:spring-aspects:${springVersion}"
     testCompile "org.springframework:spring-test:${springVersion}"
 }

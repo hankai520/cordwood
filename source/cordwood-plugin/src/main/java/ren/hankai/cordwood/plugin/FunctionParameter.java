@@ -1,7 +1,7 @@
 
 package ren.hankai.cordwood.plugin;
 
-import ren.hankai.cordwood.plugin.api.Optional;
+import ren.hankai.cordwood.plugin.api.annotation.Optional;
 
 import java.lang.reflect.Parameter;
 

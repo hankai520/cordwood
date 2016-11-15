@@ -2,9 +2,17 @@ package ren.hankai.cordwood.core.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
+import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+
+import net.sf.ehcache.CacheManager;
+import ren.hankai.cordwood.core.Preferences;
 
 /**
  * Spring 核心配置类，用于定义 cordwood-core 所必要的组件。
@@ -14,6 +22,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
  * @since Oct 28, 2016 4:42:14 PM
  */
 @ComponentScan(basePackages = {"ren.hankai.cordwood"})
+@EnableCaching
 public class CoreSpringConfig {
 
   /**
@@ -45,6 +54,23 @@ public class CoreSpringConfig {
     ms.setFallbackToSystemLocale(false);
     ms.setUseCodeAsDefaultMessage(true);
     return ms;
+  }
+
+  @Bean
+  public EhCacheManagerFactoryBean cacheManagerFactoryBean() {
+    final EhCacheManagerFactoryBean bean = new EhCacheManagerFactoryBean();
+    final String path = Preferences.getConfigFilePath("ehcache.xml");
+    final Resource resource = new FileSystemResource(path);
+    bean.setConfigLocation(resource);
+    return bean;
+  }
+
+  @Bean
+  public EhCacheCacheManager cacheCacheManager(EhCacheManagerFactoryBean factory) {
+    final EhCacheCacheManager cm = new EhCacheCacheManager(factory.getObject());
+    // 随 JVM 一起关闭
+    System.setProperty(CacheManager.ENABLE_SHUTDOWN_HOOK_PROPERTY, "true");
+    return cm;
   }
 
 }

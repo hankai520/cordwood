@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ren.hankai.cordwood.plugin.api.Pluggable;
 import ren.hankai.cordwood.plugin.api.PluginDriver;
+import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 import ren.hankai.cordwood.plugin.exception.ParameterIntegrityException;
 import ren.hankai.cordwood.plugin.exception.PluginException;
 import ren.hankai.cordwood.plugin.exception.PluginNotFoundException;
