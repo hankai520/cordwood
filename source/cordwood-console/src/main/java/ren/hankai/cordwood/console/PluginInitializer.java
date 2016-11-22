@@ -113,8 +113,7 @@ public class PluginInitializer {
   private void uninstallPlugin(String fileName) {
     final PluginPackageBean ppb = pluginService.getInstalledPackageByFileName(fileName);
     if ((ppb != null) && pluginRegistry.isPackageRegistered(ppb.getId())) {
-      pluginRegistry.unregisterPackage(ppb.getId());
-      pluginService.deletePackageById(ppb.getId());
+      pluginService.uninstallPluginPackage(ppb);
     }
   }
 
