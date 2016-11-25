@@ -4,5 +4,8 @@ include "cordwood-plugin", "cordwood-core", "cordwood-console"
 //security
 include "cordwood-oauth2-server"
 
+//mobile
+include "cordwood-mobile"
+
 //demo plugins
 include "cordwood-plugin-advance", "cordwood-plugin-pojo"

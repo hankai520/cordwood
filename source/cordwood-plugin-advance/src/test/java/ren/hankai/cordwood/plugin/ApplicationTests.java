@@ -1,7 +1,9 @@
 
 package ren.hankai.cordwood.plugin;
 
+import org.apache.commons.io.FileUtils;
 import org.eclipse.persistence.platform.database.HSQLPlatform;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.context.annotation.Bean;
@@ -20,10 +22,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import ren.hankai.cordwood.core.ApplicationInitializer;
+import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.advance.util.Slf4jSessionLogger;
 import ren.hankai.cordwood.plugin.config.PluginConfig;
 import ren.hankai.cordwood.plugin.support.PluginRequestDispatcher;
 
+import java.io.File;
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -36,7 +41,7 @@ import javax.sql.DataSource;
  * @since Jun 21, 2016 1:29:53 PM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ApplicationTests.class})
+@ContextConfiguration(classes = ApplicationTests.class)
 @EnableJpaRepositories(basePackages = {"ren.hankai.cordwood"})
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"ren.hankai.cordwood"})
@@ -44,6 +49,21 @@ import javax.sql.DataSource;
 @Import({PluginConfig.class})
 @Configuration
 public abstract class ApplicationTests {
+
+  static {
+    System.setProperty(Preferences.ENV_APP_HOME_DIR, "./test-home");
+    Assert.assertTrue(ApplicationInitializer.initialize("ehcache.xml"));
+    Runtime.getRuntime().addShutdownHook(new Thread() {
+      @Override
+      public void run() {
+        try {
+          FileUtils.deleteDirectory(new File(Preferences.getHomeDir()));
+        } catch (final Exception e) {
+          e.printStackTrace();
+        }
+      }
+    });
+  }
 
   @Before
   public void setup() {

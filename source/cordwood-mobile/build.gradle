@@ -1,0 +1,30 @@
+eclipse {
+    project {
+        name="cordwood-mobile"
+    }
+}
+
+jar {
+    baseName = "cordwood-mobile"
+    version = mainVersion
+    manifest {
+        attributes(
+            "Implementation-Version": mainVersion
+        )
+    }
+}
+
+sourceSets {
+    main.java.srcDirs = ["src/main/java"]
+    main.resources.srcDirs = ["src/main/resources"]
+    test.java.srcDirs = ["src/test/java"]
+    test.resources.srcDirs = ["src/test/resources"]
+}
+
+dependencies {
+    compile "commons-io:commons-io:2.2"
+    compile "commons-codec:commons-codec:1.9"
+    compile "commons-lang:commons-lang:2.6"
+    compile "com.googlecode.plist:dd-plist:1.16"
+    compile "net.dongliu:apk-parser:2.1.2"
+}

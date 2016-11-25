@@ -47,8 +47,10 @@ dependencies {
 
     compile project(":cordwood-plugin")
 
-    testCompile "org.springframework:spring-test:4.3.3.RELEASE"
-    testCompile("com.jayway.jsonpath:json-path-assert:0.8.1")
-    testCompile ("org.hsqldb:hsqldb:2.3.4")
+    testCompile "org.springframework:spring-test:${springVersion}"
+    testCompile "org.springframework:spring-context-support:${springVersion}"
+    testCompile "org.springframework:spring-aspects:${springVersion}"
+    testCompile "com.jayway.jsonpath:json-path-assert:0.8.1"
+    testCompile "org.hsqldb:hsqldb:2.3.4"
 }
 
