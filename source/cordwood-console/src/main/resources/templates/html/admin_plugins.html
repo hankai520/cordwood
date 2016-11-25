@@ -74,6 +74,10 @@
                             </div>
                             <div class="description">安装、更新、卸载或启用和禁用插件</div>
                         </div>
+                        <div class="text-center" th:if="${#lists.isEmpty(packages)}">
+                            <i class="fa fa-frown-o" style="color: #E6E6E6; font-size: 10em;"></i>
+                            <P style="color: #A1A1A1;">还没有安装任何插件</P>
+                        </div>
                         <div class="row" th:each="pluginPackage : ${packages}">
                             <div class="col-md-12">
                                 <div class="box border primary">

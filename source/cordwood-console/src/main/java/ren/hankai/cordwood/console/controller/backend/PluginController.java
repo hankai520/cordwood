@@ -1,6 +1,7 @@
 
 package ren.hankai.cordwood.console.controller.backend;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,7 +135,9 @@ public class PluginController {
         }
         if (copiedFiles.size() > 0) {
           for (final File file : copiedFiles) {
-            pluginService.installPluginPackage(file.toURI().toURL(), true);
+            if (pluginService.installPluginPackage(file.toURI().toURL(), true)) {
+              FileUtils.deleteQuietly(file);
+            }
           }
         }
       }

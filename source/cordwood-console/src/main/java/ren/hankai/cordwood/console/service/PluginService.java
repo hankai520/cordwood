@@ -97,7 +97,7 @@ public class PluginService {
   }
 
   /**
-   * 安装插件包。
+   * 安装插件包（安装时，将会将指定 url 对应的插件包拷贝到插件安装目录）。
    *
    * @param url 插件包本地路径
    * @param overwrite 是否覆盖已有插件包
