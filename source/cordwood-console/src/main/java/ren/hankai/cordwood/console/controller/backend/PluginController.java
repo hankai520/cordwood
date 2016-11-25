@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import ren.hankai.cordwood.console.config.Route;
 import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
 import ren.hankai.cordwood.console.service.PluginService;
 import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.plugin.api.PluginRegistry;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,6 +44,10 @@ public class PluginController {
 
   @Autowired
   private PluginService pluginService;
+  @Autowired
+  private PluginRegistry pluginRegistry;
+  @Autowired
+  private MessageSource messageSource;
 
   /**
    * 查看插件集合。
@@ -55,6 +61,21 @@ public class PluginController {
     final ModelAndView mav = new ModelAndView("admin_plugins.html");
     final List<PluginPackageBean> list = pluginService.getInstalledPackages();
     mav.addObject("packages", list);
+    return mav;
+  }
+
+  @GetMapping(Route.BG_PLUGINS_UNINSTALL)
+  public ModelAndView uninstallpackage(@RequestParam("package_id") String packageId) {
+    final ModelAndView mav = new ModelAndView("redirect:" + Route.BG_PLUGINS);
+    final PluginPackageBean ppb = pluginService.getInstalledPackageById(packageId);
+    if (ppb == null) {
+      mav.setViewName("redirect:/404.html");
+    } else if (!pluginService.uninstallPluginPackage(ppb)) {
+      mav.addObject("error", messageSource.getMessage("package.uninstall.failed", null, null));
+      mav.setViewName("admin_failure.html");
+    } else {
+      // 成功
+    }
     return mav;
   }
 

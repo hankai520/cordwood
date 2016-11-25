@@ -1,6 +1,7 @@
 
 package ren.hankai.cordwood.console.service;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -142,6 +143,16 @@ public class PluginService {
     return false;
   }
 
+  @Transactional
+  public boolean uninstallPluginPackage(PluginPackageBean ppb) {
+    if (pluginRegistry.unregisterPackage(ppb.getId())) {
+      pluginPackageRepo.delete(ppb.getId());
+      final String path = Preferences.getPluginsDir() + File.separator + ppb.getFileName();
+      return FileUtils.deleteQuietly(new File(path));
+    }
+    return false;
+  }
+
   /**
    * 按名称查找已安装的插件信息。
    *
@@ -189,16 +200,8 @@ public class PluginService {
     return pluginPackageRepo.findOne(EntitySpecs.field("fileName", fileName));
   }
 
-  /**
-   * 根据标识删除插件包登记信息。
-   *
-   * @param id 插件包标识
-   * @author hankai
-   * @since Nov 12, 2016 12:13:22 AM
-   */
-  @Transactional
-  public void deletePackageById(String id) {
-    pluginPackageRepo.delete(id);
+  public PluginPackageBean getInstalledPackageById(String packageId) {
+    return pluginPackageRepo.findOne(packageId);
   }
 
   /**
@@ -221,4 +224,5 @@ public class PluginService {
       }
     }
   }
+
 }

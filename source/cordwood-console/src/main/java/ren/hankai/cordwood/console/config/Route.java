@@ -27,6 +27,7 @@ public final class Route {
   public static final String BG_PLUGINS_UPLOAD = BACKGROUND_PREFIX + "/plugins/upload";
   public static final String BG_PLUGINS_ON = BACKGROUND_PREFIX + "/plugins/{plugin_name}/on";
   public static final String BG_PLUGINS_OFF = BACKGROUND_PREFIX + "/plugins/{plugin_name}/off";
+  public static final String BG_PLUGINS_UNINSTALL = BACKGROUND_PREFIX + "/plugins/uninstall";
   /*** 前台根地址。 ***/
   public static final String FOREGROUND_PREFIX = "/home";
   public static final String FG_LOGIN = FOREGROUND_PREFIX + "/login";
