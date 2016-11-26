@@ -6518,10 +6518,10 @@ fieldset[disabled] .btn-yellow.active {
 }
 /* Patterns */
 .pattern {
-  background-image: url("../img/pattern.png");
+  background-image: url("../images/pattern.png");
 }
 .dots {
-  background-image: url("../img/dots.png");
+  background-image: url("../images/dots.png");
 }
 /*-----------------------------------------------------------------------------------*/
 /*	Grids and Box
@@ -8174,7 +8174,7 @@ div[data-role="editor-toolbar"] {
 }
 /* Login Screen */
 .login {
-  background: url("../img/light_noise_diagonal.png") repeat scroll 0 0 rgba(0, 0, 0, 0);
+  background: url("../images/light_noise_diagonal.png") repeat scroll 0 0 rgba(0, 0, 0, 0);
   height: 100%;
   min-height: 100%;
 }
@@ -8183,7 +8183,7 @@ div[data-role="editor-toolbar"] {
   text-align: center;
 }
 .login-box {
-  background: url("../img/lockscreen.png") repeat scroll 0 0 rgba(0, 0, 0, 0);
+  background: url("../images/lockscreen.png") repeat scroll 0 0 rgba(0, 0, 0, 0);
   color: #FFFFFF;
   border-radius: 7px 7px 7px 7px;
   margin: 50px auto;
@@ -8713,7 +8713,7 @@ div[data-role="editor-toolbar"] {
   text-transform: uppercase;
 }
 #not-found-bg {
-  background: url(../img/gallery/img/1.jpg) 0 0 no-repeat fixed;
+  background: url(../images/gallery/img/1.jpg) 0 0 no-repeat fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

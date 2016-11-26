@@ -37,8 +37,12 @@ public class SecurityConfig {
     protected void configure(HttpSecurity http) throws Exception {
       // http.antMatcher(Route.BACKGROUND_PREFIX + "/**").authorizeRequests().anyRequest()
       // .hasAuthority("ADMIN").and().httpBasic();
+      // http.antMatcher(Route.BACKGROUND_PREFIX + "/**").authorizeRequests().anyRequest()
+      // .authenticated().and().httpBasic();
+
       http.antMatcher(Route.BACKGROUND_PREFIX + "/**").authorizeRequests().anyRequest()
-          .authenticated().and().httpBasic();
+          .authenticated().and().formLogin().loginPage(Route.BG_LOGIN).permitAll()
+          .failureUrl(Route.BG_LOGIN);
     }
   }
 
