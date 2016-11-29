@@ -22,6 +22,8 @@
     th:href="@{~/js/uniform/css/uniform.default.min.css}"/>
 <link rel="stylesheet" type="text/css" href="../../static/css/animatecss/animate.min.css"
     th:href="@{~/css/animatecss/animate.min.css}" />
+<link rel="stylesheet" type="text/css" href="../../static/cordwood/css/cordwood.css"
+    th:href="@{~/cordwood/css/cordwood.css}" />
 </head>
 <body class="login">
     <!-- PAGE -->
@@ -34,7 +36,8 @@
                     <div class="col-md-4 col-md-offset-4">
                         <div id="logo">
                             <a href="index.html">
-                                <img src="../../static/images/logo/logo-alt.png" height="40" alt="logo name" />
+                                <img th:src="@{~/images/logo/logo-alt.png}" src="../../static/images/logo/logo-alt.png" 
+                                    height="40" alt="logo name" />
                             </a>
                         </div>
                     </div>
@@ -49,51 +52,35 @@
                 <div class="row">
                     <div class="col-md-4 col-md-offset-4">
                         <div class="login-box-plain">
-                            <h2 class="bigintro">登录</h2>
                             <div class="divide-40"></div>
-                            <form role="form">
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">邮箱</label> <i
-                                        class="fa fa-envelope"></i>
-                                    <input type="email" class="form-control" id="exampleInputEmail1">
+                            <div class="alert alert-danger" th:if="${param.error}">
+                                <i class="fa fa-exclamation-circle"></i> <span th:text="#{admin.login.invalid.user}">账号或密码不正确！</span>
+                            </div>
+                            <div class="alert alert-success" th:if="${param.logout}">
+                                <span th:text="#{admin.logout.success}">您已注销，任何自动化登录都已停止。</span>
+                            </div>
+                            <form role="form" th:action="@{~/admin/login}" method="post">
+                                <div class="form-group" th:classappend="${param.error} ? 'has-error' : ''">
+                                    <label class="control-label" for="email">邮箱</label>
+                                    <i class="fa fa-envelope"></i>
+                                    <input id="email" name="username" type="email" class="form-control" th:value="${session.LAST_USERNAME}" />
                                 </div>
-                                <div class="form-group">
-                                    <label for="exampleInputPassword1">密码</label> <i
-                                        class="fa fa-lock"></i>
-                                    <input type="password" class="form-control"
-                                        id="exampleInputPassword1">
+                                <div class="form-group" th:classappend="${param.error}  ? 'has-error' : ''">
+                                    <label class="control-label" for="password">密码</label>
+                                    <i class="fa fa-lock"></i>
+                                    <input id="password" name="password" type="password" class="form-control" />
                                 </div>
                                 <div class="form-actions">
-                                    <label class="checkbox"> <input type="checkbox"
-                                            class="uniform" value=""> 记住我
+                                    <label class="checkbox">
+                                        <input name="remember-me" type="checkbox" class="uniform" > 记住我
                                     </label>
                                     <button type="submit" class="btn btn-danger">登录</button>
                                 </div>
                             </form>
-                            <!-- SOCIAL LOGIN -->
-                            <div class="divide-20"></div>
-                            <div class="center">
-                                <strong>Or login using your social account</strong>
-                            </div>
-                            <div class="divide-20"></div>
-                            <div class="social-login center">
-                                <a class="btn btn-primary btn-lg">
-                                    <i class="fa fa-facebook"></i>
-                                </a>
-                                <a class="btn btn-info btn-lg">
-                                    <i class="fa fa-twitter"></i>
-                                </a>
-                                <a class="btn btn-danger btn-lg">
-                                    <i class="fa fa-google-plus"></i>
-                                </a>
-                            </div>
-                            <!-- /SOCIAL LOGIN -->
+                            
                             <div class="login-helpers">
-                                <a href="#" onclick="swapScreen('forgot');return false;">Forgot
-                                    Password?</a>
-                                <br> Don't have an account with us?
-                                <a href="#" onclick="swapScreen('register');return false;">Register
-                                    now!</a>
+                                <a href="#" onclick="swapScreen('forgot');return false;">忘记了密码？</a>
+                                <br/> 还没有账号？现在就去<a href="#" onclick="swapScreen('register');return false;">注册</a>新账号！
                             </div>
                         </div>
                     </div>
@@ -107,66 +94,40 @@
                 <div class="row">
                     <div class="col-md-4 col-md-offset-4">
                         <div class="login-box-plain">
-                            <h2 class="bigintro">Register</h2>
-                            <div class="divide-40"></div>
+                            <h2 class="bigintro">注册</h2>
                             <form role="form">
                                 <div class="form-group">
-                                    <label for="exampleInputName">Full Name</label> <i
+                                    <label for="exampleInputName">姓名</label> <i
                                         class="fa fa-font"></i>
                                     <input type="text" class="form-control" id="exampleInputName">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputUsername">Username</label> <i
-                                        class="fa fa-user"></i>
-                                    <input type="text" class="form-control"
-                                        id="exampleInputUsername">
-                                </div>
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Email address</label> <i
+                                    <label for="exampleInputEmail1">E-mail 地址</label> <i
                                         class="fa fa-envelope"></i>
                                     <input type="email" class="form-control" id="exampleInputEmail1">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputPassword1">Password</label> <i
+                                    <label for="exampleInputPassword1">密码</label> <i
                                         class="fa fa-lock"></i>
                                     <input type="password" class="form-control"
                                         id="exampleInputPassword1">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputPassword2">Repeat Password</label> <i
+                                    <label for="exampleInputPassword2">再次输入密码</label> <i
                                         class="fa fa-check-square-o"></i>
                                     <input type="password" class="form-control"
                                         id="exampleInputPassword2">
                                 </div>
                                 <div class="form-actions">
-                                    <label class="checkbox"> <input type="checkbox"
-                                            class="uniform" value=""> I agree to the <a
-                                            href="#">Terms of Service</a> and <a href="#">Privacy
-                                            Policy</a></label>
-                                    <button type="submit" class="btn btn-success">Sign Up</button>
+                                    <!-- <label class="checkbox"> <input type="checkbox"
+                                            class="uniform" value=""> 我同意 
+                                            <a href="#">服务条款</a> 和 <a href="#">隐私政策</a>
+                                    </label> -->
+                                    <button type="submit" class="btn btn-success">提交</button>
                                 </div>
                             </form>
-                            <!-- SOCIAL REGISTER -->
-                            <div class="divide-20"></div>
-                            <div class="center">
-                                <strong>Or register using your social account</strong>
-                            </div>
-                            <div class="divide-20"></div>
-                            <div class="social-login center">
-                                <a class="btn btn-primary btn-lg">
-                                    <i class="fa fa-facebook"></i>
-                                </a>
-                                <a class="btn btn-info btn-lg">
-                                    <i class="fa fa-twitter"></i>
-                                </a>
-                                <a class="btn btn-danger btn-lg">
-                                    <i class="fa fa-google-plus"></i>
-                                </a>
-                            </div>
-                            <!-- /SOCIAL REGISTER -->
                             <div class="login-helpers">
-                                <a href="#" onclick="swapScreen('login');return false;"> Back to
-                                    Login</a>
+                                <a href="#" onclick="swapScreen('login');return false;"> 返回登录页面</a>
                                 <br>
                             </div>
                         </div>
@@ -181,22 +142,20 @@
                 <div class="row">
                     <div class="col-md-4 col-md-offset-4">
                         <div class="login-box-plain">
-                            <h2 class="bigintro">Reset Password</h2>
+                            <h2 class="bigintro">重置密码</h2>
                             <div class="divide-40"></div>
                             <form role="form">
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Enter your Email address</label>
+                                    <label for="exampleInputEmail1">请输入您的 E-mail 地址</label>
                                     <i class="fa fa-envelope"></i>
                                     <input type="email" class="form-control" id="exampleInputEmail1">
                                 </div>
                                 <div class="form-actions">
-                                    <button type="submit" class="btn btn-info">Send Me
-                                        Reset Instructions</button>
+                                    <button type="submit" class="btn btn-info">向我发送用于重置密码的邮件</button>
                                 </div>
                             </form>
                             <div class="login-helpers">
-                                <a href="#" onclick="swapScreen('login');return false;">Back to
-                                    Login</a>
+                                <a href="#" onclick="swapScreen('login');return false;">返回登录页面</a>
                                 <br>
                             </div>
                         </div>
@@ -207,30 +166,31 @@
         <!-- FORGOT PASSWORD -->
     </section>
     <!--/PAGE -->
-    <!-- JAVASCRIPTS -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <!-- JQUERY -->
-    <script src="js/jquery/jquery-2.0.3.min.js"></script>
-    <!-- JQUERY UI-->
-    <script src="js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
-    <!-- BOOTSTRAP -->
-    <script src="bootstrap-dist/js/bootstrap.min.js"></script>
-    <!-- UNIFORM -->
-    <script type="text/javascript" src="js/uniform/jquery.uniform.min.js"></script>
+    <script type="text/javascript" src="../../static/js/jquery/jquery-2.0.3.min.js"
+        th:src="@{~/js/jquery/jquery-2.0.3.min.js}"></script>
+    <script type="text/javascript" src="../../static/js/jQuery-Cookie/jquery.cookie.min.js"
+        th:src="@{~/js/jQuery-Cookie/jquery.cookie.min.js}"></script>
+    <script type="text/javascript" src="../../static/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"
+        th:src="@{~/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js}"></script>
+    <script type="text/javascript" src="../../static/bootstrap/js/bootstrap.min.js"
+        th:src="@{~/bootstrap/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" src="../../static/js/uniform/jquery.uniform.min.js"
+        th:src="@{~/js/uniform/jquery.uniform.min.js}"></script>
     <!-- CUSTOM SCRIPT -->
-    <script src="js/script.js"></script>
+    <script src="../../static/js/script.js"
+        th:src="@{~/js/script.js}"></script>
     <script>
-          jQuery(document).ready(function() {
-            App.setPage("login"); //Set current page
-            App.init(); //Initialise plugins and elements
-          });
-        </script>
+      jQuery(document).ready(function() {
+        App.setPage("login");
+        App.init();
+      });
+    </script>
     <script type="text/javascript">
-          function swapScreen(id) {
-            jQuery('.visible').removeClass('visible animated fadeInUp');
-            jQuery('#' + id).addClass('visible animated fadeInUp');
-          }
-        </script>
+      function swapScreen(id) {
+        jQuery('.visible').removeClass('visible animated fadeInUp');
+        jQuery('#' + id).addClass('visible animated fadeInUp');
+      }
+    </script>
     <!-- /JAVASCRIPTS -->
 </body>
 </html>

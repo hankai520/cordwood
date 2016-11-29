@@ -173,7 +173,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
   @Override
   public void addViewControllers(ViewControllerRegistry registry) {
-    registry.addViewController(Route.FG_LOGIN).setViewName("home/login");
+    registry.addViewController(Route.BG_LOGIN).setViewName("admin_login.html");
+    registry.addViewController(Route.FOREGROUND_PREFIX).setViewName("home_index.html");
+    registry.addViewController("/").setViewName("home_index.html");
     registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
   }
 

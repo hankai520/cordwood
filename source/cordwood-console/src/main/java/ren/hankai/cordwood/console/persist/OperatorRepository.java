@@ -1,9 +1,6 @@
 package ren.hankai.cordwood.console.persist;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import ren.hankai.cordwood.console.persist.model.UserBean;
-import ren.hankai.cordwood.console.persist.util.CustomJpaRepository;
 
 import javax.transaction.Transactional;
 
@@ -15,7 +12,6 @@ import javax.transaction.Transactional;
  * @since Nov 2, 2016 1:56:02 PM
  */
 @Transactional
-public interface OperatorRepository
-    extends CustomJpaRepository<UserBean>, JpaRepository<UserBean, Integer> {
+public interface OperatorRepository extends BaseRepository<UserBean, Integer> {
 
 }

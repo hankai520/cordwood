@@ -5,11 +5,11 @@
 -- 新建默认管理员账号（默认密码为 123456 SHA1密文）
 MERGE INTO PUBLIC.USERS t
   USING ( VALUES
-            (1, 'sa', '超级管理员', '7c4a8d09ca3762af61e59520943dc26494f8941b', 1, 1, '2016-03-15 15:14:21'),
-            (2, 'cfg', '系统配置员', '7c4a8d09ca3762af61e59520943dc26494f8941b', 1, 0, '2016-03-15 15:14:21'))
+            (1, 'sa@sparksoft.com.cn', '超级管理员', '7c4a8d09ca3762af61e59520943dc26494f8941b', 1, 1, '2016-03-15 15:14:21'),
+            (2, 'cfg@sparksoft.com.cn', '系统配置员', '7c4a8d09ca3762af61e59520943dc26494f8941b', 1, 0, '2016-03-15 15:14:21'))
   AS vals(c1,c2,c3,c4,c5,c6,c7) ON t.id = vals.c1
 WHEN NOT MATCHED THEN
-    INSERT (ID,LOGINID,NAME,PASSWORD,STATUS,ROLE,CREATETIME) 
+    INSERT (ID,EMAIL,NAME,PASSWORD,STATUS,ROLE,CREATETIME) 
     VALUES (vals.c1,trim(vals.c2),trim(vals.c3),trim(vals.c4),vals.c5,vals.c6,trim(vals.c7));
 
 -- 內建的角色

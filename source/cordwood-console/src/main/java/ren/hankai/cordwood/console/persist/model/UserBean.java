@@ -44,7 +44,7 @@ public class UserBean implements Serializable, UserDetails {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   @Column(length = 100, unique = true, nullable = false)
-  private String loginId;
+  private String email;
   @Column(length = 20, unique = true)
   private String mobile;
   @Column(length = 45, nullable = false)
@@ -83,21 +83,21 @@ public class UserBean implements Serializable, UserDetails {
   }
 
   /**
-   * 获取 loginId 字段的值。
+   * 获取 email 字段的值。
    *
-   * @return loginId 字段值
+   * @return email 字段值
    */
-  public String getLoginId() {
-    return loginId;
+  public String getEmail() {
+    return email;
   }
 
   /**
-   * 设置 loginId 字段的值。
+   * 设置 email 字段的值。
    *
-   * @param loginId loginId 字段的值
+   * @param email email 字段的值
    */
-  public void setLoginId(String loginId) {
-    this.loginId = loginId;
+  public void setEmail(String email) {
+    this.email = email;
   }
 
   /**
@@ -256,7 +256,7 @@ public class UserBean implements Serializable, UserDetails {
 
   @Override
   public String getUsername() {
-    return getLoginId();
+    return getEmail();
   }
 
   @Override
@@ -300,7 +300,7 @@ public class UserBean implements Serializable, UserDetails {
 
     /**
      * 将整型转换为用户状态枚举。
-     * 
+     *
      * @param value 整型值
      * @return 用户状态
      * @author hankai

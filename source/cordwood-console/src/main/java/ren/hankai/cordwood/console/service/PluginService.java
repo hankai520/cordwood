@@ -17,7 +17,7 @@ import ren.hankai.cordwood.console.persist.PluginPackageRepository;
 import ren.hankai.cordwood.console.persist.PluginRepository;
 import ren.hankai.cordwood.console.persist.model.PluginBean;
 import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
-import ren.hankai.cordwood.console.persist.util.EntitySpecs;
+import ren.hankai.cordwood.console.persist.support.EntitySpecs;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.Plugin;
 import ren.hankai.cordwood.plugin.PluginPackage;

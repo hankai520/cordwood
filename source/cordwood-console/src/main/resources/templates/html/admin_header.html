@@ -33,57 +33,20 @@
     <header class="navbar clearfix" id="header">
         <div class="container" th:fragment="header">
             <div class="navbar-brand">
-                <!-- COMPANY LOGO -->
                 <a href="#">
                     <img src="../../static/images/logo/logo.png" th:src="@{~/images/logo/logo.png}"
                         alt="Cloud Admin Logo" class="img-responsive" height="30" width="120">
                 </a>
-                <!-- /COMPANY LOGO -->
-                <!-- SIDEBAR COLLAPSE -->
                 <div id="sidebar-collapse" class="sidebar-collapse btn">
                     <i class="fa fa-bars" data-icon1="fa fa-bars" data-icon2="fa fa-bars"></i>
                 </div>
-                <!-- /SIDEBAR COLLAPSE -->
             </div>
-            <!-- NAVBAR LEFT -->
-            <!-- <ul class="nav navbar-nav pull-left hidden-xs" id="navbar-left">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-cog"></i> <span class="name">Skins</span> <i
-                            class="fa fa-angle-down"></i>
-                    </a>
-                    <ul class="dropdown-menu skins">
-                        <li class="dropdown-title">
-                            <span><i class="fa fa-leaf"></i> Theme Skins</span>
-                        </li>
-                        <li>
-                            <a href="#" data-skin="default">Subtle (default)</a>
-                        </li>
-                        <li>
-                            <a href="#" data-skin="night">Night</a>
-                        </li>
-                        <li>
-                            <a href="#" data-skin="earth">Earth</a>
-                        </li>
-                        <li>
-                            <a href="#" data-skin="utopia">Utopia</a>
-                        </li>
-                        <li>
-                            <a href="#" data-skin="nature">Nature</a>
-                        </li>
-                        <li>
-                            <a href="#" data-skin="graphite">Graphite</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul> -->
-            <!-- /NAVBAR LEFT -->
-            <!-- BEGIN TOP NAVIGATION MENU -->
             <ul class="nav navbar-nav pull-right">
-                <!-- BEGIN USER LOGIN DROPDOWN -->
                 <li class="dropdown user pull-right" id="header-user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <span class="username">John</span> <i class="fa fa-angle-down"></i>
+                        <img />
+                        <span class="username" th:text="${#authentication.getPrincipal().getName()}">用户名</span> 
+                        <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
@@ -97,15 +60,15 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="javascript:$('#logoutForm').submit();">
                                 <i class="fa fa-power-off"></i> 注销
                             </a>
+                            <form id="logoutForm" th:action="@{~/admin/logout}" method="post">
+                            </form>
                         </li>
                     </ul>
                 </li>
-                <!-- END USER LOGIN DROPDOWN -->
             </ul>
-            <!-- END TOP NAVIGATION MENU -->
         </div>
     </header>
     <!--/HEADER -->

@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import ren.hankai.cordwood.console.persist.support.BaseRepositoryFactoryBean;
 import ren.hankai.cordwood.core.ApplicationInitializer;
 
 /**
@@ -27,7 +28,8 @@ import ren.hankai.cordwood.core.ApplicationInitializer;
 @EnableSpringConfigured
 @EnableAspectJAutoProxy
 @EnableConfigurationProperties
-@EnableJpaRepositories(basePackages = {"ren.hankai"})
+@EnableJpaRepositories(basePackages = {"ren.hankai"},
+    repositoryFactoryBeanClass = BaseRepositoryFactoryBean.class)
 @EnableTransactionManagement
 @EnableJdbcHttpSession
 @EnableScheduling

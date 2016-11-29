@@ -1,10 +1,13 @@
 package ren.hankai.cordwood.console.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.authentication.RememberMeServices;
 
+import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.config.BaseSecurityConfig;
 
 /**
@@ -18,20 +21,11 @@ import ren.hankai.cordwood.core.config.BaseSecurityConfig;
 public class SecurityConfig {
 
   @Configuration
-  @Order(2)
-  public static class FrontendWebSecurityConfigurationAdapter extends BaseSecurityConfig {
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-      http.antMatcher(Route.FOREGROUND_PREFIX + "/**").authorizeRequests().anyRequest()
-          .authenticated().and().formLogin().loginPage(Route.FG_LOGIN).permitAll()
-          .failureUrl(Route.FG_LOGIN);
-    }
-  }
-
-  @Configuration
   @Order(1)
   public static class BackendWebSecurityConfigurationAdapter extends BaseSecurityConfig {
+
+    @Autowired
+    private RememberMeServices rememberMeServices;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -40,9 +34,24 @@ public class SecurityConfig {
       // http.antMatcher(Route.BACKGROUND_PREFIX + "/**").authorizeRequests().anyRequest()
       // .authenticated().and().httpBasic();
 
-      http.antMatcher(Route.BACKGROUND_PREFIX + "/**").authorizeRequests().anyRequest()
-          .authenticated().and().formLogin().loginPage(Route.BG_LOGIN).permitAll()
-          .failureUrl(Route.BG_LOGIN);
+      http.antMatcher(Route.BACKGROUND_PREFIX + "/**")
+          .authorizeRequests()
+          .anyRequest()
+          .authenticated();
+
+      http.formLogin()
+          .loginPage(Route.BG_LOGIN)
+          .defaultSuccessUrl(Route.BG_DASHBOARD)
+          .permitAll();
+
+      http.logout()
+          .logoutUrl(Route.BG_LOGOUT)
+          .permitAll();
+
+      http.rememberMe()
+          .rememberMeServices(rememberMeServices)
+          .key(Preferences.getSystemSk())
+          .tokenValiditySeconds(60 * 60 * 24 * 7);
     }
   }
 

@@ -4,7 +4,7 @@
  * http://www.hankai.ren
  */
 
-package ren.hankai.cordwood.console.persist.util;
+package ren.hankai.cordwood.console.persist.support;
 
 import org.springframework.data.jpa.domain.Specification;
 

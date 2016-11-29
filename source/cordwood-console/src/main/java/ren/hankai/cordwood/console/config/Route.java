@@ -15,6 +15,7 @@ public final class Route {
   /*** 后台根地址。 ***/
   public static final String BACKGROUND_PREFIX = "/admin";
   public static final String BG_LOGIN = BACKGROUND_PREFIX + "/login";
+  public static final String BG_LOGOUT = BACKGROUND_PREFIX + "/logout";
   public static final String BG_DASHBOARD = BACKGROUND_PREFIX + "/dashboard";
   public static final String BG_SYS_SETTINGS = BACKGROUND_PREFIX + "/settings";
   public static final String BG_USERS = BACKGROUND_PREFIX + "/users";
@@ -31,5 +32,4 @@ public final class Route {
   public static final String BG_PLUGINS_UNINSTALL = BACKGROUND_PREFIX + "/plugins/uninstall";
   /*** 前台根地址。 ***/
   public static final String FOREGROUND_PREFIX = "/home";
-  public static final String FG_LOGIN = FOREGROUND_PREFIX + "/login";
 }

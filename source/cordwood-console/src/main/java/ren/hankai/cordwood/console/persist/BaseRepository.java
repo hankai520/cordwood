@@ -1,43 +1,52 @@
-/*
- * Copyright © 2016 hankai.ren, All rights reserved.
- *
- * http://www.hankai.ren
- */
-
-package ren.hankai.cordwood.console.persist.util;
+package ren.hankai.cordwood.console.persist;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.NoRepositoryBean;
 
+import ren.hankai.cordwood.console.persist.support.DeleteSpecification;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
- * 扩展 Spring Data 的 jpa repository 来提供更多实用查询。 实体 Repository 类似 DAO，主要提供直接面向实体的查询接口。
+ * JPA 实体仓库基类。
  *
  * @author hankai
- * @version 1.0
- * @since Aug 17, 2016 2:47:55 PM
+ * @version 1.0.0
+ * @since Nov 21, 2016 5:22:10 PM
  */
-public interface CustomJpaRepository<T> {
+@NoRepositoryBean
+public interface BaseRepository<T, I extends Serializable> extends JpaRepository<T, I> {
 
   /**
-   * 根据指定条件查询实体。
+   * 分离实体对象，将其转换为游离状态。
    *
-   * @param spec 查询条件
-   * @return 实体集合
+   * @param entity 实体对象
    * @author hankai
-   * @since Oct 14, 2016 1:09:10 PM
+   * @since Nov 22, 2016 10:17:10 AM
    */
-  List<T> findAll(Specification<T> spec);
+  void detach(Object entity);
+
+  /**
+   * 按条件批量删除实体。
+   *
+   * @param spec 删除条件
+   * @return 删除的记录数
+   * @author hankai
+   * @since Nov 22, 2016 10:45:14 AM
+   */
+  public int delete(DeleteSpecification<T> spec);
 
   /**
    * 根据查询和排序条件查找所有符合要求的实体。
    *
    * @param spec 查询条件
    * @param sort 排序条件
-   * @return 实体集合
+   * @return 实体列表
    * @author hankai
    * @since Aug 18, 2016 10:27:03 AM
    */
@@ -48,7 +57,7 @@ public interface CustomJpaRepository<T> {
    *
    * @param spec 查询条件
    * @param pageable 分页及排序条件
-   * @return 实体集合
+   * @return 实体列表
    * @author hankai
    * @since Aug 18, 2016 10:27:49 AM
    */
@@ -73,4 +82,5 @@ public interface CustomJpaRepository<T> {
    * @since Aug 18, 2016 10:30:22 AM
    */
   T findOne(Specification<T> spec);
+
 }
