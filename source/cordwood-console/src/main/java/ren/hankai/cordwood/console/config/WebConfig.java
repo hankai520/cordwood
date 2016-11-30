@@ -41,6 +41,15 @@ import java.util.Set;
 public class WebConfig extends WebMvcConfigurerAdapter {
 
   /**
+   * 用于在页面渲染前传递页面级提示消息。
+   */
+  public static final String WEB_PAGE_MESSAGE = "pageMessage";
+  /**
+   * 用于在页面渲染前传递页面级错误。
+   */
+  public static final String WEB_PAGE_ERROR = "pageError";
+
+  /**
    * HTML 模板解析器。
    *
    * @param applicationContext spring 上下文

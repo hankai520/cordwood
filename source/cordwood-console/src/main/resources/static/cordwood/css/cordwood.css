@@ -18,3 +18,33 @@
   margin: 50px auto;
   padding: 0px 60px 60px !important;
 }
+
+.truncate-tail.short {
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.truncate-tail.middle {
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.truncate-tail.long {
+  max-width: 360px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.error-span {
+  color: #b94a48;
+}
+
+#content .page-header {
+  margin: 0 -15px 12px;
+  min-height: 45px;
+}

@@ -26,6 +26,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
  * 平台运维账号。
@@ -44,13 +46,21 @@ public class UserBean implements Serializable, UserDetails {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   @Column(length = 100, unique = true, nullable = false)
+  @Pattern(
+      regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
   private String email;
+  @Column(length = 100, nullable = false)
+  @Pattern(regexp = "[a-fA-F0-9]{40}")
+  private String password;
   @Column(length = 20, unique = true)
+  @Pattern(regexp = "\\d*")
   private String mobile;
   @Column(length = 45, nullable = false)
+  @Size(min = 1, max = 20)
   private String name;
-  @Column(length = 100, nullable = false)
-  private String password;
+  @Column(length = 200)
+  @Size(min = 1, max = 140)
+  private String aboutMe;
   private UserStatus status;
   @Column(nullable = false)
   @Temporal(TemporalType.TIMESTAMP)
@@ -134,6 +144,24 @@ public class UserBean implements Serializable, UserDetails {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * 获取 aboutMe 字段的值。
+   *
+   * @return aboutMe 字段值
+   */
+  public String getAboutMe() {
+    return aboutMe;
+  }
+
+  /**
+   * 设置 aboutMe 字段的值。
+   *
+   * @param aboutMe aboutMe 字段的值
+   */
+  public void setAboutMe(String aboutMe) {
+    this.aboutMe = aboutMe;
   }
 
   /**

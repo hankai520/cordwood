@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<title>Cloud Admin | Dashboard</title>
+<title th:text="#{site.title.dashboard}">仪表盘</title>
 <meta name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
 <meta name="description" content="">
@@ -32,7 +32,6 @@
     <!-- HEADER -->
     <header class="navbar clearfix" id="header">
         <div class="container" th:replace="admin_header.html :: header"></div>
-        <!-- /TEAM STATUS -->
     </header>
     <!--/HEADER -->
     <!-- PAGE -->
@@ -69,8 +68,6 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="page-header">
-                                    <!-- STYLER -->
-                                    <!-- /STYLER -->
                                     <!-- BREADCRUMBS -->
                                     <ul class="breadcrumb" th:replace="admin_navbar.html :: navbar">
                                     </ul>

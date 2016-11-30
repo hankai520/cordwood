@@ -14,7 +14,9 @@ import ren.hankai.cordwood.console.persist.UserRepository;
 import ren.hankai.cordwood.console.persist.UserRepository.UserSpecs;
 import ren.hankai.cordwood.console.persist.model.UserBean;
 import ren.hankai.cordwood.console.persist.support.EntitySpecs;
+import ren.hankai.cordwood.core.Preferences;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -60,6 +62,48 @@ public class UserService implements UserDetailsService {
         logger.error(String.format("Found duplicate user with email \"%s\"", email));
       }
       return users.get(0);
+    }
+    return null;
+  }
+
+  /**
+   * 根据用户标识查找用户。
+   *
+   * @param userId 用户唯一标识
+   * @return 用户信息
+   * @author hankai
+   * @since Nov 30, 2016 9:42:25 AM
+   */
+  public UserBean getUserById(Integer userId) {
+    return userRepo.findOne(userId);
+  }
+
+  /**
+   * 更新用户信息。
+   *
+   * @param user 用户信息
+   * @return 更新后的用户
+   * @author hankai
+   * @since Nov 30, 2016 10:47:14 AM
+   */
+  public UserBean updateUserInfo(UserBean user) {
+    return userRepo.save(user);
+  }
+
+  /**
+   * 获取用户头像。
+   * 
+   * @param user 用户
+   * @return 头像文件
+   * @author hankai
+   * @since Nov 30, 2016 5:25:12 PM
+   */
+  public File getUserAvatar(UserBean user) {
+    final String fileName = String.format("avatar_%d.jpg", user.getId());
+    final String path = Preferences.getAttachmentDir() + File.separator + fileName;
+    final File file = new File(path);
+    if (file.exists() && file.isFile()) {
+      return file;
     }
     return null;
   }
