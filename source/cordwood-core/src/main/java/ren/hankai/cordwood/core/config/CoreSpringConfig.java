@@ -23,7 +23,7 @@ import ren.hankai.cordwood.core.Preferences;
  */
 @ComponentScan(basePackages = {"ren.hankai.cordwood"})
 @EnableCaching
-public class CoreSpringConfig {
+public abstract class CoreSpringConfig {
 
   /**
    * JSON 序列化/反序列化。
@@ -50,7 +50,7 @@ public class CoreSpringConfig {
     final ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
     ms.setBasenames("WEB-INF/i18n/messages", "WEB-INF/i18n/validation");
     ms.setDefaultEncoding("UTF-8");
-    ms.setCacheSeconds(0);
+    ms.setCacheSeconds(30);
     ms.setFallbackToSystemLocale(false);
     ms.setUseCodeAsDefaultMessage(true);
     return ms;

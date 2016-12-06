@@ -23,10 +23,10 @@ WHEN NOT MATCHED THEN
 -- 内建的菜单项
 MERGE INTO PUBLIC.SIDEBAR_ITEMS t
   USING ( VALUES
-            (1,'仪表盘','fa fa-tachometer fa-fw','dashboard',1,'/admin/dashboard',null),
-            (2,'插件管理','fa fa-plug fa-fw','plugins',2,'/admin/plugins',null),
-            (3,'用户管理','fa fa-user-circle-o fa-fw','users',3, '/admin/users',null),
-            (4,'权限管理','fa fa-key fa-fw','privileges',4,'/admin/privileges',null))
+            (1,'nav.dashboard','fa fa-tachometer fa-fw','dashboard',1,'/admin/dashboard',null),
+            (2,'nav.plugins','fa fa-plug fa-fw','plugins',2,'/admin/plugins',null),
+            (3,'nav.users','fa fa-user-circle-o fa-fw','users',3, '/admin/users',null),
+            (4,'nav.privileges','fa fa-key fa-fw','privileges',4,'/admin/privileges',null))
   AS vals(c1,c2,c3,c4,c5,c6,c7) ON t.URL = trim(vals.c6)
 WHEN NOT MATCHED THEN
     INSERT (ID,DISPLAYTEXT,ICONCLASSES,NAME,SINK,URL,PARENTID) 

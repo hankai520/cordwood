@@ -1,8 +1,11 @@
 package ren.hankai.cordwood.console.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import ren.hankai.cordwood.console.persist.SidebarItemRepository;
 import ren.hankai.cordwood.console.persist.model.RoleBean;
 import ren.hankai.cordwood.console.persist.model.SidebarItemBean;
 import ren.hankai.cordwood.console.persist.model.UserBean;
@@ -20,6 +23,11 @@ import java.util.List;
 @Service
 public class SidebarService {
 
+  @Autowired
+  private MessageSource messageSource;
+  @Autowired
+  private SidebarItemRepository sidebarItemRepo;
+
   /**
    * 获取当前用户可访问的边栏菜单项。
    *
@@ -33,7 +41,11 @@ public class SidebarService {
     if (principal instanceof UserBean) {
       final UserBean user = (UserBean) principal;
       for (final RoleBean rb : user.getRoles()) {
-        items.addAll(rb.getSidebarItems());
+        for (final SidebarItemBean sib : rb.getSidebarItems()) {
+          sidebarItemRepo.detach(sib);
+          sib.setDisplayText(messageSource.getMessage(sib.getDisplayText(), null, null));
+          items.add(sib);
+        }
       }
     }
     return items;

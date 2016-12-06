@@ -1,5 +1,5 @@
 
-package ren.hankai.cordwood.console.controller.backend;
+package ren.hankai.cordwood.console.controller;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -22,7 +22,7 @@ import ren.hankai.cordwood.console.config.Route;
 import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
 import ren.hankai.cordwood.console.service.PluginService;
 import ren.hankai.cordwood.core.Preferences;
-import ren.hankai.cordwood.plugin.api.PluginRegistry;
+import ren.hankai.cordwood.web.breadcrumb.NavigationItem;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,14 +39,12 @@ import java.util.List;
  * @since Nov 8, 2016 10:07:48 AM
  */
 @Controller
-public class PluginController {
+public class PluginController extends BaseController {
 
   private static final Logger logger = LoggerFactory.getLogger(PluginController.class);
 
   @Autowired
   private PluginService pluginService;
-  @Autowired
-  private PluginRegistry pluginRegistry;
   @Autowired
   private MessageSource messageSource;
 
@@ -57,6 +55,7 @@ public class PluginController {
    * @author hankai
    * @since Nov 8, 2016 10:14:55 AM
    */
+  @NavigationItem(label = "nav.plugins")
   @GetMapping(Route.BG_PLUGINS)
   public ModelAndView pluginPackages() {
     final ModelAndView mav = new ModelAndView("admin_plugins.html");
@@ -74,8 +73,6 @@ public class PluginController {
     } else if (!pluginService.uninstallPluginPackage(ppb)) {
       mav.addObject("error", messageSource.getMessage("package.uninstall.failed", null, null));
       mav.setViewName("admin_failure.html");
-    } else {
-      // 成功
     }
     return mav;
   }

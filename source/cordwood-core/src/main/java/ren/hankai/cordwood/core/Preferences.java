@@ -52,7 +52,7 @@ public final class Preferences {
   /**
    * 命令行参数：程序数据根目录。
    */
-  public static final String ENV_APP_HOME_DIR = "HOME_DIR";
+  public static final String ENV_APP_HOME_DIR = "APP_HOME";
 
   /**
    * 配置：程序内部或数据库采用的数据分隔符。例如：字符串hello,apple,etc就是采用了分隔符将子串连接为 一个字符串。

@@ -80,9 +80,10 @@
                                                         <p>
                                                             <i class="fa fa-circle text-green"></i> 在线
                                                         </p>
-                                                        <p>个人介绍个人介绍个人介绍个人介绍个人介绍个人介绍个人介绍</p>
+                                                        <p th:text="${user.aboutMe}">个人介绍个人介绍个人介绍个人介绍个人介绍个人介绍个人介绍</p>
                                                         <p>
-                                                            <i class="fa fa-envelope fa-fw"></i> <a href="#">exam@sparksoft.com.cn</a>
+                                                            <i class="fa fa-envelope fa-fw"></i> 
+                                                            <a href="#" th:text="${user.email}">exam@sparksoft.com.cn</a>
                                                         </p>
                                                     </div>
                                                     <a href="#" class="list-group-item" th:href="@{~/admin/my_profile}">

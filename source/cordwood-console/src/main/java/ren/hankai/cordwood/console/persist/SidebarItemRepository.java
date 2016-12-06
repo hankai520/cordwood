@@ -12,6 +12,6 @@ import ren.hankai.cordwood.console.persist.model.SidebarItemBean;
  * @since Nov 2, 2016 10:35:04 AM
  */
 @Transactional
-public interface SidebarRepository extends BaseRepository<SidebarItemBean, Integer> {
+public interface SidebarItemRepository extends BaseRepository<SidebarItemBean, Integer> {
 
 }

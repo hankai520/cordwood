@@ -1,7 +1,5 @@
 package ren.hankai.cordwood.console.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -16,6 +14,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
 import org.springframework.http.converter.xml.SourceHttpMessageConverter;
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.thymeleaf.TemplateEngine;
@@ -24,6 +23,8 @@ import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
+
+import ren.hankai.cordwood.web.breadcrumb.BreadCrumbInterceptor;
 
 import java.nio.charset.Charset;
 import java.util.HashSet;
@@ -48,6 +49,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
    * 用于在页面渲染前传递页面级错误。
    */
   public static final String WEB_PAGE_ERROR = "pageError";
+
+  @Autowired
+  private MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter;
+
+  @Autowired
+  private BreadCrumbInterceptor breadCrumbInterceptor;
 
   /**
    * HTML 模板解析器。
@@ -152,24 +159,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     return viewResolver;
   }
 
-  /**
-   * HTTP JSON 消息转换器。
-   *
-   * @param om jackson json 核心对象
-   * @return HTTP JSON 消息转换器
-   * @author hankai
-   * @since Nov 8, 2016 8:47:02 AM
-   */
-  @Bean
-  public MappingJackson2HttpMessageConverter jackson2HttpMessageConverter(ObjectMapper om) {
-    final MappingJackson2HttpMessageConverter cvt = new MappingJackson2HttpMessageConverter(om);
-    cvt.setDefaultCharset(Charset.forName("UTF-8"));
-    return cvt;
-  }
-
-  @Autowired
-  private MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter;
-
   @Override
   public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
     converters.add(new ByteArrayHttpMessageConverter());
@@ -186,6 +175,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     registry.addViewController(Route.FOREGROUND_PREFIX).setViewName("home_index.html");
     registry.addViewController("/").setViewName("home_index.html");
     registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+  }
+
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(breadCrumbInterceptor).addPathPatterns(Route.BACKGROUND_PREFIX + "/**");
   }
 
 }

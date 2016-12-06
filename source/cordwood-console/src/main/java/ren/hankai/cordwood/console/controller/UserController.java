@@ -1,5 +1,5 @@
 
-package ren.hankai.cordwood.console.controller.backend;
+package ren.hankai.cordwood.console.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import ren.hankai.cordwood.console.config.Route;
-import ren.hankai.cordwood.console.controller.BaseController;
 import ren.hankai.cordwood.console.persist.model.UserBean;
 import ren.hankai.cordwood.console.service.UserService;
+import ren.hankai.cordwood.web.breadcrumb.NavigationItem;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,6 +44,7 @@ public class UserController extends BaseController {
   @Autowired
   private UserService userService;
 
+  @NavigationItem(label = "nav.my.account", family = "users")
   @GetMapping(Route.BG_MY_ACCOUNT)
   public ModelAndView myAccount() {
     final ModelAndView mav = new ModelAndView("admin_my_account.html");
@@ -53,6 +54,7 @@ public class UserController extends BaseController {
     return mav;
   }
 
+  @NavigationItem(label = "nav.my.profile", parent = "nav.my.account", family = "users")
   @GetMapping(Route.BG_MY_PROFILE)
   public ModelAndView myProfile() {
     final ModelAndView mav = new ModelAndView("admin_my_profile.html");

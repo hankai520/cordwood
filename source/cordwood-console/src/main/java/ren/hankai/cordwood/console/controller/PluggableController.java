@@ -1,4 +1,4 @@
-package ren.hankai.cordwood.console.controller.service;
+package ren.hankai.cordwood.console.controller;
 
 import org.springframework.stereotype.Controller;
 

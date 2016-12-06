@@ -53,9 +53,15 @@
                                     <ul class="breadcrumb" th:fragment="navbar">
                                         <li>
                                             <i class="fa fa-home"></i>
-                                            <a href="#">Home</a>
+                                            <span>Cordwood</span>
                                         </li>
-                                        <li>Dashboard - shared on weidea.net</li>
+                                        <li th:each="breadcrumb : ${session.currentBreadCrumb}">
+                                            <span th:if="${breadcrumb.currentPage}" 
+                                                  th:text="#{${breadcrumb.label}}"></span>
+                                            <a th:if="${!breadcrumb.currentPage}"
+                                               th:href="${breadcrumb.url}"
+                                               th:text="#{${breadcrumb.label}}"></a>
+                                        </li>
                                     </ul>
                                     <!-- /BREADCRUMBS -->
                                 </div>

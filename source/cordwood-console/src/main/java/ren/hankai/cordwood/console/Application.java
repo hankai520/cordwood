@@ -46,7 +46,7 @@ public class Application {
    * @since Oct 25, 2016 10:53:27 AM
    */
   public static void main(String[] args) {
-    final String[] configs = {"hsql.properties", "system.yml", "ehcache.xml"};
+    final String[] configs = {"hsql.properties", "system.yml", "ehcache.xml", "i18n.properties"};
     if (ApplicationInitializer.initialize(configs)) {
       if (SpringApplication.run(Application.class, args) != null) {
         logger.info(
