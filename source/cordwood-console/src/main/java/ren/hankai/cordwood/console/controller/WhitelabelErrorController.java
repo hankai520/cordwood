@@ -16,14 +16,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 友好的错误页面控制器。
+ * 白板错误页面控制器，一般用于显示通过了身份认证的用户在使用过程中产生的系统错误。
  *
  * @author hankai
  * @version 1.0.0
  * @since Nov 1, 2016 11:14:31 AM
  */
 @Controller
-public class FriendlyErrorController implements ErrorController {
+public class WhitelabelErrorController implements ErrorController {
   private static final String PATH = "/error";
 
   @Value("${debug}")
@@ -34,7 +34,7 @@ public class FriendlyErrorController implements ErrorController {
 
   /**
    * 处理 HTTP 错误。
-   * 
+   *
    * @param request HTTP请求
    * @param response HTTP响应
    * @return 错误页面

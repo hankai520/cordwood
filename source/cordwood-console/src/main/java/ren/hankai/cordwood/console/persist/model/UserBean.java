@@ -2,10 +2,13 @@ package ren.hankai.cordwood.console.persist.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import ren.hankai.cordwood.jackson.DateTimeSerializer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -62,17 +66,53 @@ public class UserBean implements Serializable, UserDetails {
   @Size(min = 1, max = 140)
   private String aboutMe;
   private UserStatus status;
+  @Transient
+  private String statusName;
   @Column(nullable = false)
   @Temporal(TemporalType.TIMESTAMP)
   private Date createTime;
   @Temporal(TemporalType.TIMESTAMP)
   private Date updateTime;
-
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "users_roles",
       joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"))
   private List<RoleBean> roles;
+  @Transient
+  private List<Integer> selectedRoleIds;
+
+  /**
+   * 用已关联的角色来初始化角色ID数组。
+   *
+   * @author hankai
+   * @since Dec 7, 2016 3:01:00 PM
+   */
+  public void initSelectedRoleIds() {
+    final List<Integer> ids = new ArrayList<>();
+    final List<RoleBean> list = getRoles();
+    for (final RoleBean roleBean : list) {
+      ids.add(roleBean.getId());
+    }
+    selectedRoleIds = ids;
+  }
+
+  /**
+   * 用选择的角色ID数组来更新角色数组（用于修改用户角色）。
+   *
+   * @author hankai
+   * @since Dec 7, 2016 3:01:34 PM
+   */
+  public void updateRolesWithSelectedIds() {
+    final List<RoleBean> list = new ArrayList<>();
+    if (getSelectedRoleIds() != null) {
+      for (final Integer rid : getSelectedRoleIds()) {
+        final RoleBean rb = new RoleBean();
+        rb.setId(rid);
+        list.add(rb);
+      }
+    }
+    setRoles(list);
+  }
 
   /**
    * 获取 id 字段的值。
@@ -202,10 +242,29 @@ public class UserBean implements Serializable, UserDetails {
   }
 
   /**
+   * 获取 statusName 字段的值。
+   *
+   * @return statusName 字段值
+   */
+  public String getStatusName() {
+    return statusName;
+  }
+
+  /**
+   * 设置 statusName 字段的值。
+   *
+   * @param statusName statusName 字段的值
+   */
+  public void setStatusName(String statusName) {
+    this.statusName = statusName;
+  }
+
+  /**
    * 获取 createTime 字段的值。
    *
    * @return createTime 字段值
    */
+  @JsonSerialize(using = DateTimeSerializer.class)
   public Date getCreateTime() {
     return createTime;
   }
@@ -224,6 +283,7 @@ public class UserBean implements Serializable, UserDetails {
    *
    * @return updateTime 字段值
    */
+  @JsonSerialize(using = DateTimeSerializer.class)
   public Date getUpdateTime() {
     return updateTime;
   }
@@ -253,6 +313,24 @@ public class UserBean implements Serializable, UserDetails {
    */
   public void setRoles(List<RoleBean> roles) {
     this.roles = roles;
+  }
+
+  /**
+   * 获取 selectedRoleIds 字段的值。
+   *
+   * @return selectedRoleIds 字段值
+   */
+  public List<Integer> getSelectedRoleIds() {
+    return selectedRoleIds;
+  }
+
+  /**
+   * 设置 selectedRoleIds 字段的值。
+   *
+   * @param selectedRoleIds selectedRoleIds 字段的值
+   */
+  public void setSelectedRoleIds(List<Integer> selectedRoleIds) {
+    this.selectedRoleIds = selectedRoleIds;
   }
 
   /**
@@ -353,8 +431,12 @@ public class UserBean implements Serializable, UserDetails {
     /**
      * 获取用于国际化的键名。
      */
-    public String i18nKey() {
-      return String.format("operator.status.%d", value);
+    public String i18nKey(boolean withStyle) {
+      if (withStyle) {
+        return String.format("user.status.%d.html", value);
+      } else {
+        return String.format("user.status.%d", value);
+      }
     }
 
     @JsonValue

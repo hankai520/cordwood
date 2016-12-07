@@ -42,6 +42,16 @@ public interface BaseRepository<T, I extends Serializable> extends JpaRepository
   public int delete(DeleteSpecification<T> spec);
 
   /**
+   * 根据查询条件超照复合要求的实体。
+   * 
+   * @param spec 查询条件
+   * @return 实体列表
+   * @author hankai
+   * @since Dec 7, 2016 10:19:08 AM
+   */
+  List<T> findAll(Specification<T> spec);
+
+  /**
    * 根据查询和排序条件查找所有符合要求的实体。
    *
    * @param spec 查询条件

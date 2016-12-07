@@ -29,7 +29,7 @@ public @interface NavigationItem {
    * @author hankai
    * @since Dec 6, 2016 2:52:56 PM
    */
-  public String family() default "";
+  public String family() default "shared";
 
   /**
    * 前一个导航项的标签名。
