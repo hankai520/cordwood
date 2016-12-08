@@ -116,13 +116,8 @@
                                                                         <i class="fa fa-fire fa-3x"></i>
                                                                     </div>
                                                                     <div class="panel-right">
-                                                                        <div class="number">3.2 k</div>
-                                                                        <div class="title">今日插件访问量</div>
-                                                                        <span
-                                                                            class="label label-success">
-                                                                            26% <i
-                                                                            class="fa fa-arrow-up"></i>
-                                                                        </span>
+                                                                        <div class="number" th:text="${pluginAccesses}">3932</div>
+                                                                        <div class="title">今日插件访问次数</div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -135,13 +130,11 @@
                                                                         <i class="fa fa-bolt fa-3x"></i>
                                                                     </div>
                                                                     <div class="panel-right">
-                                                                        <div class="number">2.3 s</div>
-                                                                        <div class="title">插件响应时间</div>
-                                                                        <span
-                                                                            class="label label-warning">
-                                                                            5% <i
-                                                                            class="fa fa-arrow-down"></i>
-                                                                        </span>
+                                                                        <div class="number">
+                                                                        <span th:text="${#numbers.formatDecimal(timeUsageAvg, 1, 1)}">
+                                                                            23</span> <small>ms</small>
+                                                                        </div>
+                                                                        <div class="title">今日平均响应时间</div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -153,7 +146,7 @@
                                                                 class="quick-pie panel panel-default">
                                                                 <div class="panel-body">
                                                                     <div class="col-md-4 text-center">
-                                                                        <div id="pie_1" class="piechart" data-percent="9.8">
+                                                                        <div id="pie_1" class="piechart" data-percent="9.8" th:data-percent="${faultRate}">
                                                                             <span class="percent"></span>
                                                                         </div>
                                                                         <div>插件故障率</div>
@@ -227,7 +220,7 @@
                                                                         <tbody>
                                                                             <tr>
                                                                                 <td>
-                                                                                    <span class="label label-warning">法律法规电子字典 iOS</span>
+                                                                                    <span class="label label-warning">测试插件1</span>
                                                                                 </td>
                                                                                 <td>728 MB</td>
                                                                                 <td>239,123</td>
@@ -235,7 +228,7 @@
                                                                             </tr>
                                                                             <tr>
                                                                                 <td>
-                                                                                    <span class="label label-success">法律法规电子字典 Android</span>
+                                                                                    <span class="label label-success">测试插件2</span>
                                                                                 </td>
                                                                                 <td>2.3 GB</td>
                                                                                 <td>939,123</td>
@@ -243,8 +236,7 @@
                                                                             </tr>
                                                                             <tr>
                                                                                 <td>
-                                                                                    <span class="label label-success">
-                                                                                    工商移动监管 Android</span>
+                                                                                    <span class="label label-success">测试插件3</span>
                                                                                 </td>
                                                                                 <td>1.4 GB</td>
                                                                                 <td>339,123</td>

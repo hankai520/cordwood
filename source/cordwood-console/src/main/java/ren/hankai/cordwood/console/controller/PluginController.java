@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import ren.hankai.cordwood.console.PluginInitializer;
 import ren.hankai.cordwood.console.config.Route;
 import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
 import ren.hankai.cordwood.console.persist.model.PluginRequest;
@@ -53,6 +54,8 @@ public class PluginController extends BaseController {
   private PluginService pluginService;
   @Autowired
   private MessageSource messageSource;
+  @Autowired
+  private PluginInitializer pluginInitializer;
 
   /**
    * 查看插件集合。
@@ -117,6 +120,7 @@ public class PluginController extends BaseController {
   @ResponseBody
   public ResponseEntity<String> uploadPlugins(@RequestParam("files[]") MultipartFile[] files) {
     try {
+      pluginInitializer.suspend();
       if ((files != null) && (files.length > 0)) {
         String tempPath = null;
         OutputStream output = null;
@@ -125,6 +129,7 @@ public class PluginController extends BaseController {
         for (final MultipartFile file : files) {
           try {
             tempPath = Preferences.getTempDir() + File.separator + file.getOriginalFilename();
+            FileUtils.deleteQuietly(new File(tempPath));
             input = file.getInputStream();
             output = new FileOutputStream(tempPath);
             IOUtils.copy(input, output);
@@ -151,6 +156,8 @@ public class PluginController extends BaseController {
     } catch (final Error e) {
       logger.error("Failed to upload plugins.", e);
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    } finally {
+      pluginInitializer.resume();
     }
   }
 

@@ -88,6 +88,18 @@ public class UserService implements UserDetailsService {
   }
 
   /**
+   * 按用户邮箱查找用户。
+   * 
+   * @param email 邮箱
+   * @return 用户信息
+   * @author hankai
+   * @since Dec 8, 2016 5:28:31 PM
+   */
+  public UserBean getUserByEmail(String email) {
+    return userRepo.findOne(EntitySpecs.field("email", email));
+  }
+
+  /**
    * 更新用户信息。
    *
    * @param user 用户信息
@@ -196,7 +208,7 @@ public class UserService implements UserDetailsService {
 
   /**
    * 删除用户。
-   * 
+   *
    * @param userId 用户ID
    * @author hankai
    * @since Dec 7, 2016 4:57:44 PM

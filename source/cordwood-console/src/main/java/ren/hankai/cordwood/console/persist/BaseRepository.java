@@ -43,7 +43,7 @@ public interface BaseRepository<T, I extends Serializable> extends JpaRepository
 
   /**
    * 根据查询条件超照复合要求的实体。
-   * 
+   *
    * @param spec 查询条件
    * @return 实体列表
    * @author hankai

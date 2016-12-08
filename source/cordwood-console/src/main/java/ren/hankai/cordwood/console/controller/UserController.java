@@ -27,6 +27,7 @@ import ren.hankai.cordwood.console.config.Route;
 import ren.hankai.cordwood.console.persist.model.UserBean;
 import ren.hankai.cordwood.console.persist.model.UserBean.UserStatus;
 import ren.hankai.cordwood.console.persist.util.PageUtil;
+import ren.hankai.cordwood.console.service.PluginService;
 import ren.hankai.cordwood.console.service.UserService;
 import ren.hankai.cordwood.console.view.model.BootstrapTableData;
 import ren.hankai.cordwood.web.breadcrumb.NavigationItem;
@@ -51,6 +52,8 @@ public class UserController extends BaseController {
 
   @Autowired
   private UserService userService;
+  @Autowired
+  private PluginService pluginService;
 
   @NavigationItem(label = "nav.my.account")
   @GetMapping(Route.BG_MY_ACCOUNT)
@@ -59,6 +62,12 @@ public class UserController extends BaseController {
     final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     final UserBean user = (UserBean) auth.getPrincipal();
     mav.addObject("user", user);
+    final long pluginAccesses = pluginService.getUserPluginAccessCount(user.getEmail());
+    mav.addObject("pluginAccesses", pluginAccesses);
+    final float timeUsageAvg = pluginService.getUserPluginTimeAverage(user.getEmail());
+    mav.addObject("timeUsageAvg", timeUsageAvg);
+    final float faultRate = pluginService.getUserPluginFaultRate(user.getEmail());
+    mav.addObject("faultRate", faultRate * 100);
     return mav;
   }
 

@@ -37,6 +37,7 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -246,7 +247,7 @@ public class PluginService {
 
   /**
    * 搜索插件访问记录。
-   * 
+   *
    * @param keyword 关键字
    * @param pageable 分页
    * @return 访问记录列表
@@ -255,6 +256,61 @@ public class PluginService {
    */
   public Page<PluginRequest> searchPluginRequests(String keyword, Pageable pageable) {
     return pluginRequestRepo.findAll(PluginRequestSpecs.search(keyword), pageable);
+  }
+
+  /**
+   * 获取用户所上传的插件的当日访问量。
+   *
+   * @param userEmail 用户邮箱
+   * @return 插件访问次数
+   * @author hankai
+   * @since Dec 8, 2016 5:23:23 PM
+   */
+  public long getUserPluginAccessCount(String userEmail) {
+    return pluginRequestRepo.count(PluginRequestSpecs.usersPluginRequestsToday(userEmail));
+  }
+
+  /**
+   * 获取用户插件当天的平均响应时间。
+   * 
+   * @param userEmail 用户邮箱
+   * @return 响应时间（毫秒）
+   * @author hankai
+   * @since Dec 8, 2016 7:42:21 PM
+   */
+  public float getUserPluginTimeAverage(String userEmail) {
+    final Calendar cal = Calendar.getInstance();
+    cal.set(Calendar.HOUR_OF_DAY, 0);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+    final Date beginTime = cal.getTime();
+
+    cal.set(Calendar.HOUR_OF_DAY, 23);
+    cal.set(Calendar.MINUTE, 59);
+    cal.set(Calendar.SECOND, 59);
+    cal.set(Calendar.MILLISECOND, 999);
+    final Date endTime = cal.getTime();
+
+    final String fuzzyEmail = "%" + userEmail + "%";
+    final Double avg = pluginRequestRepo.timeUsageAverage(fuzzyEmail, beginTime, endTime);
+    return avg.floatValue();
+  }
+
+  /**
+   * 获取用户插件故障率。
+   * 
+   * @param userEmail 用户邮箱
+   * @return 故障率
+   * @author hankai
+   * @since Dec 8, 2016 7:42:04 PM
+   */
+  public float getUserPluginFaultRate(String userEmail) {
+    final float failures =
+        pluginRequestRepo.count(PluginRequestSpecs.userPluginRequests(userEmail, false));
+    final float all = pluginRequestRepo.count(PluginRequestSpecs.userPluginRequests(userEmail));
+    final float rate = failures / all;
+    return rate;
   }
 
 }
