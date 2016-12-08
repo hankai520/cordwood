@@ -24,6 +24,8 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
+import ren.hankai.cordwood.console.interceptor.PluginRequestInterceptor;
+import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 import ren.hankai.cordwood.web.breadcrumb.BreadCrumbInterceptor;
 
 import java.nio.charset.Charset;
@@ -52,9 +54,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
   @Autowired
   private MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter;
-
   @Autowired
   private BreadCrumbInterceptor breadCrumbInterceptor;
+  @Autowired
+  private PluginRequestInterceptor pluginRequestInterceptor;
 
   /**
    * HTML 模板解析器。
@@ -180,6 +183,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(breadCrumbInterceptor).addPathPatterns(Route.BACKGROUND_PREFIX + "/**");
+    registry.addInterceptor(pluginRequestInterceptor)
+        .addPathPatterns(Pluggable.PLUGIN_BASE_URL + "/**");
   }
 
 }

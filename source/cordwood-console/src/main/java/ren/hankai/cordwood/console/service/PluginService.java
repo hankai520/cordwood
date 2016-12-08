@@ -7,6 +7,8 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -15,8 +17,11 @@ import org.springframework.util.FileCopyUtils;
 
 import ren.hankai.cordwood.console.persist.PluginPackageRepository;
 import ren.hankai.cordwood.console.persist.PluginRepository;
+import ren.hankai.cordwood.console.persist.PluginRequestRepository;
+import ren.hankai.cordwood.console.persist.PluginRequestRepository.PluginRequestSpecs;
 import ren.hankai.cordwood.console.persist.model.PluginBean;
 import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
+import ren.hankai.cordwood.console.persist.model.PluginRequest;
 import ren.hankai.cordwood.console.persist.support.EntitySpecs;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.Plugin;
@@ -54,6 +59,8 @@ public class PluginService {
   private PluginPackageRepository pluginPackageRepo;
   @Autowired
   private PluginRepository pluginRepo;
+  @Autowired
+  private PluginRequestRepository pluginRequestRepo;
 
   /**
    * 将临时插件包文件复制到插件包安装路径，如果插件包已安装过了，则不会覆盖。
@@ -223,6 +230,31 @@ public class PluginService {
         pluginManager.deactivatePlugin(pb.getName());
       }
     }
+  }
+
+  /**
+   * 保存插件请求记录。
+   *
+   * @param request 插件请求
+   * @author hankai
+   * @since Dec 8, 2016 10:47:21 AM
+   */
+  @Transactional
+  public void savePluginRequest(PluginRequest request) {
+    pluginRequestRepo.save(request);
+  }
+
+  /**
+   * 搜索插件访问记录。
+   * 
+   * @param keyword 关键字
+   * @param pageable 分页
+   * @return 访问记录列表
+   * @author hankai
+   * @since Dec 8, 2016 3:25:23 PM
+   */
+  public Page<PluginRequest> searchPluginRequests(String keyword, Pageable pageable) {
+    return pluginRequestRepo.findAll(PluginRequestSpecs.search(keyword), pageable);
   }
 
 }

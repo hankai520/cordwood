@@ -1,6 +1,8 @@
 
 package ren.hankai.cordwood.console.persist.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ren.hankai.cordwood.plugin.PluginFunction;
 import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 
@@ -54,6 +56,7 @@ public final class PluginBean implements Serializable {
    *
    * @return pluginPackage 字段值
    */
+  @JsonIgnore
   public PluginPackageBean getPluginPackage() {
     return pluginPackage;
   }
@@ -180,6 +183,7 @@ public final class PluginBean implements Serializable {
    *
    * @return features 字段值
    */
+  @JsonIgnore
   public List<PluginFunction> getFeatures() {
     return features;
   }

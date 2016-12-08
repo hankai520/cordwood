@@ -56,32 +56,70 @@ public abstract class PluginRequestDispatcher {
    */
   @RequestMapping(value = Pluggable.PLUGIN_BASE_URL + "/{plugin_name}/{function_name}")
   @ResponseBody
-  public ResponseEntity<Object> dispatchPluginRequest(
+  public final ResponseEntity<Object> dispatchPluginRequest(
       @PathVariable("plugin_name") String pluginName,
       @PathVariable("function_name") String functionName, HttpServletRequest request,
       HttpServletResponse response) {
-    Object result = null;
+    ResponseEntity<Object> responseEntity = null;
+    Throwable errors = null;
+    beforeProcessingPluginRequest(pluginName, functionName, request);
     try {
-      result = pluginDriver.handleRequest(pluginName, functionName, request, response);
-      return new ResponseEntity<>(result, HttpStatus.OK);
+      final Object result = pluginDriver.handleRequest(pluginName, functionName, request, response);
+      responseEntity = new ResponseEntity<>(result, HttpStatus.OK);
     } catch (final ParameterIntegrityException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+      errors = e;
+      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     } catch (final AccessTokenException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+      errors = e;
+      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     } catch (final PluginStatusException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
+      errors = e;
+      responseEntity =
+          new ResponseEntity<>(e.getMessage(), HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
     } catch (final PluginNotFoundException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+      errors = e;
+      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     } catch (final PluginException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      errors = e;
+      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     } catch (final Exception e) {
       logger.error("Unkown error occurred while invoking plugin function.", e);
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      errors = e;
+      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     } catch (final Error e) {
       logger.error("Unkown error occurred while invoking plugin function.", e);
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      errors = e;
+      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    afterProcessingPluginRequest(pluginName, functionName, request, errors);
+    return responseEntity;
   }
+
+  /**
+   * 插件请求被处理之前触发此方法的调用。
+   *
+   * @param pluginName 插件名
+   * @param functionName 插件功能
+   * @param request http 请求
+   * @author hankai
+   * @since Dec 8, 2016 10:52:29 AM
+   */
+  protected void beforeProcessingPluginRequest(String pluginName, String functionName,
+      HttpServletRequest request) {}
+
+  /**
+   * 插件请求被处理之后触发此方法的调用。
+   *
+   * @param pluginName 插件名
+   * @param functionName 插件功能
+   * @param request http 请求
+   * @param errors 异常或错误
+   * @author hankai
+   * @since Dec 8, 2016 10:52:29 AM
+   */
+  protected void afterProcessingPluginRequest(String pluginName, String functionName,
+      HttpServletRequest request, Throwable errors) {}
+
 
   /**
    * 分发插件资源访问请求。
@@ -96,21 +134,46 @@ public abstract class PluginRequestDispatcher {
   @ResponseBody
   public ResponseEntity<Object> dispatchPluginResourceRequest(
       @PathVariable("plugin_name") String pluginName, HttpServletRequest request) {
+    ResponseEntity<Object> responseEntity = null;
+    beforeProcessingPluginResource(pluginName, request);
     try {
       final InputStream is = pluginDriver.getResource(pluginName, request);
-      return new ResponseEntity<>(new InputStreamResource(is), HttpStatus.OK);
+      responseEntity = new ResponseEntity<>(new InputStreamResource(is), HttpStatus.OK);
     } catch (final PluginNotFoundException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     } catch (final PluginStatusException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
+      responseEntity =
+          new ResponseEntity<>(e.getMessage(), HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
     } catch (final PluginResourceNotFoundException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     } catch (final Exception e) {
       logger.error("Unkown error occurred while loading plugin resource.", e);
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     } catch (final Error e) {
       logger.error("Unkown error occurred while loading plugin resource.", e);
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    afterProcessingPluginResource(pluginName, request);
+    return responseEntity;
   }
+
+  /**
+   * 插件资源访问被处理之前触发此方法的调用。
+   *
+   * @param pluginName 插件名
+   * @param request http 请求
+   * @author hankai
+   * @since Dec 8, 2016 10:55:06 AM
+   */
+  protected void beforeProcessingPluginResource(String pluginName, HttpServletRequest request) {}
+
+  /**
+   * 插件资源访问被处理之后触发此方法的调用。
+   *
+   * @param pluginName 插件名
+   * @param request http 请求
+   * @author hankai
+   * @since Dec 8, 2016 10:55:06 AM
+   */
+  protected void afterProcessingPluginResource(String pluginName, HttpServletRequest request) {}
 }

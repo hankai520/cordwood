@@ -60,7 +60,8 @@ public class DefaultAccessAuthenticator implements AccessAuthenticator {
     final TokenInfo tokenInfo = parseAccessToken(tokenString);
     if (tokenInfo == null) {
       return TokenInfo.TOKEN_ERROR_INVALID;
-    } else if (tokenInfo.getExpiryTime() < System.currentTimeMillis()) {
+    } else if ((tokenInfo.getExpiryTime() >= 0)
+        && (tokenInfo.getExpiryTime() < System.currentTimeMillis())) {
       return TokenInfo.TOKEN_ERROR_EXPIRED;
     }
     return 0;

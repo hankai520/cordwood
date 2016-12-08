@@ -63,21 +63,24 @@ public interface AccessAuthenticator {
      */
     public static final int TOKEN_ERROR_EXPIRED = -2;
 
-    private int uid;
+    private String userKey; // 用户唯一标识
+    private String userSk; // 用户秘钥
     private long expiryTime;
 
     /**
      * 生成一个将在若干分钟后过期的令牌。
      *
-     * @param uid 用户ID
+     * @param userKey 用户标识
+     * @param userSk 用户秘钥
      * @param minutes 分钟数
      * @return 令牌
      * @author hankai
      * @since Oct 27, 2016 6:15:42 PM
      */
-    public static TokenInfo withinMinutes(int uid, int minutes) {
+    public static TokenInfo withinMinutes(String userKey, String userSk, int minutes) {
       final TokenInfo ti = new TokenInfo();
-      ti.setUid(uid);
+      ti.setUserKey(userKey);
+      ti.setUserSk(userSk);
       final long time = System.currentTimeMillis() + (minutes * 60 * 1000);
       ti.setExpiryTime(time);
       return ti;
@@ -86,43 +89,101 @@ public interface AccessAuthenticator {
     /**
      * 生成一个将在若干小时后过期的令牌。
      *
-     * @param uid 用户ID
+     * @param userKey 用户标识
+     * @param userSk 用户秘钥
      * @param hours 小时数
      * @return 令牌
      * @author hankai
      * @since Oct 27, 2016 6:15:42 PM
      */
-    public static TokenInfo withinHours(int uid, int hours) {
-      return withinMinutes(uid, hours * 60);
+    public static TokenInfo withinHours(String userKey, String userSk, int hours) {
+      return withinMinutes(userKey, userSk, hours * 60);
     }
 
     /**
      * 生成一个将在若干天后过期的令牌。
      *
-     * @param uid 用户ID
+     * @param userKey 用户标识
+     * @param userSk 用户秘钥
      * @param days 天数
      * @return 令牌
      * @author hankai
      * @since Oct 27, 2016 6:15:42 PM
      */
-    public static TokenInfo withinDays(int uid, int days) {
-      return withinHours(uid, days * 24);
+    public static TokenInfo withinDays(String userKey, String userSk, int days) {
+      return withinHours(userKey, userSk, days * 24);
     }
 
-    public int getUid() {
-      return uid;
+    /**
+     * 生成一个永不过期的令牌。
+     * 
+     * @param userKey 用户标识
+     * @param userSk 用户秘钥
+     * @return 令牌
+     * @author hankai
+     * @since Dec 8, 2016 2:42:27 PM
+     */
+    public static TokenInfo neverExpire(String userKey, String userSk) {
+      final TokenInfo ti = new TokenInfo();
+      ti.setUserKey(userKey);
+      ti.setUserSk(userSk);
+      ti.setExpiryTime(-1);
+      return ti;
     }
 
-    public void setUid(int uid) {
-      this.uid = uid;
+    /**
+     * 获取 userKey 字段的值。
+     *
+     * @return userKey 字段值
+     */
+    public String getUserKey() {
+      return userKey;
     }
 
+    /**
+     * 设置 userKey 字段的值。
+     *
+     * @param userKey userKey 字段的值
+     */
+    public void setUserKey(String userKey) {
+      this.userKey = userKey;
+    }
+
+    /**
+     * 获取 userSk 字段的值。
+     *
+     * @return userSk 字段值
+     */
+    public String getUserSk() {
+      return userSk;
+    }
+
+    /**
+     * 设置 userSk 字段的值。
+     *
+     * @param userSk userSk 字段的值
+     */
+    public void setUserSk(String userSk) {
+      this.userSk = userSk;
+    }
+
+    /**
+     * 获取 expiryTime 字段的值。
+     *
+     * @return expiryTime 字段值
+     */
     public long getExpiryTime() {
       return expiryTime;
     }
 
+    /**
+     * 设置 expiryTime 字段的值。
+     *
+     * @param expiryTime expiryTime 字段的值
+     */
     public void setExpiryTime(long expiryTime) {
       this.expiryTime = expiryTime;
     }
+
   }
 }

@@ -11,7 +11,7 @@ public final class Route {
 
   /*** API根地址。 ***/
   public static final String API_PREFIX = "/api";
-  public static final String API_LOGIN = API_PREFIX + "/login";
+  public static final String API_AUTHENTICATE = API_PREFIX + "/authenticate";
   /*** 后台根地址。 ***/
   public static final String BACKGROUND_PREFIX = "/admin";
   public static final String BG_LOGIN = BACKGROUND_PREFIX + "/login";
@@ -33,6 +33,8 @@ public final class Route {
   public static final String BG_PLUGINS_ON = BACKGROUND_PREFIX + "/plugins/{plugin_name}/on";
   public static final String BG_PLUGINS_OFF = BACKGROUND_PREFIX + "/plugins/{plugin_name}/off";
   public static final String BG_PLUGINS_UNINSTALL = BACKGROUND_PREFIX + "/plugins/uninstall";
+  public static final String BG_PLUGIN_LOGS = BACKGROUND_PREFIX + "/plugins/logs";
+  public static final String BG_PLUGIN_LOGS_JSON = BACKGROUND_PREFIX + "/plugins/logs.json";
   /*** 前台根地址。 ***/
   public static final String FOREGROUND_PREFIX = "/home";
 }

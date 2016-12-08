@@ -7,12 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,7 +23,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ren.hankai.cordwood.console.config.Route;
 import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
+import ren.hankai.cordwood.console.persist.model.PluginRequest;
+import ren.hankai.cordwood.console.persist.util.PageUtil;
 import ren.hankai.cordwood.console.service.PluginService;
+import ren.hankai.cordwood.console.view.model.BootstrapTableData;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.web.breadcrumb.NavigationItem;
 
@@ -148,4 +154,33 @@ public class PluginController extends BaseController {
     }
   }
 
+  @NavigationItem(label = "nav.plugins.logs", parent = "nav.plugins")
+  @GetMapping(Route.BG_PLUGIN_LOGS)
+  public ModelAndView pluginLogs() {
+    return new ModelAndView("admin_plugin_logs.html");
+  }
+
+  @RequestMapping(Route.BG_PLUGIN_LOGS_JSON)
+  @ResponseBody
+  public BootstrapTableData getPluginLogsJson(
+      @RequestParam(value = "search", required = false) String search,
+      @RequestParam(value = "order", required = false) String order,
+      @RequestParam(value = "sort", required = false) String sort,
+      @RequestParam("limit") int limit,
+      @RequestParam("offset") int offset) {
+    BootstrapTableData response = null;
+    try {
+      final boolean asc = "asc".equalsIgnoreCase(order);
+      final Pageable pageable = PageUtil.pageWithOffsetAndCount(offset, limit, sort, asc);
+      final Page<PluginRequest> logs = pluginService.searchPluginRequests(search, pageable);
+      response = new BootstrapTableData();
+      response.setTotal(logs.getTotalElements());
+      response.setRows(logs.getContent());
+    } catch (final Exception e) {
+      logger.error(Route.BG_PLUGIN_LOGS_JSON, e);
+    } catch (final Error e) {
+      logger.error(Route.BG_PLUGIN_LOGS_JSON, e);
+    }
+    return response;
+  }
 }

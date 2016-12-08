@@ -60,3 +60,7 @@
 .has-error .chosen-choices {
   border-color: #b94a48;
 }
+
+.popover-content {
+  word-break: break-all;
+}

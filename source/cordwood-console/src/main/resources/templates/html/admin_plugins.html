@@ -49,114 +49,117 @@
                             </ul>
                         </div>
                         <div class="row">
-                            <a href="#uploadPlugin" data-toggle="modal" class="config">
-                                <button class="btn btn-info pull-right mr-2" style="margin-bottom: 20px;">
-                                    <i class="fa fa-cloud-upload"></i> 上传插件
-                                </button>
-                            </a>
+                            <div class="col-md-12" style="margin-bottom: 15px;">
+                                <div class="btn-group pull-right">
+                                    <a href="#uploadPlugin" data-toggle="modal" class="btn btn-default">
+                                        <i class="fa fa-cloud-upload"></i> 上传插件
+                                    </a>
+                                    <a href="#" th:href="@{~/admin/plugins/logs}" class="btn btn-default">
+                                        <i class="fa fa-history"></i> 访问日志
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                         <div class="text-center" style="padding-top: 100px;" th:if="${#lists.isEmpty(packages)}">
                             <i class="fa fa-frown-o" style="color: #E6E6E6; font-size: 10em;"></i>
                             <P style="color: #A1A1A1;">还没有安装任何插件</P>
                         </div>
-                        <div class="col-md-12">
-                            <div class="row" th:each="pluginPackage : ${packages}">
-                                <div class="col-md-12">
-                                    <div class="box border primary">
-                                        <div class="box-title">
-                                            <h4 th:text="${pluginPackage.id}"></h4>
-                                            <div class="pull-right">
-                                                <div class="tools">
-                                                    <a href="javascript:;" class="collapse">
-                                                        <i class="fa fa-chevron-up"></i>
-                                                    </a>
-                                                </div>
+                        <div class="row" th:each="pluginPackage : ${packages}">
+                            <div class="col-md-12">
+                                <div class="box border primary">
+                                    <div class="box-title">
+                                        <h4 th:text="${pluginPackage.id}">插件包标识</h4>
+                                        <div class="pull-right">
+                                            <div class="tools">
+                                                <a href="javascript:;" class="collapse">
+                                                    <i class="fa fa-chevron-up"></i>
+                                                </a>
                                             </div>
                                         </div>
-                                        <div class="box-body">
-                                            <div class="row">
-                                                <div class="col-md-10">
-                                                    <p>
-                                                        <i class="fa fa-plug"></i> <span
-                                                            th:text="${pluginPackage.fileName}">插件包文件名</span>
-                                                    </p>
-                                                    <h6>
-                                                        <i class="fa fa-clock-o"></i> <span
-                                                            th:text="${#calendars.format(pluginPackage.createTime,'yyyy-MM-dd HH:mm:ss')}">
-                                                            2016-11-08 14:32:20 </span>
-                                                    </h6>
-                                                </div>
-                                                <div class="col-md-2">
-                                                  <button class="btn btn-grey pull-right uninstall" th:value="${pluginPackage.id}"><i class="fa fa-trash"></i> 卸载</button>
-                                                </div>
+                                    </div>
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <p>
+                                                    <i class="fa fa-plug"></i> <span
+                                                        th:text="${pluginPackage.fileName}">插件包文件名</span>
+                                                </p>
+                                                <h6>
+                                                    <i class="fa fa-clock-o"></i> <span
+                                                        th:text="${#calendars.format(pluginPackage.createTime,'yyyy-MM-dd HH:mm:ss')}">
+                                                        2016-11-08 14:32:20 </span>
+                                                </h6>
                                             </div>
-                                            <hr/>
-                                            <div class="panel-group">
-                                                <div class="panel panel-default" th:each="plugin : ${pluginPackage.plugins}">
-                                                    <div class="panel-heading">
-                                                        <h3 class="panel-title">
-                                                            <span th:id="${'pluginSwitch' + plugin.name}" class="make-switch switch-mini pull-right"
-                                                                data-on="success" data-off="warning" data-on-label="启用" data-off-label="禁用">
-                                                                <input type="checkbox" th:checked="${plugin.active}" th:value="${plugin.name}" />
-                                                            </span>
-                                                            <a class="accordion-toggle"
-                                                                data-toggle="collapse"
-                                                                href="#collapseOne"
-                                                                th:href="${'#' + plugin.name}"
-                                                                th:text="${plugin.displayName}"></a>
-                                                        </h3>
-                                                    </div>
-                                                    <div id="collapseOne"
-                                                        class="panel-collapse collapse"
-                                                        th:id="${plugin.name}">
-                                                        <div class="panel-body">
-                                                            <p th:text="${plugin.description}">插件简介</p>
+                                            <div class="col-md-2">
+                                              <button class="btn btn-grey pull-right uninstall" th:value="${pluginPackage.id}"><i class="fa fa-trash"></i> 卸载</button>
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                        <div class="panel-group">
+                                            <div class="panel panel-default" th:each="plugin : ${pluginPackage.plugins}">
+                                                <div class="panel-heading">
+                                                    <h3 class="panel-title">
+                                                        <span th:id="${'pluginSwitch' + plugin.name}" class="make-switch switch-mini pull-right"
+                                                            data-on="success" data-off="warning" data-on-label="启用" data-off-label="禁用">
+                                                            <input type="checkbox" th:checked="${plugin.active}" th:value="${plugin.name}" />
+                                                        </span>
+                                                        <a class="accordion-toggle"
+                                                            data-toggle="collapse"
+                                                            href="#collapseOne"
+                                                            th:href="${'#' + plugin.name}"
+                                                            th:text="${plugin.displayName}">插件显示名</a>
+                                                    </h3>
+                                                </div>
+                                                <div id="collapseOne"
+                                                    class="panel-collapse collapse"
+                                                    th:id="${plugin.name}">
+                                                    <div class="panel-body">
+                                                        <p th:text="${plugin.description}">插件简介</p>
+                                                        <ul class="list-unstyled">
+                                                            <li><strong>标识：</strong><span th:text="${plugin.name}">XXX</span></li>
+                                                            <li><strong>版本：</strong><span th:text="${plugin.version}">XXX</span></li>
+                                                            <li><strong>开发者：</strong><span th:text="${plugin.developer}">XXX</span></li>
+                                                        </ul>
+                                                        <hr/>
+                                                        <div class="well" th:each="feature : ${plugin.features}">
+                                                            <h5><strong th:text="${feature.description}">功能简介</strong></h5>
                                                             <ul class="list-unstyled">
-                                                                <li><strong>标识：</strong><span th:text="${plugin.name}">XXX</span></li>
-                                                                <li><strong>版本：</strong><span th:text="${plugin.version}">XXX</span></li>
-                                                                <li><strong>开发者：</strong><span th:text="${plugin.developer}">XXX</span></li>
+                                                                <li class="text-primary" th:text="${#httpServletRequest.scheme+'://'+
+                                                                                        #httpServletRequest.serverName+':'+
+                                                                                        #httpServletRequest.serverPort+
+                                                                                        plugin.getFeatureUrl(feature.name)}">
+                                                                    http://...
+                                                                </li>
+                                                                <li th:text="${'响应：' + feature.resultType}">响应：text/html</li>
+                                                                <li>入参防篡改：
+                                                                    <i class="fa fa-check-circle text-success" 
+                                                                       th:if="${feature.checkInboundParameters}"></i>
+                                                                   <i class="fa fa-times-circle text-warning" 
+                                                                       th:if="${!feature.checkInboundParameters}"></i>
+                                                                <li>访问需授权：
+                                                                    <i class="fa fa-check-circle text-success" 
+                                                                       th:if="${feature.checkAccessToken}"></i>
+                                                                   <i class="fa fa-times-circle text-warning" 
+                                                                       th:if="${!feature.checkAccessToken}"></i>
+                                                                </li>
+                                                                <li>已启用缓存：
+                                                                    <i class="fa fa-check-circle text-success" 
+                                                                       th:if="${feature.cacheable}"></i>
+                                                                   <i class="fa fa-times-circle text-warning" 
+                                                                       th:if="${!feature.cacheable}"></i>
+                                                                </li>
+                                                                <li>入参：</li>
+                                                                <li>
+                                                                    <ul class="list-unstyled" style="text-indent: 20px;">
+                                                                        <li th:each="inputParam : ${feature.parameters}">
+                                                                            <span style="font-weight: bold;" th:text="${inputParam.name}">参数名</span>: 
+                                                                            <span th:text="${inputParam.type.name}">参数类型</span> | 
+                                                                            <span th:text="${inputParam.required ? '必传' : '可选'}">是否必传</span> | 
+                                                                            <span th:text="${inputParam.description}">参数简介</span>
+                                                                        </li>
+                                                                    </ul>
+                                                                </li>
                                                             </ul>
-                                                            <hr/>
-                                                            <div class="well" th:each="feature : ${plugin.features}">
-                                                                <h5><strong th:text="${feature.description}">功能简介</strong></h5>
-                                                                <ul class="list-unstyled">
-                                                                    <li class="text-primary" th:text="${#httpServletRequest.scheme+'://'+
-                                                                                            #httpServletRequest.serverName+':'+
-                                                                                            #httpServletRequest.serverPort+
-                                                                                            plugin.getFeatureUrl(feature.name)}">
-                                                                        http://...
-                                                                    </li>
-                                                                    <li th:text="${'响应：' + feature.resultType}">响应：text/html</li>
-                                                                    <li>入参防篡改：
-                                                                        <i class="fa fa-check-circle text-success" 
-                                                                           th:if="${feature.checkInboundParameters}"></i>
-                                                                       <i class="fa fa-times-circle text-warning" 
-                                                                           th:if="${!feature.checkInboundParameters}"></i>
-                                                                    <li>访问需授权：
-                                                                        <i class="fa fa-check-circle text-success" 
-                                                                           th:if="${feature.checkAccessToken}"></i>
-                                                                       <i class="fa fa-times-circle text-warning" 
-                                                                           th:if="${!feature.checkAccessToken}"></i>
-                                                                    </li>
-                                                                    <li>已启用缓存：
-                                                                        <i class="fa fa-check-circle text-success" 
-                                                                           th:if="${feature.cacheable}"></i>
-                                                                       <i class="fa fa-times-circle text-warning" 
-                                                                           th:if="${!feature.cacheable}"></i>
-                                                                    </li>
-                                                                    <li>入参：</li>
-                                                                    <li>
-                                                                        <ul class="list-unstyled" style="text-indent: 20px;">
-                                                                            <li th:each="inputParam : ${feature.parameters}">
-                                                                                <span style="font-weight: bold;" th:text="${inputParam.name}">参数名</span>: 
-                                                                                <span th:text="${inputParam.type.name}">参数类型</span> | 
-                                                                                <span th:text="${inputParam.required ? '必传' : '可选'}">是否必传</span> | 
-                                                                                <span th:text="${inputParam.description}">参数简介</span>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
