@@ -30,6 +30,12 @@ public interface PluginRequestRepository extends BaseRepository<PluginRequest, I
   Double timeUsageAverage(@Param("userEmail") String userEmail, @Param("beginTime") Date beginTime,
       @Param("endTime") Date endTime);
 
+  @Query("select sum(o.requestBytes+o.responseBytes) from PluginRequest o")
+  long pluginTotalDataBytes();
+
+  @Query("select sum(o.requestBytes+o.responseBytes) from PluginRequest o where o.plugin.developer like :userEmail")
+  long userPluginDataBytes(@Param("userEmail") String userEmail);
+
   public static final class PluginRequestSpecs {
 
     /**
@@ -48,8 +54,7 @@ public interface PluginRequestRepository extends BaseRepository<PluginRequest, I
           Predicate pre = null;
           if (!StringUtils.isEmpty(keyword)) {
             final String fuzzyKeyword = "%" + keyword + "%";
-            pre = cb.or(
-                cb.like(root.get("plugin").get("name"), fuzzyKeyword),
+            pre = cb.or(cb.like(root.get("plugin").get("name"), fuzzyKeyword),
                 cb.like(root.get("plugin").get("displayName"), fuzzyKeyword),
                 cb.like(root.get("plugin").get("description"), fuzzyKeyword),
                 cb.like(root.get("plugin").get("developer"), fuzzyKeyword),
@@ -102,7 +107,7 @@ public interface PluginRequestRepository extends BaseRepository<PluginRequest, I
 
     /**
      * 查询用户所有的插件请求。
-     * 
+     *
      * @param userEmail 用户邮箱
      * @return 查询条件
      * @author hankai

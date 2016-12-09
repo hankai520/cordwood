@@ -183,6 +183,9 @@
       jQuery(document).ready(function() {
         App.setPage("login");
         App.init();
+        if (!$('#email').val()) {
+            $('#email').focus();
+        }
       });
     </script>
     <script type="text/javascript">

@@ -131,7 +131,7 @@
                                                                     </div>
                                                                     <div class="panel-right">
                                                                         <div class="number">
-                                                                        <span th:text="${#numbers.formatDecimal(timeUsageAvg, 1, 1)}">
+                                                                        <span th:text="${#numbers.formatDecimal(pluginTimeUsageAvg, 1, 1)}">
                                                                             23</span> <small>ms</small>
                                                                         </div>
                                                                         <div class="title">今日平均响应时间</div>
@@ -146,19 +146,22 @@
                                                                 class="quick-pie panel panel-default">
                                                                 <div class="panel-body">
                                                                     <div class="col-md-4 text-center">
-                                                                        <div id="pie_1" class="piechart" data-percent="9.8" th:data-percent="${faultRate}">
+                                                                        <div id="pie_1" class="piechart" data-percent="9.8"
+                                                                            th:data-percent="${pluginFaultRate}">
                                                                             <span class="percent"></span>
                                                                         </div>
                                                                         <div>插件故障率</div>
                                                                     </div>
                                                                     <div class="col-md-4 text-center">
-                                                                        <div id="pie_2" class="piechart" data-percent="73">
+                                                                        <div id="pie_2" class="piechart" data-percent="73"
+                                                                            th:data-percent="${pluginUsage}">
                                                                             <span class="percent"></span>
                                                                         </div>
                                                                         <div>插件使用率</div>
                                                                     </div>
                                                                     <div class="col-md-4 text-center">
-                                                                        <div id="pie_3" class="piechart" data-percent="44">
+                                                                        <div id="pie_3" class="piechart" data-percent="44"
+                                                                            th:data-percent="${pluginDataShare}">
                                                                             <span class="percent"></span>
                                                                         </div>
                                                                         <div>插件流量占比</div>

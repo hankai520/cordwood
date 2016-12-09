@@ -65,9 +65,13 @@ public class UserController extends BaseController {
     final long pluginAccesses = pluginService.getUserPluginAccessCount(user.getEmail());
     mav.addObject("pluginAccesses", pluginAccesses);
     final float timeUsageAvg = pluginService.getUserPluginTimeAverage(user.getEmail());
-    mav.addObject("timeUsageAvg", timeUsageAvg);
+    mav.addObject("pluginTimeUsageAvg", timeUsageAvg);
     final float faultRate = pluginService.getUserPluginFaultRate(user.getEmail());
-    mav.addObject("faultRate", faultRate * 100);
+    mav.addObject("pluginFaultRate", faultRate * 100);
+    final float pluginUsage = pluginService.getUserPluginUsage(user.getEmail());
+    mav.addObject("pluginUsage", pluginUsage * 100);
+    final float pluginDataShare = pluginService.getUserPluginDataShare(user.getEmail());
+    mav.addObject("pluginDataShare", pluginDataShare * 100);
     return mav;
   }
 
@@ -134,8 +138,7 @@ public class UserController extends BaseController {
   public BootstrapTableData getUsersJson(
       @RequestParam(value = "search", required = false) String search,
       @RequestParam(value = "order", required = false) String order,
-      @RequestParam(value = "sort", required = false) String sort,
-      @RequestParam("limit") int limit,
+      @RequestParam(value = "sort", required = false) String sort, @RequestParam("limit") int limit,
       @RequestParam("offset") int offset) {
     BootstrapTableData response = null;
     try {
@@ -217,8 +220,7 @@ public class UserController extends BaseController {
 
   @NavigationItem(label = "nav.users.edit", parent = "nav.users")
   @PostMapping(Route.BG_EDIT_USER)
-  public ModelAndView editUser(
-      @PathVariable("user_id") Integer uid,
+  public ModelAndView editUser(@PathVariable("user_id") Integer uid,
       @ModelAttribute("user") @Valid UserBean user, BindingResult br) {
     final ModelAndView mav = new ModelAndView("admin_edit_user.html");
     user.setId(uid);

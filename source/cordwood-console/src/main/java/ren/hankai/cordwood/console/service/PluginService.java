@@ -272,7 +272,7 @@ public class PluginService {
 
   /**
    * 获取用户插件当天的平均响应时间。
-   * 
+   *
    * @param userEmail 用户邮箱
    * @return 响应时间（毫秒）
    * @author hankai
@@ -299,9 +299,9 @@ public class PluginService {
 
   /**
    * 获取用户插件故障率。
-   * 
+   *
    * @param userEmail 用户邮箱
-   * @return 故障率
+   * @return 故障率（0~1）
    * @author hankai
    * @since Dec 8, 2016 7:42:04 PM
    */
@@ -311,6 +311,38 @@ public class PluginService {
     final float all = pluginRequestRepo.count(PluginRequestSpecs.userPluginRequests(userEmail));
     final float rate = failures / all;
     return rate;
+  }
+
+  /**
+   * 获取用户插件使用率。
+   *
+   * @param userEmail 用户邮箱
+   * @return 使用率（0~1）
+   * @author hankai
+   * @since Dec 9, 2016 10:18:24 PM
+   */
+  public float getUserPluginUsage(String userEmail) {
+    final long userPluginAccessCount =
+        pluginRequestRepo.count(PluginRequestSpecs.userPluginRequests(userEmail));
+    final long totalCount = pluginRequestRepo.count();
+    final float percent = ((float) userPluginAccessCount) / totalCount;
+    return percent;
+  }
+
+  /**
+   * 获取用户插件流量与插件总流量之比。
+   *
+   * @param userEmail 用户邮箱
+   * @return 用户插件流量占比（0~1）
+   * @author hankai
+   * @since Dec 9, 2016 10:23:04 PM
+   */
+  public float getUserPluginDataShare(String userEmail) {
+    final long totalBytes = pluginRequestRepo.pluginTotalDataBytes();
+    final String fuzzyEmail = "%" + userEmail + "%";
+    final long userPluginBytes = pluginRequestRepo.userPluginDataBytes(fuzzyEmail);
+    final float percent = ((float) userPluginBytes) / totalBytes;
+    return percent;
   }
 
 }
