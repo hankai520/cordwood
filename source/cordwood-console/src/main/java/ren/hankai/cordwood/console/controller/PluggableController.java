@@ -1,14 +1,17 @@
 package ren.hankai.cordwood.console.controller;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import ren.hankai.cordwood.console.interceptor.PluginRequestInterceptor;
-import ren.hankai.cordwood.console.persist.model.App;
-import ren.hankai.cordwood.console.persist.model.PluginRequest;
+import ren.hankai.cordwood.console.persist.model.AppBean;
+import ren.hankai.cordwood.console.persist.model.PluginRequestBean;
 import ren.hankai.cordwood.console.service.AppService;
 import ren.hankai.cordwood.console.service.PluginService;
+import ren.hankai.cordwood.plugin.exception.PluginException;
 import ren.hankai.cordwood.plugin.support.PluginRequestDispatcher;
 import ren.hankai.cordwood.web.security.AccessAuthenticator;
 import ren.hankai.cordwood.web.security.AccessAuthenticator.TokenInfo;
@@ -27,6 +30,8 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class PluggableController extends PluginRequestDispatcher {
 
+  private static final Logger logger = LoggerFactory.getLogger(PluggableController.class);
+
   @Autowired
   private PluginService pluginService;
   @Autowired
@@ -39,18 +44,18 @@ public class PluggableController extends PluginRequestDispatcher {
       HttpServletRequest request) {
     final long now = System.currentTimeMillis();
     request.setAttribute(PluginRequestInterceptor.REQUEST_TIMESTAMP, now);
-    PluginRequest pr = null;
+    PluginRequestBean pr = null;
     final Object object = request.getAttribute(PluginRequestInterceptor.PLUGIN_REQUEST);
     if (object == null) {
-      pr = new PluginRequest();
+      pr = new PluginRequestBean();
     } else {
-      pr = (PluginRequest) object;
+      pr = (PluginRequestBean) object;
     }
     pr.setPlugin(pluginService.getInstalledPluginByName(pluginName));
     final String tokenString = request.getParameter(AccessAuthenticator.ACCESS_TOKEN);
     if (StringUtils.isNotEmpty(tokenString)) {
       final TokenInfo tokenInfo = authenticator.parseAccessToken(tokenString);
-      final App app = appService.getAppByAppKey(tokenInfo.getUserKey());
+      final AppBean app = appService.getAppByAppKey(tokenInfo.getUserKey());
       pr.setApp(app);
     }
     pr.setClientIp(request.getRemoteAddr());
@@ -68,10 +73,17 @@ public class PluggableController extends PluginRequestDispatcher {
   @Override
   protected void afterProcessingPluginRequest(String pluginName, String functionName,
       HttpServletRequest request, Throwable errors) {
+    final PluginRequestBean pr =
+        (PluginRequestBean) request.getAttribute(PluginRequestInterceptor.PLUGIN_REQUEST);
+    pr.setSucceeded(true);
     if (errors != null) {
+      if (errors instanceof PluginException) {
+        logger.warn(
+            String.format("%s [%s] exception: %s", pluginName, functionName, errors.getMessage()));
+      } else {
+        pr.setSucceeded(false);
+      }
       request.setAttribute(PluginRequestInterceptor.RESPONSE_ERRORS, errors);
     }
   }
-
-
 }

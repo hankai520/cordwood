@@ -33,7 +33,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "plugin_requests")
 @Cacheable(false)
-public class PluginRequest implements Serializable {
+public class PluginRequestBean implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -45,7 +45,7 @@ public class PluginRequest implements Serializable {
   private PluginBean plugin;
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "appId", referencedColumnName = "id")
-  private App app;
+  private AppBean app;
   @Column(length = 40, nullable = false)
   @Size(min = 1, max = 20)
   private String clientIp;
@@ -126,7 +126,7 @@ public class PluginRequest implements Serializable {
    * @return app 字段值
    */
   @JsonIgnore
-  public App getApp() {
+  public AppBean getApp() {
     return app;
   }
 
@@ -135,7 +135,7 @@ public class PluginRequest implements Serializable {
    *
    * @param app app 字段的值
    */
-  public void setApp(App app) {
+  public void setApp(AppBean app) {
     this.app = app;
   }
 

@@ -1,5 +1,6 @@
 package ren.hankai.cordwood.console.persist.support;
 
+import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
 import ren.hankai.cordwood.console.persist.BaseRepository;
@@ -21,8 +22,8 @@ import javax.persistence.criteria.Root;
 public class BaseRepositoryImpl<T, I extends Serializable> extends SimpleJpaRepository<T, I>
     implements BaseRepository<T, I> {
 
-  private final EntityManager entityManager;
-  private final Class<T> domainClass;
+  protected final EntityManager entityManager;
+  protected final Class<T> domainClass;
 
   /**
    * 构造实体仓库基类。
@@ -34,6 +35,13 @@ public class BaseRepositoryImpl<T, I extends Serializable> extends SimpleJpaRepo
     super(domainClass, entityManager);
     this.entityManager = entityManager;
     this.domainClass = domainClass;
+  }
+
+  public BaseRepositoryImpl(JpaEntityInformation<T, ?> entityInformation,
+      EntityManager entityManager) {
+    super(entityInformation, entityManager);
+    this.entityManager = entityManager;
+    this.domainClass = entityInformation.getJavaType();
   }
 
   @Override

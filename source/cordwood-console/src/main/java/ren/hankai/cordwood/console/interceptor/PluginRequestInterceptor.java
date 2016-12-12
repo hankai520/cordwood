@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import ren.hankai.cordwood.console.persist.model.PluginRequest;
+import ren.hankai.cordwood.console.persist.model.PluginRequestBean;
 import ren.hankai.cordwood.console.service.PluginService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,19 +41,18 @@ public class PluginRequestInterceptor implements HandlerInterceptor {
       ModelAndView modelAndView) throws Exception {
     final long begin = (long) request.getAttribute(REQUEST_TIMESTAMP);
     final long timespan = System.currentTimeMillis() - begin;
-    final PluginRequest pr = (PluginRequest) request.getAttribute(PLUGIN_REQUEST);
+    final PluginRequestBean pr = (PluginRequestBean) request.getAttribute(PLUGIN_REQUEST);
     pr.setMilliseconds(timespan);
     if (request.getAttribute(RESPONSE_ERRORS) != null) {
       final Throwable errors = (Throwable) request.getAttribute(RESPONSE_ERRORS);
       pr.setErrors(errors.toString());
     }
-    pr.setSucceeded(pr.getErrors() == null);
   }
 
   @Override
   public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
       Object handler, Exception ex) throws Exception {
-    final PluginRequest pr = (PluginRequest) request.getAttribute(PLUGIN_REQUEST);
+    final PluginRequestBean pr = (PluginRequestBean) request.getAttribute(PLUGIN_REQUEST);
     pr.setResponseCode(response.getStatus());
     final String len = response.getHeader(HttpHeaders.CONTENT_LENGTH);
     pr.setResponseBytes(Long.parseLong(len));

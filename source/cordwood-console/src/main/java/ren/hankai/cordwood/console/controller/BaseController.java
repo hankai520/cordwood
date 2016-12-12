@@ -1,6 +1,8 @@
 
 package ren.hankai.cordwood.console.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,12 +21,14 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class BaseController {
 
+  private static final Logger logger = LoggerFactory.getLogger(BaseController.class);
+
   @Autowired
   protected MessageSource messageSource;
 
   /**
    * 添加操作成功的提示消息。
-   * 
+   *
    * @param mav 视图模型
    * @author hankai
    * @since Dec 7, 2016 3:46:05 PM
@@ -36,7 +40,7 @@ public abstract class BaseController {
 
   /**
    * 添加操作失败的提示消息。
-   * 
+   *
    * @param mav 视图模型
    * @author hankai
    * @since Dec 7, 2016 3:46:29 PM
@@ -60,6 +64,7 @@ public abstract class BaseController {
     final ModelAndView mav = new ModelAndView("error.html");
     mav.addObject("exception", exception);
     mav.addObject("errors", exception.toString());
+    logger.warn(request.getRequestURL().toString(), exception);
     return mav;
   }
 

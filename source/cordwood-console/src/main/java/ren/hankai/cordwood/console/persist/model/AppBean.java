@@ -31,7 +31,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "apps")
 @Cacheable(false)
-public class App implements Serializable {
+public class AppBean implements Serializable {
 
   private static final long serialVersionUID = 1L;
 

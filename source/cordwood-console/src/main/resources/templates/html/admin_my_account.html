@@ -116,8 +116,8 @@
                                                                         <i class="fa fa-fire fa-3x"></i>
                                                                     </div>
                                                                     <div class="panel-right">
-                                                                        <div class="number" th:text="${pluginAccesses}">3932</div>
-                                                                        <div class="title">今日插件访问次数</div>
+                                                                        <div class="number" th:text="${statistics.accessCount}">3932</div>
+                                                                        <div class="title">插件访问次数</div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -131,10 +131,10 @@
                                                                     </div>
                                                                     <div class="panel-right">
                                                                         <div class="number">
-                                                                        <span th:text="${#numbers.formatDecimal(pluginTimeUsageAvg, 1, 1)}">
+                                                                        <span th:text="${#numbers.formatDecimal(statistics.timeUsageAvg, 1, 1)}">
                                                                             23</span> <small>ms</small>
                                                                         </div>
-                                                                        <div class="title">今日平均响应时间</div>
+                                                                        <div class="title">插件响应时间</div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -147,21 +147,21 @@
                                                                 <div class="panel-body">
                                                                     <div class="col-md-4 text-center">
                                                                         <div id="pie_1" class="piechart" data-percent="9.8"
-                                                                            th:data-percent="${pluginFaultRate}">
+                                                                            th:data-percent="${statistics.faultRate}">
                                                                             <span class="percent"></span>
                                                                         </div>
                                                                         <div>插件故障率</div>
                                                                     </div>
                                                                     <div class="col-md-4 text-center">
                                                                         <div id="pie_2" class="piechart" data-percent="73"
-                                                                            th:data-percent="${pluginUsage}">
+                                                                            th:data-percent="${statistics.usageRage}">
                                                                             <span class="percent"></span>
                                                                         </div>
                                                                         <div>插件使用率</div>
                                                                     </div>
                                                                     <div class="col-md-4 text-center">
                                                                         <div id="pie_3" class="piechart" data-percent="44"
-                                                                            th:data-percent="${pluginDataShare}">
+                                                                            th:data-percent="${statistics.dataShare}">
                                                                             <span class="percent"></span>
                                                                         </div>
                                                                         <div>插件流量占比</div>
@@ -214,36 +214,29 @@
                                                                     <table class="table table-striped table-bordered table-hover">
                                                                         <thead>
                                                                             <tr>
-                                                                                <th>应用</th>
-                                                                                <th>流量</th>
-                                                                                <th>次数</th>
+                                                                                <th>插件</th>
+                                                                                <th>请求（字节）</th>
+                                                                                <th>响应（字节）</th>
+                                                                                <th>访问次数</th>
+                                                                                <th>响应时间</th>
                                                                                 <th>最近访问</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
-                                                                            <tr>
+                                                                            <tr th:each="req : ${statistics.summarizedRequests}">
                                                                                 <td>
-                                                                                    <span class="label label-warning">测试插件1</span>
+                                                                                    <span class="label label-warning"
+                                                                                        th:text="${req.pluginName}">测试插件1</span>
                                                                                 </td>
-                                                                                <td>728 MB</td>
-                                                                                <td>239,123</td>
-                                                                                <td>2016-11-30 13:23:34</td>
-                                                                            </tr>
-                                                                            <tr>
                                                                                 <td>
-                                                                                    <span class="label label-success">测试插件2</span>
+                                                                                    <span th:text="${#numbers.formatDecimal(req.inboundBytes, 1, 1)}">217</span>
                                                                                 </td>
-                                                                                <td>2.3 GB</td>
-                                                                                <td>939,123</td>
-                                                                                <td>2016-11-30 16:29:45</td>
-                                                                            </tr>
-                                                                            <tr>
                                                                                 <td>
-                                                                                    <span class="label label-success">测试插件3</span>
+                                                                                    <span th:text="${#numbers.formatDecimal(req.outboundBytes, 1, 1)}">217</span>
                                                                                 </td>
-                                                                                <td>1.4 GB</td>
-                                                                                <td>339,123</td>
-                                                                                <td>2016-11-30 17:23:34</td>
+                                                                                <td th:text="${req.accessCount}">239,123</td>
+                                                                                <td><span th:text="${req.timeUsageAvg}">12</span> ms</td>
+                                                                                <td th:text="${#calendars.format(req.lastAccessTime,'yyyy-MM-dd HH:mm:ss')}">2016-11-30 13:23:34</td>
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>

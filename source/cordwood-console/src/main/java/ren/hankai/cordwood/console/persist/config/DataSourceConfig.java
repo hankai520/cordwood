@@ -38,7 +38,7 @@ import javax.sql.DataSource;
 @Configuration
 public class DataSourceConfig {
 
-  private static final Logger logger = LoggerFactory.getLogger(DataSourceConfig.class);
+  private static final Logger logger = LoggerFactory.getLogger(InMemoryDataSourceConfig.class);
   private static final String[] basePackages = {"ren.hankai.cordwood"};
 
   /**

@@ -24,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ren.hankai.cordwood.console.PluginInitializer;
 import ren.hankai.cordwood.console.config.Route;
 import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
-import ren.hankai.cordwood.console.persist.model.PluginRequest;
+import ren.hankai.cordwood.console.persist.model.PluginRequestBean;
 import ren.hankai.cordwood.console.persist.util.PageUtil;
 import ren.hankai.cordwood.console.service.PluginService;
 import ren.hankai.cordwood.console.view.model.BootstrapTableData;
@@ -179,7 +179,7 @@ public class PluginController extends BaseController {
     try {
       final boolean asc = "asc".equalsIgnoreCase(order);
       final Pageable pageable = PageUtil.pageWithOffsetAndCount(offset, limit, sort, asc);
-      final Page<PluginRequest> logs = pluginService.searchPluginRequests(search, pageable);
+      final Page<PluginRequestBean> logs = pluginService.searchPluginRequests(search, pageable);
       response = new BootstrapTableData();
       response.setTotal(logs.getTotalElements());
       response.setRows(logs.getContent());

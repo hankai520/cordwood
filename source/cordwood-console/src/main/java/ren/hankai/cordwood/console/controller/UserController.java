@@ -30,6 +30,8 @@ import ren.hankai.cordwood.console.persist.util.PageUtil;
 import ren.hankai.cordwood.console.service.PluginService;
 import ren.hankai.cordwood.console.service.UserService;
 import ren.hankai.cordwood.console.view.model.BootstrapTableData;
+import ren.hankai.cordwood.console.view.model.PluginRequestStatistics;
+import ren.hankai.cordwood.core.util.DateUtil;
 import ren.hankai.cordwood.web.breadcrumb.NavigationItem;
 
 import java.io.File;
@@ -62,16 +64,10 @@ public class UserController extends BaseController {
     final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     final UserBean user = (UserBean) auth.getPrincipal();
     mav.addObject("user", user);
-    final long pluginAccesses = pluginService.getUserPluginAccessCount(user.getEmail());
-    mav.addObject("pluginAccesses", pluginAccesses);
-    final float timeUsageAvg = pluginService.getUserPluginTimeAverage(user.getEmail());
-    mav.addObject("pluginTimeUsageAvg", timeUsageAvg);
-    final float faultRate = pluginService.getUserPluginFaultRate(user.getEmail());
-    mav.addObject("pluginFaultRate", faultRate * 100);
-    final float pluginUsage = pluginService.getUserPluginUsage(user.getEmail());
-    mav.addObject("pluginUsage", pluginUsage * 100);
-    final float pluginDataShare = pluginService.getUserPluginDataShare(user.getEmail());
-    mav.addObject("pluginDataShare", pluginDataShare * 100);
+    final Date[] dateRange = DateUtil.thisMonth();
+    final PluginRequestStatistics statistics =
+        pluginService.getUserPluginStatistics(user.getEmail(), dateRange[0], dateRange[1]);
+    mav.addObject("statistics", statistics);
     return mav;
   }
 

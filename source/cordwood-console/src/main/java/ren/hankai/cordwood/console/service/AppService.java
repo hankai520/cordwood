@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import ren.hankai.cordwood.console.persist.AppRepository;
 import ren.hankai.cordwood.console.persist.AppRepository.AppSpecs;
-import ren.hankai.cordwood.console.persist.model.App;
+import ren.hankai.cordwood.console.persist.model.AppBean;
 import ren.hankai.cordwood.console.persist.support.EntitySpecs;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public class AppService {
    * @author hankai
    * @since Dec 8, 2016 11:20:34 AM
    */
-  public App getAppByAppKey(String appKey) {
+  public AppBean getAppByAppKey(String appKey) {
     return appRepo.findOne(EntitySpecs.field("appKey", appKey));
   }
 
@@ -45,8 +45,8 @@ public class AppService {
    * @author hankai
    * @since Dec 8, 2016 2:39:34 PM
    */
-  public App getIdentifiedApp(String appKey, String secretKey) {
-    final List<App> apps = appRepo.findAll(AppSpecs.identifiedApp(appKey, secretKey));
+  public AppBean getIdentifiedApp(String appKey, String secretKey) {
+    final List<AppBean> apps = appRepo.findAll(AppSpecs.identifiedApp(appKey, secretKey));
     if ((apps != null) && (apps.size() > 0)) {
       return apps.get(0);
     }

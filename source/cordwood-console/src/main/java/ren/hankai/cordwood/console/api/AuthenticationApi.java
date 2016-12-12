@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ren.hankai.cordwood.console.api.exception.AppNotFoundException;
 import ren.hankai.cordwood.console.api.payload.BusinessErrors;
 import ren.hankai.cordwood.console.config.Route;
-import ren.hankai.cordwood.console.persist.model.App;
+import ren.hankai.cordwood.console.persist.model.AppBean;
 import ren.hankai.cordwood.console.service.AppService;
 import ren.hankai.cordwood.core.api.support.ApiResponse;
 import ren.hankai.cordwood.core.api.support.WebServiceSupport;
@@ -37,7 +37,7 @@ public class AuthenticationApi extends WebServiceSupport {
   public ApiResponse authenticate(@RequestParam("app_key") String appKey,
       @RequestParam("app_sk") String appSk) {
     final ApiResponse response = new ApiResponse();
-    final App app = appService.getIdentifiedApp(appKey, appSk);
+    final AppBean app = appService.getIdentifiedApp(appKey, appSk);
     if (app == null) {
       throw new AppNotFoundException(BusinessErrors.APP_NOT_FOUND, "App not found!");
     }

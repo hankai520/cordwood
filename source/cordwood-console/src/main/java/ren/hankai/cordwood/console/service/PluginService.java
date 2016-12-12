@@ -21,8 +21,9 @@ import ren.hankai.cordwood.console.persist.PluginRequestRepository;
 import ren.hankai.cordwood.console.persist.PluginRequestRepository.PluginRequestSpecs;
 import ren.hankai.cordwood.console.persist.model.PluginBean;
 import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
-import ren.hankai.cordwood.console.persist.model.PluginRequest;
+import ren.hankai.cordwood.console.persist.model.PluginRequestBean;
 import ren.hankai.cordwood.console.persist.support.EntitySpecs;
+import ren.hankai.cordwood.console.view.model.PluginRequestStatistics;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.Plugin;
 import ren.hankai.cordwood.plugin.PluginPackage;
@@ -37,7 +38,6 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -241,7 +241,7 @@ public class PluginService {
    * @since Dec 8, 2016 10:47:21 AM
    */
   @Transactional
-  public void savePluginRequest(PluginRequest request) {
+  public void savePluginRequest(PluginRequestBean request) {
     pluginRequestRepo.save(request);
   }
 
@@ -254,95 +254,50 @@ public class PluginService {
    * @author hankai
    * @since Dec 8, 2016 3:25:23 PM
    */
-  public Page<PluginRequest> searchPluginRequests(String keyword, Pageable pageable) {
+  public Page<PluginRequestBean> searchPluginRequests(String keyword, Pageable pageable) {
     return pluginRequestRepo.findAll(PluginRequestSpecs.search(keyword), pageable);
   }
 
   /**
-   * 获取用户所上传的插件的当日访问量。
+   * 对指定时间范围内的用户插件访问信息进行统计。
    *
    * @param userEmail 用户邮箱
-   * @return 插件访问次数
+   * @param beginTime 开始时间
+   * @param endTime 结束时间
+   * @return 统计信息
    * @author hankai
-   * @since Dec 8, 2016 5:23:23 PM
+   * @since Dec 12, 2016 2:04:02 PM
    */
-  public long getUserPluginAccessCount(String userEmail) {
-    return pluginRequestRepo.count(PluginRequestSpecs.usersPluginRequestsToday(userEmail));
-  }
+  public PluginRequestStatistics getUserPluginStatistics(String userEmail, Date beginTime,
+      Date endTime) {
+    final PluginRequestStatistics stats = new PluginRequestStatistics();
 
-  /**
-   * 获取用户插件当天的平均响应时间。
-   *
-   * @param userEmail 用户邮箱
-   * @return 响应时间（毫秒）
-   * @author hankai
-   * @since Dec 8, 2016 7:42:21 PM
-   */
-  public float getUserPluginTimeAverage(String userEmail) {
-    final Calendar cal = Calendar.getInstance();
-    cal.set(Calendar.HOUR_OF_DAY, 0);
-    cal.set(Calendar.MINUTE, 0);
-    cal.set(Calendar.SECOND, 0);
-    cal.set(Calendar.MILLISECOND, 0);
-    final Date beginTime = cal.getTime();
+    final long userPluginAccessCount =
+        pluginRequestRepo.getUserPluginAccessCount(userEmail, beginTime, endTime);
+    stats.setAccessCount(userPluginAccessCount);
 
-    cal.set(Calendar.HOUR_OF_DAY, 23);
-    cal.set(Calendar.MINUTE, 59);
-    cal.set(Calendar.SECOND, 59);
-    cal.set(Calendar.MILLISECOND, 999);
-    final Date endTime = cal.getTime();
+    final double avg = pluginRequestRepo.getUserPluginTimeUsageAvg(userEmail, beginTime, endTime);
+    stats.setTimeUsageAvg(avg);
 
-    final String fuzzyEmail = "%" + userEmail + "%";
-    final Double avg = pluginRequestRepo.timeUsageAverage(fuzzyEmail, beginTime, endTime);
-    return avg.floatValue();
-  }
-
-  /**
-   * 获取用户插件故障率。
-   *
-   * @param userEmail 用户邮箱
-   * @return 故障率（0~1）
-   * @author hankai
-   * @since Dec 8, 2016 7:42:04 PM
-   */
-  public float getUserPluginFaultRate(String userEmail) {
     final float failures =
         pluginRequestRepo.count(PluginRequestSpecs.userPluginRequests(userEmail, false));
-    final float all = pluginRequestRepo.count(PluginRequestSpecs.userPluginRequests(userEmail));
-    final float rate = failures / all;
-    return rate;
-  }
+    final float faultRate = failures / userPluginAccessCount;
+    stats.setFaultRate((int) (faultRate * 100));
 
-  /**
-   * 获取用户插件使用率。
-   *
-   * @param userEmail 用户邮箱
-   * @return 使用率（0~1）
-   * @author hankai
-   * @since Dec 9, 2016 10:18:24 PM
-   */
-  public float getUserPluginUsage(String userEmail) {
-    final long userPluginAccessCount =
-        pluginRequestRepo.count(PluginRequestSpecs.userPluginRequests(userEmail));
     final long totalCount = pluginRequestRepo.count();
-    final float percent = ((float) userPluginAccessCount) / totalCount;
-    return percent;
-  }
+    final float usageRage = ((float) userPluginAccessCount) / totalCount;
+    stats.setUsageRage((int) (usageRage * 100));
 
-  /**
-   * 获取用户插件流量与插件总流量之比。
-   *
-   * @param userEmail 用户邮箱
-   * @return 用户插件流量占比（0~1）
-   * @author hankai
-   * @since Dec 9, 2016 10:23:04 PM
-   */
-  public float getUserPluginDataShare(String userEmail) {
-    final long totalBytes = pluginRequestRepo.pluginTotalDataBytes();
-    final String fuzzyEmail = "%" + userEmail + "%";
-    final long userPluginBytes = pluginRequestRepo.userPluginDataBytes(fuzzyEmail);
-    final float percent = ((float) userPluginBytes) / totalBytes;
-    return percent;
+    final long totalBytes = pluginRequestRepo.getPluginTotalDataBytes(beginTime, endTime);
+    final long userPluginBytes =
+        pluginRequestRepo.getUserPluginDataBytes(userEmail, beginTime, endTime);
+    final float dataShare = ((float) userPluginBytes) / totalBytes;
+    stats.setDataShare((int) (dataShare * 100));
+
+    stats.setSummarizedRequests(
+        pluginRequestRepo.getRequestsGroupByPlugin(userEmail, beginTime, endTime));
+
+    return stats;
   }
 
 }
