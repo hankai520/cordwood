@@ -12,6 +12,7 @@ import java.util.Date;
  */
 public final class SummarizedRequest {
   private String pluginName; // 插件显示名称
+  private boolean pluginIsActive; // 插件是否已启用
   private double inboundBytes; // 输入流量 KB
   private double outboundBytes; // 输出流量 KB
   private long accessCount; // 访问次数
@@ -34,6 +35,24 @@ public final class SummarizedRequest {
    */
   public void setPluginName(String pluginName) {
     this.pluginName = pluginName;
+  }
+
+  /**
+   * 获取 pluginIsActive 字段的值。
+   *
+   * @return pluginIsActive 字段值
+   */
+  public boolean isPluginIsActive() {
+    return pluginIsActive;
+  }
+
+  /**
+   * 设置 pluginIsActive 字段的值。
+   *
+   * @param pluginIsActive pluginIsActive 字段的值
+   */
+  public void setPluginIsActive(boolean pluginIsActive) {
+    this.pluginIsActive = pluginIsActive;
   }
 
   /**

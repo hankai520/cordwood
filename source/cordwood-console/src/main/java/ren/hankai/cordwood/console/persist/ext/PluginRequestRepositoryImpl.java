@@ -126,6 +126,7 @@ public class PluginRequestRepositoryImpl implements PluginRequestRepositoryCusto
       sr.setOutboundBytes(tuple.get("totalResponseBytes", Double.class));
       final Plugin plugin = pluginManager.getPlugin(tuple.get("pluginName", String.class));
       sr.setPluginName(plugin.getDisplayName());
+      sr.setPluginIsActive(plugin.isActive());
       sr.setLastAccessTime(tuple.get("lastAccessTime", Date.class));
       list.add(sr);
     }
