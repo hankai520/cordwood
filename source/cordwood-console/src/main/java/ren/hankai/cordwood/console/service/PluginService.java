@@ -294,6 +294,9 @@ public class PluginService {
     final float dataShare = ((float) userPluginBytes) / totalBytes;
     stats.setDataShare((int) (dataShare * 100));
 
+    stats.setRankedApps(
+        pluginRequestRepo.getRankedAppsByRequestCount(userEmail, beginTime, endTime));
+
     stats.setSummarizedRequests(
         pluginRequestRepo.getRequestsGroupByPlugin(userEmail, beginTime, endTime));
 

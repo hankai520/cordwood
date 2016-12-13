@@ -1,6 +1,8 @@
 
 package ren.hankai.cordwood.console.view.model;
 
+import ren.hankai.cordwood.console.persist.model.AppBean;
+
 import java.util.List;
 
 /**
@@ -17,6 +19,7 @@ public class PluginRequestStatistics {
   private int faultRate; // 故障率的百分值
   private int usageRage; // 使用率的百分值
   private int dataShare; // 流量占比的百分值
+  private List<AppBean> rankedApps; // 应用访问排行
   private List<SummarizedRequest> summarizedRequests; // 按插件分组汇总后的访问信息
   private List<String> leaderboard; // 插件排行榜
 
@@ -126,6 +129,24 @@ public class PluginRequestStatistics {
    */
   public void setSummarizedRequests(List<SummarizedRequest> summarizedRequests) {
     this.summarizedRequests = summarizedRequests;
+  }
+
+  /**
+   * 获取 rankedApps 字段的值。
+   *
+   * @return rankedApps 字段值
+   */
+  public List<AppBean> getRankedApps() {
+    return rankedApps;
+  }
+
+  /**
+   * 设置 rankedApps 字段的值。
+   *
+   * @param rankedApps rankedApps 字段的值
+   */
+  public void setRankedApps(List<AppBean> rankedApps) {
+    this.rankedApps = rankedApps;
   }
 
   /**

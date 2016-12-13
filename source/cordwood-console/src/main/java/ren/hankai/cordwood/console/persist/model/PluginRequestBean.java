@@ -1,7 +1,9 @@
 
 package ren.hankai.cordwood.console.persist.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import ren.hankai.cordwood.jackson.DateTimeSerializer;
@@ -49,6 +51,7 @@ public class PluginRequestBean implements Serializable {
   @Column(length = 40, nullable = false)
   @Size(min = 1, max = 20)
   private String clientIp;
+  private RequestChannel channel;
   @Column(length = 400, nullable = false)
   @Size(min = 1, max = 360)
   private String requestUrl;
@@ -155,6 +158,24 @@ public class PluginRequestBean implements Serializable {
    */
   public void setClientIp(String clientIp) {
     this.clientIp = clientIp;
+  }
+
+  /**
+   * 获取 channel 字段的值。
+   *
+   * @return channel 字段值
+   */
+  public RequestChannel getChannel() {
+    return channel;
+  }
+
+  /**
+   * 设置 channel 字段的值。
+   *
+   * @param channel channel 字段的值
+   */
+  public void setChannel(RequestChannel channel) {
+    this.channel = channel;
   }
 
   /**
@@ -345,6 +366,69 @@ public class PluginRequestBean implements Serializable {
    */
   public static long getSerialversionuid() {
     return serialVersionUID;
+  }
+
+  /**
+   * 插件请求渠道。
+   *
+   * @author hankai
+   * @version 1.0.0
+   * @since Dec 13, 2016 3:52:34 PM
+   */
+  public enum RequestChannel {
+    /**
+     * 桌面用户。
+     */
+    Desktop(0),
+    /**
+     * 平板电脑。
+     */
+    Tablet(1),
+
+    /**
+     * 移动设备。
+     */
+    MobilePhone(2),
+
+    ;
+
+    /**
+     * 将整型转换为用户状态枚举。
+     *
+     * @param value 整型值
+     * @return 用户状态
+     * @author hankai
+     * @since Nov 8, 2016 8:43:21 AM
+     */
+    @JsonCreator
+    public static RequestChannel fromInteger(Integer value) {
+      if (value == Desktop.value) {
+        return Desktop;
+      } else if (value == Tablet.value) {
+        return Tablet;
+      } else if (value == MobilePhone.value) {
+        return MobilePhone;
+      }
+      return null;
+    }
+
+    private final int value;
+
+    private RequestChannel(int value) {
+      this.value = value;
+    }
+
+    /**
+     * 获取用于国际化的键名。
+     */
+    public String i18nKey() {
+      return String.format("plugin.request.channel.%d", value);
+    }
+
+    @JsonValue
+    public int value() {
+      return value;
+    }
   }
 
 }

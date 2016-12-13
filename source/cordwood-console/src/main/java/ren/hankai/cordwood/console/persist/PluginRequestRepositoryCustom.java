@@ -2,6 +2,7 @@
 package ren.hankai.cordwood.console.persist;
 
 
+import ren.hankai.cordwood.console.persist.model.AppBean;
 import ren.hankai.cordwood.console.view.model.SummarizedRequest;
 
 import java.util.Date;
@@ -74,6 +75,16 @@ public interface PluginRequestRepositoryCustom {
    * @since Dec 12, 2016 1:26:24 PM
    */
   public List<SummarizedRequest> getRequestsGroupByPlugin(String userEmail, Date beginTime,
+      Date endTime);
+
+  /**
+   * 获取根据插件访问次数降序排列的应用访问排行榜（前6位）。
+   * 
+   * @return 应用列表
+   * @author hankai
+   * @since Dec 13, 2016 1:32:32 PM
+   */
+  public List<AppBean> getRankedAppsByRequestCount(String userEmail, Date beginTime,
       Date endTime);
 
 }

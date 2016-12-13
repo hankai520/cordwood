@@ -64,3 +64,7 @@
 .popover-content {
   word-break: break-all;
 }
+
+.progress.thin {
+  height: 9px !important;
+}
