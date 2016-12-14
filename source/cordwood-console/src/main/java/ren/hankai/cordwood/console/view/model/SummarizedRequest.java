@@ -1,6 +1,10 @@
 
 package ren.hankai.cordwood.console.view.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import ren.hankai.cordwood.jackson.DateTimeSerializer;
+
 import java.util.Date;
 
 /**
@@ -132,6 +136,7 @@ public final class SummarizedRequest {
    *
    * @return lastAccessTime 字段值
    */
+  @JsonSerialize(using = DateTimeSerializer.class)
   public Date getLastAccessTime() {
     return lastAccessTime;
   }

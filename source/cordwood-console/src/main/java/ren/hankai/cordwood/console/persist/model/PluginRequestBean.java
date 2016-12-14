@@ -390,6 +390,11 @@ public class PluginRequestBean implements Serializable {
      */
     MobilePhone(2),
 
+    /**
+     * 其他渠道。
+     */
+    Other(3),
+
     ;
 
     /**
@@ -408,6 +413,8 @@ public class PluginRequestBean implements Serializable {
         return Tablet;
       } else if (value == MobilePhone.value) {
         return MobilePhone;
+      } else if (value == Other.value) {
+        return Other;
       }
       return null;
     }

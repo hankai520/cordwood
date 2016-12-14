@@ -1,10 +1,6 @@
 
 package ren.hankai.cordwood.console.view.model;
 
-import ren.hankai.cordwood.console.persist.model.AppBean;
-
-import java.util.List;
-
 /**
  * 用户插件访问统计。
  *
@@ -19,9 +15,7 @@ public class PluginRequestStatistics {
   private int faultRate; // 故障率的百分值
   private int usageRage; // 使用率的百分值
   private int dataShare; // 流量占比的百分值
-  private List<AppBean> rankedApps; // 应用访问排行
-  private List<SummarizedRequest> summarizedRequests; // 按插件分组汇总后的访问信息
-  private List<String> leaderboard; // 插件排行榜
+  private ChannelRequest channelRequest; // 渠道统计
 
   /**
    * 获取 accessCount 字段的值。
@@ -114,56 +108,21 @@ public class PluginRequestStatistics {
   }
 
   /**
-   * 获取 summarizedRequests 字段的值。
+   * 获取 channelRequest 字段的值。
    *
-   * @return summarizedRequests 字段值
+   * @return channelRequest 字段值
    */
-  public List<SummarizedRequest> getSummarizedRequests() {
-    return summarizedRequests;
+  public ChannelRequest getChannelRequest() {
+    return channelRequest;
   }
 
   /**
-   * 设置 summarizedRequests 字段的值。
+   * 设置 channelRequest 字段的值。
    *
-   * @param summarizedRequests summarizedRequests 字段的值
+   * @param channelRequest channelRequest 字段的值
    */
-  public void setSummarizedRequests(List<SummarizedRequest> summarizedRequests) {
-    this.summarizedRequests = summarizedRequests;
+  public void setChannelRequest(ChannelRequest channelRequest) {
+    this.channelRequest = channelRequest;
   }
 
-  /**
-   * 获取 rankedApps 字段的值。
-   *
-   * @return rankedApps 字段值
-   */
-  public List<AppBean> getRankedApps() {
-    return rankedApps;
-  }
-
-  /**
-   * 设置 rankedApps 字段的值。
-   *
-   * @param rankedApps rankedApps 字段的值
-   */
-  public void setRankedApps(List<AppBean> rankedApps) {
-    this.rankedApps = rankedApps;
-  }
-
-  /**
-   * 获取 leaderboard 字段的值。
-   *
-   * @return leaderboard 字段值
-   */
-  public List<String> getLeaderboard() {
-    return leaderboard;
-  }
-
-  /**
-   * 设置 leaderboard 字段的值。
-   *
-   * @param leaderboard leaderboard 字段的值
-   */
-  public void setLeaderboard(List<String> leaderboard) {
-    this.leaderboard = leaderboard;
-  }
 }

@@ -31,12 +31,14 @@ import ren.hankai.cordwood.console.service.PluginService;
 import ren.hankai.cordwood.console.service.UserService;
 import ren.hankai.cordwood.console.view.model.BootstrapTableData;
 import ren.hankai.cordwood.console.view.model.PluginRequestStatistics;
+import ren.hankai.cordwood.console.view.model.SummarizedRequest;
 import ren.hankai.cordwood.core.util.DateUtil;
 import ren.hankai.cordwood.web.breadcrumb.NavigationItem;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -69,6 +71,24 @@ public class UserController extends BaseController {
         pluginService.getUserPluginStatistics(user.getEmail(), dateRange[0], dateRange[1]);
     mav.addObject("statistics", statistics);
     return mav;
+  }
+
+  @RequestMapping(Route.BG_MY_PLUGIN_STATS)
+  @ResponseBody
+  public List<SummarizedRequest> myPluginStatistics() {
+    try {
+      final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+      final UserBean user = (UserBean) auth.getPrincipal();
+      final Date[] dateRange = DateUtil.thisMonth();
+      final List<SummarizedRequest> list = pluginService
+          .getUserPluginSummarizedRequests(user.getEmail(), dateRange[0], dateRange[1]);
+      return list;
+    } catch (final Exception e) {
+      logger.warn(Route.BG_MY_PLUGIN_STATS, e);
+    } catch (final Error e) {
+      logger.warn(Route.BG_MY_PLUGIN_STATS, e);
+    }
+    return null;
   }
 
   @NavigationItem(label = "nav.my.profile", parent = "nav.my.account")

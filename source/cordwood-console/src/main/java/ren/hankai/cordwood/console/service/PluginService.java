@@ -24,6 +24,7 @@ import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
 import ren.hankai.cordwood.console.persist.model.PluginRequestBean;
 import ren.hankai.cordwood.console.persist.support.EntitySpecs;
 import ren.hankai.cordwood.console.view.model.PluginRequestStatistics;
+import ren.hankai.cordwood.console.view.model.SummarizedRequest;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.Plugin;
 import ren.hankai.cordwood.plugin.PluginPackage;
@@ -294,13 +295,24 @@ public class PluginService {
     final float dataShare = ((float) userPluginBytes) / totalBytes;
     stats.setDataShare((int) (dataShare * 100));
 
-    stats.setRankedApps(
-        pluginRequestRepo.getRankedAppsByRequestCount(userEmail, beginTime, endTime));
-
-    stats.setSummarizedRequests(
-        pluginRequestRepo.getRequestsGroupByPlugin(userEmail, beginTime, endTime));
-
+    stats.setChannelRequest(
+        pluginRequestRepo.getRequestCountGroupByChannel(userEmail, beginTime, endTime));
     return stats;
+  }
+
+  /**
+   * 获取按插件分组的用户插件请求。
+   *
+   * @param userEmail 用户邮箱
+   * @param beginTime 开始时间
+   * @param endTime 结束时间
+   * @return 按插件分组的用户插件请求列表
+   * @author hankai
+   * @since Dec 14, 2016 1:50:45 PM
+   */
+  public List<SummarizedRequest> getUserPluginSummarizedRequests(String userEmail, Date beginTime,
+      Date endTime) {
+    return pluginRequestRepo.getRequestsGroupByPlugin(userEmail, beginTime, endTime);
   }
 
 }

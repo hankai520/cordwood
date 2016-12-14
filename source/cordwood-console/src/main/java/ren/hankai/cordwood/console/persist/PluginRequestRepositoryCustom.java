@@ -2,7 +2,7 @@
 package ren.hankai.cordwood.console.persist;
 
 
-import ren.hankai.cordwood.console.persist.model.AppBean;
+import ren.hankai.cordwood.console.view.model.ChannelRequest;
 import ren.hankai.cordwood.console.view.model.SummarizedRequest;
 
 import java.util.Date;
@@ -68,7 +68,7 @@ public interface PluginRequestRepositoryCustom {
    * 获取按插件分组汇总后的访问统计信息。
    *
    * @param userEmail 用户邮箱
-   * @param beginTime 起始时间
+   * @param beginTime 开始时间
    * @param endTime 结束时间
    * @return 汇总后的插件访问信息
    * @author hankai
@@ -78,13 +78,15 @@ public interface PluginRequestRepositoryCustom {
       Date endTime);
 
   /**
-   * 获取根据插件访问次数降序排列的应用访问排行榜（前6位）。
-   * 
-   * @return 应用列表
+   * 获取按渠道分组汇总后的插件访问数。
+   *
+   * @param userEmail 用户邮箱
+   * @param beginTime 开始时间
+   * @param endTime 结束时间
+   * @return 分组汇总后的插件访问数
    * @author hankai
-   * @since Dec 13, 2016 1:32:32 PM
+   * @since Dec 14, 2016 11:37:55 AM
    */
-  public List<AppBean> getRankedAppsByRequestCount(String userEmail, Date beginTime,
+  public ChannelRequest getRequestCountGroupByChannel(String userEmail, Date beginTime,
       Date endTime);
-
 }

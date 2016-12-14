@@ -5,8 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ren.hankai.cordwood.console.persist.PluginRequestRepositoryCustom;
-import ren.hankai.cordwood.console.persist.model.AppBean;
 import ren.hankai.cordwood.console.persist.model.PluginRequestBean;
+import ren.hankai.cordwood.console.persist.model.PluginRequestBean.RequestChannel;
+import ren.hankai.cordwood.console.view.model.ChannelRequest;
 import ren.hankai.cordwood.console.view.model.SummarizedRequest;
 import ren.hankai.cordwood.plugin.Plugin;
 import ren.hankai.cordwood.plugin.api.PluginManager;
@@ -135,16 +136,33 @@ public class PluginRequestRepositoryImpl implements PluginRequestRepositoryCusto
   }
 
   @Override
-  public List<AppBean> getRankedAppsByRequestCount(String userEmail, Date beginTime,
+  public ChannelRequest getRequestCountGroupByChannel(String userEmail, Date beginTime,
       Date endTime) {
     final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-    final CriteriaQuery<AppBean> cq = cb.createQuery(AppBean.class);
+    final CriteriaQuery<Tuple> cq = cb.createQuery(Tuple.class);
     final Root<PluginRequestBean> root = cq.from(PluginRequestBean.class);
-    cq.select(root.get("app")).where(
-        cb.equal(root.get("succeeded"), true),
-        cb.isNotNull(root.get("app")),
+    cq.multiselect(
+        cb.count(root).alias("count"),
+        root.get("channel").alias("channel"));
+    cq.where(
         cb.like(root.get("plugin").get("developer"), "%" + userEmail + "%"),
         cb.between(root.get("createTime"), beginTime, endTime));
-    return entityManager.createQuery(cq).setMaxResults(6).getResultList();
+    cq.groupBy(root.get("channel"));
+    final List<Tuple> results = entityManager.createQuery(cq).getResultList();
+    final ChannelRequest cr = new ChannelRequest();
+    for (final Tuple tuple : results) {
+      final RequestChannel channel = tuple.get("channel", RequestChannel.class);
+      final long count = tuple.get("count", Long.class);
+      if (channel == RequestChannel.Desktop) {
+        cr.setDesktopCount(count);
+      } else if (channel == RequestChannel.MobilePhone) {
+        cr.setMobileCount(count);
+      } else if (channel == RequestChannel.Tablet) {
+        cr.setTabletCount(count);
+      } else if (channel == RequestChannel.Other) {
+        cr.setOtherCount(count);
+      }
+    }
+    return cr;
   }
 }
