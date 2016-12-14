@@ -16,19 +16,10 @@
     th:href="@{~/css/responsive.css}" />
 <link rel="stylesheet" type="text/css" href="../../static/font-awesome/css/font-awesome.min.css"
     th:href="@{~/font-awesome/css/font-awesome.min.css}" />
-<link rel="stylesheet" type="text/css" href="../../static/css/animatecss/animate.min.css"
-    th:href="@{~/css/animatecss/animate.min.css}" />
-<link rel="stylesheet" type="text/css"
-    href="../../static/js/bootstrap-daterangepicker/daterangepicker-bs3.css"
-    th:href="@{~/js/bootstrap-daterangepicker/daterangepicker-bs3.css}" />
-<link rel="stylesheet" type="text/css" href="../../static/js/jquery-todo/css/styles.css"
-    th:href="@{~/js/jquery-todo/css/styles.css}" />
-<link rel="stylesheet" type="text/css" href="../../static/js/fullcalendar/fullcalendar.min.css"
-    th:href="@{~/js/fullcalendar/fullcalendar.min.css}" />
-<link rel="stylesheet" type="text/css" href="../../static/js/gritter/css/jquery.gritter.css"
-    th:href="@{~/js/gritter/css/jquery.gritter.css}" />
 <link rel="stylesheet" type="text/css" href="../../static/js/uniform/css/uniform.default.min.css"
     th:href="@{~/js/uniform/css/uniform.default.min.css}"/>
+<link rel="stylesheet" type="text/css" href="../../static/cropper/cropper.min.css"
+    th:href="@{~/cropper/cropper.min.css}"/>
 <link rel="stylesheet" type="text/css" href="../../static/cordwood/css/cordwood.css"
     th:href="@{~/cordwood/css/cordwood.css}" />
 </head>
@@ -73,6 +64,16 @@
                                                     <div class="alert alert-success" th:if="${pageMessage}">
                                                         <a class="close" aria-hidden="true" href="#" data-dismiss="alert">×</a>
                                                         <span th:text="${pageMessage}">消息提示</span>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-2 control-label">头像</label>
+                                                        <div class="col-md-10">
+                                                            <input type="hidden" id="avatarBase64Data" th:field="*{avatarBase64Data}" />
+                                                            <a href="#uploadAvatar" data-toggle="modal">
+                                                                <img id="currentAvatar" src="../../static/images/profile/avatar.jpg"
+                                                                th:src="@{~/admin/my_avatar}" style="max-width:120px;" />
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                     <div class="form-group" 
                                                          th:classappend="${#fields.hasErrors('email') ? 'has-error' : ''}">
@@ -122,66 +123,82 @@
             </div>
         </div>
     </section>
+    <div id="uploadAvatar" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">修改头像</h4>
+                </div>
+                <div class="modal-body">
+                    <label>上传新头像</label>
+                    <input id="avatarFile" type="file" class="form-control" style="margin-bottom:10px;" />
+                    <div id="avatarPreview" style="display:none;">
+                        <label>裁剪头像</label>
+                        <div style="max-height:350px;"><img id="avatarCropper" /></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="updateAvatarPreview();">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script type="text/javascript" src="../../static/js/jquery/jquery-2.0.3.min.js"
         th:src="@{~/js/jquery/jquery-2.0.3.min.js}"></script>
-    <script type="text/javascript"
-        src="../../static/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"
-        th:src="@{~/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js}"></script>
     <script type="text/javascript" src="../../static/bootstrap/js/bootstrap.min.js"
         th:src="@{~/bootstrap/js/bootstrap.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/bootstrap-daterangepicker/moment.min.js"
-        th:src="@{~/js/bootstrap-daterangepicker/moment.min.js}"></script>
-    <script type="text/javascript"
-        src="../../static/js/bootstrap-daterangepicker/daterangepicker.min.js"
-        th:src="@{~/js/bootstrap-daterangepicker/daterangepicker.min.js}"></script>
-    <script type="text/javascript"
-        src="../../static/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js"
-        th:src="@{~/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js}"></script>
-    <script type="text/javascript"
-        src="../../static/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js"
-        th:src="@{~/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js}"></script>
-    <script type="text/javascript"
-        src="../../static/js/jQuery-slimScroll-1.3.0/slimScrollHorizontal.min.js"
-        th:src="@{~/js/jQuery-slimScroll-1.3.0/slimScrollHorizontal.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/jQuery-BlockUI/jquery.blockUI.min.js"
-        th:src="@{~/js/jQuery-BlockUI/jquery.blockUI.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/sparklines/jquery.sparkline.min.js"
-        th:src="@{~/js/sparklines/jquery.sparkline.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/jquery-easing/jquery.easing.min.js"
-        th:src="@{~/js/jquery-easing/jquery.easing.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/easypiechart/jquery.easypiechart.min.js"
-        th:src="@{~/js/easypiechart/jquery.easypiechart.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/flot/jquery.flot.min.js"
-        th:src="@{~/js/flot/jquery.flot.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/flot/jquery.flot.time.min.js"
-        th:src="@{~/js/flot/jquery.flot.time.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/flot/jquery.flot.selection.min.js"
-        th:src="@{~/js/flot/jquery.flot.selection.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/flot/jquery.flot.resize.min.js"
-        th:src="@{~/js/flot/jquery.flot.resize.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/flot/jquery.flot.pie.min.js"
-        th:src="@{~/js/flot/jquery.flot.pie.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/flot/jquery.flot.stack.min.js"
-        th:src="@{~/js/flot/jquery.flot.stack.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/flot/jquery.flot.crosshair.min.js"
-        th:src="@{~/js/flot/jquery.flot.crosshair.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/jquery-todo/js/paddystodolist.js"
-        th:src="@{~/js/jquery-todo/js/paddystodolist.js}"></script>
-    <script type="text/javascript" src="../../static/js/timeago/jquery.timeago.min.js"
-        th:src="@{~/js/timeago/jquery.timeago.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/fullcalendar/fullcalendar.min.js"
-        th:src="@{~/js/fullcalendar/fullcalendar.min.js}"></script>
     <script type="text/javascript" src="../../static/js/jQuery-Cookie/jquery.cookie.min.js"
         th:src="@{~/js/jQuery-Cookie/jquery.cookie.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/gritter/js/jquery.gritter.min.js"
-        th:src="@{~/js/gritter/js/jquery.gritter.min.js}"></script>
     <script type="text/javascript" src="../../static/js/uniform/jquery.uniform.min.js"
         th:src="@{~/js/uniform/jquery.uniform.min.js}"></script>
+    <script type="text/javascript" src="../../static/cropper/cropper.min.js"
+        th:src="@{~/cropper/cropper.min.js}"></script>
     <script type="text/javascript" src="../../static/js/script.js" 
         th:src="@{~/js/script.js}"></script>
     <script type="text/javascript" src="../../templates/js/admin_sidebar.js" 
         th:src="@{~/admin/sidebar.js}"></script>
     <script>
+        function updateAvatarPreview() {
+            var croppedData = $('#avatarCropper').cropper('getCroppedCanvas').toDataURL('image/jpeg');
+            if (croppedData) {
+                $('#currentAvatar').attr('src', croppedData);
+                $('#avatarBase64Data').val(croppedData);
+            }
+            $('#uploadAvatar').modal('hide');
+        }
+
+        $('#uploadAvatar').on('shown.bs.modal', function (e) {
+            var currentAvatar = $('#currentAvatar').attr('src');
+            if (currentAvatar) {
+                $('#avatarCropper').cropper('replace', currentAvatar);
+                $('#avatarPreview').show();
+            }
+        });
+
+        $("#avatarFile").change(function(){
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#avatarCropper').cropper('replace', e.target.result);
+                    $('#avatarPreview').show();
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        $('#avatarCropper').cropper({
+            aspectRatio: 16/12,
+            movable: false,
+            minContainerWidth: 100, 
+            zoomable: false,
+            minCropBoxWidth: 160,
+            minCropBoxHeight: 120,
+            crop: function(e) {
+
+            }
+        });
+
         jQuery(document).ready(function() {     
             App.setPage("user_profile");
             App.init();

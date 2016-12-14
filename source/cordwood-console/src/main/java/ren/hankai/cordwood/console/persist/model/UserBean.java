@@ -49,6 +49,8 @@ public class UserBean implements Serializable, UserDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+  @Transient
+  private String avatarBase64Data;
   @Column(length = 100, unique = true, nullable = false)
   @Pattern(
       regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
@@ -130,6 +132,24 @@ public class UserBean implements Serializable, UserDetails {
    */
   public void setId(Integer id) {
     this.id = id;
+  }
+
+  /**
+   * 获取 avatarBase64Data 字段的值。
+   *
+   * @return avatarBase64Data 字段值
+   */
+  public String getAvatarBase64Data() {
+    return avatarBase64Data;
+  }
+
+  /**
+   * 设置 avatarBase64Data 字段的值。
+   *
+   * @param avatarBase64Data avatarBase64Data 字段的值
+   */
+  public void setAvatarBase64Data(String avatarBase64Data) {
+    this.avatarBase64Data = avatarBase64Data;
   }
 
   /**
