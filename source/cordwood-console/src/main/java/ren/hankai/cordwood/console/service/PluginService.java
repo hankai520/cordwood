@@ -4,6 +4,7 @@ package ren.hankai.cordwood.console.service;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 
 import ren.hankai.cordwood.console.persist.PluginPackageRepository;
+import ren.hankai.cordwood.console.persist.PluginPackageRepository.PluginPackageSpecs;
 import ren.hankai.cordwood.console.persist.PluginRepository;
 import ren.hankai.cordwood.console.persist.PluginRequestRepository;
 import ren.hankai.cordwood.console.persist.PluginRequestRepository.PluginRequestSpecs;
@@ -130,6 +133,7 @@ public class PluginService {
             ppb.setFileName(pp.getFileName());
             ppb.setId(pp.getIdentifier());
             ppb.setFileName(pp.getFileName());
+            ppb.setDeveloper(pp.getDeveloper());
             for (final Plugin plugin : pp.getPlugins()) {
               final PluginBean pb = new PluginBean();
               pb.setPluginPackage(ppb);
@@ -177,13 +181,21 @@ public class PluginService {
   /**
    * 获取已安装的插件包。
    *
+   * @param developer 插件包作者
    * @return 插件包集合
    * @author hankai
    * @since Nov 8, 2016 10:13:18 AM
    */
-  public List<PluginPackageBean> getInstalledPackages() {
+  public List<PluginPackageBean> getInstalledPackages(String developer) {
     final Sort sort = new Sort(Direction.DESC, "fileName");
-    final List<PluginPackageBean> list = pluginPackageRepo.findAll(sort);
+    List<PluginPackageBean> list = null;
+    if (StringUtils.isNotEmpty(developer)) {
+      final Specification<PluginPackageBean> spec =
+          PluginPackageSpecs.userPluginPackages(developer);
+      list = pluginPackageRepo.findAll(spec, sort);
+    } else {
+      list = pluginPackageRepo.findAll(sort);
+    }
     if (list != null) {
       for (final PluginPackageBean ppb : list) {
         for (final PluginBean pluginBean : ppb.getPlugins()) {

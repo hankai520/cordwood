@@ -42,7 +42,7 @@ WHEN NOT MATCHED THEN
     
 -- 默认角色可见菜单
 MERGE INTO PUBLIC.SIDEBAR_ITEMS_ROLES t
-  USING ( VALUES (1, 1), (1, 2), (2, 1), (2, 2), (3, 1), (3, 2) )
+  USING ( VALUES (1, 1), (1, 2), (2, 1), (2, 2), (3, 1) )
   AS vals(c1,c2) ON t.SIDEBARITEMID = vals.c1 and t.ROLEID = vals.c2
 WHEN NOT MATCHED THEN
     INSERT (SIDEBARITEMID, ROLEID) 

@@ -12,6 +12,7 @@ jar {
             "Group-Id": "ren.hankai.cordwood",
             "Artifact-Id": "plugin.pojo",
             "Implementation-Version": mainVersion,
+            "Developer": "cfg@sparksoft.com.cn",
             "Plugin-Packages": "ren.hankai.cordwood.plugin"
         )
     }

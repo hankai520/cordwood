@@ -68,7 +68,7 @@ public class PluginController extends BaseController {
   @GetMapping(Route.BG_PLUGINS)
   public ModelAndView pluginPackages() {
     final ModelAndView mav = new ModelAndView("admin_plugins.html");
-    final List<PluginPackageBean> list = pluginService.getInstalledPackages();
+    final List<PluginPackageBean> list = pluginService.getInstalledPackages(null);
     mav.addObject("packages", list);
     return mav;
   }

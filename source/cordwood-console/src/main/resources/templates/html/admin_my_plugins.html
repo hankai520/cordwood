@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<title th:text="#{site.title.plugins}">插件管理</title>
+<title th:text="#{site.title.my.plugins}">我的插件</title>
 <meta name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
 <meta name="description" content="">
@@ -54,7 +54,7 @@
                                     <a href="#uploadPlugin" data-toggle="modal" class="btn btn-default">
                                         <i class="fa fa-cloud-upload"></i> 上传插件
                                     </a>
-                                    <a href="#" th:href="@{~/admin/plugins/logs}" class="btn btn-default">
+                                    <a href="#" th:href="@{~/admin/my_plugin_logs}" class="btn btn-default">
                                         <i class="fa fa-history"></i> 访问日志
                                     </a>
                                 </div>
@@ -88,11 +88,6 @@
                                                     <i class="fa fa-clock-o"></i> <span
                                                         th:text="${#calendars.format(pluginPackage.createTime,'yyyy-MM-dd HH:mm:ss')}">
                                                         2016-11-08 14:32:20 </span>
-                                                </h6>
-                                                <h6>
-                                                    <i class="fa fa-copyright"></i> <span
-                                                        th:text="${pluginPackage.developer}">
-                                                        开发者 </span>
                                                 </h6>
                                             </div>
                                             <div class="col-md-2">
@@ -226,7 +221,7 @@
     <script type="text/javascript" src="/admin/sidebar.js"></script>
     <script>
           jQuery(document).ready(function() {
-            loadSidebarItems('plugins');
+            loadSidebarItems();
           });
           $('.uninstall').click(function() {
             var pid = $(this).attr('value');

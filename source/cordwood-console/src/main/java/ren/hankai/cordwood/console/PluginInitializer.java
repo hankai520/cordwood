@@ -111,7 +111,7 @@ public class PluginInitializer {
     if (suspended) {
       return;
     }
-    final List<PluginPackageBean> list = pluginService.getInstalledPackages();
+    final List<PluginPackageBean> list = pluginService.getInstalledPackages(null);
     if (list != null) {
       final List<PluginPackage> packages = new ArrayList<>();
       for (final PluginPackageBean ppb : list) {

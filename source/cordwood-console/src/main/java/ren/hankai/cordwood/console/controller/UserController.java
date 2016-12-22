@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import ren.hankai.cordwood.console.config.Route;
+import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
+import ren.hankai.cordwood.console.persist.model.PluginRequestBean;
 import ren.hankai.cordwood.console.persist.model.UserBean;
 import ren.hankai.cordwood.console.persist.model.UserBean.UserStatus;
 import ren.hankai.cordwood.console.persist.util.PageUtil;
@@ -91,6 +93,47 @@ public class UserController extends BaseController {
     return null;
   }
 
+  @NavigationItem(label = "nav.my.plugins", parent = "nav.my.account")
+  @GetMapping(Route.BG_MY_PLUGINS)
+  public ModelAndView myPlugins() {
+    final ModelAndView mav = new ModelAndView("admin_my_plugins.html");
+    final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    final UserBean user = (UserBean) auth.getPrincipal();
+    final List<PluginPackageBean> list = pluginService.getInstalledPackages(user.getEmail());
+    mav.addObject("packages", list);
+    return mav;
+  }
+
+  @NavigationItem(label = "nav.my.plugin.logs", parent = "nav.my.account")
+  @GetMapping(Route.BG_MY_PLUGIN_LOGS)
+  public ModelAndView myPluginLogs() {
+    return new ModelAndView("admin_my_plugin_logs.html");
+  }
+
+  @RequestMapping(Route.BG_MY_PLUGIN_LOGS_JSON)
+  @ResponseBody
+  public BootstrapTableData getMyPluginLogsJson(
+      @RequestParam(value = "search", required = false) String search,
+      @RequestParam(value = "order", required = false) String order,
+      @RequestParam(value = "sort", required = false) String sort,
+      @RequestParam("limit") int limit,
+      @RequestParam("offset") int offset) {
+    BootstrapTableData response = null;
+    try {
+      final boolean asc = "asc".equalsIgnoreCase(order);
+      final Pageable pageable = PageUtil.pageWithOffsetAndCount(offset, limit, sort, asc);
+      final Page<PluginRequestBean> logs = pluginService.searchPluginRequests(search, pageable);
+      response = new BootstrapTableData();
+      response.setTotal(logs.getTotalElements());
+      response.setRows(logs.getContent());
+    } catch (final Exception e) {
+      logger.error(Route.BG_PLUGIN_LOGS_JSON, e);
+    } catch (final Error e) {
+      logger.error(Route.BG_PLUGIN_LOGS_JSON, e);
+    }
+    return response;
+  }
+
   @NavigationItem(label = "nav.my.profile", parent = "nav.my.account")
   @GetMapping(Route.BG_MY_PROFILE)
   public ModelAndView myProfile() {
@@ -108,6 +151,7 @@ public class UserController extends BaseController {
     final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     final UserBean me = (UserBean) auth.getPrincipal();
     if (!br.hasErrors()) {
+      me.setAvatarBase64Data(user.getAvatarBase64Data());
       me.setEmail(user.getEmail());
       me.setMobile(user.getMobile());
       me.setName(user.getName());

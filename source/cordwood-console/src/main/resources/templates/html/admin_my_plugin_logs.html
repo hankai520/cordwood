@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title th:text="#{site.title.my.plugins.logs}">插件日志</title>
+<meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="stylesheet" type="text/css" href="../../static/css/cloud-admin.css"
+    th:href="@{~/css/cloud-admin.css}" />
+<link rel="stylesheet" type="text/css" href="../../static/css/themes/default.css" id="skin-switcher"
+    th:href="@{~/css/themes/default.css}" />
+<link rel="stylesheet" type="text/css" href="../../static/css/responsive.css"
+    th:href="@{~/css/responsive.css}" />
+<link rel="stylesheet" type="text/css" href="../../static/font-awesome/css/font-awesome.min.css"
+    th:href="@{~/font-awesome/css/font-awesome.min.css}" />
+<link rel="stylesheet" type="text/css" href="../../static/bootstrap-table/bootstrap-table.css"
+    th:href="@{~/bootstrap-table/bootstrap-table.css}" />
+<link rel="stylesheet" type="text/css" href="../../static/cordwood/css/cordwood.css"
+    th:href="@{~/cordwood/css/cordwood.css}" />
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="navbar clearfix" id="header">
+        <div class="container" th:replace="admin_header.html :: header"></div>
+        <!-- /TEAM STATUS -->
+    </header>
+    <!--/HEADER -->
+    <!-- PAGE -->
+    <section id="page">
+        <!-- SIDEBAR -->
+        <div id="sidebar" class="sidebar">
+            <div class="sidebar-menu nav-collapse" th:replace="admin_sidebar.html :: sidebar"></div>
+        </div>
+        <!-- /SIDEBAR -->
+        <div id="main-content">
+            <div class="container">
+                <div class="row">
+                    <div id="content" class="col-md-12">
+                        <div class="page-header" style="overflow: visible;">
+                            <ul class="breadcrumb" th:replace="admin_navbar.html :: navbar">
+                                <li>插件日志</li>
+                            </ul>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div id="toolbar">
+                                        </div>
+                                        <table id="dataTable"></table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script type="text/javascript" src="../../static/js/jquery/jquery-2.0.3.min.js"
+        th:src="@{~/js/jquery/jquery-2.0.3.min.js}"></script>
+    <script type="text/javascript"
+        src="../../static/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"
+        th:src="@{~/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js}"></script>
+    <script type="text/javascript" src="../../static/bootstrap/js/bootstrap.min.js"
+        th:src="@{~/bootstrap/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" src="../../static/js/jQuery-Cookie/jquery.cookie.min.js"
+        th:src="@{~/js/jQuery-Cookie/jquery.cookie.min.js}"></script>
+    <script type="text/javascript" src="../../static/bootstrap-table/bootstrap-table.js"
+        th:src="@{~/bootstrap-table/bootstrap-table.js}"></script>
+    <script type="text/javascript" src="../../static/bootstrap-table/bootstrap-table-zh-CN.js"
+        th:src="@{~/bootstrap-table/bootstrap-table-zh-CN.js}"></script>
+    <script type="text/javascript" src="../../static/cordwood/js/common-init.js"
+        th:src="@{~/cordwood/js/common-init.js}"></script>
+    <script type="text/javascript" src="/admin/sidebar.js"></script>
+    <script>
+          jQuery(document).ready(function() {
+            loadSidebarItems();
+          });
+
+          $('#dataTable').bootstrapTable({
+            url: '/admin/my_plugin_logs.json',
+            toolbar: '#toolbar',
+            sidePagination: 'server',
+            showRefresh: true,
+            pageSize: 50,
+            pageList: [50,100,150],
+            showColumns: true,
+            search: true,
+            pagination: true,
+            sortName: 'createTime',
+            sortOrder: 'desc',
+            columns: [{
+                field: 'createTime',
+                title: '时间',
+                valign: 'middle',
+                sortable: true
+            }, {
+                field: 'pluginDisplayName',
+                title: '插件',
+                sortable: false,
+                valign: 'middle'
+            }, {
+                field: 'appName',
+                title: '应用',
+                sortable: false,
+                valign: 'middle',
+                visible: false
+            }, {
+                field: 'clientIp',
+                title: '客户端IP',
+                valign: 'middle',
+                sortable: true,
+                visible: false
+            }, {
+                field: 'requestUrl',
+                title: '请求 URL',
+                valign: 'middle',
+                sortable: true
+            }, {
+                field: 'requestMethod',
+                title: '请求方法',
+                valign: 'middle',
+                sortable: true,
+                visible: false
+            }, {
+                field: 'requestDigest',
+                title: '摘要',
+                valign: 'middle',
+                sortable: true,
+                visible: false
+            }, {
+                field: 'requestBytes',
+                title: '请求大小',
+                valign: 'middle',
+                sortable: true,
+                formatter: function(value, row, index) {
+                    return value;
+                }
+            }, {
+                field: 'responseCode',
+                title: '响应代码',
+                valign: 'middle',
+                sortable: true,
+                visible: false
+            }, {
+                field: 'responseBytes',
+                title: '响应大小',
+                valign: 'middle',
+                sortable: true,
+                formatter: function(value, row, index) {
+                    return value;
+                }
+            }, {
+                field: 'milliseconds',
+                title: '耗时',
+                valign: 'middle',
+                sortable: true,
+                formatter: function(value, row, index) {
+                    return value + 'ms';
+                }
+            }, {
+                field: 'succeeded',
+                title: '结果',
+                valign: 'middle',
+                sortable: true,
+                formatter: function(value, row, index) {
+                    if (value) {
+                        if (row.errors) {
+                            return '<span class="label label-warning" data-toggle="popover" title="错误详情" data-content="'
+                                +row.errors+'">处理成功</span>';
+                        } else {
+                            return '<span class="label label-success">处理成功</span>';
+                        }
+                    } else {
+                        return '<span class="label label-danger" data-toggle="popover" title="错误详情" data-content="'
+                            +row.errors+'">处理失败</span>';
+                    }
+                }
+            }],
+            onLoadSuccess: function(data) {
+                $('[data-toggle="popover"]').popover({container: 'body', placement: 'left', trigger: 'hover'}); 
+            }
+        });
+        </script>
+    <!-- /JAVASCRIPTS -->
+</body>
+</html>

@@ -34,11 +34,6 @@ public class RoleBean implements Serializable {
   @Column(length = 100, nullable = false, unique = true)
   private String name;
   @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "roles_privileges",
-      joinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"),
-      inverseJoinColumns = @JoinColumn(name = "privilegeId", referencedColumnName = "id"))
-  private List<PrivilegeBean> privileges;
-  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "sidebar_items_roles",
       joinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "sidebarItemId", referencedColumnName = "id"))
@@ -78,24 +73,6 @@ public class RoleBean implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
-  }
-
-  /**
-   * 获取 privileges 字段的值。
-   *
-   * @return privileges 字段值
-   */
-  public List<PrivilegeBean> getPrivileges() {
-    return privileges;
-  }
-
-  /**
-   * 设置 privileges 字段的值。
-   *
-   * @param privileges privileges 字段的值
-   */
-  public void setPrivileges(List<PrivilegeBean> privileges) {
-    this.privileges = privileges;
   }
 
   /**

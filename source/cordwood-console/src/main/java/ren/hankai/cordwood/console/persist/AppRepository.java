@@ -2,6 +2,7 @@
 package ren.hankai.cordwood.console.persist;
 
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
 
 import ren.hankai.cordwood.console.persist.model.AppBean;
 
@@ -17,6 +18,7 @@ import javax.persistence.criteria.Root;
  * @version 1.0.0
  * @since Dec 8, 2016 9:51:27 AM
  */
+@Transactional
 public interface AppRepository extends BaseRepository<AppBean, Integer> {
 
   public static final class AppSpecs {
@@ -32,7 +34,8 @@ public interface AppRepository extends BaseRepository<AppBean, Integer> {
     public static Specification<AppBean> identifiedApp(String key, String sk) {
       return new Specification<AppBean>() {
         @Override
-        public Predicate toPredicate(Root<AppBean> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+        public Predicate toPredicate(Root<AppBean> root, CriteriaQuery<?> query,
+            CriteriaBuilder cb) {
           return cb.and(cb.equal(root.get("appKey"), key),
               cb.equal(root.get("secretKey"), sk));
         }

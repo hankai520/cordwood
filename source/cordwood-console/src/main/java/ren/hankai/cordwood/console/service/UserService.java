@@ -1,5 +1,8 @@
 package ren.hankai.cordwood.console.service;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ren.hankai.cordwood.console.persist.RoleRepository;
 import ren.hankai.cordwood.console.persist.UserRepository;
@@ -22,9 +26,8 @@ import ren.hankai.cordwood.console.persist.support.EntitySpecs;
 import ren.hankai.cordwood.core.Preferences;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
-
-import javax.transaction.Transactional;
 
 /**
  * 用户认证服务。
@@ -42,6 +45,20 @@ public class UserService implements UserDetailsService {
   private UserRepository userRepo;
   @Autowired
   private RoleRepository roleRepo;
+
+  /**
+   * 获取用户头像文件路径。
+   *
+   * @param user 用户
+   * @return 头像文件路径
+   * @author hankai
+   * @since Dec 22, 2016 10:33:56 AM
+   */
+  private String getUserAvatarPath(UserBean user) {
+    final String fileName = String.format("avatar_%d.jpg", user.getId());
+    final String path = Preferences.getAttachmentDir() + File.separator + fileName;
+    return path;
+  }
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -89,7 +106,7 @@ public class UserService implements UserDetailsService {
 
   /**
    * 按用户邮箱查找用户。
-   * 
+   *
    * @param email 邮箱
    * @return 用户信息
    * @author hankai
@@ -105,9 +122,24 @@ public class UserService implements UserDetailsService {
    * @param user 用户信息
    * @return 更新后的用户
    * @author hankai
+   * @throws IOException 保存用户头像失败
    * @since Nov 30, 2016 10:47:14 AM
    */
-  public UserBean updateUserInfo(UserBean user) {
+  @Transactional
+  public UserBean updateUserInfo(UserBean user) throws IOException {
+    final String avatarString = user.getAvatarBase64Data();
+    if (StringUtils.isNotEmpty(avatarString)) {
+      final String[] arr = avatarString.split(",");
+      if ((arr != null) && (arr.length == 2)) {
+        final byte[] avatarData = Base64.decodeBase64(arr[1]);
+        File avatarFile = getUserAvatar(user);
+        if (avatarFile != null) {
+          FileUtils.deleteQuietly(avatarFile);
+        }
+        avatarFile = new File(getUserAvatarPath(user));
+        FileUtils.writeByteArrayToFile(avatarFile, avatarData);
+      }
+    }
     return userRepo.save(user);
   }
 
@@ -120,8 +152,7 @@ public class UserService implements UserDetailsService {
    * @since Nov 30, 2016 5:25:12 PM
    */
   public File getUserAvatar(UserBean user) {
-    final String fileName = String.format("avatar_%d.jpg", user.getId());
-    final String path = Preferences.getAttachmentDir() + File.separator + fileName;
+    final String path = getUserAvatarPath(user);
     final File file = new File(path);
     if (file.exists() && file.isFile()) {
       return file;

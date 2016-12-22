@@ -29,15 +29,19 @@ public class SecurityConfig {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-      // http.antMatcher(Route.BACKGROUND_PREFIX + "/**").authorizeRequests().anyRequest()
-      // .hasAuthority("ADMIN").and().httpBasic();
-      // http.antMatcher(Route.BACKGROUND_PREFIX + "/**").authorizeRequests().anyRequest()
-      // .authenticated().and().httpBasic();
-
       http.antMatcher(Route.BACKGROUND_PREFIX + "/**")
           .authorizeRequests()
-          .anyRequest()
-          .authenticated();
+
+          .antMatchers(Route.BG_PLUGINS + "/**")
+          .hasAnyAuthority(PredefinedRoles.ADMIN, PredefinedRoles.CONFIG)
+
+          .antMatchers(Route.BG_PLUGIN_LOGS + "/**")
+          .hasAnyAuthority(PredefinedRoles.ADMIN)
+
+          .antMatchers(Route.BG_USERS + "/**")
+          .hasAuthority(PredefinedRoles.ADMIN)
+
+          .anyRequest().authenticated();
 
       http.formLogin()
           .loginPage(Route.BG_LOGIN)

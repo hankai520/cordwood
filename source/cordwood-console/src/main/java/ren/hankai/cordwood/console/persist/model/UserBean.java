@@ -50,7 +50,7 @@ public class UserBean implements Serializable, UserDetails {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   @Transient
-  private String avatarBase64Data;
+  private String avatarBase64Data; // 用于接收用户修改后的新头像
   @Column(length = 100, unique = true, nullable = false)
   @Pattern(
       regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
@@ -367,14 +367,8 @@ public class UserBean implements Serializable, UserDetails {
     final List<SimpleGrantedAuthority> authorities = new ArrayList<>();
     final List<RoleBean> roles = getRoles();
     if (roles != null) {
-      List<PrivilegeBean> privileges = null;
       for (final RoleBean roleBean : roles) {
-        privileges = roleBean.getPrivileges();
-        if (privileges != null) {
-          for (final PrivilegeBean privilegeBean : privileges) {
-            authorities.add(new SimpleGrantedAuthority(privilegeBean.getName()));
-          }
-        }
+        authorities.add(new SimpleGrantedAuthority(roleBean.getName()));
       }
     }
     return authorities;

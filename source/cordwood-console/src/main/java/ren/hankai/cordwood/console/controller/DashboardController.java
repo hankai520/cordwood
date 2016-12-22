@@ -17,8 +17,13 @@ import ren.hankai.cordwood.web.breadcrumb.NavigationItem;
 @Controller
 public class DashboardController extends BaseController {
 
+  @GetMapping(Route.BACKGROUND_PREFIX)
+  public String redirectToIndex() {
+    return "redirect:" + Route.BG_DASHBOARD;
+  }
+
   @NavigationItem(label = "nav.dashboard")
-  @GetMapping({Route.BACKGROUND_PREFIX, Route.BG_DASHBOARD})
+  @GetMapping(Route.BG_DASHBOARD)
   public ModelAndView index() {
     return new ModelAndView("admin_dashboard.html");
   }

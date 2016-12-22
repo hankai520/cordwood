@@ -39,6 +39,8 @@ public final class PluginPackageBean implements Serializable {
   private String id; // 插件包标识符，e.g. org.example:calculator:1.3.2
   @Column(length = 100, nullable = false, unique = true)
   private String fileName;
+  @Column(length = 100, nullable = false)
+  private String developer;
   @Column(nullable = false)
   @Temporal(TemporalType.TIMESTAMP)
   private Date createTime;
@@ -79,6 +81,24 @@ public final class PluginPackageBean implements Serializable {
    */
   public void setFileName(String fileName) {
     this.fileName = fileName;
+  }
+
+  /**
+   * 获取 developer 字段的值。
+   *
+   * @return developer 字段值
+   */
+  public String getDeveloper() {
+    return developer;
+  }
+
+  /**
+   * 设置 developer 字段的值。
+   *
+   * @param developer developer 字段的值
+   */
+  public void setDeveloper(String developer) {
+    this.developer = developer;
   }
 
   /**
