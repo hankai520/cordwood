@@ -90,9 +90,6 @@
                                                         2016-11-08 14:32:20 </span>
                                                 </h6>
                                             </div>
-                                            <div class="col-md-2">
-                                              <button class="btn btn-grey pull-right uninstall" th:value="${pluginPackage.id}"><i class="fa fa-trash"></i> 卸载</button>
-                                            </div>
                                         </div>
                                         <hr/>
                                         <div class="panel-group">
@@ -222,12 +219,6 @@
     <script>
           jQuery(document).ready(function() {
             loadSidebarItems();
-          });
-          $('.uninstall').click(function() {
-            var pid = $(this).attr('value');
-            if (confirm('确定要卸载插件包 \n' + pid + ' ?')) {
-              location.href='/admin/plugins/uninstall?package_id='+pid;
-            }
           });
           $('.make-switch').on('switch-change', function(e, data) {
             var sender = $(data.el);

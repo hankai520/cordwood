@@ -134,6 +134,7 @@ public class PluginService {
             ppb.setId(pp.getIdentifier());
             ppb.setFileName(pp.getFileName());
             ppb.setDeveloper(pp.getDeveloper());
+            ppb.setDescription(pp.getDescription());
             for (final Plugin plugin : pp.getPlugins()) {
               final PluginBean pb = new PluginBean();
               pb.setPluginPackage(ppb);
@@ -198,15 +199,34 @@ public class PluginService {
     }
     if (list != null) {
       for (final PluginPackageBean ppb : list) {
-        for (final PluginBean pluginBean : ppb.getPlugins()) {
-          final Plugin plugin = pluginManager.getPlugin(pluginBean.getName());
-          if (plugin != null) {// 为空时可能正在加载
-            pluginBean.setFeatures(new ArrayList<>(plugin.getFunctions().values()));
-          }
-        }
+        loadPluginFeatures(ppb);
       }
     }
     return list;
+  }
+
+  /**
+   * 搜索已安装的插件包。
+   *
+   * @param keyword 搜索关键字
+   * @param pageable 分页
+   * @return 插件包集合
+   * @author hankai
+   * @since Dec 23, 2016 9:22:41 AM
+   */
+  public Page<PluginPackageBean> searchInstalledPackages(String keyword, Pageable pageable) {
+    Page<PluginPackageBean> results = null;
+    if (StringUtils.isNotEmpty(keyword)) {
+      results = pluginPackageRepo.findAll(PluginPackageSpecs.search(keyword), pageable);
+    } else {
+      results = pluginPackageRepo.findAll(pageable);
+    }
+    if (results.getContent() != null) {
+      for (final PluginPackageBean ppb : results.getContent()) {
+        loadPluginFeatures(ppb);
+      }
+    }
+    return results;
   }
 
   /**
@@ -218,11 +238,24 @@ public class PluginService {
    * @since Nov 12, 2016 12:09:52 AM
    */
   public PluginPackageBean getInstalledPackageByFileName(String fileName) {
-    return pluginPackageRepo.findOne(EntitySpecs.field("fileName", fileName));
+    final PluginPackageBean ppb =
+        pluginPackageRepo.findOne(EntitySpecs.field("fileName", fileName));
+    loadPluginFeatures(ppb);
+    return ppb;
   }
 
+  /**
+   * 根据插件包标识符查找插件包。
+   *
+   * @param packageId 插件包标识符
+   * @return 插件包
+   * @author hankai
+   * @since Dec 23, 2016 10:20:31 AM
+   */
   public PluginPackageBean getInstalledPackageById(String packageId) {
-    return pluginPackageRepo.findOne(packageId);
+    final PluginPackageBean ppb = pluginPackageRepo.findOne(packageId);
+    loadPluginFeatures(ppb);
+    return ppb;
   }
 
   /**
@@ -325,6 +358,25 @@ public class PluginService {
   public List<SummarizedRequest> getUserPluginSummarizedRequests(String userEmail, Date beginTime,
       Date endTime) {
     return pluginRequestRepo.getRequestsGroupByPlugin(userEmail, beginTime, endTime);
+  }
+
+  /**
+   * 加载插件包中所有插件的功能信息。
+   *
+   * @param ppb 插件包
+   * @author hankai
+   * @since Dec 23, 2016 10:18:43 AM
+   */
+  public void loadPluginFeatures(PluginPackageBean ppb) {
+    if ((ppb == null) || (ppb.getPlugins() == null)) {
+      return;
+    }
+    for (final PluginBean pluginBean : ppb.getPlugins()) {
+      final Plugin plugin = pluginManager.getPlugin(pluginBean.getName());
+      if (plugin != null) {// 为空时可能正在加载
+        pluginBean.setFeatures(new ArrayList<>(plugin.getFunctions().values()));
+      }
+    }
   }
 
 }

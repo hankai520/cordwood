@@ -34,6 +34,7 @@ public final class PluginPackage {
   private String artifactId;
   private String version;
   private String developer;
+  private String description;
   private String[] basePackages;
   private String configClass;
   private Manifest manifest;
@@ -66,6 +67,7 @@ public final class PluginPackage {
     artifactId = attributes.getValue(PluginLoader.ARTIFACT_ID);
     version = attributes.getValue(PluginLoader.PACKAGE_VERSION);
     developer = attributes.getValue(PluginLoader.DEVELOPER);
+    description = attributes.getValue(PluginLoader.DESCRIPTION);
     identifier = String.format("%s:%s:%s", groupId, artifactId, version);
     final String basePackages = attributes.getValue(PluginLoader.PLUGIN_BASE_PACKAGES);
     if (StringUtils.isEmpty(basePackages)) {
@@ -196,6 +198,15 @@ public final class PluginPackage {
    */
   public String getDeveloper() {
     return developer;
+  }
+
+  /**
+   * 获取 description 字段的值。
+   *
+   * @return description 字段值
+   */
+  public String getDescription() {
+    return description;
   }
 
   /**

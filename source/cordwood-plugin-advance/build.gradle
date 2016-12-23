@@ -13,6 +13,7 @@ jar {
             "Artifact-Id": "plugin.advance",
             "Implementation-Version": mainVersion,
             "Developer": "sa@sparksoft.com.cn",
+            "Description": "高级示例插件集合",
             "Plugin-Packages": "ren.hankai.cordwood.plugin.advance",
             "Spring-Config-Class": "ren.hankai.cordwood.plugin.advance.config.PluginBootstrap"
         )

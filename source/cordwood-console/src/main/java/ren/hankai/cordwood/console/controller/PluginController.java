@@ -6,7 +6,6 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -53,8 +52,6 @@ public class PluginController extends BaseController {
   @Autowired
   private PluginService pluginService;
   @Autowired
-  private MessageSource messageSource;
-  @Autowired
   private PluginInitializer pluginInitializer;
 
   /**
@@ -65,25 +62,59 @@ public class PluginController extends BaseController {
    * @since Nov 8, 2016 10:14:55 AM
    */
   @NavigationItem(label = "nav.plugins")
-  @GetMapping(Route.BG_PLUGINS)
+  @GetMapping(Route.BG_PLUGIN_PACKAGES)
   public ModelAndView pluginPackages() {
-    final ModelAndView mav = new ModelAndView("admin_plugins.html");
-    final List<PluginPackageBean> list = pluginService.getInstalledPackages(null);
-    mav.addObject("packages", list);
+    final ModelAndView mav = new ModelAndView("admin_plugin_packages.html");
     return mav;
   }
 
-  @GetMapping(Route.BG_PLUGINS_UNINSTALL)
-  public ModelAndView uninstallpackage(@RequestParam("package_id") String packageId) {
-    final ModelAndView mav = new ModelAndView("redirect:" + Route.BG_PLUGINS);
+  @RequestMapping(Route.BG_PLUGIN_PACKAGES_JSON)
+  @ResponseBody
+  public BootstrapTableData getPluginPackagesJson(
+      @RequestParam(value = "search", required = false) String search,
+      @RequestParam(value = "order", required = false) String order,
+      @RequestParam(value = "sort", required = false) String sort,
+      @RequestParam("limit") int limit,
+      @RequestParam("offset") int offset) {
+    BootstrapTableData response = null;
+    try {
+      final boolean asc = "asc".equalsIgnoreCase(order);
+      final Pageable pageable = PageUtil.pageWithOffsetAndCount(offset, limit, sort, asc);
+      final Page<PluginPackageBean> packages =
+          pluginService.searchInstalledPackages(search, pageable);
+      response = new BootstrapTableData();
+      response.setTotal(packages.getTotalElements());
+      response.setRows(packages.getContent());
+    } catch (final Exception e) {
+      logger.error(Route.BG_PLUGIN_PACKAGES_JSON, e);
+    } catch (final Error e) {
+      logger.error(Route.BG_PLUGIN_PACKAGES_JSON, e);
+    }
+    return response;
+  }
+
+  @NavigationItem(label = "nav.plugin.details", parent = "nav.plugins")
+  @GetMapping(Route.BG_PLUGIN_PACKAGE_DETAILS)
+  public ModelAndView pluginPackageDetails(@RequestParam("package_id") String packageId) {
+    final ModelAndView mav = new ModelAndView("admin_plugin_package_details.html");
     final PluginPackageBean ppb = pluginService.getInstalledPackageById(packageId);
     if (ppb == null) {
       mav.setViewName("redirect:/404.html");
-    } else if (!pluginService.uninstallPluginPackage(ppb)) {
-      mav.addObject("error", messageSource.getMessage("package.uninstall.failed", null, null));
-      mav.setViewName("admin_failure.html");
+    } else {
+      mav.addObject("pluginPackage", ppb);
     }
     return mav;
+  }
+
+  @GetMapping(Route.BG_PLUGIN_PACKAGES_UNINSTALL)
+  public ResponseEntity<String> uninstallpackage(@RequestParam("package_id") String packageId) {
+    final PluginPackageBean ppb = pluginService.getInstalledPackageById(packageId);
+    if (ppb != null) {
+      if (!pluginService.uninstallPluginPackage(ppb)) {
+        logger.warn("Failed to uninstall plugin package: " + packageId);
+      }
+    }
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @GetMapping(Route.BG_PLUGINS_ON)
@@ -116,7 +147,7 @@ public class PluginController extends BaseController {
     }
   }
 
-  @PostMapping(Route.BG_PLUGINS_UPLOAD)
+  @PostMapping(Route.BG_PLUGIN_PACKAGES_UPLOAD)
   @ResponseBody
   public ResponseEntity<String> uploadPlugins(@RequestParam("files[]") MultipartFile[] files) {
     try {

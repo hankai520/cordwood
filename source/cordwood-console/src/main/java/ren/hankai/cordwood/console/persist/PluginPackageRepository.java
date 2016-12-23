@@ -1,6 +1,7 @@
 
 package ren.hankai.cordwood.console.persist;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,25 @@ import javax.persistence.criteria.Root;
 public interface PluginPackageRepository extends BaseRepository<PluginPackageBean, String> {
 
   public static final class PluginPackageSpecs {
+
+    public static Specification<PluginPackageBean> search(String keyword) {
+      return new Specification<PluginPackageBean>() {
+        @Override
+        public Predicate toPredicate(Root<PluginPackageBean> root, CriteriaQuery<?> query,
+            CriteriaBuilder cb) {
+          if (StringUtils.isNotEmpty(keyword)) {
+            final String fuzzyKeyword = "%" + keyword + "%";
+            return cb.or(
+                cb.like(root.get("id"), fuzzyKeyword),
+                cb.like(root.get("fileName"), fuzzyKeyword),
+                cb.like(root.get("developer"), fuzzyKeyword),
+                cb.like(root.get("description"), fuzzyKeyword));
+          }
+          return null;
+        }
+      };
+    }
+
     public static Specification<PluginPackageBean> userPluginPackages(String developer) {
       return new Specification<PluginPackageBean>() {
         @Override

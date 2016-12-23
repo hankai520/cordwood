@@ -32,7 +32,7 @@ public class SecurityConfig {
       http.antMatcher(Route.BACKGROUND_PREFIX + "/**")
           .authorizeRequests()
 
-          .antMatchers(Route.BG_PLUGINS + "/**")
+          .antMatchers(Route.BG_PLUGIN_PACKAGES + "/**")
           .hasAnyAuthority(PredefinedRoles.ADMIN, PredefinedRoles.CONFIG)
 
           .antMatchers(Route.BG_PLUGIN_LOGS + "/**")

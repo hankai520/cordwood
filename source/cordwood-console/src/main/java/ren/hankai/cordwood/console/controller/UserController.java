@@ -127,9 +127,9 @@ public class UserController extends BaseController {
       response.setTotal(logs.getTotalElements());
       response.setRows(logs.getContent());
     } catch (final Exception e) {
-      logger.error(Route.BG_PLUGIN_LOGS_JSON, e);
+      logger.error(Route.BG_MY_PLUGIN_LOGS_JSON, e);
     } catch (final Error e) {
-      logger.error(Route.BG_PLUGIN_LOGS_JSON, e);
+      logger.error(Route.BG_MY_PLUGIN_LOGS_JSON, e);
     }
     return response;
   }

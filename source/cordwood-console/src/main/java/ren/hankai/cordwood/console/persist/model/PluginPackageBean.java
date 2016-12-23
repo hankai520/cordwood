@@ -1,7 +1,10 @@
 
 package ren.hankai.cordwood.console.persist.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.jackson.DateTimeSerializer;
 
 import java.io.File;
 import java.io.Serializable;
@@ -41,6 +44,8 @@ public final class PluginPackageBean implements Serializable {
   private String fileName;
   @Column(length = 100, nullable = false)
   private String developer;
+  @Column(length = 200, nullable = false)
+  private String description;
   @Column(nullable = false)
   @Temporal(TemporalType.TIMESTAMP)
   private Date createTime;
@@ -102,10 +107,29 @@ public final class PluginPackageBean implements Serializable {
   }
 
   /**
+   * 获取 description 字段的值。
+   *
+   * @return description 字段值
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
+   * 设置 description 字段的值。
+   *
+   * @param description description 字段的值
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  /**
    * 获取 createTime 字段的值。
    *
    * @return createTime 字段值
    */
+  @JsonSerialize(using = DateTimeSerializer.class)
   public Date getCreateTime() {
     return createTime;
   }

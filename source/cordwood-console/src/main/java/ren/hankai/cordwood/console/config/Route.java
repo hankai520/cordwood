@@ -32,11 +32,16 @@ public final class Route {
   public static final String BG_DELETE_USER = BACKGROUND_PREFIX + "/users/{user_id}/delete";
   public static final String BG_CHANGE_USER_PWD = BACKGROUND_PREFIX + "/users/{user_id}/change_pwd";
   public static final String BG_SIDEBAR_JS = BACKGROUND_PREFIX + "/sidebar.js";
-  public static final String BG_PLUGINS = BACKGROUND_PREFIX + "/plugins";
-  public static final String BG_PLUGINS_UPLOAD = BACKGROUND_PREFIX + "/plugins/upload";
+  public static final String BG_PLUGIN_PACKAGES = BACKGROUND_PREFIX + "/plugin_packages";
+  public static final String BG_PLUGIN_PACKAGES_JSON = BACKGROUND_PREFIX + "/plugin_packages.json";
+  public static final String BG_PLUGIN_PACKAGE_DETAILS =
+      BACKGROUND_PREFIX + "/plugin_package_details";
+  public static final String BG_PLUGIN_PACKAGES_UPLOAD =
+      BACKGROUND_PREFIX + "/plugin_packages/upload";
+  public static final String BG_PLUGIN_PACKAGES_UNINSTALL =
+      BACKGROUND_PREFIX + "/plugin_packages/uninstall";
   public static final String BG_PLUGINS_ON = BACKGROUND_PREFIX + "/plugins/{plugin_name}/on";
   public static final String BG_PLUGINS_OFF = BACKGROUND_PREFIX + "/plugins/{plugin_name}/off";
-  public static final String BG_PLUGINS_UNINSTALL = BACKGROUND_PREFIX + "/plugins/uninstall";
   public static final String BG_PLUGIN_LOGS = BACKGROUND_PREFIX + "/plugins/logs";
   public static final String BG_PLUGIN_LOGS_JSON = BACKGROUND_PREFIX + "/plugins/logs.json";
   /*** 前台根地址。 ***/

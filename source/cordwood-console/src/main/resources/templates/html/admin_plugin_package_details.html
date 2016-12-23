@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<title th:text="#{site.title.plugins}">插件管理</title>
+<title th:text="#{site.title.plugin.details}">插件包详情</title>
 <meta name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
 <meta name="description" content="">
@@ -20,8 +20,6 @@
     th:href="@{~/css/responsive.css}" />
 <link rel="stylesheet" type="text/css" href="../../static/font-awesome/css/font-awesome.min.css"
     th:href="@{~/font-awesome/css/font-awesome.min.css}" />
-<link rel="stylesheet" type="text/css" href="../../static/js/dropzone/dropzone.min.css"
-    th:href="@{~/js/dropzone/dropzone.min.css}" />    
 <link rel="stylesheet" type="text/css" href="../../static/cordwood/css/cordwood.css"
     th:href="@{~/cordwood/css/cordwood.css}" />
 </head>
@@ -45,37 +43,14 @@
                     <div id="content" class="col-md-12">
                         <div class="page-header" style="overflow: visible;">
                             <ul class="breadcrumb" th:replace="admin_navbar.html :: navbar">
-                                <li>插件管理</li>
+                                <li>插件详情</li>
                             </ul>
                         </div>
                         <div class="row">
-                            <div class="col-md-12" style="margin-bottom: 15px;">
-                                <div class="btn-group pull-right">
-                                    <a href="#uploadPlugin" data-toggle="modal" class="btn btn-default">
-                                        <i class="fa fa-cloud-upload"></i> 上传插件
-                                    </a>
-                                    <a href="#" th:href="@{~/admin/plugins/logs}" class="btn btn-default">
-                                        <i class="fa fa-history"></i> 访问日志
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="text-center" style="padding-top: 100px;" th:if="${#lists.isEmpty(packages)}">
-                            <i class="fa fa-frown-o" style="color: #E6E6E6; font-size: 10em;"></i>
-                            <P style="color: #A1A1A1;">还没有安装任何插件</P>
-                        </div>
-                        <div class="row" th:each="pluginPackage : ${packages}">
                             <div class="col-md-12">
                                 <div class="box border primary">
                                     <div class="box-title">
                                         <h4 th:text="${pluginPackage.id}">插件包标识</h4>
-                                        <div class="pull-right">
-                                            <div class="tools">
-                                                <a href="javascript:;" class="collapse">
-                                                    <i class="fa fa-chevron-up"></i>
-                                                </a>
-                                            </div>
-                                        </div>
                                     </div>
                                     <div class="box-body">
                                         <div class="row">
@@ -89,14 +64,6 @@
                                                         th:text="${#calendars.format(pluginPackage.createTime,'yyyy-MM-dd HH:mm:ss')}">
                                                         2016-11-08 14:32:20 </span>
                                                 </h6>
-                                                <h6>
-                                                    <i class="fa fa-copyright"></i> <span
-                                                        th:text="${pluginPackage.developer}">
-                                                        开发者 </span>
-                                                </h6>
-                                            </div>
-                                            <div class="col-md-2">
-                                              <button class="btn btn-grey pull-right uninstall" th:value="${pluginPackage.id}"><i class="fa fa-trash"></i> 卸载</button>
                                             </div>
                                         </div>
                                         <hr/>
@@ -116,7 +83,7 @@
                                                     </h3>
                                                 </div>
                                                 <div id="collapseOne"
-                                                    class="panel-collapse collapse"
+                                                    class="panel-collapse collapse in"
                                                     th:id="${plugin.name}">
                                                     <div class="panel-body">
                                                         <p th:text="${plugin.description}">插件简介</p>
@@ -179,27 +146,6 @@
             </div>
         </div>
     </section>
-    <div class="modal fade" id="uploadPlugin" tabindex="-1" role="dialog"
-        aria-labelledby="uploadPlugin" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">上传新插件（最多同时上传5个插件包）</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="dropzone" id="dropzone">
-                        <div class="fallback">
-                            <input name="files" type="file" />
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="submitBtn">上传</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <script type="text/javascript" src="../../static/js/jquery/jquery-2.0.3.min.js"
         th:src="@{~/js/jquery/jquery-2.0.3.min.js}"></script>
     <script type="text/javascript"
@@ -217,8 +163,6 @@
         th:src="@{~/js/jQuery-BlockUI/jquery.blockUI.min.js}"></script>
     <script type="text/javascript" src="../../static/js/bootstrap-switch/bootstrap-switch.min.js"
         th:src="@{~/js/bootstrap-switch/bootstrap-switch.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/dropzone/dropzone.min.js"
-        th:src="@{~/js/dropzone/dropzone.min.js}"></script>    
     <script type="text/javascript" src="../../static/js/jQuery-Cookie/jquery.cookie.min.js"
         th:src="@{~/js/jQuery-Cookie/jquery.cookie.min.js}"></script>
     <script type="text/javascript" src="../../static/cordwood/js/common-init.js"
@@ -227,12 +171,6 @@
     <script>
           jQuery(document).ready(function() {
             loadSidebarItems('plugins');
-          });
-          $('.uninstall').click(function() {
-            var pid = $(this).attr('value');
-            if (confirm('确定要卸载插件包 \n' + pid + ' ?')) {
-              location.href='/admin/plugins/uninstall?package_id='+pid;
-            }
           });
           $('.make-switch').on('switch-change', function(e, data) {
             var sender = $(data.el);
@@ -246,40 +184,6 @@
                 $(senderId).bootstrapSwitch('setActive', true);
               }
             });
-          });
-          Dropzone.autoDiscover = false;
-          $('#dropzone').dropzone({
-            url: '/admin/plugins/upload',
-            paramName: 'files',
-            acceptedFiles: '.jar,.JAR',
-            maxFiles: 5,
-            autoProcessQueue: false,
-            uploadMultiple: true,
-            maxFilesize: 10, // MB
-            addRemoveLinks: true,
-            dictInvalidFileType: '文件格式不正确，请上传 .jar 格式的插件包文件！',
-            dictRemoveFile: '删除',
-            dictResponseError: '上传出现错误！',
-            dictFileTooBig: '文件太大！',
-            dictFallbackMessage: '您的浏览器不支持拖拽上传！',
-            dictDefaultMessage: '拖拽文件来上传',
-            dictMaxFilesExceeded: '文件个数超出限制！',
-            init: function() {
-              myDropzone = this;
-              $('#submitBtn').click(function(event) {
-                myDropzone.processQueue();
-              });
-              this.on("sending", function(file, jqXHR, data) {
-                var param = $("meta[name='_csrf_param']").attr("content");
-                var token = $("meta[name='_csrf']").attr("content");
-                data.append(param, token);
-              });
-              this.on("success", function(file) {
-                $("#uploadPlugin").modal('hide');
-                alert('插件上传成功!');
-                location.reload();
-              });
-            }
           });
         </script>
     <!-- /JAVASCRIPTS -->

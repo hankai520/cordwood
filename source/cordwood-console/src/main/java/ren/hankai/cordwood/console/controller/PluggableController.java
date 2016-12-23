@@ -64,7 +64,12 @@ public class PluggableController extends PluginRequestDispatcher {
     } else {
       pr.setRequestBytes(0);
     }
-    pr.setRequestUrl(request.getRequestURL().toString());
+    final StringBuffer url = request.getRequestURL();
+    final String query = request.getQueryString();
+    if (StringUtils.isNotEmpty(query)) {
+      url.append("?" + query);
+    }
+    pr.setRequestUrl(url.toString());
     pr.setRequestMethod(request.getMethod().toUpperCase());
     pr.setCreateTime(new Date(now));
     request.setAttribute(PluginRequestInterceptor.PLUGIN_REQUEST, pr);
