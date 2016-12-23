@@ -19,6 +19,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
@@ -39,15 +42,24 @@ public class AppBean implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   @Column(length = 20, nullable = false, unique = true)
+  @NotNull
   @Size(min = 1, max = 20)
   private String name;
   @Column(length = 200, nullable = false)
+  @NotNull
   @Size(min = 1, max = 180)
   private String introduction;
   private AppPlatform platform;
+  @Transient
+  private String platformName;
+  private AppStatus status;
+  @Transient
+  private String statusName;
   @Column(length = 120, nullable = false, unique = true)
+  @Pattern(regexp = "[a-zA-Z0-9]{20,120}")
   private String appKey; // app 唯一标识
   @Column(length = 120, nullable = false)
+  @Pattern(regexp = "[a-zA-Z0-9]{20,120}")
   private String secretKey; // app 秘钥
   @Temporal(TemporalType.TIMESTAMP)
   private Date updateTime;
@@ -63,8 +75,6 @@ public class AppBean implements Serializable {
     return id;
   }
 
-
-
   /**
    * 设置 id 字段的值。
    *
@@ -73,8 +83,6 @@ public class AppBean implements Serializable {
   public void setId(Integer id) {
     this.id = id;
   }
-
-
 
   /**
    * 获取 name 字段的值。
@@ -85,8 +93,6 @@ public class AppBean implements Serializable {
     return name;
   }
 
-
-
   /**
    * 设置 name 字段的值。
    *
@@ -95,8 +101,6 @@ public class AppBean implements Serializable {
   public void setName(String name) {
     this.name = name;
   }
-
-
 
   /**
    * 获取 introduction 字段的值。
@@ -107,8 +111,6 @@ public class AppBean implements Serializable {
     return introduction;
   }
 
-
-
   /**
    * 设置 introduction 字段的值。
    *
@@ -117,8 +119,6 @@ public class AppBean implements Serializable {
   public void setIntroduction(String introduction) {
     this.introduction = introduction;
   }
-
-
 
   /**
    * 获取 platform 字段的值。
@@ -129,8 +129,6 @@ public class AppBean implements Serializable {
     return platform;
   }
 
-
-
   /**
    * 设置 platform 字段的值。
    *
@@ -140,7 +138,59 @@ public class AppBean implements Serializable {
     this.platform = platform;
   }
 
+  /**
+   * 获取 platformName 字段的值。
+   *
+   * @return platformName 字段值
+   */
+  public String getPlatformName() {
+    return platformName;
+  }
 
+  /**
+   * 设置 platformName 字段的值。
+   *
+   * @param platformName platformName 字段的值
+   */
+  public void setPlatformName(String platformName) {
+    this.platformName = platformName;
+  }
+
+  /**
+   * 获取 status 字段的值。
+   *
+   * @return status 字段值
+   */
+  public AppStatus getStatus() {
+    return status;
+  }
+
+  /**
+   * 设置 status 字段的值。
+   *
+   * @param status status 字段的值
+   */
+  public void setStatus(AppStatus status) {
+    this.status = status;
+  }
+
+  /**
+   * 获取 statusName 字段的值。
+   *
+   * @return statusName 字段值
+   */
+  public String getStatusName() {
+    return statusName;
+  }
+
+  /**
+   * 设置 statusName 字段的值。
+   *
+   * @param statusName statusName 字段的值
+   */
+  public void setStatusName(String statusName) {
+    this.statusName = statusName;
+  }
 
   /**
    * 获取 appKey 字段的值。
@@ -151,8 +201,6 @@ public class AppBean implements Serializable {
     return appKey;
   }
 
-
-
   /**
    * 设置 appKey 字段的值。
    *
@@ -161,8 +209,6 @@ public class AppBean implements Serializable {
   public void setAppKey(String appKey) {
     this.appKey = appKey;
   }
-
-
 
   /**
    * 获取 secretKey 字段的值。
@@ -173,8 +219,6 @@ public class AppBean implements Serializable {
     return secretKey;
   }
 
-
-
   /**
    * 设置 secretKey 字段的值。
    *
@@ -183,8 +227,6 @@ public class AppBean implements Serializable {
   public void setSecretKey(String secretKey) {
     this.secretKey = secretKey;
   }
-
-
 
   /**
    * 获取 updateTime 字段的值。
@@ -196,8 +238,6 @@ public class AppBean implements Serializable {
     return updateTime;
   }
 
-
-
   /**
    * 设置 updateTime 字段的值。
    *
@@ -206,8 +246,6 @@ public class AppBean implements Serializable {
   public void setUpdateTime(Date updateTime) {
     this.updateTime = updateTime;
   }
-
-
 
   /**
    * 获取 createTime 字段的值。
@@ -219,8 +257,6 @@ public class AppBean implements Serializable {
     return createTime;
   }
 
-
-
   /**
    * 设置 createTime 字段的值。
    *
@@ -230,8 +266,6 @@ public class AppBean implements Serializable {
     this.createTime = createTime;
   }
 
-
-
   /**
    * 获取 serialversionuid 字段的值。
    *
@@ -240,8 +274,6 @@ public class AppBean implements Serializable {
   public static long getSerialversionuid() {
     return serialVersionUID;
   }
-
-
 
   public enum AppPlatform {
     /**
@@ -292,6 +324,71 @@ public class AppBean implements Serializable {
         return String.format("app.platform.%d.html", value);
       } else {
         return String.format("app.platform.%d", value);
+      }
+    }
+
+    @JsonValue
+    public int value() {
+      return value;
+    }
+  }
+
+  /**
+   * 应用状态。
+   *
+   * @author hankai
+   * @version 1.0.0
+   * @since Dec 23, 2016 11:35:43 AM
+   */
+  public enum AppStatus {
+    /**
+     * 已上架。
+     */
+    Enabled(0),
+    /**
+     * 已下架。
+     */
+    Disabled(1),
+
+    /**
+     * 维护中。
+     */
+    Maintaining(2);
+
+    /**
+     * 将整型转换为应用状态枚举。
+     *
+     * @param value 整型值
+     * @return 应用状态
+     * @author hankai
+     * @since Nov 8, 2016 8:43:21 AM
+     */
+    @JsonCreator
+    public static AppStatus fromInteger(Integer value) {
+      if (value == Enabled.value) {
+        return Enabled;
+      } else if (value == Disabled.value) {
+        return Disabled;
+      } else if (value == Maintaining.value) {
+        return Maintaining;
+      }
+      return null;
+    }
+
+    private final int value;
+
+    private AppStatus(int value) {
+      this.value = value;
+    }
+
+    /**
+     * 获取用于国际化的键名。
+     */
+    public String i18nKey(boolean withStyle) {
+      if (withStyle) {
+        return String.format("app.status.%d.html", value);
+      } else {
+        return String.format("app.status.%d", value);
       }
     }
 

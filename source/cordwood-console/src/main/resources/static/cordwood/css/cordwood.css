@@ -68,3 +68,19 @@
 .progress.thin {
   height: 9px !important;
 }
+
+.fa-2 {
+  font-size: 1.5em;
+}
+
+.fa-android.colored {
+  color: #AED05B;
+}
+
+.fa-apple.colored {
+  color: #2897d1;
+}
+
+.fa-internet-explorer.colored {
+  color: #2897d1;
+}

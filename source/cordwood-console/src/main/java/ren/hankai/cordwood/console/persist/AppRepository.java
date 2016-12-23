@@ -1,6 +1,7 @@
 
 package ren.hankai.cordwood.console.persist;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +39,25 @@ public interface AppRepository extends BaseRepository<AppBean, Integer> {
             CriteriaBuilder cb) {
           return cb.and(cb.equal(root.get("appKey"), key),
               cb.equal(root.get("secretKey"), sk));
+        }
+      };
+    }
+
+    public static Specification<AppBean> search(String keyword) {
+      return new Specification<AppBean>() {
+        @Override
+        public Predicate toPredicate(Root<AppBean> root, CriteriaQuery<?> query,
+            CriteriaBuilder cb) {
+          Predicate pre = null;
+          if (!StringUtils.isEmpty(keyword)) {
+            final String fuzzyKeyword = "%" + keyword + "%";
+            pre = cb.or(
+                cb.like(root.<String>get("name"), fuzzyKeyword),
+                cb.like(root.<String>get("introduction"), fuzzyKeyword),
+                cb.like(root.<String>get("appKey"), fuzzyKeyword),
+                cb.like(root.<String>get("secretKey"), fuzzyKeyword));
+          }
+          return pre;
         }
       };
     }

@@ -30,6 +30,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -62,6 +63,7 @@ public class UserBean implements Serializable, UserDetails {
   @Pattern(regexp = "\\d*")
   private String mobile;
   @Column(length = 45, nullable = false)
+  @NotNull
   @Size(min = 1, max = 20)
   private String name;
   @Column(length = 200)

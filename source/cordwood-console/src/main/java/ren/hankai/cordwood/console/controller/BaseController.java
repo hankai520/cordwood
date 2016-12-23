@@ -46,7 +46,7 @@ public abstract class BaseController {
    * @since Dec 7, 2016 3:46:29 PM
    */
   protected void operationFailed(ModelAndView mav) {
-    mav.addObject(WebConfig.WEB_PAGE_MESSAGE,
+    mav.addObject(WebConfig.WEB_PAGE_ERROR,
         messageSource.getMessage("operation.failed", null, null));
   }
 

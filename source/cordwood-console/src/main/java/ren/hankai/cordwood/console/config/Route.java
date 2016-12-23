@@ -44,6 +44,12 @@ public final class Route {
   public static final String BG_PLUGINS_OFF = BACKGROUND_PREFIX + "/plugins/{plugin_name}/off";
   public static final String BG_PLUGIN_LOGS = BACKGROUND_PREFIX + "/plugins/logs";
   public static final String BG_PLUGIN_LOGS_JSON = BACKGROUND_PREFIX + "/plugins/logs.json";
+  public static final String BG_APPS = BACKGROUND_PREFIX + "/apps";
+  public static final String BG_APPS_JSON = BACKGROUND_PREFIX + "/apps.json";
+  public static final String BG_ADD_APP = BACKGROUND_PREFIX + "/apps/add";
+  public static final String BG_EDIT_APP = BACKGROUND_PREFIX + "/apps/{app_id}/edit";
+  public static final String BG_DELETE_APP = BACKGROUND_PREFIX + "/apps/{app_id}/delete";
+
   /*** 前台根地址。 ***/
   public static final String FOREGROUND_PREFIX = "/home";
 }

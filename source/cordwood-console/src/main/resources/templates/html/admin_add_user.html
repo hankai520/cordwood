@@ -59,7 +59,7 @@
                                                 <div class="col-md-8">
                                                     <div class="alert alert-danger" th:if="${pageError}">
                                                         <a class="close" aria-hidden="true" href="#" data-dismiss="alert">×</a>
-                                                        <span th:errors="${pageError}">错误提示</span>
+                                                        <span th:text="${pageError}">错误提示</span>
                                                     </div>
                                                     <div class="alert alert-success" th:if="${pageMessage}">
                                                         <a class="close" aria-hidden="true" href="#" data-dismiss="alert">×</a>
