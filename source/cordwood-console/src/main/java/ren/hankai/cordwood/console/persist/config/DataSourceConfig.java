@@ -53,8 +53,8 @@ public class DataSourceConfig {
     try {
       props = new Properties();
       props.load(new FileInputStream(Preferences.getDbConfigFile(fileName)));
-    } catch (final IOException e) {
-      logger.warn("Failed to load external database configuration file for production profile.", e);
+    } catch (final IOException ex) {
+      logger.warn("Failed to load external database configuration file for production profile.", ex);
     }
     if ((props != null) && (props.size() > 0)) {
       return props;

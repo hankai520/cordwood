@@ -172,8 +172,8 @@ public final class PluginPackageBean implements Serializable {
     final String path = Preferences.getPluginsDir() + File.separator + fileName;
     try {
       return new File(path).toURI().toURL();
-    } catch (final MalformedURLException e) {
-      throw new RuntimeException(e);
+    } catch (final MalformedURLException ex) {
+      throw new RuntimeException(ex);
     }
   }
 

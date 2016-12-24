@@ -9,6 +9,7 @@ import org.springframework.security.web.authentication.RememberMeServices;
 
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.config.BaseSecurityConfig;
+import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 
 /**
  * 控制台 web 访问的安全配置。
@@ -29,8 +30,7 @@ public class SecurityConfig {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-      http.antMatcher(Route.BACKGROUND_PREFIX + "/**")
-          .authorizeRequests()
+      http.antMatcher(Route.BACKGROUND_PREFIX + "/**").authorizeRequests()
 
           .antMatchers(Route.BG_PLUGIN_PACKAGES + "/**")
           .hasAnyAuthority(PredefinedRoles.ADMIN, PredefinedRoles.CONFIG)
@@ -43,24 +43,41 @@ public class SecurityConfig {
 
           .anyRequest().authenticated();
 
-      http.formLogin()
-          .loginPage(Route.BG_LOGIN)
-          .defaultSuccessUrl(Route.BG_DASHBOARD)
-          .permitAll();
-
-      http.logout()
-          .logoutUrl(Route.BG_LOGOUT)
-          .permitAll();
-
-      http.rememberMe()
-          .rememberMeServices(rememberMeServices)
-          .key(Preferences.getSystemSk())
+      http.formLogin().loginPage(Route.BG_LOGIN).defaultSuccessUrl(Route.BG_DASHBOARD).permitAll();
+      http.logout().logoutUrl(Route.BG_LOGOUT).permitAll();
+      http.rememberMe().rememberMeServices(rememberMeServices).key(Preferences.getSystemSk())
           .tokenValiditySeconds(60 * 60 * 24 * 7);
     }
   }
 
   @Configuration
+  @Order(2)
+  public static class ApiSecurityConfigurationAdapter extends BaseSecurityConfig {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+      http.csrf().ignoringAntMatchers(Route.API_PREFIX + "/**");
+      http.sessionManagement().disable();
+      http.antMatcher(Route.API_PREFIX + "/**").authorizeRequests().anyRequest().permitAll();
+    }
+  }
+
+  @Configuration
   @Order(3)
+  public static class PluginSecurityConfigurationAdapter extends BaseSecurityConfig {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+      http.csrf().ignoringAntMatchers(Pluggable.PLUGIN_BASE_URL + "/**",
+          Pluggable.PLUGIN_RESOURCE_BASE_URL + "/**");
+      http.sessionManagement().disable();
+      http.authorizeRequests().antMatchers(Pluggable.PLUGIN_BASE_URL + "/**",
+          Pluggable.PLUGIN_RESOURCE_BASE_URL + "/**").anonymous();
+    }
+  }
+
+  @Configuration
+  @Order(4)
   public static class CommonWebSecurityConfigurationAdapter extends BaseSecurityConfig {
 
     @Override

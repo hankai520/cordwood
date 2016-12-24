@@ -85,10 +85,10 @@ public class UserController extends BaseController {
       final List<SummarizedRequest> list = pluginService
           .getUserPluginSummarizedRequests(user.getEmail(), dateRange[0], dateRange[1]);
       return list;
-    } catch (final Exception e) {
-      logger.warn(Route.BG_MY_PLUGIN_STATS, e);
-    } catch (final Error e) {
-      logger.warn(Route.BG_MY_PLUGIN_STATS, e);
+    } catch (final Exception ex) {
+      logger.warn(Route.BG_MY_PLUGIN_STATS, ex);
+    } catch (final Error ex) {
+      logger.warn(Route.BG_MY_PLUGIN_STATS, ex);
     }
     return null;
   }
@@ -126,10 +126,10 @@ public class UserController extends BaseController {
       response = new BootstrapTableData();
       response.setTotal(logs.getTotalElements());
       response.setRows(logs.getContent());
-    } catch (final Exception e) {
-      logger.error(Route.BG_MY_PLUGIN_LOGS_JSON, e);
-    } catch (final Error e) {
-      logger.error(Route.BG_MY_PLUGIN_LOGS_JSON, e);
+    } catch (final Exception ex) {
+      logger.error(Route.BG_MY_PLUGIN_LOGS_JSON, ex);
+    } catch (final Error ex) {
+      logger.error(Route.BG_MY_PLUGIN_LOGS_JSON, ex);
     }
     return response;
   }
@@ -159,8 +159,8 @@ public class UserController extends BaseController {
       try {
         user = userService.updateUserInfo(me);
         operationSucceeded(mav);
-      } catch (final Exception e) {
-        logger.error(Route.BG_MY_PROFILE, e);
+      } catch (final Exception ex) {
+        logger.error(Route.BG_MY_PROFILE, ex);
         operationFailed(mav);
       }
     }
@@ -177,8 +177,8 @@ public class UserController extends BaseController {
     if (avatar == null) {
       try {
         avatar = ResourceUtils.getFile("classpath:static/images/default_avatar.jpg");
-      } catch (final FileNotFoundException e) {
-        logger.warn("Failed to get default avatar file.", e);
+      } catch (final FileNotFoundException ex) {
+        logger.warn("Failed to get default avatar file.", ex);
       }
     }
     if (avatar != null) {
@@ -213,10 +213,10 @@ public class UserController extends BaseController {
       response = new BootstrapTableData();
       response.setTotal(users.getTotalElements());
       response.setRows(users.getContent());
-    } catch (final Exception e) {
-      logger.error(Route.BG_USERS_JSON, e);
-    } catch (final Error e) {
-      logger.error(Route.BG_USERS_JSON, e);
+    } catch (final Exception ex) {
+      logger.error(Route.BG_USERS_JSON, ex);
+    } catch (final Error ex) {
+      logger.error(Route.BG_USERS_JSON, ex);
     }
     return response;
   }
@@ -251,9 +251,9 @@ public class UserController extends BaseController {
         userService.save(user);
         user = new UserBean();
         operationSucceeded(mav);
-      } catch (final Exception e) {
+      } catch (final Exception ex) {
         operationFailed(mav);
-        logger.error(Route.BG_ADD_USER, e);
+        logger.error(Route.BG_ADD_USER, ex);
       }
     } else {
       user.setPassword(null);
@@ -304,9 +304,9 @@ public class UserController extends BaseController {
           user = userService.save(user);
           user.initSelectedRoleIds();
           operationSucceeded(mav);
-        } catch (final Exception e) {
+        } catch (final Exception ex) {
           operationFailed(mav);
-          logger.error(Route.BG_ADD_USER, e);
+          logger.error(Route.BG_ADD_USER, ex);
         }
       }
       mav.addObject("user", user);

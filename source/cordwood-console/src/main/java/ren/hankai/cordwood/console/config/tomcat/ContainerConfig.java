@@ -10,6 +10,8 @@ import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import ren.hankai.cordwood.console.config.Route;
+
 /**
  * 自定义servlet容器配置。
  *
@@ -32,10 +34,15 @@ public class ContainerConfig implements EmbeddedServletContainerCustomizer {
    */
   @Override
   public void customize(ConfigurableEmbeddedServletContainer container) {
-    container.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST, "/400.html"));
-    container.addErrorPages(new ErrorPage(HttpStatus.FORBIDDEN, "/403.html"));
-    container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/404.html"));
-    container.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500.html"));
+    container.addErrorPages(
+        // Http 错误
+        new ErrorPage(HttpStatus.BAD_REQUEST, Route.ERROR_PREFIX + "/400"),
+        new ErrorPage(HttpStatus.FORBIDDEN, Route.ERROR_PREFIX + "/403"),
+        new ErrorPage(HttpStatus.NOT_FOUND, Route.ERROR_PREFIX + "/404"),
+        new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, Route.ERROR_PREFIX + "/500"),
+        // 异常
+        new ErrorPage(Exception.class, Route.ERROR_PREFIX),
+        new ErrorPage(Error.class, Route.ERROR_PREFIX));
     if (container instanceof TomcatEmbeddedServletContainerFactory) {
       final TomcatEmbeddedServletContainerFactory cf =
           (TomcatEmbeddedServletContainerFactory) container;

@@ -75,10 +75,10 @@ public class AppController extends BaseController {
       response = new BootstrapTableData();
       response.setTotal(apps.getTotalElements());
       response.setRows(apps.getContent());
-    } catch (final Exception e) {
-      logger.error(Route.BG_APPS_JSON, e);
-    } catch (final Error e) {
-      logger.error(Route.BG_APPS_JSON, e);
+    } catch (final Exception ex) {
+      logger.error(Route.BG_APPS_JSON, ex);
+    } catch (final Error ex) {
+      logger.error(Route.BG_APPS_JSON, ex);
     }
     return response;
   }
@@ -108,10 +108,12 @@ public class AppController extends BaseController {
         app.setCreateTime(new Date());
         appService.save(app);
         app = new AppBean();
+        app.setAppKey(appService.generateAppKey());
+        app.setSecretKey(appService.generateSecretKey());
         operationSucceeded(mav);
-      } catch (final Exception e) {
+      } catch (final Exception ex) {
         operationFailed(mav);
-        logger.error(Route.BG_ADD_APP, e);
+        logger.error(Route.BG_ADD_APP, ex);
       }
     }
     mav.addObject("app", app);
@@ -150,9 +152,9 @@ public class AppController extends BaseController {
           app.setUpdateTime(new Date());
           app = appService.save(app);
           operationSucceeded(mav);
-        } catch (final Exception e) {
+        } catch (final Exception ex) {
           operationFailed(mav);
-          logger.error(Route.BG_EDIT_APP, e);
+          logger.error(Route.BG_EDIT_APP, ex);
         }
       }
       mav.addObject("app", app);

@@ -96,11 +96,11 @@ public class PluginService {
         FileCopyUtils.copy(is, os);
       }
       return localFile.toURI().toURL();
-    } catch (final MalformedURLException e) {
+    } catch (final MalformedURLException ex) {
       logger.error(String.format("Failed to convert package url to local: %s", tempUrl.toString()),
-          e);
-    } catch (final IOException e) {
-      logger.error(String.format("Failed to copy plugin package file: %s", tempUrl.toString()), e);
+          ex);
+    } catch (final IOException ex) {
+      logger.error(String.format("Failed to copy plugin package file: %s", tempUrl.toString()), ex);
     } finally {
       IOUtils.closeQuietly(os);
       IOUtils.closeQuietly(is);
@@ -151,8 +151,8 @@ public class PluginService {
           return true;
         }
       }
-    } catch (final Exception e) {
-      logger.error(String.format("Failed to install plugin from: %s", url.toString()), e);
+    } catch (final Exception ex) {
+      logger.error(String.format("Failed to install plugin from: %s", url.toString()), ex);
     }
     return false;
   }

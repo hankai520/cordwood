@@ -58,7 +58,7 @@ public class PluginInitializer {
       @Override
       public void handleEvent(Plugin plugin, String eventType) {
         final String clazz = plugin.getInstanceClass().getName();
-        LogbackUtil.setupFileLoggerFor(clazz, Level.WARN, plugin.getName() + ".txt");
+        LogbackUtil.setupFileLoggerFor(clazz, Level.INFO, plugin.getName() + ".txt");
       }
     });
   }
@@ -73,8 +73,8 @@ public class PluginInitializer {
   private void installPlugin(File file) {
     try {
       pluginService.installPluginPackage(file.toURI().toURL(), false);
-    } catch (final Exception e) {
-      logger.error("Failed to install plugin: " + file.getPath(), e);
+    } catch (final Exception ex) {
+      logger.error("Failed to install plugin: " + file.getPath(), ex);
     }
   }
 

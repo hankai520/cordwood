@@ -73,8 +73,7 @@ public class PluginController extends BaseController {
   public BootstrapTableData getPluginPackagesJson(
       @RequestParam(value = "search", required = false) String search,
       @RequestParam(value = "order", required = false) String order,
-      @RequestParam(value = "sort", required = false) String sort,
-      @RequestParam("limit") int limit,
+      @RequestParam(value = "sort", required = false) String sort, @RequestParam("limit") int limit,
       @RequestParam("offset") int offset) {
     BootstrapTableData response = null;
     try {
@@ -85,10 +84,10 @@ public class PluginController extends BaseController {
       response = new BootstrapTableData();
       response.setTotal(packages.getTotalElements());
       response.setRows(packages.getContent());
-    } catch (final Exception e) {
-      logger.error(Route.BG_PLUGIN_PACKAGES_JSON, e);
-    } catch (final Error e) {
-      logger.error(Route.BG_PLUGIN_PACKAGES_JSON, e);
+    } catch (final Exception ex) {
+      logger.error(Route.BG_PLUGIN_PACKAGES_JSON, ex);
+    } catch (final Error ex) {
+      logger.error(Route.BG_PLUGIN_PACKAGES_JSON, ex);
     }
     return response;
   }
@@ -123,11 +122,11 @@ public class PluginController extends BaseController {
     try {
       pluginService.disableOrEnablePlugin(pluginName, true);
       return new ResponseEntity<>(HttpStatus.OK);
-    } catch (final Exception e) {
-      logger.error(String.format("Failed to enable plugin \"%d\".", pluginName), e);
+    } catch (final Exception ex) {
+      logger.error(String.format("Failed to enable plugin \"%d\".", pluginName), ex);
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    } catch (final Error e) {
-      logger.error(String.format("Failed to enable plugin \"%d\".", pluginName), e);
+    } catch (final Error ex) {
+      logger.error(String.format("Failed to enable plugin \"%d\".", pluginName), ex);
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -138,11 +137,11 @@ public class PluginController extends BaseController {
     try {
       pluginService.disableOrEnablePlugin(pluginName, false);
       return new ResponseEntity<>(HttpStatus.OK);
-    } catch (final Exception e) {
-      logger.error(String.format("Failed to disable plugin \"%d\".", pluginName), e);
+    } catch (final Exception ex) {
+      logger.error(String.format("Failed to disable plugin \"%d\".", pluginName), ex);
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    } catch (final Error e) {
-      logger.error(String.format("Failed to enable plugin \"%d\".", pluginName), e);
+    } catch (final Error ex) {
+      logger.error(String.format("Failed to enable plugin \"%d\".", pluginName), ex);
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -165,8 +164,8 @@ public class PluginController extends BaseController {
             output = new FileOutputStream(tempPath);
             IOUtils.copy(input, output);
             copiedFiles.add(new File(tempPath));
-          } catch (final Exception e) {
-            throw e;
+          } catch (final Exception ex) {
+            throw ex;
           } finally {
             IOUtils.closeQuietly(output);
             IOUtils.closeQuietly(input);
@@ -181,11 +180,11 @@ public class PluginController extends BaseController {
         }
       }
       return new ResponseEntity<>(HttpStatus.OK);
-    } catch (final Exception e) {
-      logger.error("Failed to upload plugins.", e);
+    } catch (final Exception ex) {
+      logger.error("Failed to upload plugins.", ex);
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    } catch (final Error e) {
-      logger.error("Failed to upload plugins.", e);
+    } catch (final Error ex) {
+      logger.error("Failed to upload plugins.", ex);
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     } finally {
       pluginInitializer.resume();
@@ -203,8 +202,7 @@ public class PluginController extends BaseController {
   public BootstrapTableData getPluginLogsJson(
       @RequestParam(value = "search", required = false) String search,
       @RequestParam(value = "order", required = false) String order,
-      @RequestParam(value = "sort", required = false) String sort,
-      @RequestParam("limit") int limit,
+      @RequestParam(value = "sort", required = false) String sort, @RequestParam("limit") int limit,
       @RequestParam("offset") int offset) {
     BootstrapTableData response = null;
     try {
@@ -214,10 +212,10 @@ public class PluginController extends BaseController {
       response = new BootstrapTableData();
       response.setTotal(logs.getTotalElements());
       response.setRows(logs.getContent());
-    } catch (final Exception e) {
-      logger.error(Route.BG_PLUGIN_LOGS_JSON, e);
-    } catch (final Error e) {
-      logger.error(Route.BG_PLUGIN_LOGS_JSON, e);
+    } catch (final Exception ex) {
+      logger.error(Route.BG_PLUGIN_LOGS_JSON, ex);
+    } catch (final Error ex) {
+      logger.error(Route.BG_PLUGIN_LOGS_JSON, ex);
     }
     return response;
   }

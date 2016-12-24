@@ -1,5 +1,6 @@
 package ren.hankai.cordwood.core.config;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.cache.annotation.EnableCaching;
@@ -21,7 +22,7 @@ import ren.hankai.cordwood.core.Preferences;
  * @version 1.0.0
  * @since Oct 28, 2016 4:42:14 PM
  */
-@ComponentScan(basePackages = {"ren.hankai.cordwood"})
+@ComponentScan(basePackages = { "ren.hankai.cordwood" })
 @EnableCaching
 public abstract class CoreSpringConfig {
 
@@ -35,6 +36,7 @@ public abstract class CoreSpringConfig {
   @Bean
   public ObjectMapper getObjectMapper() {
     final ObjectMapper om = new ObjectMapper();
+    om.setSerializationInclusion(Include.NON_NULL);
     return om;
   }
 

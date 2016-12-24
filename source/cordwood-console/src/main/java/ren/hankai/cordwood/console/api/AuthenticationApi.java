@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import ren.hankai.cordwood.console.api.exception.AppNotFoundException;
 import ren.hankai.cordwood.console.api.payload.BusinessErrors;
@@ -33,15 +34,27 @@ public class AuthenticationApi extends WebServiceSupport {
   @Autowired
   private AppService appService;
 
+  /**
+   * 获取鉴权码。
+   *
+   * @param appKey 应用标识
+   * @param appSk 应用秘钥
+   * @param interval 鉴权码有效时长（分钟）
+   * @return 鉴权码信息
+   * @author hankai
+   * @since Dec 24, 2016 9:46:46 AM
+   */
   @PostMapping(Route.API_AUTHENTICATE)
+  @ResponseBody
   public ApiResponse authenticate(@RequestParam("app_key") String appKey,
-      @RequestParam("app_sk") String appSk) {
+      @RequestParam("app_sk") String appSk, @RequestParam("interval") Integer interval) {
     final ApiResponse response = new ApiResponse();
     final AppBean app = appService.getIdentifiedApp(appKey, appSk);
     if (app == null) {
       throw new AppNotFoundException(BusinessErrors.APP_NOT_FOUND, "App not found!");
     }
-    final TokenInfo tokenInfo = TokenInfo.withinDays(appKey, appSk, 1);
+    interval = ((interval <= 0) || (interval > (60 * 24 * 2))) ? 60 * 24 : interval;
+    final TokenInfo tokenInfo = TokenInfo.withinMinutes(appKey, appSk, interval);
     final String appToken = accessAuthenticator.generateAccessToken(tokenInfo);
     final HashMap<String, String> data = new HashMap<>();
     data.put("accessToken", appToken);

@@ -48,8 +48,8 @@ public class SidebarController {
     try {
       final String json = objectMapper.writeValueAsString(items);
       mav.addObject("visibleItems", json);
-    } catch (final JsonProcessingException e) {
-      logger.error("Failed to generate json for sidebar items.", e);
+    } catch (final JsonProcessingException ex) {
+      logger.error("Failed to generate json for sidebar items.", ex);
     }
     mav.addObject("selectedItem", "plugins");
     return mav;

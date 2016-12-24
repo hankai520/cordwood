@@ -1,12 +1,17 @@
 
 package ren.hankai.cordwood.plugin.util;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLDecoder;
 
 /**
@@ -32,13 +37,13 @@ public class PathUtil {
     try {
       String decodedUrl = URLDecoder.decode(url, "UTF-8");
 
-      int index = decodedUrl.indexOf(Pluggable.PLUGIN_RESOURCE_BASE_URL);
+      final int index = decodedUrl.indexOf(Pluggable.PLUGIN_RESOURCE_BASE_URL);
       if (index >= 0) {
         decodedUrl = decodedUrl.substring(index + 1);
         decodedUrl = decodedUrl.startsWith("/") ? decodedUrl.substring(1) : decodedUrl;
-        String[] parts = decodedUrl.split("/");
+        final String[] parts = decodedUrl.split("/");
         if ((parts != null) && (parts.length > 2)) {
-          StringBuilder sb = new StringBuilder();
+          final StringBuilder sb = new StringBuilder();
           for (int i = 2; i < parts.length; i++) {
             sb.append(parts[i] + "/");
           }
@@ -48,9 +53,26 @@ public class PathUtil {
           return sb.toString();
         }
       }
-    } catch (UnsupportedEncodingException e) {
+    } catch (final UnsupportedEncodingException e) {
       logger.error(String.format("Failed to decode url: \"%s\"", url), e);
     }
     return null;
+  }
+
+  public static URL getFileUrlInPluginJar(Class<?> pluginClass, String fileRelativePath)
+      throws URISyntaxException, MalformedURLException {
+    final URL jarUrl = pluginClass.getProtectionDomain().getCodeSource().getLocation();
+    final String jarPath = jarUrl.getPath().toLowerCase();
+    URL fileUrl = null;
+    if (FilenameUtils.isExtension(jarPath, "jar")) {
+      String filePath = fileRelativePath;
+      if (!fileRelativePath.startsWith(File.separator)) {
+        filePath = File.separator + fileRelativePath;
+      }
+      fileUrl = new URL(String.format("jar:file:%s!%s", jarPath, filePath));
+    } else {
+      fileUrl = pluginClass.getClassLoader().getResource(fileRelativePath);
+    }
+    return fileUrl;
   }
 }

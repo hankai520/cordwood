@@ -27,8 +27,10 @@ import java.io.File;
 import java.util.Date;
 
 /**
+ * Cordwood 控制台测试基类。
+ * 
  * @author hankai
- * @version TODO Missing version number
+ * @version 1.0.0
  * @since Dec 12, 2016 9:19:41 AM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -46,8 +48,8 @@ public abstract class ConsoleTestSupport {
       public void run() {
         try {
           FileUtils.deleteDirectory(new File(Preferences.getHomeDir()));
-        } catch (final Exception e) {
-          e.printStackTrace();
+        } catch (final Exception ex) {
+          ex.printStackTrace();
         }
       }
     });

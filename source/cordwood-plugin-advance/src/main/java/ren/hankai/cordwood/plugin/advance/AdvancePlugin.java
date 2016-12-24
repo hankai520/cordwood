@@ -23,6 +23,7 @@ import ren.hankai.cordwood.plugin.api.annotation.LightWeight;
 import ren.hankai.cordwood.plugin.api.annotation.Optional;
 import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 import ren.hankai.cordwood.plugin.api.annotation.Secure;
+import ren.hankai.cordwood.plugin.util.PathUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -68,7 +69,7 @@ public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader
    * @author hankai
    * @since Nov 8, 2016 8:55:38 AM
    */
-  @Secure
+  @Secure(checkParameterIntegrity = false)
   @Functional(name = "add", resultType = "text/html")
   public String add(Integer op1, Integer op2, @Optional String echo) {
     final MyTbl1 mt = new MyTbl1();
@@ -120,14 +121,13 @@ public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader
   @Override
   public void pluginDidLoad() {
     try {
-      final URL url = AdvancePlugin.class.getClassLoader().getResource("templates");
-      final String templatePath = url.toString();
-      logger.info("Velocity template root: " + templatePath);
+      final URL url = PathUtil.getFileUrlInPluginJar(this.getClass(), "templates");
+      logger.info("Velocity template root: " + url.toString());
       if (engine == null) {
         engine = new VelocityEngine();
       }
       engine.setProperty("resource.loader", "url");
-      engine.setProperty("url.resource.loader.root", templatePath);
+      engine.setProperty("url.resource.loader.root", url.toString());
       engine.setProperty("url.resource.loader.class", URLResourceLoader.class.getName());
       engine.setProperty("url.resource.loader.cache", "true");
       engine.setProperty("url.resource.loader.modificationCheckInterval", "60");

@@ -9,6 +9,9 @@ package ren.hankai.cordwood.console.config;
  */
 public final class Route {
 
+  /*** 通用。 ***/
+  public static final String ERROR_PREFIX = "/error";
+  public static final String ERROR_HTTP = ERROR_PREFIX + "/{error_code}";
   /*** API根地址。 ***/
   public static final String API_PREFIX = "/api";
   public static final String API_AUTHENTICATE = API_PREFIX + "/authenticate";
