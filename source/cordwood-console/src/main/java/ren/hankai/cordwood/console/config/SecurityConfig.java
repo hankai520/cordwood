@@ -23,6 +23,39 @@ public class SecurityConfig {
 
   @Configuration
   @Order(1)
+  public static class PluginServiceSecurity extends BaseSecurityConfig {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+      http.antMatcher(Pluggable.PLUGIN_BASE_URL + "/**").anonymous();
+      http.csrf().disable();
+      http.sessionManagement().disable();
+    }
+  }
+
+  @Configuration
+  @Order(2)
+  public static class PluginResourceSecurity extends BaseSecurityConfig {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+      http.antMatcher(Pluggable.PLUGIN_RESOURCE_BASE_URL + "/**").anonymous();
+      http.csrf().disable();
+      http.sessionManagement().disable();
+    }
+  }
+
+  @Configuration
+  @Order(3)
+  public static class ApiSecurityConfigurationAdapter extends BaseSecurityConfig {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+      http.antMatcher(Route.API_PREFIX + "/**").anonymous();
+      http.csrf().disable();
+      http.sessionManagement().disable();
+    }
+  }
+
+  @Configuration
+  @Order(4)
   public static class BackendWebSecurityConfigurationAdapter extends BaseSecurityConfig {
 
     @Autowired
@@ -51,38 +84,13 @@ public class SecurityConfig {
   }
 
   @Configuration
-  @Order(2)
-  public static class ApiSecurityConfigurationAdapter extends BaseSecurityConfig {
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-      http.csrf().ignoringAntMatchers(Route.API_PREFIX + "/**");
-      http.sessionManagement().disable();
-      http.antMatcher(Route.API_PREFIX + "/**").authorizeRequests().anyRequest().permitAll();
-    }
-  }
-
-  @Configuration
-  @Order(3)
-  public static class PluginSecurityConfigurationAdapter extends BaseSecurityConfig {
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-      http.csrf().ignoringAntMatchers(Pluggable.PLUGIN_BASE_URL + "/**",
-          Pluggable.PLUGIN_RESOURCE_BASE_URL + "/**");
-      http.sessionManagement().disable();
-      http.authorizeRequests().antMatchers(Pluggable.PLUGIN_BASE_URL + "/**",
-          Pluggable.PLUGIN_RESOURCE_BASE_URL + "/**").anonymous();
-    }
-  }
-
-  @Configuration
-  @Order(4)
+  @Order(5)
   public static class CommonWebSecurityConfigurationAdapter extends BaseSecurityConfig {
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-      http.authorizeRequests().anyRequest().permitAll();
+      http.anonymous();
+      http.csrf().disable();
+      http.sessionManagement().disable();
     }
   }
 

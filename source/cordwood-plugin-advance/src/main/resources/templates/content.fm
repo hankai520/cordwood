@@ -4,13 +4,13 @@
     <link href="${resourceBaseUrl}/css/style.css" rel="stylesheet">
 </head>
 <body>
-#parse("/header.vt")
+<#include "/header.fm">
 <div style="margin-top: 20px; margin-bottom: 20px;">The calculations: </div>
 <ul>
-#foreach( $record in $results )
+<#list results as record>
     <li>${record.timestamp} -> ${record.exp}</li>
-#end
+</#list>
 </ul>
-#parse("/footer.vt")
+<#include "/footer.fm">
 </body>
 </html>

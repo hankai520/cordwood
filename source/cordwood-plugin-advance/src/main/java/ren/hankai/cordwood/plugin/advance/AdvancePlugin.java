@@ -1,21 +1,16 @@
 
 package ren.hankai.cordwood.plugin.advance;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.app.event.implement.EscapeHtmlReference;
-import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.resource.loader.URLResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 import ren.hankai.cordwood.plugin.advance.model.MyTbl1;
 import ren.hankai.cordwood.plugin.advance.persist.MyTbl1Repository;
-import ren.hankai.cordwood.plugin.advance.util.MyLogChute;
 import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
 import ren.hankai.cordwood.plugin.api.PluginResourceLoader;
 import ren.hankai.cordwood.plugin.api.annotation.Functional;
@@ -23,15 +18,15 @@ import ren.hankai.cordwood.plugin.api.annotation.LightWeight;
 import ren.hankai.cordwood.plugin.api.annotation.Optional;
 import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 import ren.hankai.cordwood.plugin.api.annotation.Secure;
-import ren.hankai.cordwood.plugin.util.PathUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 示例插件，将插件访问时间插入数据库。
@@ -45,19 +40,18 @@ import java.util.List;
 public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader {
 
   private static final Logger logger = LoggerFactory.getLogger(AdvancePlugin.class);
-
   public static final String NAME = "advance";
-
-  private static VelocityEngine engine = null;
-
   @Autowired
   private MyTbl1Repository tbl1Repo;
+  @Autowired
+  private Configuration freeMarkerConfig;
 
-  private VelocityContext buildVelcityContext() {
-    final VelocityContext vc = new VelocityContext();
-    vc.put("pluginBaseUrl", String.format("%s/%s", Pluggable.PLUGIN_BASE_URL, NAME));
-    vc.put("resourceBaseUrl", String.format("%s/%s", Pluggable.PLUGIN_RESOURCE_BASE_URL, NAME));
-    return vc;
+  private Map<String, Object> buildModel() {
+    final Map<String, Object> model = new HashMap<>();
+    model.put("pluginBaseUrl", String.format("%s/%s", Pluggable.PLUGIN_BASE_URL, NAME));
+    model.put("resourceBaseUrl",
+        String.format("%s/%s", Pluggable.PLUGIN_RESOURCE_BASE_URL, NAME));
+    return model;
   }
 
   /**
@@ -69,7 +63,7 @@ public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader
    * @author hankai
    * @since Nov 8, 2016 8:55:38 AM
    */
-  @Secure(checkParameterIntegrity = false)
+  @Secure(checkParameterIntegrity = false, checkAccessToken = false)
   @Functional(name = "add", resultType = "text/html")
   public String add(Integer op1, Integer op2, @Optional String echo) {
     final MyTbl1 mt = new MyTbl1();
@@ -77,15 +71,13 @@ public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader
     final int sum = op1 + op2;
     mt.setExp(op1 + " + " + op2 + " = " + sum);
     tbl1Repo.save(mt);
-    final VelocityContext vc = buildVelcityContext();
+    final Map<String, Object> model = buildModel();
     final List<MyTbl1> results = tbl1Repo.findAll();
-    vc.put("results", results);
-    Template tmpl = null;
+    model.put("results", results);
     try {
-      tmpl = engine.getTemplate("/content.vt", "utf-8");
-      final StringWriter sw = new StringWriter();
-      tmpl.merge(vc, sw);
-      return sw.toString();
+      final Template template = freeMarkerConfig.getTemplate("content.fm");
+      final String tmpl = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+      return tmpl;
     } catch (final Exception e) {
       logger.error("Failed to render template!", e);
     }
@@ -120,32 +112,8 @@ public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader
 
   @Override
   public void pluginDidLoad() {
-    try {
-      final URL url = PathUtil.getFileUrlInPluginJar(this.getClass(), "templates");
-      logger.info("Velocity template root: " + url.toString());
-      if (engine == null) {
-        engine = new VelocityEngine();
-      }
-      engine.setProperty("resource.loader", "url");
-      engine.setProperty("url.resource.loader.root", url.toString());
-      engine.setProperty("url.resource.loader.class", URLResourceLoader.class.getName());
-      engine.setProperty("url.resource.loader.cache", "true");
-      engine.setProperty("url.resource.loader.modificationCheckInterval", "60");
-      final String logDir = System.getProperty("app.log");
-      if (!StringUtils.isEmpty(logDir)) {
-        logger.info("Velocity run time log: " + logDir);
-        engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM,
-            new MyLogChute(AdvancePlugin.NAME));
-      }
-      // 必须设置该选项，因为velocity在生成html时，不会转义html实体（如 & <），需要通过该配置来自动转义
-      engine.setProperty("eventhandler.referenceinsertion.class",
-          EscapeHtmlReference.class.getName());
-      // 模板中所有符号都原样输出
-      engine.setProperty("eventhandler.escape.html.match", "/.*/");
-      engine.init();
-    } catch (final Exception e) {
-      logger.error("Failed to initialize velocity!", e);
-    }
+    // final URL url = PathUtil.getFileUrlInPluginJar(this.getClass(), "templates");
+    logger.info("Plugin \"" + AdvancePlugin.NAME + "\" did load");
   }
 
   @Override

@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -13,7 +14,9 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean;
 
+import freemarker.cache.ClassTemplateLoader;
 import ren.hankai.cordwood.plugin.advance.util.Slf4jSessionLogger;
 import ren.hankai.cordwood.plugin.config.PluginConfig;
 
@@ -94,5 +97,23 @@ public class PluginBootstrap {
   @Bean(name = "transactionManager")
   public PlatformTransactionManager getTransactionManager() {
     return new JpaTransactionManager();
+  }
+
+  /**
+   * 配置 Free Marker 配置工厂。
+   *
+   * @return Free Marker 配置工厂
+   * @author hankai
+   * @since Dec 26, 2016 5:26:53 PM
+   */
+  @Primary
+  @Bean
+  public FreeMarkerConfigurationFactoryBean freeMarkerConfigurationFactory() {
+    final FreeMarkerConfigurationFactoryBean factory = new FreeMarkerConfigurationFactoryBean();
+    factory.setDefaultEncoding("UTF-8");
+    final ClassLoader cl = Thread.currentThread().getContextClassLoader();
+    final ClassTemplateLoader loader = new ClassTemplateLoader(cl, "templates");
+    factory.setPreTemplateLoaders(loader);
+    return factory;
   }
 }

@@ -68,7 +68,7 @@ public class SpringablePluginLoader implements PluginLoader {
     if (sharedClassLoader == null) {
       final URL[] urls = Preferences.getLibUrls();
       if ((urls != null) && (urls.length != 0)) {
-        sharedClassLoader = new URLClassLoader(urls, context.getClassLoader());
+        sharedClassLoader = new PluginDependenciesClassLoader(urls, context.getClassLoader());
       } else {
         sharedClassLoader = context.getClassLoader();
       }
