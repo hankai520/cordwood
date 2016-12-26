@@ -68,6 +68,18 @@ public class PluginController extends BaseController {
     return mav;
   }
 
+  /**
+   * 获取插件包列表AJAX接口。
+   *
+   * @param search 搜索关键字
+   * @param order 排序字段
+   * @param sort 升序/降序
+   * @param limit 返回结果数
+   * @param offset 从第几条开始返回
+   * @return 插件包列表
+   * @author hankai
+   * @since Dec 26, 2016 11:01:45 AM
+   */
   @RequestMapping(Route.BG_PLUGIN_PACKAGES_JSON)
   @ResponseBody
   public BootstrapTableData getPluginPackagesJson(
@@ -92,6 +104,14 @@ public class PluginController extends BaseController {
     return response;
   }
 
+  /**
+   * 插件包详情页面。
+   *
+   * @param packageId 插件包标识
+   * @return 插件包详情页面
+   * @author hankai
+   * @since Dec 26, 2016 11:05:42 AM
+   */
   @NavigationItem(label = "nav.plugin.details", parent = "nav.plugins")
   @GetMapping(Route.BG_PLUGIN_PACKAGE_DETAILS)
   public ModelAndView pluginPackageDetails(@RequestParam("package_id") String packageId) {
@@ -105,8 +125,16 @@ public class PluginController extends BaseController {
     return mav;
   }
 
+  /**
+   * 卸载插件包AJAX接口。
+   *
+   * @param packageId 插件包标识
+   * @return 是否成功
+   * @author hankai
+   * @since Dec 26, 2016 11:04:22 AM
+   */
   @GetMapping(Route.BG_PLUGIN_PACKAGES_UNINSTALL)
-  public ResponseEntity<String> uninstallpackage(@RequestParam("package_id") String packageId) {
+  public ResponseEntity<String> uninstallPackage(@RequestParam("package_id") String packageId) {
     final PluginPackageBean ppb = pluginService.getInstalledPackageById(packageId);
     if (ppb != null) {
       if (!pluginService.uninstallPluginPackage(ppb)) {
@@ -116,6 +144,14 @@ public class PluginController extends BaseController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
+  /**
+   * 启用插件功能AJAX接口。
+   *
+   * @param pluginName 插件名称
+   * @return 是否成功
+   * @author hankai
+   * @since Dec 26, 2016 11:04:06 AM
+   */
   @GetMapping(Route.BG_PLUGINS_ON)
   @ResponseBody
   public ResponseEntity<String> enablePlugin(@PathVariable("plugin_name") String pluginName) {
@@ -131,6 +167,14 @@ public class PluginController extends BaseController {
     }
   }
 
+  /**
+   * 禁用插件功能AJAX接口。
+   *
+   * @param pluginName 插件名
+   * @return 是否成功
+   * @author hankai
+   * @since Dec 26, 2016 11:03:49 AM
+   */
   @GetMapping(Route.BG_PLUGINS_OFF)
   @ResponseBody
   public ResponseEntity<String> disablePlugin(@PathVariable("plugin_name") String pluginName) {
@@ -146,6 +190,14 @@ public class PluginController extends BaseController {
     }
   }
 
+  /**
+   * 上传插件包AJAX接口。
+   *
+   * @param files 插件包文件
+   * @return 是否成功
+   * @author hankai
+   * @since Dec 26, 2016 11:03:26 AM
+   */
   @PostMapping(Route.BG_PLUGIN_PACKAGES_UPLOAD)
   @ResponseBody
   public ResponseEntity<String> uploadPlugins(@RequestParam("files[]") MultipartFile[] files) {
@@ -197,6 +249,18 @@ public class PluginController extends BaseController {
     return new ModelAndView("admin_plugin_logs.html");
   }
 
+  /**
+   * 获取插件访问日志列表AJAX接口。
+   *
+   * @param search 搜索关键字
+   * @param order 排序字段
+   * @param sort 升序/降序
+   * @param limit 返回结果数
+   * @param offset 从第几条开始返回
+   * @return 插件访问日志JSON
+   * @author hankai
+   * @since Dec 26, 2016 11:02:25 AM
+   */
   @RequestMapping(Route.BG_PLUGIN_LOGS_JSON)
   @ResponseBody
   public BootstrapTableData getPluginLogsJson(

@@ -92,7 +92,7 @@ public interface UserRepository extends BaseRepository<UserBean, Integer> {
     /**
      * 手机号码是否已被使用。
      *
-     * @param mobile 手机号
+     * @param user 用户信息
      * @return 查询条件
      * @author hankai
      * @since Dec 7, 2016 2:48:41 PM

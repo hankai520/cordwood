@@ -82,7 +82,7 @@ public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader
     vc.put("results", results);
     Template tmpl = null;
     try {
-      tmpl = engine.getTemplate("/content.html", "utf-8");
+      tmpl = engine.getTemplate("/content.vt", "utf-8");
       final StringWriter sw = new StringWriter();
       tmpl.merge(vc, sw);
       return sw.toString();

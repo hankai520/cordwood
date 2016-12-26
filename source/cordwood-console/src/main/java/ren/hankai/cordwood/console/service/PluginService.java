@@ -157,6 +157,14 @@ public class PluginService {
     return false;
   }
 
+  /**
+   * 卸载插件包。
+   *
+   * @param ppb 插件包信息
+   * @return 是否成功
+   * @author hankai
+   * @since Dec 26, 2016 11:18:20 AM
+   */
   @Transactional
   public boolean uninstallPluginPackage(PluginPackageBean ppb) {
     if (pluginRegistry.unregisterPackage(ppb.getId())) {
@@ -373,7 +381,8 @@ public class PluginService {
     }
     for (final PluginBean pluginBean : ppb.getPlugins()) {
       final Plugin plugin = pluginManager.getPlugin(pluginBean.getName());
-      if (plugin != null) {// 为空时可能正在加载
+      if (plugin != null) {
+        // 为空时可能正在加载
         pluginBean.setFeatures(new ArrayList<>(plugin.getFunctions().values()));
       }
     }

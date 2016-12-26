@@ -22,9 +22,9 @@ import ren.hankai.cordwood.core.Preferences;
  * @version 1.0.0
  * @since Oct 28, 2016 4:42:14 PM
  */
-@ComponentScan(basePackages = { "ren.hankai.cordwood" })
+@ComponentScan(basePackages = {"ren.hankai.cordwood"})
 @EnableCaching
-public abstract class CoreSpringConfig {
+public class CoreSpringConfig {
 
   /**
    * JSON 序列化/反序列化。
@@ -58,6 +58,13 @@ public abstract class CoreSpringConfig {
     return ms;
   }
 
+  /**
+   * Ehcache 缓存工厂。
+   * 
+   * @return Ehcache 缓存工厂
+   * @author hankai
+   * @since Dec 26, 2016 11:33:58 AM
+   */
   @Bean
   public EhCacheManagerFactoryBean cacheManagerFactoryBean() {
     final EhCacheManagerFactoryBean bean = new EhCacheManagerFactoryBean();
@@ -67,6 +74,14 @@ public abstract class CoreSpringConfig {
     return bean;
   }
 
+  /**
+   * Ehcache 管理器。
+   * 
+   * @param factory 缓存工厂
+   * @return Ehcache 管理器
+   * @author hankai
+   * @since Dec 26, 2016 11:32:41 AM
+   */
   @Bean
   public EhCacheCacheManager cacheCacheManager(EhCacheManagerFactoryBean factory) {
     final EhCacheCacheManager cm = new EhCacheCacheManager(factory.getObject());

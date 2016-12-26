@@ -29,8 +29,8 @@ public class PojoPlugin implements PluginLifeCycleAware, PluginResourceLoader {
   /**
    * 求和（使用请求对象手工获取参数）。
    *
-   * @param request HTTP 请求
-   * @param response HTTP 响应
+   * @param op1 左操作数
+   * @param op2 右操作数
    * @return 和
    * @author hankai
    * @since Oct 25, 2016 2:18:22 PM

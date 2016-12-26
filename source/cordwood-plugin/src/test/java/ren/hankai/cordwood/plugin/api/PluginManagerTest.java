@@ -104,12 +104,12 @@ public class PluginManagerTest extends PluginTestSupport {
   @Test
   public void testGetPluginPackage() throws Exception {
     final PluginPackage pp = pluginRegistry.registerPackage(testPluginPackageUrl, true);
-    final PluginPackage loadedPP = pluginManager.getPluginPackage(pp.getIdentifier());
-    Assert.assertEquals(loadedPP.getGroupId(), pp.getGroupId());
-    Assert.assertEquals(loadedPP.getArtifactId(), pp.getArtifactId());
-    Assert.assertEquals(loadedPP.getVersion(), pp.getVersion());
-    Assert.assertArrayEquals(loadedPP.getBasePackages(), pp.getBasePackages());
-    Assert.assertEquals(loadedPP.getIdentifier(), pp.getIdentifier());
+    final PluginPackage loadedPackage = pluginManager.getPluginPackage(pp.getIdentifier());
+    Assert.assertEquals(loadedPackage.getGroupId(), pp.getGroupId());
+    Assert.assertEquals(loadedPackage.getArtifactId(), pp.getArtifactId());
+    Assert.assertEquals(loadedPackage.getVersion(), pp.getVersion());
+    Assert.assertArrayEquals(loadedPackage.getBasePackages(), pp.getBasePackages());
+    Assert.assertEquals(loadedPackage.getIdentifier(), pp.getIdentifier());
   }
 
   @Test

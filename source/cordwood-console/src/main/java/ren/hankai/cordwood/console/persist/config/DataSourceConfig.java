@@ -38,7 +38,7 @@ import javax.sql.DataSource;
 @Configuration
 public class DataSourceConfig {
 
-  private static final Logger logger = LoggerFactory.getLogger(InMemoryDataSourceConfig.class);
+  private static final Logger logger = LoggerFactory.getLogger(DataSourceConfig.class);
   private static final String[] basePackages = {"ren.hankai.cordwood"};
 
   /**
@@ -54,7 +54,8 @@ public class DataSourceConfig {
       props = new Properties();
       props.load(new FileInputStream(Preferences.getDbConfigFile(fileName)));
     } catch (final IOException ex) {
-      logger.warn("Failed to load external database configuration file for production profile.", ex);
+      logger.warn("Failed to load external database configuration file for production profile.",
+          ex);
     }
     if ((props != null) && (props.size() > 0)) {
       return props;

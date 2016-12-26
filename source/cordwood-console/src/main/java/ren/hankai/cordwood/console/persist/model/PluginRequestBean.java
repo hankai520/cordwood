@@ -75,10 +75,24 @@ public class PluginRequestBean implements Serializable {
   @Temporal(TemporalType.TIMESTAMP)
   private Date createTime;
 
+  /**
+   * 获取所访问的插件的显示名称。
+   * 
+   * @return 插件显示名称
+   * @author hankai
+   * @since Dec 26, 2016 11:17:54 AM
+   */
   public String getPluginDisplayName() {
     return plugin.getDisplayName();
   }
 
+  /**
+   * 获取所访问的插件的名称。
+   *
+   * @return 插件名称
+   * @author hankai
+   * @since Dec 26, 2016 11:16:31 AM
+   */
   public String getAppName() {
     if (app != null) {
       return app.getName();

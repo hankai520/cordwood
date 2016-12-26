@@ -61,6 +61,13 @@ public class UserController extends BaseController {
   @Autowired
   private PluginService pluginService;
 
+  /**
+   * 显示当前登录的用户的账号信息。
+   * 
+   * @return 账号信息页面
+   * @author hankai
+   * @since Dec 26, 2016 11:12:42 AM
+   */
   @NavigationItem(label = "nav.my.account")
   @GetMapping(Route.BG_MY_ACCOUNT)
   public ModelAndView myAccount() {
@@ -75,6 +82,13 @@ public class UserController extends BaseController {
     return mav;
   }
 
+  /**
+   * 获取当前登录的用户所开发的插件被访问的统计信息。
+   * 
+   * @return 插件访问统计信息
+   * @author hankai
+   * @since Dec 26, 2016 11:12:22 AM
+   */
   @RequestMapping(Route.BG_MY_PLUGIN_STATS)
   @ResponseBody
   public List<SummarizedRequest> myPluginStatistics() {
@@ -93,6 +107,13 @@ public class UserController extends BaseController {
     return null;
   }
 
+  /**
+   * 显示当前登录的用户所开发的插件。
+   * 
+   * @return 插件列表页面
+   * @author hankai
+   * @since Dec 26, 2016 11:12:00 AM
+   */
   @NavigationItem(label = "nav.my.plugins", parent = "nav.my.account")
   @GetMapping(Route.BG_MY_PLUGINS)
   public ModelAndView myPlugins() {
@@ -110,6 +131,18 @@ public class UserController extends BaseController {
     return new ModelAndView("admin_my_plugin_logs.html");
   }
 
+  /**
+   * 获取当前登录用户所开发的插件的访问日志。
+   * 
+   * @param search 搜索关键字
+   * @param order 排序字段
+   * @param sort 升序/降序
+   * @param limit 返回结果数
+   * @param offset 从第几条开始返回
+   * @return 访问日志JSON
+   * @author hankai
+   * @since Dec 26, 2016 11:10:59 AM
+   */
   @RequestMapping(Route.BG_MY_PLUGIN_LOGS_JSON)
   @ResponseBody
   public BootstrapTableData getMyPluginLogsJson(
@@ -134,6 +167,13 @@ public class UserController extends BaseController {
     return response;
   }
 
+  /**
+   * 用户个人资料页面。
+   * 
+   * @return 用户个人资料页面
+   * @author hankai
+   * @since Dec 26, 2016 11:10:51 AM
+   */
   @NavigationItem(label = "nav.my.profile", parent = "nav.my.account")
   @GetMapping(Route.BG_MY_PROFILE)
   public ModelAndView myProfile() {
@@ -144,6 +184,15 @@ public class UserController extends BaseController {
     return mav;
   }
 
+  /**
+   * 更新当前登录用户的信息。
+   * 
+   * @param user 用户信息
+   * @param br 错误
+   * @return 用户个人资料页面
+   * @author hankai
+   * @since Dec 26, 2016 11:09:39 AM
+   */
   @PostMapping(Route.BG_MY_PROFILE)
   public ModelAndView updateMyProfile(@ModelAttribute("user") @Valid UserBean user,
       BindingResult br) {
@@ -168,6 +217,13 @@ public class UserController extends BaseController {
     return mav;
   }
 
+  /**
+   * 获取当前登录用户的头像。
+   * 
+   * @return 头像图片
+   * @author hankai
+   * @since Dec 26, 2016 11:09:21 AM
+   */
   @GetMapping(Route.BG_MY_AVATAR)
   @ResponseBody
   public ResponseEntity<FileSystemResource> getMyAvatar() {
@@ -193,6 +249,18 @@ public class UserController extends BaseController {
     return new ModelAndView("admin_users.html");
   }
 
+  /**
+   * 获取用户列表AJAX接口。
+   * 
+   * @param search 搜索关键字
+   * @param order 排序字段
+   * @param sort 升序/降序
+   * @param limit 返回结果数
+   * @param offset 从第几条开始返回
+   * @return 用户列表JSON
+   * @author hankai
+   * @since Dec 26, 2016 11:08:41 AM
+   */
   @RequestMapping(Route.BG_USERS_JSON)
   @ResponseBody
   public BootstrapTableData getUsersJson(
@@ -221,6 +289,13 @@ public class UserController extends BaseController {
     return response;
   }
 
+  /**
+   * 添加用户页面。
+   * 
+   * @return 添加用户页面
+   * @author hankai
+   * @since Dec 26, 2016 11:08:31 AM
+   */
   @NavigationItem(label = "nav.users.add", parent = "nav.users")
   @GetMapping(Route.BG_ADD_USER)
   public ModelAndView addUserForm() {
@@ -230,6 +305,15 @@ public class UserController extends BaseController {
     return mav;
   }
 
+  /**
+   * 添加用户。
+   * 
+   * @param user 用户信息
+   * @param br 错误
+   * @return 添加用户页面
+   * @author hankai
+   * @since Dec 26, 2016 11:08:12 AM
+   */
   @NavigationItem(label = "nav.users.add", parent = "nav.users")
   @PostMapping(Route.BG_ADD_USER)
   public ModelAndView addUser(@ModelAttribute("user") @Valid UserBean user, BindingResult br) {
@@ -263,6 +347,14 @@ public class UserController extends BaseController {
     return mav;
   }
 
+  /**
+   * 编辑用户页面。
+   * 
+   * @param uid 用户ID
+   * @return 编辑用户页面
+   * @author hankai
+   * @since Dec 26, 2016 11:07:57 AM
+   */
   @NavigationItem(label = "nav.users.edit", parent = "nav.users")
   @GetMapping(Route.BG_EDIT_USER)
   public ModelAndView editUserForm(@PathVariable("user_id") Integer uid) {
@@ -278,6 +370,16 @@ public class UserController extends BaseController {
     return mav;
   }
 
+  /**
+   * 编辑用户。
+   * 
+   * @param uid 用户ID
+   * @param user 用户信息
+   * @param br 错误
+   * @return 编辑用户页面
+   * @author hankai
+   * @since Dec 26, 2016 11:07:37 AM
+   */
   @NavigationItem(label = "nav.users.edit", parent = "nav.users")
   @PostMapping(Route.BG_EDIT_USER)
   public ModelAndView editUser(@PathVariable("user_id") Integer uid,
@@ -317,6 +419,14 @@ public class UserController extends BaseController {
     return mav;
   }
 
+  /**
+   * 删除用户。
+   * 
+   * @param uid 用户ID
+   * @return 是否成功
+   * @author hankai
+   * @since Dec 26, 2016 11:07:22 AM
+   */
   @GetMapping(Route.BG_DELETE_USER)
   public ResponseEntity<String> deleteUser(@PathVariable("user_id") Integer uid) {
     final UserBean user = userService.getUserById(uid);

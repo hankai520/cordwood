@@ -59,6 +59,17 @@ public class PathUtil {
     return null;
   }
 
+  /**
+   * 获取插件包内的资源文件的访问URL。
+   *
+   * @param pluginClass 插件类
+   * @param fileRelativePath 资源文件相对路径
+   * @return 资源文件URL
+   * @throws URISyntaxException URI语法异常
+   * @throws MalformedURLException URL格式错误
+   * @author hankai
+   * @since Dec 26, 2016 11:40:22 AM
+   */
   public static URL getFileUrlInPluginJar(Class<?> pluginClass, String fileRelativePath)
       throws URISyntaxException, MalformedURLException {
     final URL jarUrl = pluginClass.getProtectionDomain().getCodeSource().getLocation();

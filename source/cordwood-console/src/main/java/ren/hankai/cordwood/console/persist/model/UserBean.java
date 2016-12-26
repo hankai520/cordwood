@@ -53,8 +53,8 @@ public class UserBean implements Serializable, UserDetails {
   @Transient
   private String avatarBase64Data; // 用于接收用户修改后的新头像
   @Column(length = 100, unique = true, nullable = false)
-  @Pattern(
-      regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
+  @Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+"
+      + "(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
   private String email;
   @Column(length = 100, nullable = false)
   @Pattern(regexp = "[a-fA-F0-9]{40}")

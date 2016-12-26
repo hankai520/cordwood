@@ -14,7 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * @since Oct 31, 2016 11:04:32 PM
  *
  */
-public class BaseSecurityConfig extends WebSecurityConfigurerAdapter {
+public abstract class BaseSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {

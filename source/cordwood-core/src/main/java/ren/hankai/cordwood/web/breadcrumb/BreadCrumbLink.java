@@ -25,6 +25,14 @@ public class BreadCrumbLink implements Serializable {
   private String parentKey;
   private BreadCrumbLink parent;
 
+  /**
+   * 初始化面包屑导航模型。
+   * 
+   * @param family 家族（分组）
+   * @param label 标签（显示名）
+   * @param currentPage 是否是当前显示的页面
+   * @param parentKey 父页面标识
+   */
   public BreadCrumbLink(String family, String label, boolean currentPage, String parentKey) {
     this.family = family;
     this.label = label;

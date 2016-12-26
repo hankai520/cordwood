@@ -43,6 +43,14 @@ public interface AppRepository extends BaseRepository<AppBean, Integer> {
       };
     }
 
+    /**
+     * 搜索应用。
+     * 
+     * @param keyword 关键字
+     * @return 查询条件
+     * @author hankai
+     * @since Dec 26, 2016 11:13:05 AM
+     */
     public static Specification<AppBean> search(String keyword) {
       return new Specification<AppBean>() {
         @Override

@@ -9,17 +9,14 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
+ * 插件仓库扩展逻辑测试。
+ * 
  * @author hankai
- * @version TODO Missing version number
+ * @version 1.0.0
  * @since Dec 12, 2016 9:18:47 AM
  */
 public class PluginRequestRepositoryCustomTest extends ConsoleTestSupport {
 
-
-  /**
-   * Test method for
-   * {@link ren.hankai.cordwood.console.persist.PluginRequestRepositoryCustom#getRequestsGroupByPlugin(java.util.Date, java.util.Date)}.
-   */
   @Test
   public void testGetRequestStatistics() {
     final Calendar cal = Calendar.getInstance();

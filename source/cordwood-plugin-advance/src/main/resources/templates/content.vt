@@ -4,13 +4,13 @@
     <link href="${resourceBaseUrl}/css/style.css" rel="stylesheet">
 </head>
 <body>
-#parse("/header.html")
+#parse("/header.vt")
 <div style="margin-top: 20px; margin-bottom: 20px;">The calculations: </div>
 <ul>
 #foreach( $record in $results )
     <li>${record.timestamp} -> ${record.exp}</li>
 #end
 </ul>
-#parse("/footer.html")
+#parse("/footer.vt")
 </body>
 </html>

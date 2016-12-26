@@ -26,7 +26,7 @@ import java.util.Date;
  * @since Oct 31, 2016 10:53:27 PM
  *
  */
-public class BaseWebConfig extends WebMvcConfigurerAdapter {
+public abstract class BaseWebConfig extends WebMvcConfigurerAdapter {
 
   private static final Logger logger = LoggerFactory.getLogger(BaseWebConfig.class);
   /**

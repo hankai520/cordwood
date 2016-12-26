@@ -38,8 +38,9 @@ public abstract class CoreTestSupport {
       public void run() {
         try {
           FileUtils.deleteDirectory(new File(Preferences.getHomeDir()));
-        } catch (final Exception e) {
-          e.printStackTrace();
+        } catch (final Exception ex) {
+          // Kindly ignore this exception
+          ex.getMessage();
         }
       }
     });

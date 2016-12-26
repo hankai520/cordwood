@@ -24,6 +24,14 @@ public interface PluginPackageRepository extends BaseRepository<PluginPackageBea
 
   public static final class PluginPackageSpecs {
 
+    /**
+     * 搜索插件包。
+     * 
+     * @param keyword 关键字
+     * @return 查询条件
+     * @author hankai
+     * @since Dec 26, 2016 11:13:28 AM
+     */
     public static Specification<PluginPackageBean> search(String keyword) {
       return new Specification<PluginPackageBean>() {
         @Override
@@ -42,6 +50,14 @@ public interface PluginPackageRepository extends BaseRepository<PluginPackageBea
       };
     }
 
+    /**
+     * 搜索指定用户开发的插件包。
+     * 
+     * @param developer 开发者（用户）
+     * @return 查询条件
+     * @author hankai
+     * @since Dec 26, 2016 11:13:47 AM
+     */
     public static Specification<PluginPackageBean> userPluginPackages(String developer) {
       return new Specification<PluginPackageBean>() {
         @Override

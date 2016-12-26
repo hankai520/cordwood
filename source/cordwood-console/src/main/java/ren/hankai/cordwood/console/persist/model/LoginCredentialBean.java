@@ -13,7 +13,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * 用户登录凭证（用于实现 remember-me 功能）
+ * 用户登录凭证（用于实现 remember-me 功能）。
  *
  * @author hankai
  * @version 1.0.0

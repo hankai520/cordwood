@@ -144,8 +144,9 @@ public class AppService {
    * @since Dec 23, 2016 1:22:31 PM
    */
   public String generateAppKey() {
-    String key = "appkey:" +
-        UUID.randomUUID().toString() + System.currentTimeMillis() + Preferences.getSystemSk();
+    String key = "appkey:" + UUID.randomUUID().toString()
+        + System.currentTimeMillis()
+        + Preferences.getSystemSk();
     key = DigestUtils.md5Hex(key);
     return key;
   }
@@ -158,8 +159,9 @@ public class AppService {
    * @since Dec 23, 2016 1:22:29 PM
    */
   public String generateSecretKey() {
-    String sk = "appsk:" +
-        UUID.randomUUID().toString() + System.currentTimeMillis() + Preferences.getSystemSk();
+    String sk = "appsk:" + UUID.randomUUID().toString()
+        + System.currentTimeMillis()
+        + Preferences.getSystemSk();
     sk = DigestUtils.md5Hex(sk);
     return sk;
   }

@@ -21,6 +21,15 @@ public abstract class WebServiceSupport {
 
   private static final Logger logger = LoggerFactory.getLogger(WebServiceSupport.class);
 
+  /**
+   * 处理内部异常导致的接口调用错误。
+   * 
+   * @param request HTTP请求
+   * @param exception 异常
+   * @return 错误
+   * @author hankai
+   * @since Dec 26, 2016 11:28:14 AM
+   */
   @ExceptionHandler({Exception.class, Error.class})
   @ResponseBody
   public ApiResponse handleInternalError(HttpServletRequest request, Exception exception) {
@@ -31,6 +40,15 @@ public abstract class WebServiceSupport {
     return response;
   }
 
+  /**
+   * 处理接口业务逻辑错误。
+   * 
+   * @param request HTTP 请求
+   * @param exception 异常
+   * @return 错误
+   * @author hankai
+   * @since Dec 26, 2016 11:31:57 AM
+   */
   @ExceptionHandler({ApiException.class})
   @ResponseBody
   public ApiResponse handleBusinessError(HttpServletRequest request, ApiException exception) {

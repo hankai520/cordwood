@@ -37,6 +37,12 @@ public class BaseRepositoryImpl<T, I extends Serializable> extends SimpleJpaRepo
     this.domainClass = domainClass;
   }
 
+  /**
+   * 实体仓库基类初始化。
+   * 
+   * @param entityInformation 实体信息
+   * @param entityManager 实体管理器（JPA核心对象）
+   */
   public BaseRepositoryImpl(JpaEntityInformation<T, ?> entityInformation,
       EntityManager entityManager) {
     super(entityInformation, entityManager);

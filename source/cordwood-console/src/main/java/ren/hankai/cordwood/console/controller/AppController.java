@@ -53,6 +53,18 @@ public class AppController extends BaseController {
     return new ModelAndView("admin_apps.html");
   }
 
+  /**
+   * 获取应用列表AJAX接口。
+   * 
+   * @param search 搜索关键字
+   * @param order 排序字段
+   * @param sort 升序/降序
+   * @param limit 返回结果数
+   * @param offset 从第几条开始返回
+   * @return 应用列表JSON
+   * @author hankai
+   * @since Dec 26, 2016 11:00:30 AM
+   */
   @RequestMapping(Route.BG_APPS_JSON)
   @ResponseBody
   public BootstrapTableData getAppsJson(
@@ -83,6 +95,13 @@ public class AppController extends BaseController {
     return response;
   }
 
+  /**
+   * 添加应用页面。
+   * 
+   * @return 添加应用页面
+   * @author hankai
+   * @since Dec 26, 2016 11:00:14 AM
+   */
   @NavigationItem(label = "nav.apps.add", parent = "nav.apps")
   @GetMapping(Route.BG_ADD_APP)
   public ModelAndView addAppForm() {
@@ -95,6 +114,15 @@ public class AppController extends BaseController {
     return mav;
   }
 
+  /**
+   * 添加应用。
+   * 
+   * @param app 应用信息
+   * @param br 错误
+   * @return 添加应用页面
+   * @author hankai
+   * @since Dec 26, 2016 10:59:57 AM
+   */
   @NavigationItem(label = "nav.apps.add", parent = "nav.apps")
   @PostMapping(Route.BG_ADD_APP)
   public ModelAndView addApp(@ModelAttribute("app") @Valid AppBean app, BindingResult br) {
@@ -120,6 +148,14 @@ public class AppController extends BaseController {
     return mav;
   }
 
+  /**
+   * 编辑应用页面。
+   * 
+   * @param appId 应用ID
+   * @return 编辑应用页面
+   * @author hankai
+   * @since Dec 26, 2016 10:59:37 AM
+   */
   @NavigationItem(label = "nav.apps.edit", parent = "nav.apps")
   @GetMapping(Route.BG_EDIT_APP)
   public ModelAndView editAppForm(@PathVariable("app_id") Integer appId) {
@@ -133,6 +169,16 @@ public class AppController extends BaseController {
     return mav;
   }
 
+  /**
+   * 编辑应用信息。
+   * 
+   * @param appId 应用ID
+   * @param app 应用信息
+   * @param br 错误
+   * @return 编辑应用页面
+   * @author hankai
+   * @since Dec 26, 2016 10:59:00 AM
+   */
   @NavigationItem(label = "nav.apps.edit", parent = "nav.apps")
   @PostMapping(Route.BG_EDIT_APP)
   public ModelAndView editApp(@PathVariable("app_id") Integer appId,
@@ -164,6 +210,14 @@ public class AppController extends BaseController {
     return mav;
   }
 
+  /**
+   * 删除应用。
+   *
+   * @param appId 应用ID
+   * @return 是否成功
+   * @author hankai
+   * @since Dec 26, 2016 10:58:30 AM
+   */
   @GetMapping(Route.BG_DELETE_APP)
   public ResponseEntity<String> deleteApp(@PathVariable("app_id") Integer appId) {
     final AppBean app = appService.getAppById(appId);

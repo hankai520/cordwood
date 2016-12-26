@@ -1,6 +1,3 @@
-/**
- *
- */
 package ren.hankai.cordwood.console.controller;
 
 import org.apache.commons.lang.StringUtils;
@@ -61,7 +58,7 @@ public class CustomErrorController implements ErrorController {
    * @author hankai
    * @since Dec 7, 2016 3:45:39 PM
    */
-  @ExceptionHandler({ Exception.class, Error.class })
+  @ExceptionHandler({Exception.class, Error.class})
   @RequestMapping(Route.ERROR_PREFIX)
   public ModelAndView handleException(HttpServletRequest request, Exception exception) {
     final ModelAndView mav = new ModelAndView("error.html");

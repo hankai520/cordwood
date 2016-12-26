@@ -1,7 +1,5 @@
 package ren.hankai.cordwood.plugin.support;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
@@ -29,8 +27,6 @@ import java.util.List;
  */
 @Component
 public class DefaultPluginResolver implements PluginResolver {
-
-  private static final Logger logger = LoggerFactory.getLogger(DefaultPluginResolver.class);
 
   private void resolveParameters(PluginFunction function, Plugin plugin) {
     final List<FunctionParameter> params = new ArrayList<>();

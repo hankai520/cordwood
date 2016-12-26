@@ -20,6 +20,7 @@ import ren.hankai.cordwood.console.persist.PluginRequestRepository;
 import ren.hankai.cordwood.console.persist.model.PluginBean;
 import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
 import ren.hankai.cordwood.console.persist.model.PluginRequestBean;
+import ren.hankai.cordwood.console.persist.model.PluginRequestBean.RequestChannel;
 import ren.hankai.cordwood.core.ApplicationInitializer;
 import ren.hankai.cordwood.core.Preferences;
 
@@ -28,13 +29,13 @@ import java.util.Date;
 
 /**
  * Cordwood 控制台测试基类。
- * 
+ *
  * @author hankai
  * @version 1.0.0
  * @since Dec 12, 2016 9:19:41 AM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = {ConsoleTestSupport.class}) // CoreSpringConfig.class
+@SpringBootTest(classes = {ConsoleTestSupport.class})
 @ActiveProfiles({Preferences.PROFILE_TEST})
 @Configuration
 @ComponentScan(basePackages = {"ren.hankai"})
@@ -49,7 +50,8 @@ public abstract class ConsoleTestSupport {
         try {
           FileUtils.deleteDirectory(new File(Preferences.getHomeDir()));
         } catch (final Exception ex) {
-          ex.printStackTrace();
+          // Kindly ignore this exception
+          ex.getMessage();
         }
       }
     });
@@ -66,6 +68,13 @@ public abstract class ConsoleTestSupport {
   protected PluginPackageBean pluginPackageBean;
   protected PluginBean pluginBean;
 
+  /**
+   * 测试用例初始化。
+   *
+   * @throws Exception 异常
+   * @author hankai
+   * @since Dec 26, 2016 11:18:45 AM
+   */
   @Before
   public void setup() throws Exception {
     pluginInitializer.suspend();
@@ -74,6 +83,8 @@ public abstract class ConsoleTestSupport {
     pluginPackageBean.setId("org.test:test:1.0.0");
     pluginPackageBean.setCreateTime(new Date());
     pluginPackageBean.setFileName("test.jar");
+    pluginPackageBean.setDeveloper("developer");
+    pluginPackageBean.setDescription("test only");
     pluginPackageRepo.save(pluginPackageBean);
 
     pluginBean = new PluginBean();
@@ -97,9 +108,17 @@ public abstract class ConsoleTestSupport {
     pluginRequest.setResponseBytes(12L);
     pluginRequest.setResponseCode(200);
     pluginRequest.setSucceeded(true);
+    pluginRequest.setChannel(RequestChannel.Desktop);
+    pluginRequest.setRequestDigest("test only");
     pluginRequestRepo.save(pluginRequest);
   }
 
+  /**
+   * 测试用例资源释放。
+   * 
+   * @author hankai
+   * @since Dec 26, 2016 11:19:11 AM
+   */
   @After
   public void teardown() {
     pluginRequestRepo.deleteAll();

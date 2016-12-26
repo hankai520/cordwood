@@ -74,10 +74,10 @@ public class PluginRequestInterceptor implements HandlerInterceptor {
   }
 
   /**
-   * 判断请求是否来自主流
-   * 
-   * @param request
-   * @return
+   * 判断请求是否来自主流浏览器。
+   *
+   * @param request HTTP 请求
+   * @return 是否来自主流浏览器
    * @author hankai
    * @since Dec 14, 2016 4:05:02 PM
    */
