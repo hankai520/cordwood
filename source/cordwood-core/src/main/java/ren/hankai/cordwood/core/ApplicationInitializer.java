@@ -4,11 +4,10 @@ package ren.hankai.cordwood.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.util.ResourceUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -65,27 +64,26 @@ public class ApplicationInitializer {
   /**
    * 检查数据根目录下的配置文件，如果有丢失，则复制默认配置文件。注意：该操作不是基于事务的，因此在遇到失败时，可能出现部分文件复制成功。 该方法不会覆盖用户指定的配置目录下已存在的配置文件。
    *
-   * @param files 配置文件名称列表
+   * @param fileNames 配置文件名称列表
    * @return 是否正常
    * @author hankai
    * @since Jun 21, 2016 12:52:59 PM
    */
-  private static boolean checkConfigurations(String... files) {
-    if (files == null) {
+  private static boolean checkConfigurations(String... fileNames) {
+    if (fileNames == null) {
       return true;
     }
     try {
-      for (final String file : files) {
-        final InputStream is = ApplicationInitializer.class.getResourceAsStream("/support/" + file);
-        if (is != null) {
-          final File destFile = new File(Preferences.getConfigDir() + File.separator + file);
+      for (final String fileName : fileNames) {
+        final File srcFile = ResourceUtils.getFile("classpath:support/" + fileName);
+        if (srcFile.exists()) {
+          final File destFile = new File(Preferences.getConfigDir() + File.separator + fileName);
           if (!destFile.exists()) {
-            final FileOutputStream fos = new FileOutputStream(destFile);
-            FileCopyUtils.copy(is, fos);
-            logger.info(String.format("Copied support file: %s", file));
+            FileCopyUtils.copy(srcFile, destFile);
+            logger.info(String.format("Copied support file: %s", fileName));
           }
         } else {
-          logger.warn(String.format("Missing support file: %s", file));
+          logger.warn(String.format("Missing support file: %s", fileName));
         }
       }
       return true;
