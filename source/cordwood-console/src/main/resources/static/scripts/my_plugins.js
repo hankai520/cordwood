@@ -77,6 +77,7 @@ require(['dropzone'], function(Dropzone) {
       });
       this.on("success", function(file) {
         $("#uploadPlugin").modal('hide');
+        myDropzone.removeFile(file);
         alert('插件上传成功!');
         location.reload();
       });

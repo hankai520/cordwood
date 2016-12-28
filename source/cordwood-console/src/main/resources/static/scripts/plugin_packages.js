@@ -135,6 +135,7 @@ require(['dropzone'], function(Dropzone) {
       this.on("success", function(file) {
         $("#uploadPlugin").modal('hide');
         $('#dataTable').bootstrapTable('refresh', {silent: true});
+        myDropzone.removeFile(file);
         alert('插件上传成功!');
       });
     }
