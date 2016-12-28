@@ -315,6 +315,22 @@ public class PluginService {
   }
 
   /**
+   * 搜索用户的插件访问记录。
+   * 
+   * @param userEmail 用户邮箱
+   * @param keyword 关键字
+   * @param pageable 分页
+   * @return 访问记录列表
+   * @author hankai
+   * @since Dec 28, 2016 3:46:52 PM
+   */
+  public Page<PluginRequestBean> searchPluginRequests(String userEmail, String keyword,
+      Pageable pageable) {
+    return pluginRequestRepo
+        .findAll(PluginRequestSpecs.searchUserPluginRequests(userEmail, keyword), pageable);
+  }
+
+  /**
    * 对指定时间范围内的用户插件访问信息进行统计。
    *
    * @param userEmail 用户邮箱

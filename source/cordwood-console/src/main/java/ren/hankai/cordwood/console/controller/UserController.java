@@ -155,7 +155,10 @@ public class UserController extends BaseController {
     try {
       final boolean asc = "asc".equalsIgnoreCase(order);
       final Pageable pageable = PageUtil.pageWithOffsetAndCount(offset, limit, sort, asc);
-      final Page<PluginRequestBean> logs = pluginService.searchPluginRequests(search, pageable);
+      final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+      final UserBean user = (UserBean) auth.getPrincipal();
+      final Page<PluginRequestBean> logs =
+          pluginService.searchPluginRequests(user.getEmail(), search, pageable);
       response = new BootstrapTableData();
       response.setTotal(logs.getTotalElements());
       response.setRows(logs.getContent());

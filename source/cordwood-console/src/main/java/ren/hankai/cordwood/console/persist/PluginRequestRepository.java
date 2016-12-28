@@ -57,6 +57,41 @@ public interface PluginRequestRepository
     }
 
     /**
+     * 根据关键字搜索用户所开发的插件的访问记录。
+     *
+     * @param userEmail 用户邮箱
+     * @param keyword 关键字
+     * @return 查询条件
+     * @author hankai
+     * @since Dec 28, 2016 3:30:37 PM
+     */
+    public static Specification<PluginRequestBean> searchUserPluginRequests(String userEmail,
+        String keyword) {
+      return new Specification<PluginRequestBean>() {
+        @Override
+        public Predicate toPredicate(Root<PluginRequestBean> root, CriteriaQuery<?> query,
+            CriteriaBuilder cb) {
+          Predicate pre = cb.like(root.get("plugin").get("pluginPackage").get("developer"),
+              "%" + userEmail + "%");
+          if (!StringUtils.isEmpty(keyword)) {
+            final String fuzzyKeyword = "%" + keyword + "%";
+            final Predicate p = cb.or(
+                cb.like(root.get("plugin").get("name"), fuzzyKeyword),
+                cb.like(root.get("plugin").get("displayName"), fuzzyKeyword),
+                cb.like(root.get("plugin").get("description"), fuzzyKeyword),
+                cb.like(root.get("plugin").get("developer"), fuzzyKeyword),
+                cb.like(root.get("clientIp"), fuzzyKeyword),
+                cb.like(root.get("requestUrl"), fuzzyKeyword),
+                cb.like(root.get("requestDigest"), fuzzyKeyword),
+                cb.like(root.get("errors"), fuzzyKeyword));
+            pre = (pre == null) ? p : cb.and(pre, p);
+          }
+          return pre;
+        }
+      };
+    }
+
+    /**
      * 查询用户所有的插件请求。
      *
      * @param userEmail 用户邮箱

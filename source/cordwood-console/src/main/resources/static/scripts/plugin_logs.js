@@ -90,10 +90,7 @@ requirejs(['bootstrap','bootstrap-table-i18n'], function() {
         field: 'requestBytes',
         title: '请求 (字节)',
         valign: 'middle',
-        sortable: true,
-        formatter: function(value, row, index) {
-            return value;
-        }
+        sortable: true
     }, {
         field: 'responseCode',
         title: '响应代码',
@@ -104,10 +101,7 @@ requirejs(['bootstrap','bootstrap-table-i18n'], function() {
         field: 'responseBytes',
         title: '响应 (字节)',
         valign: 'middle',
-        sortable: true,
-        formatter: function(value, row, index) {
-            return value;
-        }
+        sortable: true
     }, {
         field: 'milliseconds',
         title: '耗时',
