@@ -4,43 +4,45 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <title th:text="#{site.title.plugins}">插件管理</title>
-<meta name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
-<meta name="description" content="">
-<meta name="author" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_param" th:content="${_csrf.parameterName}"/>
-<link rel="stylesheet" type="text/css" href="../../static/css/cloud-admin.css"
-    th:href="@{~/css/cloud-admin.css}" />
-<link rel="stylesheet" type="text/css" href="../../static/css/themes/default.css" id="skin-switcher"
-    th:href="@{~/css/themes/default.css}" />
-<link rel="stylesheet" type="text/css" href="../../static/css/responsive.css"
-    th:href="@{~/css/responsive.css}" />
-<link rel="stylesheet" type="text/css" href="../../static/font-awesome/css/font-awesome.min.css"
-    th:href="@{~/font-awesome/css/font-awesome.min.css}" />
-<link rel="stylesheet" type="text/css" href="../../static/js/dropzone/dropzone.min.css"
-    th:href="@{~/js/dropzone/dropzone.min.css}" />
-<link rel="stylesheet" type="text/css" href="../../static/bootstrap-table/bootstrap-table.css"
-    th:href="@{~/bootstrap-table/bootstrap-table.css}" />
-<link rel="stylesheet" type="text/css" href="../../static/js/bootstrap-switch/bootstrap-switch.min.css"
-    th:href="@{~/js/bootstrap-switch/bootstrap-switch.min.css}" />
-<link rel="stylesheet" type="text/css" href="../../static/cordwood/css/cordwood.css"
-    th:href="@{~/cordwood/css/cordwood.css}" />
+<link rel="stylesheet" type="text/css" 
+    href="../../static/styles/bootstrap/css/bootstrap.min.css"
+    th:href="@{~/styles/bootstrap/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" 
+    href="../../static/styles/bootstrap-switch/bootstrap-switch.min.css"
+    th:href="@{~/styles/bootstrap-switch/bootstrap-switch.min.css}" />
+<link rel="stylesheet" type="text/css" 
+    href="../../static/styles/bootstrap-table/bootstrap-table.css"
+    th:href="@{~/styles/bootstrap-table/bootstrap-table.css}" />
+<link rel="stylesheet" type="text/css" 
+    href="../../static/styles/dropzone/dropzone.min.css"
+    th:href="@{~/styles/dropzone/dropzone.min.css}" />    
+<link rel="stylesheet" type="text/css" 
+    href="../../static/styles/font-awesome/css/font-awesome.min.css"
+    th:href="@{~/styles/font-awesome/css/font-awesome.min.css}" />
+<link rel="stylesheet" type="text/css" 
+    href="../../static/styles/cloud-admin.css"
+    th:href="@{~/styles/cloud-admin.css}" />
+<link id="skin-switcher" rel="stylesheet" type="text/css" 
+    href="../../static/styles/themes/default.css"
+    th:href="@{~/styles/themes/default.css}" />
+<link rel="stylesheet" type="text/css" 
+    href="../../static/styles/responsive.css"
+    th:href="@{~/styles/responsive.css}" />
+<link rel="stylesheet" type="text/css" 
+    href="../../static/styles/cordwood.css"
+    th:href="@{~/styles/cordwood.css}" />
 </head>
 <body>
-    <!-- HEADER -->
     <header class="navbar clearfix" id="header">
         <div class="container" th:replace="admin_header.html :: header"></div>
-        <!-- /TEAM STATUS -->
     </header>
-    <!--/HEADER -->
-    <!-- PAGE -->
     <section id="page">
-        <!-- SIDEBAR -->
         <div id="sidebar" class="sidebar">
             <div class="sidebar-menu nav-collapse" th:replace="admin_sidebar.html :: sidebar"></div>
         </div>
-        <!-- /SIDEBAR -->
         <div id="main-content">
             <div class="container">
                 <div class="row">

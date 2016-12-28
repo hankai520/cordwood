@@ -2,16 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<meta name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
-<meta name="description" content="">
-<meta name="author" content="">
 <meta charset="utf-8">
 <title th:text="#{site.title.error}">系统错误</title>
-<link rel="stylesheet" type="text/css" href="../../static/font-awesome/css/font-awesome.min.css"
-    th:href="@{~/font-awesome/css/font-awesome.min.css}" />
-<link rel="stylesheet" type="text/css" href="../../static/css/cloud-admin.css"
-    th:href="@{~/css/cloud-admin.css}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" type="text/css" 
+    href="../../static/styles/font-awesome/css/font-awesome.min.css"
+    th:href="@{~/styles/font-awesome/css/font-awesome.min.css}" />
+<link rel="stylesheet" type="text/css" 
+    href="../../static/styles/cloud-admin.css"
+    th:href="@{~/styles/cloud-admin.css}">
 </head>
 <body>
     <div style="display: none;" th:text="${ errors }"></div>
