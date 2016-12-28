@@ -139,72 +139,13 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="updateAvatarPreview();">确定</button>
+                    <button id="confirmCrop" type="button" class="btn btn-primary" onclick="updateAvatarPreview();">确定</button>
                 </div>
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="../../static/js/jquery/jquery-2.0.3.min.js"
-        th:src="@{~/js/jquery/jquery-2.0.3.min.js}"></script>
-    <script type="text/javascript" src="../../static/bootstrap/js/bootstrap.min.js"
-        th:src="@{~/bootstrap/js/bootstrap.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/jQuery-Cookie/jquery.cookie.min.js"
-        th:src="@{~/js/jQuery-Cookie/jquery.cookie.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/uniform/jquery.uniform.min.js"
-        th:src="@{~/js/uniform/jquery.uniform.min.js}"></script>
-    <script type="text/javascript" src="../../static/cropper/cropper.min.js"
-        th:src="@{~/cropper/cropper.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/script.js" 
-        th:src="@{~/js/script.js}"></script>
-    <script type="text/javascript" src="../../templates/js/admin_sidebar.js" 
-        th:src="@{~/admin/sidebar.js}"></script>
-    <script>
-        function updateAvatarPreview() {
-            var croppedData = $('#avatarCropper').cropper('getCroppedCanvas').toDataURL('image/jpeg');
-            if (croppedData) {
-                $('#currentAvatar').attr('src', croppedData);
-                $('#avatarBase64Data').val(croppedData);
-            }
-            $('#uploadAvatar').modal('hide');
-        }
-
-        $('#uploadAvatar').on('shown.bs.modal', function (e) {
-            var currentAvatar = $('#currentAvatar').attr('src');
-            if (currentAvatar) {
-                $('#avatarCropper').cropper('replace', currentAvatar);
-                $('#avatarPreview').show();
-            }
-        });
-
-        $("#avatarFile").change(function(){
-            if (this.files && this.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#avatarCropper').cropper('replace', e.target.result);
-                    $('#avatarPreview').show();
-                }
-                reader.readAsDataURL(this.files[0]);
-            }
-        });
-
-        $('#avatarCropper').cropper({
-            aspectRatio: 16/12,
-            movable: false,
-            minContainerWidth: 100, 
-            zoomable: false,
-            minCropBoxWidth: 160,
-            minCropBoxHeight: 120,
-            crop: function(e) {
-
-            }
-        });
-
-        jQuery(document).ready(function() {     
-            App.setPage("user_profile");
-            App.init();
-            loadSidebarItems('');
-        });
-    </script>
-    <!-- /JAVASCRIPTS -->
+    <script type="text/javascript" 
+            data-main="../../static/scripts/my_profile" th:data-main="@{~/scripts/my_profile}"
+            src="../../static/scripts/require.js" th:src="@{~/scripts/require.js}"></script>
 </body>
 </html>

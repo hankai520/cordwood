@@ -6,8 +6,6 @@
 <title th:text="#{site.title.my.account}">账号信息</title>
 <meta name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
-<meta name="description" content="">
-<meta name="author" content="">
 <link rel="stylesheet" type="text/css" href="../../static/css/cloud-admin.css"
     th:href="@{~/css/cloud-admin.css}" />
 <link rel="stylesheet" type="text/css" href="../../static/css/themes/default.css" id="skin-switcher"
@@ -16,19 +14,6 @@
     th:href="@{~/css/responsive.css}" />
 <link rel="stylesheet" type="text/css" href="../../static/font-awesome/css/font-awesome.min.css"
     th:href="@{~/font-awesome/css/font-awesome.min.css}" />
-<link rel="stylesheet" type="text/css" href="../../static/css/animatecss/animate.min.css"
-    th:href="@{~/css/animatecss/animate.min.css}" />
-<link rel="stylesheet" type="text/css"
-    href="../../static/js/bootstrap-daterangepicker/daterangepicker-bs3.css"
-    th:href="@{~/js/bootstrap-daterangepicker/daterangepicker-bs3.css}" />
-<link rel="stylesheet" type="text/css" href="../../static/js/jquery-todo/css/styles.css"
-    th:href="@{~/js/jquery-todo/css/styles.css}" />
-<link rel="stylesheet" type="text/css" href="../../static/js/fullcalendar/fullcalendar.min.css"
-    th:href="@{~/js/fullcalendar/fullcalendar.min.css}" />
-<link rel="stylesheet" type="text/css" href="../../static/js/gritter/css/jquery.gritter.css"
-    th:href="@{~/js/gritter/css/jquery.gritter.css}" />
-<link rel="stylesheet" type="text/css" href="../../static/js/uniform/css/uniform.default.min.css"
-    th:href="@{~/js/uniform/css/uniform.default.min.css}"/>
 <link rel="stylesheet" type="text/css" href="../../static/bootstrap-table/bootstrap-table.css"
     th:href="@{~/bootstrap-table/bootstrap-table.css}" />
 <link rel="stylesheet" type="text/css" href="../../static/cordwood/css/cordwood.css"
@@ -113,7 +98,7 @@
                                                                         <i class="fa fa-fire fa-3x"></i>
                                                                     </div>
                                                                     <div class="panel-right">
-                                                                        <div class="number" th:text="${statistics.accessCount}">3932</div>
+                                                                        <div class="number" th:text="${statistics.accessCountDesc}">3932</div>
                                                                         <div class="title">插件访问次数</div>
                                                                     </div>
                                                                 </div>
@@ -128,8 +113,8 @@
                                                                     </div>
                                                                     <div class="panel-right">
                                                                         <div class="number">
-                                                                        <span th:text="${#numbers.formatDecimal(statistics.timeUsageAvg, 1, 1)}">
-                                                                            23</span> <small>ms</small>
+                                                                            <span th:text="${statistics.timeUsageAvgDesc}">
+                                                                            23 ms</span>
                                                                         </div>
                                                                         <div class="title">插件响应时间</div>
                                                                     </div>
@@ -144,6 +129,7 @@
                                                                 <div class="panel-body">
                                                                     <div class="col-md-4 text-center">
                                                                         <div id="pie_1" class="piechart" data-percent="9.8"
+                                                                            data-barcolor="#F0AD4E"
                                                                             th:data-percent="${statistics.faultRate}">
                                                                             <span class="percent"></span>
                                                                         </div>
@@ -151,6 +137,7 @@
                                                                     </div>
                                                                     <div class="col-md-4 text-center">
                                                                         <div id="pie_2" class="piechart" data-percent="73"
+                                                                            data-barcolor="#D9534F"
                                                                             th:data-percent="${statistics.usageRage}">
                                                                             <span class="percent"></span>
                                                                         </div>
@@ -158,6 +145,7 @@
                                                                     </div>
                                                                     <div class="col-md-4 text-center">
                                                                         <div id="pie_3" class="piechart" data-percent="44"
+                                                                            data-barcolor="#70AFC4"
                                                                             th:data-percent="${statistics.dataShare}">
                                                                             <span class="percent"></span>
                                                                         </div>
@@ -247,123 +235,8 @@
             </div>
         </div>
     </section>
-    <script type="text/javascript" src="../../static/js/jquery/jquery-2.0.3.min.js"
-        th:src="@{~/js/jquery/jquery-2.0.3.min.js}"></script>
-    <script type="text/javascript"
-        src="../../static/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"
-        th:src="@{~/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js}"></script>
-    <script type="text/javascript" src="../../static/bootstrap/js/bootstrap.min.js"
-        th:src="@{~/bootstrap/js/bootstrap.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/bootstrap-daterangepicker/moment.min.js"
-        th:src="@{~/js/bootstrap-daterangepicker/moment.min.js}"></script>
-    <script type="text/javascript"
-        src="../../static/js/bootstrap-daterangepicker/daterangepicker.min.js"
-        th:src="@{~/js/bootstrap-daterangepicker/daterangepicker.min.js}"></script>
-    <script type="text/javascript"
-        src="../../static/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js"
-        th:src="@{~/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js}"></script>
-    <script type="text/javascript"
-        src="../../static/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js"
-        th:src="@{~/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js}"></script>
-    <script type="text/javascript"
-        src="../../static/js/jQuery-slimScroll-1.3.0/slimScrollHorizontal.min.js"
-        th:src="@{~/js/jQuery-slimScroll-1.3.0/slimScrollHorizontal.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/jQuery-BlockUI/jquery.blockUI.min.js"
-        th:src="@{~/js/jQuery-BlockUI/jquery.blockUI.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/sparklines/jquery.sparkline.min.js"
-        th:src="@{~/js/sparklines/jquery.sparkline.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/jquery-easing/jquery.easing.min.js"
-        th:src="@{~/js/jquery-easing/jquery.easing.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/easypiechart/jquery.easypiechart.min.js"
-        th:src="@{~/js/easypiechart/jquery.easypiechart.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/flot/jquery.flot.min.js"
-        th:src="@{~/js/flot/jquery.flot.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/flot/jquery.flot.time.min.js"
-        th:src="@{~/js/flot/jquery.flot.time.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/flot/jquery.flot.selection.min.js"
-        th:src="@{~/js/flot/jquery.flot.selection.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/flot/jquery.flot.resize.min.js"
-        th:src="@{~/js/flot/jquery.flot.resize.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/flot/jquery.flot.pie.min.js"
-        th:src="@{~/js/flot/jquery.flot.pie.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/flot/jquery.flot.stack.min.js"
-        th:src="@{~/js/flot/jquery.flot.stack.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/flot/jquery.flot.crosshair.min.js"
-        th:src="@{~/js/flot/jquery.flot.crosshair.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/jquery-todo/js/paddystodolist.js"
-        th:src="@{~/js/jquery-todo/js/paddystodolist.js}"></script>
-    <script type="text/javascript" src="../../static/js/timeago/jquery.timeago.min.js"
-        th:src="@{~/js/timeago/jquery.timeago.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/fullcalendar/fullcalendar.min.js"
-        th:src="@{~/js/fullcalendar/fullcalendar.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/jQuery-Cookie/jquery.cookie.min.js"
-        th:src="@{~/js/jQuery-Cookie/jquery.cookie.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/gritter/js/jquery.gritter.min.js"
-        th:src="@{~/js/gritter/js/jquery.gritter.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/uniform/jquery.uniform.min.js"
-        th:src="@{~/js/uniform/jquery.uniform.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/script.js" 
-        th:src="@{~/js/script.js}"></script>
-    <script type="text/javascript" src="../../static/bootstrap-table/bootstrap-table.js"
-        th:src="@{~/bootstrap-table/bootstrap-table.js}"></script>
-    <script type="text/javascript" src="../../static/bootstrap-table/bootstrap-table-zh-CN.js"
-        th:src="@{~/bootstrap-table/bootstrap-table-zh-CN.js}"></script>
-    <script type="text/javascript" src="../../templates/js/admin_sidebar.js" 
-        th:src="@{~/admin/sidebar.js}"></script>
-    <script>
-        jQuery(document).ready(function() {     
-            App.setPage("user_profile");
-            App.init();
-            loadSidebarItems('');
-        });
-        $('#dataTable').bootstrapTable({
-            url: '/admin/my_plugin_stats.json',
-            toolbar: '#toolbar',
-            sidePagination: 'client',
-            showRefresh: true,
-            pageSize: 5,
-            pageList: [10,20,50],
-            pagination: true,
-            columns: [{
-                field: 'pluginName',
-                title: '插件',
-                valign: 'middle',
-                formatter: function(value, row, index) {
-                    if (row.pluginIsActive) {
-                        return '<span class="label label-success">'+value+'</span>';
-                    } else {
-                        return '<span class="label label-warning">'+value+'</span>';
-                    }
-                }
-            }, {
-                field: 'inboundBytes',
-                title: '请求（字节）',
-                valign: 'middle',
-                formatter: function(value, row, index) {
-                    return value;
-                }
-            }, {
-                field: 'outboundBytes',
-                title: '响应（字节）',
-                valign: 'middle'
-            }, {
-                field: 'accessCount',
-                title: '访问次数',
-                valign: 'middle'
-            }, {
-                field: 'timeUsageAvg',
-                title: '响应时间',
-                valign: 'middle',
-                formatter: function(value, row, index) {
-                    return value + ' ms';
-                }
-            }, {
-                field: 'lastAccessTime',
-                title: '最近访问',
-                valign: 'middle'
-            }]
-        });
-    </script>
-    <!-- /JAVASCRIPTS -->
+    <script type="text/javascript" 
+            data-main="../../static/scripts/my_account" th:data-main="@{~/scripts/my_account}"
+            src="../../static/scripts/require.js" th:src="@{~/scripts/require.js}"></script>
 </body>
 </html>

@@ -63,7 +63,7 @@ public class UserController extends BaseController {
 
   /**
    * 显示当前登录的用户的账号信息。
-   * 
+   *
    * @return 账号信息页面
    * @author hankai
    * @since Dec 26, 2016 11:12:42 AM
@@ -84,7 +84,7 @@ public class UserController extends BaseController {
 
   /**
    * 获取当前登录的用户所开发的插件被访问的统计信息。
-   * 
+   *
    * @return 插件访问统计信息
    * @author hankai
    * @since Dec 26, 2016 11:12:22 AM
@@ -109,7 +109,7 @@ public class UserController extends BaseController {
 
   /**
    * 显示当前登录的用户所开发的插件。
-   * 
+   *
    * @return 插件列表页面
    * @author hankai
    * @since Dec 26, 2016 11:12:00 AM
@@ -133,7 +133,7 @@ public class UserController extends BaseController {
 
   /**
    * 获取当前登录用户所开发的插件的访问日志。
-   * 
+   *
    * @param search 搜索关键字
    * @param order 排序字段
    * @param sort 升序/降序
@@ -169,7 +169,7 @@ public class UserController extends BaseController {
 
   /**
    * 用户个人资料页面。
-   * 
+   *
    * @return 用户个人资料页面
    * @author hankai
    * @since Dec 26, 2016 11:10:51 AM
@@ -186,13 +186,14 @@ public class UserController extends BaseController {
 
   /**
    * 更新当前登录用户的信息。
-   * 
+   *
    * @param user 用户信息
    * @param br 错误
    * @return 用户个人资料页面
    * @author hankai
    * @since Dec 26, 2016 11:09:39 AM
    */
+  @NavigationItem(label = "nav.my.profile", parent = "nav.my.account")
   @PostMapping(Route.BG_MY_PROFILE)
   public ModelAndView updateMyProfile(@ModelAttribute("user") @Valid UserBean user,
       BindingResult br) {
@@ -219,7 +220,7 @@ public class UserController extends BaseController {
 
   /**
    * 获取当前登录用户的头像。
-   * 
+   *
    * @return 头像图片
    * @author hankai
    * @since Dec 26, 2016 11:09:21 AM
@@ -251,7 +252,7 @@ public class UserController extends BaseController {
 
   /**
    * 获取用户列表AJAX接口。
-   * 
+   *
    * @param search 搜索关键字
    * @param order 排序字段
    * @param sort 升序/降序
@@ -291,7 +292,7 @@ public class UserController extends BaseController {
 
   /**
    * 添加用户页面。
-   * 
+   *
    * @return 添加用户页面
    * @author hankai
    * @since Dec 26, 2016 11:08:31 AM
@@ -307,7 +308,7 @@ public class UserController extends BaseController {
 
   /**
    * 添加用户。
-   * 
+   *
    * @param user 用户信息
    * @param br 错误
    * @return 添加用户页面
@@ -349,7 +350,7 @@ public class UserController extends BaseController {
 
   /**
    * 编辑用户页面。
-   * 
+   *
    * @param uid 用户ID
    * @return 编辑用户页面
    * @author hankai
@@ -372,7 +373,7 @@ public class UserController extends BaseController {
 
   /**
    * 编辑用户。
-   * 
+   *
    * @param uid 用户ID
    * @param user 用户信息
    * @param br 错误
@@ -421,7 +422,7 @@ public class UserController extends BaseController {
 
   /**
    * 删除用户。
-   * 
+   *
    * @param uid 用户ID
    * @return 是否成功
    * @author hankai

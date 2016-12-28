@@ -137,30 +137,8 @@
             </div>
         </div>
     </section>
-    <script type="text/javascript" src="../../static/js/jquery/jquery-2.0.3.min.js"
-        th:src="@{~/js/jquery/jquery-2.0.3.min.js}"></script>
-    <script type="text/javascript"
-        src="../../static/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"
-        th:src="@{~/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js}"></script>
-    <script type="text/javascript" src="../../static/bootstrap/js/bootstrap.min.js"
-        th:src="@{~/bootstrap/js/bootstrap.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/jQuery-Cookie/jquery.cookie.min.js"
-        th:src="@{~/js/jQuery-Cookie/jquery.cookie.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/uniform/jquery.uniform.min.js"
-        th:src="@{~/js/uniform/jquery.uniform.min.js}"></script>
-    <script type="text/javascript" src="../../static/chosen/chosen.jquery.js"
-        th:src="@{~/chosen/chosen.jquery.js}"></script>
-    <script type="text/javascript" src="../../templates/js/admin_sidebar.js" 
-        th:src="@{~/admin/sidebar.js}"></script>
-    <script>
-        jQuery(document).ready(function() {
-            loadSidebarItems('users');
-        });
-        $('.chosen-select').chosen({
-            no_results_text: '没有搜索到',
-            disable_search_threshold: 5
-        });
-    </script>
-    <!-- /JAVASCRIPTS -->
+    <script type="text/javascript" 
+            data-main="../../static/scripts/edit_user" th:data-main="@{~/scripts/edit_user}"
+            src="../../static/scripts/require.js" th:src="@{~/scripts/require.js}"></script>
 </body>
 </html>

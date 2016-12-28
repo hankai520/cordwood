@@ -53,8 +53,7 @@
                             <div class="box-body">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <form class="form-horizontal" method="post" onsubmit="return encryptPwd();"
-                                          th:action="@{~/admin/users/add}" th:object="${user}">
+                                        <form class="form-horizontal" method="post" th:action="@{~/admin/users/add}" th:object="${user}">
                                             <div class="container">
                                                 <div class="col-md-8">
                                                     <div class="alert alert-danger" th:if="${pageError}">
@@ -135,44 +134,8 @@
             </div>
         </div>
     </section>
-    <script type="text/javascript" src="../../static/js/jquery/jquery-2.0.3.min.js"
-        th:src="@{~/js/jquery/jquery-2.0.3.min.js}"></script>
-    <script type="text/javascript"
-        src="../../static/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"
-        th:src="@{~/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js}"></script>
-    <script type="text/javascript" src="../../static/bootstrap/js/bootstrap.min.js"
-        th:src="@{~/bootstrap/js/bootstrap.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/jQuery-Cookie/jquery.cookie.min.js"
-        th:src="@{~/js/jQuery-Cookie/jquery.cookie.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/uniform/jquery.uniform.min.js"
-        th:src="@{~/js/uniform/jquery.uniform.min.js}"></script>
-    <script type="text/javascript" src="../../static/chosen/chosen.jquery.js"
-        th:src="@{~/chosen/chosen.jquery.js}"></script>
-    <script type="text/javascript" src="../../static/js/crypto-js.js"
-        th:src="@{~/js/crypto-js.js}"></script>
-    <script type="text/javascript" src="../../templates/js/admin_sidebar.js" 
-        th:src="@{~/admin/sidebar.js}"></script>
-    <script>
-        jQuery(document).ready(function() {
-            loadSidebarItems('users');
-        });
-        $('.chosen-select').chosen({
-            no_results_text: '没有搜索到',
-            disable_search_threshold: 5
-        });
-        function encryptPwd() {
-            var pwd = $('#password').val();
-            if (pwd) {
-                pwd = CryptoJS.SHA1(pwd);
-                $('#password').val(pwd);
-                return true;
-            } else {
-                $('#pwd-group').addClass('has-error');
-                alert('请设置密码!');
-                return false;
-            }
-        }
-    </script>
-    <!-- /JAVASCRIPTS -->
+    <script type="text/javascript" 
+            data-main="../../static/scripts/add_user" th:data-main="@{~/scripts/add_user}"
+            src="../../static/scripts/require.js" th:src="@{~/scripts/require.js}"></script>
 </body>
 </html>

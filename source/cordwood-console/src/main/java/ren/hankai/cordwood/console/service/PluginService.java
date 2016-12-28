@@ -39,8 +39,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.RoundingMode;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -325,13 +327,35 @@ public class PluginService {
   public PluginRequestStatistics getUserPluginStatistics(String userEmail, Date beginTime,
       Date endTime) {
     final PluginRequestStatistics stats = new PluginRequestStatistics();
+    final DecimalFormat df = new DecimalFormat();
+    df.setMaximumFractionDigits(2);
+    df.setMaximumIntegerDigits(10);
+    df.setRoundingMode(RoundingMode.HALF_UP);
 
     final long userPluginAccessCount =
         pluginRequestRepo.getUserPluginAccessCount(userEmail, beginTime, endTime);
     stats.setAccessCount(userPluginAccessCount);
+    if (userPluginAccessCount > 1000) {
+      stats.setAccessCountDesc(df.format(userPluginAccessCount / 1000f) + " K");
+    } else if (userPluginAccessCount > 1000000) {
+      stats.setAccessCountDesc(df.format(userPluginAccessCount / 1000000f) + " M");
+    } else {
+      stats.setAccessCountDesc(df.format(userPluginAccessCount));
+    }
 
     final double avg = pluginRequestRepo.getUserPluginTimeUsageAvg(userEmail, beginTime, endTime);
     stats.setTimeUsageAvg(avg);
+    if (avg > 1000f) {
+      stats.setTimeUsageAvgDesc(df.format(avg / 1000f) + " s");
+    } else if (avg > (1000f * 60)) {
+      stats.setTimeUsageAvgDesc(df.format(avg / (1000f * 60)) + " m");
+    } else if (avg > (1000f * 60 * 60)) {
+      stats.setTimeUsageAvgDesc(df.format(avg / (1000f * 60 * 60)) + " h");
+    } else if (avg > (1000f * 60 * 60 * 24)) {
+      stats.setTimeUsageAvgDesc(df.format(avg / (1000f * 60 * 60 * 24)) + " d");
+    } else {
+      stats.setTimeUsageAvgDesc(df.format(avg) + " ms");
+    }
 
     final float failures =
         pluginRequestRepo.count(PluginRequestSpecs.userPluginRequests(userEmail, false));

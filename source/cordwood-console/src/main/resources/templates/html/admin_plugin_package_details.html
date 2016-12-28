@@ -59,10 +59,16 @@
                                                     <i class="fa fa-plug"></i> <span
                                                         th:text="${pluginPackage.fileName}">插件包文件名</span>
                                                 </p>
+                                                <p th:text="${pluginPackage.description}" style="padding-bottom:10px;">介绍信息</p>
                                                 <h6>
                                                     <i class="fa fa-clock-o"></i> <span
-                                                        th:text="${#calendars.format(pluginPackage.createTime,'yyyy-MM-dd HH:mm:ss')}">
+                                                        th:text="${#calendars.format(pluginPackage.createTime,'yyyy-MM-dd HH:mm:ss')}"> 
                                                         2016-11-08 14:32:20 </span>
+                                                </h6>
+                                                <h6>
+                                                    <i class="fa fa-user-o"></i> <span
+                                                        th:text="${pluginPackage.developer}"> 
+                                                        开发者信息 </span>
                                                 </h6>
                                             </div>
                                         </div>
@@ -146,46 +152,8 @@
             </div>
         </div>
     </section>
-    <script type="text/javascript" src="../../static/js/jquery/jquery-2.0.3.min.js"
-        th:src="@{~/js/jquery/jquery-2.0.3.min.js}"></script>
-    <script type="text/javascript"
-        src="../../static/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"
-        th:src="@{~/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js}"></script>
-    <script type="text/javascript" src="../../static/bootstrap/js/bootstrap.min.js"
-        th:src="@{~/bootstrap/js/bootstrap.min.js}"></script>
-    <script type="text/javascript"
-        src="../../static/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js"
-        th:src="@{~/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js}"></script>
-    <script type="text/javascript"
-        src="../../static/js/jQuery-slimScroll-1.3.0/slimScrollHorizontal.min.js"
-        th:src="@{~/js/jQuery-slimScroll-1.3.0/slimScrollHorizontal.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/jQuery-BlockUI/jquery.blockUI.min.js"
-        th:src="@{~/js/jQuery-BlockUI/jquery.blockUI.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/bootstrap-switch/bootstrap-switch.min.js"
-        th:src="@{~/js/bootstrap-switch/bootstrap-switch.min.js}"></script>
-    <script type="text/javascript" src="../../static/js/jQuery-Cookie/jquery.cookie.min.js"
-        th:src="@{~/js/jQuery-Cookie/jquery.cookie.min.js}"></script>
-    <script type="text/javascript" src="../../static/cordwood/js/common-init.js"
-        th:src="@{~/cordwood/js/common-init.js}"></script>
-    <script type="text/javascript" src="/admin/sidebar.js"></script>
-    <script>
-          jQuery(document).ready(function() {
-            loadSidebarItems('plugins');
-          });
-          $('.make-switch').on('switch-change', function(e, data) {
-            var sender = $(data.el);
-            var pname = sender.val();
-            var enabled = data.value;
-            var url = '/admin/plugins/' + pname + '/' + (enabled ? 'on' : 'off');
-            var senderId = '#pluginSwitch' + pname;
-            $(senderId).bootstrapSwitch('setActive', false);
-            $.get(url, function(data, textStatus, jqXHR) {
-              if (jqXHR.status == 200) {
-                $(senderId).bootstrapSwitch('setActive', true);
-              }
-            });
-          });
-        </script>
-    <!-- /JAVASCRIPTS -->
+    <script type="text/javascript" 
+            data-main="../../static/scripts/plugin_package_details" th:data-main="@{~/scripts/plugin_package_details}"
+            src="../../static/scripts/require.js" th:src="@{~/scripts/require.js}"></script>
 </body>
 </html>

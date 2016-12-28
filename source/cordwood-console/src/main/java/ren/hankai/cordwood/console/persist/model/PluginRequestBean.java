@@ -23,6 +23,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -44,6 +45,7 @@ public class PluginRequestBean implements Serializable {
   private Integer id;
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "pluginName", referencedColumnName = "name", nullable = false)
+  @NotNull
   private PluginBean plugin;
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "appId", referencedColumnName = "id")
@@ -77,13 +79,16 @@ public class PluginRequestBean implements Serializable {
 
   /**
    * 获取所访问的插件的显示名称。
-   * 
+   *
    * @return 插件显示名称
    * @author hankai
    * @since Dec 26, 2016 11:17:54 AM
    */
   public String getPluginDisplayName() {
-    return plugin.getDisplayName();
+    if (plugin != null) {
+      return plugin.getDisplayName();
+    }
+    return "";
   }
 
   /**

@@ -27,5 +27,4 @@ public class DashboardController extends BaseController {
   public ModelAndView index() {
     return new ModelAndView("admin_dashboard.html");
   }
-
 }

@@ -34,7 +34,7 @@ public final class Route {
   public static final String BG_EDIT_USER = BACKGROUND_PREFIX + "/users/{user_id}/edit";
   public static final String BG_DELETE_USER = BACKGROUND_PREFIX + "/users/{user_id}/delete";
   public static final String BG_CHANGE_USER_PWD = BACKGROUND_PREFIX + "/users/{user_id}/change_pwd";
-  public static final String BG_SIDEBAR_JS = BACKGROUND_PREFIX + "/sidebar.js";
+  public static final String BG_SIDEBAR_JSON = BACKGROUND_PREFIX + "/sidebar.json";
   public static final String BG_PLUGIN_PACKAGES = BACKGROUND_PREFIX + "/plugin_packages";
   public static final String BG_PLUGIN_PACKAGES_JSON = BACKGROUND_PREFIX + "/plugin_packages.json";
   public static final String BG_PLUGIN_PACKAGE_DETAILS =
