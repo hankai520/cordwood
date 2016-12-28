@@ -69,7 +69,11 @@ requirejs(['bootstrap','bootstrap-table-i18n'], function() {
         field: 'requestUrl',
         title: '请求 URL',
         valign: 'middle',
-        sortable: true
+        sortable: true,
+        'class': 'truncate-tail middle',
+        formatter: function(value, row, index) {
+          return '<a href="'+value+'">'+value+'</a>';
+        }
     }, {
         field: 'requestMethod',
         title: '请求方法',
@@ -84,7 +88,7 @@ requirejs(['bootstrap','bootstrap-table-i18n'], function() {
         visible: false
     }, {
         field: 'requestBytes',
-        title: '请求大小',
+        title: '请求 (字节)',
         valign: 'middle',
         sortable: true,
         formatter: function(value, row, index) {
@@ -98,7 +102,7 @@ requirejs(['bootstrap','bootstrap-table-i18n'], function() {
         visible: false
     }, {
         field: 'responseBytes',
-        title: '响应大小',
+        title: '响应 (字节)',
         valign: 'middle',
         sortable: true,
         formatter: function(value, row, index) {

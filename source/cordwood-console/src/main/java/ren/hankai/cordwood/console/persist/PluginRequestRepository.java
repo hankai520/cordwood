@@ -41,16 +41,11 @@ public interface PluginRequestRepository
           Predicate pre = null;
           if (!StringUtils.isEmpty(keyword)) {
             final String fuzzyKeyword = "%" + keyword + "%";
-            pre = cb.or(cb.like(root.get("plugin").get("name"), fuzzyKeyword),
+            pre = cb.or(
+                cb.like(root.get("plugin").get("name"), fuzzyKeyword),
                 cb.like(root.get("plugin").get("displayName"), fuzzyKeyword),
                 cb.like(root.get("plugin").get("description"), fuzzyKeyword),
                 cb.like(root.get("plugin").get("developer"), fuzzyKeyword),
-
-                cb.like(root.get("app").get("name"), fuzzyKeyword),
-                cb.like(root.get("app").get("introduction"), fuzzyKeyword),
-                cb.like(root.get("app").get("appKey"), fuzzyKeyword),
-                cb.like(root.get("app").get("secretKey"), fuzzyKeyword),
-
                 cb.like(root.get("clientIp"), fuzzyKeyword),
                 cb.like(root.get("requestUrl"), fuzzyKeyword),
                 cb.like(root.get("requestDigest"), fuzzyKeyword),
