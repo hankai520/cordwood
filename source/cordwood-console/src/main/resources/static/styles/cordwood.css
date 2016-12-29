@@ -84,3 +84,48 @@
 .fa-internet-explorer.colored {
   color: #2897d1;
 }
+
+.sidebar-menu {
+  height: 100%;
+}
+
+.sidebar-footer {
+  position: absolute;
+  height: 40px;
+  width: 100%;
+  bottom: 0;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+.sidebar-indicator {
+  width: 50px;
+  height: 100%;
+}
+.sidebar-indicator:HOVER {
+  background: #E6E6E6;
+  cursor: pointer;
+}
+
+.sidebar-indicator >i {
+  margin-top: 13px;
+  margin-right: 17px;
+}
+
+.navbar .navbar-brand img {
+  left: 10px;
+}
+
+.sidebar-menu > ul {
+  border-bottom: 1px solid #e7e7e7 !important;
+  border-top: none !important;
+}
+
+.sidebar-menu > ul > li > a {
+  border-bottom: none !important;
+}
+
+.sidebar-menu > ul > li.active > a {
+  border-bottom: 1px solid #ffffff !important;
+  border-top: 1px solid #ffffff !important;
+}

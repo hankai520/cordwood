@@ -31,13 +31,10 @@
     <header class="navbar clearfix" id="header">
         <div class="container" th:fragment="header">
             <div class="navbar-brand">
-                <a href="#">
+                <a href="javascript:;">
                     <img src="../../static/images/logo/logo.png" th:src="@{~/images/logo/logo.png}" 
                         class="img-responsive" height="30" width="120">
                 </a>
-                <div id="sidebar-collapse" class="sidebar-collapse btn">
-                    <i class="fa fa-bars" data-icon1="fa fa-bars" data-icon2="fa fa-bars"></i>
-                </div>
             </div>
             <ul class="nav navbar-nav pull-right">
                 <li class="dropdown user pull-right" id="header-user">
@@ -66,7 +63,7 @@
     <section id="page">
         <div id="sidebar" class="sidebar">
             <div class="sidebar-menu nav-collapse" th:fragment="sidebar">
-                <div class="divide-20"></div>
+                <div class="divide-10"></div>
                 <!-- <div id="search-bar">
                     <input class="search" type="text" placeholder="Search"><i
                         class="fa fa-search search-icon"
@@ -89,6 +86,18 @@
                         </a>
                     </li>
                 </ul>
+                <div class="sidebar-footer" style="display:none;">
+                    <div class="copyright pull-left" style="padding: 12px 0px 0px 8px;">
+                        <i class="fa fa-copyright small"></i> 
+                        <span class="small truncate-tail short" 
+                            th:text="#{site.copyright}">版权信息</span>
+                    </div>
+                    <div class="sidebar-indicator pull-right">
+                        <i class="fa fa-angle-double-left pull-right" 
+                            data-icon1="fa fa-angle-double-left" 
+                            data-icon2="fa fa-angle-double-right"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

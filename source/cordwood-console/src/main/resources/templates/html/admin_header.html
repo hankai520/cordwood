@@ -25,17 +25,15 @@
     <header class="navbar clearfix" id="header">
         <div class="container" th:fragment="header">
             <div class="navbar-brand">
-                <a href="#">
+                <a href="javascript:;">
                     <img src="../../static/images/logo/logo.png" th:src="@{~/images/logo/logo.png}" 
                         class="img-responsive" height="30" width="120">
                 </a>
-                <div id="sidebar-collapse" class="sidebar-collapse btn">
-                    <i class="fa fa-bars" data-icon1="fa fa-bars" data-icon2="fa fa-bars"></i>
-                </div>
             </div>
             <ul class="nav navbar-nav pull-right">
                 <li class="dropdown user pull-right" id="header-user">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="height:50px;">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" 
+                        style="height:50px; padding-top: 15px;">
                         <span class="username" th:text="${#authentication.getPrincipal().getName()}">用户名</span> 
                         <i class="fa fa-angle-down"></i>
                     </a>

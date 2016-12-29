@@ -11,11 +11,8 @@
     background-color: #404040;
     text-align: center;
   }
-  .navbar .nav > li > a:hover,
-  .navbar .nav > li > a:focus,
-  .navbar .nav .open > a,
-  .navbar .nav .open > a:hover,
-  .navbar .nav .open > a :focus {
+  .navbar .nav>li>a:hover, .navbar .nav>li>a:focus, .navbar .nav .open>a,
+    .navbar .nav .open>a:hover, .navbar .nav .open>a :focus {
     background-color: #5a5a5a !important;
   }
   .navbar .navbar-brand {
@@ -43,9 +40,8 @@
     box-shadow: 2px 1px 2px 0 rgba(0, 0, 0, 0.2) !important;
     text-align: left;
   }
-  .navbar #header-notification .dropdown-toggle i,
-  .navbar #header-message .dropdown-toggle i,
-  .navbar #header-tasks .dropdown-toggle i {
+  .navbar #header-notification .dropdown-toggle i, .navbar #header-message .dropdown-toggle i,
+    .navbar #header-tasks .dropdown-toggle i {
     color: #FFFFFF;
     text-shadow: none;
   }
@@ -65,15 +61,15 @@
     min-width: 250px;
     left: -100px !important;
   }
-  .navbar-nav .open .dropdown-menu > li > a {
+  .navbar-nav .open .dropdown-menu>li>a {
     line-height: 40px;
     padding: 0 10px;
   }
-  .navbar-nav .open .dropdown-menu > li.footer > a {
+  .navbar-nav .open .dropdown-menu>li.footer>a {
     line-height: 30px;
     padding: 0 10px;
   }
-  .navbar-nav > li > a {
+  .navbar-nav>li>a {
     padding: 15px;
   }
   .dropdown.user a.dropdown-toggle {
@@ -87,7 +83,6 @@
     top: 0 !important;
     z-index: 1001;
     transition: right 0.3s ease 0s;
-    display: none;
     -webkit-transform: scale3d(1, 1, 1);
   }
   .sidebar.mini-menu {
@@ -113,10 +108,6 @@
   .slidebar #content {
     border-right: 1px solid #cdd2d2;
   }
-  .sidebar-collapse {
-    right: 20px;
-    left: auto;
-  }
   /* DATE RANGE */
   .date-range.pull-right {
     display: block;
@@ -129,9 +120,7 @@
     float: none !important;
   }
   /* CALENDAR */
-  .fc-header-left,
-  .fc-header-center,
-  .fc-header-right {
+  .fc-header-left, .fc-header-center, .fc-header-right {
     display: block;
     float: none !important;
   }
@@ -139,60 +128,45 @@
   .box .box-tabs .nav-tabs {
     top: 0;
   }
-  .box .box-tabs .nav-tabs > li {
+  .box .box-tabs .nav-tabs>li {
     display: block;
     float: none;
   }
-  .box.border.orange .box-tabs .nav-tabs,
-  .box.border.blue .box-tabs .nav-tabs,
-  .box.border.red .box-tabs .nav-tabs,
-  .box.border.green .box-tabs .nav-tabs,
-  .box.border.primary .box-tabs .nav-tabs,
-  .box.border.pink .box-tabs .nav-tabs,
-  .box.border.purple .box-tabs .nav-tabs,
-  .box.border.inverse .box-tabs .nav-tabs {
+  .box.border.orange .box-tabs .nav-tabs, .box.border.blue .box-tabs .nav-tabs,
+    .box.border.red .box-tabs .nav-tabs, .box.border.green .box-tabs .nav-tabs,
+    .box.border.primary .box-tabs .nav-tabs, .box.border.pink .box-tabs .nav-tabs,
+    .box.border.purple .box-tabs .nav-tabs, .box.border.inverse .box-tabs .nav-tabs
+    {
     top: 0;
   }
-  .box.border.orange .box-tabs .nav-tabs > li,
-  .box.border.blue .box-tabs .nav-tabs > li,
-  .box.border.red .box-tabs .nav-tabs > li,
-  .box.border.green .box-tabs .nav-tabs > li,
-  .box.border.primary .box-tabs .nav-tabs > li,
-  .box.border.pink .box-tabs .nav-tabs > li,
-  .box.border.purple .box-tabs .nav-tabs > li,
-  .box.border.inverse .box-tabs .nav-tabs > li {
+  .box.border.orange .box-tabs .nav-tabs>li, .box.border.blue .box-tabs .nav-tabs>li,
+    .box.border.red .box-tabs .nav-tabs>li, .box.border.green .box-tabs .nav-tabs>li,
+    .box.border.primary .box-tabs .nav-tabs>li, .box.border.pink .box-tabs .nav-tabs>li,
+    .box.border.purple .box-tabs .nav-tabs>li, .box.border.inverse .box-tabs .nav-tabs>li
+    {
     display: block;
     float: none;
   }
-  .box.border.orange .box-tabs .nav-tabs > li > a,
-  .box.border.blue .box-tabs .nav-tabs > li > a,
-  .box.border.red .box-tabs .nav-tabs > li > a,
-  .box.border.green .box-tabs .nav-tabs > li > a,
-  .box.border.primary .box-tabs .nav-tabs > li > a,
-  .box.border.pink .box-tabs .nav-tabs > li > a,
-  .box.border.purple .box-tabs .nav-tabs > li > a,
-  .box.border.inverse .box-tabs .nav-tabs > li > a {
+  .box.border.orange .box-tabs .nav-tabs>li>a, .box.border.blue .box-tabs .nav-tabs>li>a,
+    .box.border.red .box-tabs .nav-tabs>li>a, .box.border.green .box-tabs .nav-tabs>li>a,
+    .box.border.primary .box-tabs .nav-tabs>li>a, .box.border.pink .box-tabs .nav-tabs>li>a,
+    .box.border.purple .box-tabs .nav-tabs>li>a, .box.border.inverse .box-tabs .nav-tabs>li>a
+    {
     color: #666666;
   }
-  .box.border.orange .box-tabs .nav-tabs > li.active a,
-  .box.border.blue .box-tabs .nav-tabs > li.active a,
-  .box.border.red .box-tabs .nav-tabs > li.active a,
-  .box.border.green .box-tabs .nav-tabs > li.active a,
-  .box.border.primary .box-tabs .nav-tabs > li.active a,
-  .box.border.pink .box-tabs .nav-tabs > li.active a,
-  .box.border.purple .box-tabs .nav-tabs > li.active a,
-  .box.border.inverse .box-tabs .nav-tabs > li.active a {
+  .box.border.orange .box-tabs .nav-tabs>li.active a, .box.border.blue .box-tabs .nav-tabs>li.active a,
+    .box.border.red .box-tabs .nav-tabs>li.active a, .box.border.green .box-tabs .nav-tabs>li.active a,
+    .box.border.primary .box-tabs .nav-tabs>li.active a, .box.border.pink .box-tabs .nav-tabs>li.active a,
+    .box.border.purple .box-tabs .nav-tabs>li.active a, .box.border.inverse .box-tabs .nav-tabs>li.active a
+    {
     font-weight: 600;
     color: #555555;
   }
-  .box.border.orange .box-tabs .nav-tabs > li.active a:before,
-  .box.border.blue .box-tabs .nav-tabs > li.active a:before,
-  .box.border.red .box-tabs .nav-tabs > li.active a:before,
-  .box.border.green .box-tabs .nav-tabs > li.active a:before,
-  .box.border.primary .box-tabs .nav-tabs > li.active a:before,
-  .box.border.pink .box-tabs .nav-tabs > li.active a:before,
-  .box.border.purple .box-tabs .nav-tabs > li.active a:before,
-  .box.border.inverse .box-tabs .nav-tabs > li.active a:before {
+  .box.border.orange .box-tabs .nav-tabs>li.active a:before, .box.border.blue .box-tabs .nav-tabs>li.active a:before,
+    .box.border.red .box-tabs .nav-tabs>li.active a:before, .box.border.green .box-tabs .nav-tabs>li.active a:before,
+    .box.border.primary .box-tabs .nav-tabs>li.active a:before, .box.border.pink .box-tabs .nav-tabs>li.active a:before,
+    .box.border.purple .box-tabs .nav-tabs>li.active a:before, .box.border.inverse .box-tabs .nav-tabs>li.active a:before
+    {
     color: #333;
     display: inline;
     font-size: 16px;
@@ -204,12 +178,12 @@
     padding: 0 5px;
   }
   /* HUBSPOT MESSENGER */
-  ul.messenger.messenger-fixed.messenger-on-right,
-  ul.messenger.messenger-fixed.messenger-on-left {
+  ul.messenger.messenger-fixed.messenger-on-right, ul.messenger.messenger-fixed.messenger-on-left
+    {
     width: 50% !important;
   }
   /* WIZARDS AND VALIDATION */
-  .form-wizard .nav-justified > li > a {
+  .form-wizard .nav-justified>li>a {
     text-align: left;
   }
   /* CHAT WIDGET */
@@ -225,8 +199,7 @@
   .invoice-header {
     margin-bottom: 20px;
   }
-  .invoice-header .pull-left,
-  .invoice-header .pull-right {
+  .invoice-header .pull-left, .invoice-header .pull-right {
     display: block;
     float: none !important;
   }
@@ -241,6 +214,7 @@
     right: 30%;
   }
 }
+
 @media only screen and (min-width: 768px) and (max-width: 800px) {
   body {
     overflow-x: hidden;

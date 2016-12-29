@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ErrorController;
+import org.springframework.security.web.authentication.rememberme.CookieTheftException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,6 +48,11 @@ public class CustomErrorController implements ErrorController {
       mav.setViewName("error_" + errorCode + ".html");
     }
     return mav;
+  }
+
+  @ExceptionHandler({CookieTheftException.class})
+  public String handleCookieTheftException(HttpServletRequest request, Exception exception) {
+    return "redirect:" + Route.BG_LOGIN;
   }
 
   /**
