@@ -131,6 +131,7 @@ define(['bootstrap', 'jquery-cookie', 'jquery-slimscroll', 'jquery-uniform'],
     };
 
     var collapseSidebar = function() {
+      $('.copyright').hide();
       var iconElem = $('.sidebar-indicator i');
       var iconLeft = iconElem.attr("data-icon1");
       var iconRight = iconElem.attr("data-icon2");
