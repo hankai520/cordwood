@@ -40,10 +40,14 @@ define(['bootstrap', 'jquery-cookie', 'jquery-slimscroll', 'jquery-uniform'],
     };
 
     var updateSidebarHeight = function() {
-      var bodyHeight = $('body').height();
-      var headerHeight = $('header.navbar').height();
-      var menuHeight = bodyHeight - headerHeight;
-      $('.sidebar-menu').height(menuHeight);
+//      var bodyHeight = $('body').height();
+//      var headerHeight = $('header.navbar').height();
+//      var menuHeight = bodyHeight - headerHeight;
+      var body = document.body;
+      var html = document.documentElement;
+      var height = Math.max( body.scrollHeight, body.offsetHeight, 
+                         html.clientHeight, html.scrollHeight, html.offsetHeight );
+      $('.sidebar-menu').height(html.scrollHeight);
     };
 
     var updateCollapseIndicator = function() {
@@ -70,7 +74,7 @@ define(['bootstrap', 'jquery-cookie', 'jquery-slimscroll', 'jquery-uniform'],
       if (body.hasClass('sidebar-fixed')) {
         height = $(window).height() - $('#header').height() + 1;
       } else {
-        height = sidebar.height() + 20;
+        height = sidebar.height();
       }
       if (height >= content.height()) {
         content.attr('style', 'min-height:' + height + 'px !important');
