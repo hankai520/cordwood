@@ -7,7 +7,7 @@ requirejs(['main'], function(app) {
   /**
    * 初始化数据表。
    * */
-  requirejs(['bootstrap','bootstrap-table-i18n'], function() {
+  requirejs(['bootstrap-table-i18n'], function() {
     $('#dataTable').bootstrapTable({
       url: '/admin/apps.json',
       toolbar: '#toolbar',

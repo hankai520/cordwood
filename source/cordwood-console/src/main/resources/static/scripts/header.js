@@ -14,6 +14,4 @@ require.config({
   }
 });
 
-requirejs(['bootstrap'], function() {
-  
-});
+requirejs(['bootstrap']);
