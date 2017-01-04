@@ -27,6 +27,7 @@ import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
 import ren.hankai.cordwood.console.persist.model.PluginRequestBean;
 import ren.hankai.cordwood.console.persist.support.EntitySpecs;
 import ren.hankai.cordwood.console.view.model.PluginRequestStatistics;
+import ren.hankai.cordwood.console.view.model.RequestCountAndVolume;
 import ren.hankai.cordwood.console.view.model.SummarizedRequest;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.Plugin;
@@ -316,7 +317,7 @@ public class PluginService {
 
   /**
    * 搜索用户的插件访问记录。
-   * 
+   *
    * @param userEmail 用户邮箱
    * @param keyword 关键字
    * @param pageable 分页
@@ -426,6 +427,19 @@ public class PluginService {
         pluginBean.setFeatures(new ArrayList<>(plugin.getFunctions().values()));
       }
     }
+  }
+
+  /**
+   * 获取按日期汇总的插件访问的次数和数据量信息。
+   *
+   * @param startTime 开始时间
+   * @param endTime 结束时间
+   * @return 次数和数据量
+   * @author hankai
+   * @since Jan 3, 2017 2:08:23 PM
+   */
+  public List<RequestCountAndVolume> getPluginRequestCountAndVolume(Date startTime, Date endTime) {
+    return pluginRequestRepo.getRequestCountAndVolume(startTime, endTime);
   }
 
 }

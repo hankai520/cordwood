@@ -9,6 +9,9 @@ require.config({
     'jquery-uniform': 'libs/jquery.uniform.min',
     'jquery-chosen': 'libs/chosen.jquery',
     'jquery-easypiechart': 'libs/jquery.easypiechart',
+    'jquery-flot': 'libs/jquery.flot.min',
+    'jquery-flot-time': 'libs/jquery.flot.time.min',
+    'jquery-blockui': 'libs/jquery.blockUI.min',
     'bootstrap': 'libs/bootstrap.min',
     'bootstrap-table': 'libs/bootstrap-table',
     'bootstrap-table-i18n': 'libs/bootstrap-table-zh-CN',
@@ -16,6 +19,7 @@ require.config({
     'crypto-js': 'libs/crypto-js',
     'dropzone': 'libs/dropzone.min',
     'cropper': 'libs/cropper.min',
+    'datejs': 'libs/date',
     'controls': 'helper/controls',
     'main': 'main'
   },
@@ -33,6 +37,15 @@ require.config({
     'jquery-chosen': {
       deps: ['jquery']
     },
+    'jquery-flot': {
+      deps: ['jquery']
+    },
+    'jquery-flot-time': {
+      deps: ['jquery-flot']
+    },
+    'jquery-blockui': {
+      deps: ['jquery']
+    },
     'bootstrap': {
       deps: ['jquery']
     },
@@ -47,11 +60,37 @@ require.config({
     },
     'dropzone': {
       deps: ['jquery']
-    }
+    },
+    'datejs':{}
   }
 });
-define(['controls'], function() {
+define(['controls','jquery-blockui'], function(controls) {
   return {
+    blockUI: function(el, loaderOnTop) {
+      lastBlockedUI = el;
+      $(el).block({
+        message: '<img src="../../images/loaders/12.gif" align="absmiddle" />',
+        css: {
+          border: 'none',
+          padding: '2px',
+          backgroundColor: 'none'
+        },
+        overlayCSS: {
+          backgroundColor: '#000',
+          opacity: 0.05,
+          cursor: 'wait'
+        }
+      });
+    },
+
+    unblockUI: function(el) {
+      $(el).unblock({
+        onUnblock: function() {
+          $(el).removeAttr("style");
+        }
+      });
+    },
+
     /**
      * 加载边栏菜单。
      */

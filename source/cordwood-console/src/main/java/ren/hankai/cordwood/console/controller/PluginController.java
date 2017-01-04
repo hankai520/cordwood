@@ -27,7 +27,9 @@ import ren.hankai.cordwood.console.persist.model.PluginRequestBean;
 import ren.hankai.cordwood.console.persist.util.PageUtil;
 import ren.hankai.cordwood.console.service.PluginService;
 import ren.hankai.cordwood.console.view.model.BootstrapTableData;
+import ren.hankai.cordwood.console.view.model.RequestCountAndVolume;
 import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.core.util.DateUtil;
 import ren.hankai.cordwood.web.breadcrumb.NavigationItem;
 
 import java.io.File;
@@ -35,6 +37,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -282,5 +285,20 @@ public class PluginController extends BaseController {
       logger.error(Route.BG_PLUGIN_LOGS_JSON, ex);
     }
     return response;
+  }
+
+  @RequestMapping(Route.BG_DASHBOARD_REQUEST_CHARTS_JSON)
+  @ResponseBody
+  public List<RequestCountAndVolume> getPluginRequestCountAndVolume() {
+    List<RequestCountAndVolume> list = null;
+    try {
+      final Date[] dates = DateUtil.thisMonth();
+      list = pluginService.getPluginRequestCountAndVolume(dates[0], dates[1]);
+    } catch (final Exception ex) {
+      logger.error(Route.BG_DASHBOARD_REQUEST_CHARTS_JSON, ex);
+    } catch (final Error ex) {
+      logger.error(Route.BG_DASHBOARD_REQUEST_CHARTS_JSON, ex);
+    }
+    return list;
   }
 }

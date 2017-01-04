@@ -27,6 +27,8 @@ public final class Route {
   public static final String BG_MY_PROFILE = BACKGROUND_PREFIX + "/my_profile";
   public static final String BG_MY_AVATAR = BACKGROUND_PREFIX + "/my_avatar";
   public static final String BG_DASHBOARD = BACKGROUND_PREFIX + "/dashboard";
+  public static final String BG_DASHBOARD_REQUEST_CHARTS_JSON =
+      BACKGROUND_PREFIX + "/dashboard/request_charts.json";
   public static final String BG_SYS_SETTINGS = BACKGROUND_PREFIX + "/settings";
   public static final String BG_USERS = BACKGROUND_PREFIX + "/users";
   public static final String BG_USERS_JSON = BACKGROUND_PREFIX + "/users.json";

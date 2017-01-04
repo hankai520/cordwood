@@ -40,13 +40,13 @@ define(['bootstrap', 'jquery-cookie', 'jquery-slimscroll', 'jquery-uniform'],
     };
 
     var updateSidebarHeight = function() {
-//      var bodyHeight = $('body').height();
-//      var headerHeight = $('header.navbar').height();
-//      var menuHeight = bodyHeight - headerHeight;
+      //      var bodyHeight = $('body').height();
+      //      var headerHeight = $('header.navbar').height();
+      //      var menuHeight = bodyHeight - headerHeight;
       var body = document.body;
       var html = document.documentElement;
-      var height = Math.max( body.scrollHeight, body.offsetHeight, 
-                         html.clientHeight, html.scrollHeight, html.offsetHeight );
+      var height = Math.max(body.scrollHeight, body.offsetHeight,
+        html.clientHeight, html.scrollHeight, html.offsetHeight);
       $('.sidebar-menu').height(html.scrollHeight);
     };
 
@@ -354,6 +354,24 @@ define(['bootstrap', 'jquery-cookie', 'jquery-slimscroll', 'jquery-uniform'],
       $(".uniform").uniform();
     };
 
+    var handleBoxTools = function() {
+      //Collapse
+      $('.box .tools .collapse, .box .tools .expand').click(function() {
+        var el = $(this).parents(".box").children(".box-body");
+        if ($(this).hasClass("collapse")) {
+          $(this).removeClass("collapse").addClass("expand");
+          var i = $(this).children(".fa-chevron-up");
+          i.removeClass("fa-chevron-up").addClass("fa-chevron-down");
+          el.slideUp(200);
+        } else {
+          $(this).removeClass("expand").addClass("collapse");
+          var i = $(this).children(".fa-chevron-down");
+          i.removeClass("fa-chevron-down").addClass("fa-chevron-up");
+          el.slideDown(200);
+        }
+      });
+    };
+
     var handleThemeSkins = function() {
       // Handle theme colors
       var setSkin = function(color) {
@@ -396,4 +414,5 @@ define(['bootstrap', 'jquery-cookie', 'jquery-slimscroll', 'jquery-uniform'],
     handleSlimScrolls();
     handlePopovers();
     handleUniform();
+    handleBoxTools();
   });

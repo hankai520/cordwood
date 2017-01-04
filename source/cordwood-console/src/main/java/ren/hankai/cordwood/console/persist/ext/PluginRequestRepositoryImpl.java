@@ -8,6 +8,7 @@ import ren.hankai.cordwood.console.persist.PluginRequestRepositoryCustom;
 import ren.hankai.cordwood.console.persist.model.PluginRequestBean;
 import ren.hankai.cordwood.console.persist.model.PluginRequestBean.RequestChannel;
 import ren.hankai.cordwood.console.view.model.ChannelRequest;
+import ren.hankai.cordwood.console.view.model.RequestCountAndVolume;
 import ren.hankai.cordwood.console.view.model.SummarizedRequest;
 import ren.hankai.cordwood.plugin.Plugin;
 import ren.hankai.cordwood.plugin.api.PluginManager;
@@ -19,6 +20,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -165,4 +167,28 @@ public class PluginRequestRepositoryImpl implements PluginRequestRepositoryCusto
     }
     return cr;
   }
+
+  @Override
+  public List<RequestCountAndVolume> getRequestCountAndVolume(Date beginTime, Date endTime) {
+    final String ql =
+        "select cast(o.createTime as DATE) as createDate, "
+            + "sum(o.requestBytes+o.responseBytes), "
+            + "count(o) "
+            + "from PluginRequestBean o "
+            + "where o.createTime between :startTime and :endTime "
+            + "group by createDate order by createDate asc";
+    final TypedQuery<Object[]> query = entityManager.createQuery(ql, Object[].class);
+    query.setParameter("startTime", beginTime);
+    query.setParameter("endTime", endTime);
+    final List<Object[]> list = query.getResultList();
+    final List<RequestCountAndVolume> data = new ArrayList<>(list.size());
+    for (final Object[] result : list) {
+      final Date createDate = (Date) result[0];
+      final Long dataVolume = (Long) result[1];
+      final Long dataCount = (Long) result[2];
+      data.add(new RequestCountAndVolume(createDate, dataCount, dataVolume));
+    }
+    return data;
+  }
+
 }

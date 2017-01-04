@@ -3,6 +3,7 @@ package ren.hankai.cordwood.console.persist;
 
 
 import ren.hankai.cordwood.console.view.model.ChannelRequest;
+import ren.hankai.cordwood.console.view.model.RequestCountAndVolume;
 import ren.hankai.cordwood.console.view.model.SummarizedRequest;
 
 import java.util.Date;
@@ -89,4 +90,15 @@ public interface PluginRequestRepositoryCustom {
    */
   public ChannelRequest getRequestCountGroupByChannel(String userEmail, Date beginTime,
       Date endTime);
+
+  /**
+   * 获取插件访问的次数和流量数据。
+   *
+   * @param beginTime 开始时间
+   * @param endTime 结束时间
+   * @return 按日期汇总后的数据
+   * @author hankai
+   * @since Jan 3, 2017 1:50:40 PM
+   */
+  public List<RequestCountAndVolume> getRequestCountAndVolume(Date beginTime, Date endTime);
 }
