@@ -130,5 +130,57 @@ requirejs(['main'], function(app) {
     });
   });
 
-  requirejs(['bootstrap']);
+  /**
+   * 初始化服务器资源仪表。
+   * */
+  requirejs(['raphael'], function(Raphael) {
+    window.Raphael = Raphael;
+    requirejs(['justgage'], function() {
+      var responseTime = new JustGage({
+        id: "responseTime",
+        value: 70,
+        min: 10,
+        max: 100,
+        title: "响应时间",
+        symbol: 'ms',
+        pointer: true,
+        pointerOptions: {
+          toplength: -15,
+          bottomlength: 10,
+          bottomwidth: 12,
+          color: '#8e8e93',
+          stroke: '#ffffff',
+          stroke_width: 3,
+          stroke_linecap: 'round'
+        },
+        gaugeWidthScale: 0.3
+      });
+      var faultRate = new JustGage({
+        id: "faultRate",
+        value: 20,
+        min: 0,
+        max: 100,
+        title: "故障率",
+        symbol: '%',
+        pointer: true,
+        pointerOptions: {
+          toplength: -15,
+          bottomlength: 10,
+          bottomwidth: 12,
+          color: '#8e8e93',
+          stroke: '#ffffff',
+          stroke_width: 3,
+          stroke_linecap: 'round'
+        },
+        gaugeWidthScale: 0.3
+      });
+
+      $('#reloadServerResourceInfo').click(function() {
+        responseTime.refresh(getRandomInt(0, 100));
+        faultRate.refresh(getRandomInt(0, 100));
+      });
+    });
+
+    requirejs(['bootstrap']);
+  });
 });

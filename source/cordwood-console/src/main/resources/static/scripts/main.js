@@ -12,6 +12,8 @@ require.config({
     'jquery-flot': 'libs/jquery.flot.min',
     'jquery-flot-time': 'libs/jquery.flot.time.min',
     'jquery-blockui': 'libs/jquery.blockUI.min',
+    'justgage': 'libs/justgage',
+    'raphael': 'libs/raphael.min',
     'bootstrap': 'libs/bootstrap.min',
     'bootstrap-table': 'libs/bootstrap-table',
     'bootstrap-table-i18n': 'libs/bootstrap-table-zh-CN',
@@ -46,6 +48,9 @@ require.config({
     'jquery-blockui': {
       deps: ['jquery']
     },
+    'justgage': {
+      deps: ['raphael']
+    },
     'bootstrap': {
       deps: ['jquery']
     },
@@ -65,6 +70,7 @@ require.config({
   }
 });
 define(['controls','jquery-blockui'], function(controls) {
+  
   return {
     blockUI: function(el, loaderOnTop) {
       lastBlockedUI = el;

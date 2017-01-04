@@ -42,10 +42,90 @@
                             </ul>
                         </div>
                         <div class="row">
-                            <div class="col-md-8">
-                                <div class="box border primary">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="dashbox panel panel-default">
+                                            <div class="panel-body">
+                                                <div class="panel-left red">
+                                                    <i class="fa fa-plug fa-3x"></i>
+                                                </div>
+                                                <div class="panel-right">
+                                                    <div class="number" >142</div>
+                                                    <div class="title">插件总数</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div
+                                            class="dashbox panel panel-default">
+                                            <div class="panel-body">
+                                                <div class="panel-left blue">
+                                                    <i class="fa fa-code-fork fa-3x"></i>
+                                                </div>
+                                                <div class="panel-right">
+                                                    <div class="number">
+                                                        <span >12</span>
+                                                    </div>
+                                                    <div class="title">开发者总数</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="quick-pie panel panel-default" style="min-height:150px;">
+                                            <div class="panel-body">
+                                                <div class="col-md-6">
+                                                    <div id="responseTime" style="max-height:120px; max-width:230px;"></div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div id="faultRate" style="max-height:120px; max-width:230px;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="quick-pie panel panel-default">
+                                    <div class="panel-body">
+                                        <h5><i class="fa fa-database"></i> <strong>服务器资源使用情况</strong></h5>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h5>内存 (1.2G / 4G) <small class="pull-right">已用 30%</small></h5>
+                                                <div class="progress progress-sm">
+                                                    <div class="progress-bar progress-bar-success" style="width: 30%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h5>硬盘 (63G / 1.2T) <small class="pull-right">已用 5.1%</small></h5>
+                                                <div class="progress progress-sm">
+                                                    <div class="progress-bar progress-bar-blue" style="width: 5.1%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h5>带宽 (6.7G / 7.2G) <small class="pull-right">近1小时均值 46%</small></h5>
+                                                <div class="progress progress-sm">
+                                                    <div class="progress-bar progress-bar-warning" style="width: 46%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="box border ">
                                     <div class="box-title">
-                                        <h4><i class="fa fa-signal"></i>插件访问量趋势</h4>
+                                        <h4><i class="fa fa-area-chart"></i>插件访问量趋势</h4>
                                         <div class="tools">
                                             <a href="javascript:;" class="reload" id="reloadRequestChart">
                                                 <i class="fa fa-refresh"></i>
@@ -56,12 +136,9 @@
                                         </div>
                                     </div>
                                     <div class="box-body">
-                                        <div id="request-charts" class="chart"></div>
+                                        <div id="request-charts" class="chart" style="max-height:260px;"></div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-
                             </div>
                         </div>
                     </div>

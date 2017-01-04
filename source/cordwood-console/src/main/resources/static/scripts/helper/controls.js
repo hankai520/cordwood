@@ -77,7 +77,8 @@ define(['bootstrap', 'jquery-cookie', 'jquery-slimscroll', 'jquery-uniform'],
         height = sidebar.height();
       }
       if (height >= content.height()) {
-        content.attr('style', 'min-height:' + height + 'px !important');
+        //TODO: 详细检查此处逻辑是否有用!
+        //content.attr('style', 'min-height:' + height + 'px !important');
       }
     };
 
