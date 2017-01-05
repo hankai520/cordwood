@@ -3,6 +3,7 @@ package ren.hankai.cordwood.console.persist;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
@@ -26,7 +27,7 @@ public interface PluginPackageRepository extends BaseRepository<PluginPackageBea
 
     /**
      * 搜索插件包。
-     * 
+     *
      * @param keyword 关键字
      * @return 查询条件
      * @author hankai
@@ -52,7 +53,7 @@ public interface PluginPackageRepository extends BaseRepository<PluginPackageBea
 
     /**
      * 搜索指定用户开发的插件包。
-     * 
+     *
      * @param developer 开发者（用户）
      * @return 查询条件
      * @author hankai
@@ -69,5 +70,8 @@ public interface PluginPackageRepository extends BaseRepository<PluginPackageBea
       };
     }
   }
+
+  @Query(value = "select count(distinct(o.developer)) from PluginPackageBean o")
+  public long countDevelopers();
 
 }

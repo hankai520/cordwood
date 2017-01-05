@@ -3,6 +3,7 @@ package ren.hankai.cordwood.console.persist;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.Query;
 
 import ren.hankai.cordwood.console.persist.model.PluginRequestBean;
 
@@ -45,7 +46,7 @@ public interface PluginRequestRepository
                 cb.like(root.get("plugin").get("name"), fuzzyKeyword),
                 cb.like(root.get("plugin").get("displayName"), fuzzyKeyword),
                 cb.like(root.get("plugin").get("description"), fuzzyKeyword),
-                cb.like(root.get("plugin").get("developer"), fuzzyKeyword),
+                cb.like(root.get("plugin").get("pluginPackage").get("developer"), fuzzyKeyword),
                 cb.like(root.get("clientIp"), fuzzyKeyword),
                 cb.like(root.get("requestUrl"), fuzzyKeyword),
                 cb.like(root.get("requestDigest"), fuzzyKeyword),
@@ -79,7 +80,7 @@ public interface PluginRequestRepository
                 cb.like(root.get("plugin").get("name"), fuzzyKeyword),
                 cb.like(root.get("plugin").get("displayName"), fuzzyKeyword),
                 cb.like(root.get("plugin").get("description"), fuzzyKeyword),
-                cb.like(root.get("plugin").get("developer"), fuzzyKeyword),
+                cb.like(root.get("plugin").get("pluginPackage").get("developer"), fuzzyKeyword),
                 cb.like(root.get("clientIp"), fuzzyKeyword),
                 cb.like(root.get("requestUrl"), fuzzyKeyword),
                 cb.like(root.get("requestDigest"), fuzzyKeyword),
@@ -109,7 +110,7 @@ public interface PluginRequestRepository
             CriteriaBuilder cb) {
           final String fuzzyEmail = "%" + userEmail + "%";
           return cb.and(
-              cb.like(root.get("plugin").get("developer"), fuzzyEmail),
+              cb.like(root.get("plugin").get("pluginPackage").get("developer"), fuzzyEmail),
               cb.between(root.get("createTime"), beginTime, endTime));
         }
       };
@@ -131,12 +132,38 @@ public interface PluginRequestRepository
         public Predicate toPredicate(Root<PluginRequestBean> root, CriteriaQuery<?> query,
             CriteriaBuilder cb) {
           final String fuzzyEmail = "%" + userEmail + "%";
-          return cb.and(cb.like(root.get("plugin").get("developer"), fuzzyEmail),
+          return cb.and(
+              cb.like(root.get("plugin").get("pluginPackage").get("developer"), fuzzyEmail),
               cb.equal(root.get("succeeded"), succeeded));
+        }
+      };
+    }
+
+    /**
+     * 查询失败的插件请求。
+     *
+     * @return 查询条件
+     * @author hankai
+     * @since Jan 5, 2017 10:12:32 AM
+     */
+    public static Specification<PluginRequestBean> failedRequests() {
+      return new Specification<PluginRequestBean>() {
+        @Override
+        public Predicate toPredicate(Root<PluginRequestBean> root, CriteriaQuery<?> query,
+            CriteriaBuilder cb) {
+          return cb.equal(root.get("succeeded"), false);
         }
       };
     }
   }
 
-
+  /**
+   * 查询插件请求的平均用时（毫秒）。
+   *
+   * @return 平均用时
+   * @author hankai
+   * @since Jan 5, 2017 9:57:09 AM
+   */
+  @Query(value = "select avg(o.milliseconds) from PluginRequestBean o")
+  public double getResponseTimeAvg();
 }

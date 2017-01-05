@@ -51,7 +51,7 @@
                                                     <i class="fa fa-plug fa-3x"></i>
                                                 </div>
                                                 <div class="panel-right">
-                                                    <div class="number" >142</div>
+                                                    <div class="number" th:text="${data.numberOfPlugins}">142</div>
                                                     <div class="title">插件总数</div>
                                                 </div>
                                             </div>
@@ -65,9 +65,7 @@
                                                     <i class="fa fa-code-fork fa-3x"></i>
                                                 </div>
                                                 <div class="panel-right">
-                                                    <div class="number">
-                                                        <span >12</span>
-                                                    </div>
+                                                    <div class="number"><span th:text="${data.numberOfDevelopers}">12</span></div>
                                                     <div class="title">开发者总数</div>
                                                 </div>
                                             </div>
@@ -79,10 +77,13 @@
                                         <div class="quick-pie panel panel-default" style="min-height:150px;">
                                             <div class="panel-body">
                                                 <div class="col-md-6">
-                                                    <div id="responseTime" style="max-height:120px; max-width:230px;"></div>
+                                                    <div id="responseTime" value="23" th:value="${data.responseTime}" 
+                                                    th:value-desc="${data.responseTimeDesc}"
+                                                    style="max-height:120px; max-width:230px;"></div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div id="faultRate" style="max-height:120px; max-width:230px;"></div>
+                                                    <div id="faultRate" value="18" th:value="${data.faultRate}" 
+                                                    style="max-height:120px; max-width:230px;"></div>
                                                 </div>
                                             </div>
                                         </div>

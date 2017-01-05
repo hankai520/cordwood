@@ -138,11 +138,13 @@ requirejs(['main'], function(app) {
     requirejs(['justgage'], function() {
       var responseTime = new JustGage({
         id: "responseTime",
-        value: 70,
+        value: $('#responseTime').attr('value'),
         min: 10,
         max: 100,
         title: "响应时间",
-        symbol: 'ms',
+        textRenderer: function() {
+          return $('#responseTime').attr('value-desc');
+        },
         pointer: true,
         pointerOptions: {
           toplength: -15,
@@ -155,9 +157,10 @@ requirejs(['main'], function(app) {
         },
         gaugeWidthScale: 0.3
       });
+      var faultRateValue = $('#faultRate').attr('value');
       var faultRate = new JustGage({
         id: "faultRate",
-        value: 20,
+        value: faultRateValue,
         min: 0,
         max: 100,
         title: "故障率",
@@ -173,11 +176,6 @@ requirejs(['main'], function(app) {
           stroke_linecap: 'round'
         },
         gaugeWidthScale: 0.3
-      });
-
-      $('#reloadServerResourceInfo').click(function() {
-        responseTime.refresh(getRandomInt(0, 100));
-        faultRate.refresh(getRandomInt(0, 100));
       });
     });
 

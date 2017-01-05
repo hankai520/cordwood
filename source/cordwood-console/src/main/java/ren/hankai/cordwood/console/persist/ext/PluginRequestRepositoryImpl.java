@@ -61,7 +61,6 @@ public class PluginRequestRepositoryImpl implements PluginRequestRepositoryCusto
     cq.select(cb.avg(cb.sum(root.get("milliseconds"), 0.0f)));
     cq.where(
         cb.like(root.get("plugin").get("pluginPackage").get("developer"), "%" + userEmail + "%"),
-        cb.equal(root.get("succeeded"), true),
         cb.between(root.get("createTime"), beginTime, endTime));
     final Double result = entityManager.createQuery(cq).getSingleResult();
     return result != null ? result : 0;
@@ -116,7 +115,7 @@ public class PluginRequestRepositoryImpl implements PluginRequestRepositoryCusto
         cb.count(root).alias("totalCount"),
         cb.max(root.get("createTime")).alias("lastAccessTime"),
         cb.avg(cb.sum(root.get("milliseconds"), 0.0f)).alias("timeUsageAvg"));
-    cq.where(cb.equal(root.get("succeeded"), true),
+    cq.where(
         cb.like(root.get("plugin").get("pluginPackage").get("developer"), "%" + userEmail + "%"),
         cb.between(root.get("createTime"), beginTime, endTime));
     cq.groupBy(root.get("plugin").get("name"));

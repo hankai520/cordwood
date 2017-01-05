@@ -30,6 +30,7 @@ import ren.hankai.cordwood.console.view.model.PluginRequestStatistics;
 import ren.hankai.cordwood.console.view.model.RequestCountAndVolume;
 import ren.hankai.cordwood.console.view.model.SummarizedRequest;
 import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.core.util.MathUtil;
 import ren.hankai.cordwood.plugin.Plugin;
 import ren.hankai.cordwood.plugin.PluginPackage;
 import ren.hankai.cordwood.plugin.api.PluginManager;
@@ -40,10 +41,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.math.RoundingMode;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -344,50 +343,43 @@ public class PluginService {
   public PluginRequestStatistics getUserPluginStatistics(String userEmail, Date beginTime,
       Date endTime) {
     final PluginRequestStatistics stats = new PluginRequestStatistics();
-    final DecimalFormat df = new DecimalFormat();
-    df.setMaximumFractionDigits(2);
-    df.setMaximumIntegerDigits(10);
-    df.setRoundingMode(RoundingMode.HALF_UP);
 
     final long userPluginAccessCount =
         pluginRequestRepo.getUserPluginAccessCount(userEmail, beginTime, endTime);
     stats.setAccessCount(userPluginAccessCount);
-    if (userPluginAccessCount > 1000) {
-      stats.setAccessCountDesc(df.format(userPluginAccessCount / 1000f) + " K");
-    } else if (userPluginAccessCount > 1000000) {
-      stats.setAccessCountDesc(df.format(userPluginAccessCount / 1000000f) + " M");
-    } else {
-      stats.setAccessCountDesc(df.format(userPluginAccessCount));
-    }
-
+    stats.setAccessCountDesc(MathUtil.toHumanReadableString(userPluginAccessCount,
+        new long[] {1000}, new String[] {"", " K", " M", " B"}));
     final double avg = pluginRequestRepo.getUserPluginTimeUsageAvg(userEmail, beginTime, endTime);
     stats.setTimeUsageAvg(avg);
-    if (avg > 1000f) {
-      stats.setTimeUsageAvgDesc(df.format(avg / 1000f) + " s");
-    } else if (avg > (1000f * 60)) {
-      stats.setTimeUsageAvgDesc(df.format(avg / (1000f * 60)) + " m");
-    } else if (avg > (1000f * 60 * 60)) {
-      stats.setTimeUsageAvgDesc(df.format(avg / (1000f * 60 * 60)) + " h");
-    } else if (avg > (1000f * 60 * 60 * 24)) {
-      stats.setTimeUsageAvgDesc(df.format(avg / (1000f * 60 * 60 * 24)) + " d");
-    } else {
-      stats.setTimeUsageAvgDesc(df.format(avg) + " ms");
-    }
+    stats.setTimeUsageAvgDesc(MathUtil.toHumanReadableString(avg, new long[] {1000, 60, 60, 24},
+        new String[] {" ms", "s", "min", "h", "d"}));
 
     final float failures =
         pluginRequestRepo.count(PluginRequestSpecs.userPluginRequests(userEmail, false));
-    final float faultRate = failures / userPluginAccessCount;
-    stats.setFaultRate((int) (faultRate * 100));
+    if (userPluginAccessCount == 0) {
+      stats.setFaultRate(0);
+    } else {
+      final float faultRate = failures / userPluginAccessCount;
+      stats.setFaultRate((int) (faultRate * 100));
+    }
 
     final long totalCount = pluginRequestRepo.count();
-    final float usageRage = ((float) userPluginAccessCount) / totalCount;
-    stats.setUsageRage((int) (usageRage * 100));
+    if (totalCount == 0) {
+      stats.setUsageRage(0);
+    } else {
+      final float usageRage = ((float) userPluginAccessCount) / totalCount;
+      stats.setUsageRage((int) (usageRage * 100));
+    }
 
     final long totalBytes = pluginRequestRepo.getPluginTotalDataBytes(beginTime, endTime);
-    final long userPluginBytes =
-        pluginRequestRepo.getUserPluginDataBytes(userEmail, beginTime, endTime);
-    final float dataShare = ((float) userPluginBytes) / totalBytes;
-    stats.setDataShare((int) (dataShare * 100));
+    if (totalBytes == 0) {
+      stats.setDataShare(0);
+    } else {
+      final long userPluginBytes =
+          pluginRequestRepo.getUserPluginDataBytes(userEmail, beginTime, endTime);
+      final float dataShare = ((float) userPluginBytes) / totalBytes;
+      stats.setDataShare((int) (dataShare * 100));
+    }
 
     stats.setChannelRequest(
         pluginRequestRepo.getRequestCountGroupByChannel(userEmail, beginTime, endTime));
@@ -442,4 +434,53 @@ public class PluginService {
     return pluginRequestRepo.getRequestCountAndVolume(startTime, endTime);
   }
 
+  /**
+   * 获取已安装的插件总数。
+   *
+   * @return 插件总数
+   * @author hankai
+   * @since Jan 5, 2017 9:49:23 AM
+   */
+  public long getNumberOfPlugins() {
+    return pluginRepo.count();
+  }
+
+  /**
+   * 获取开发者数量。
+   *
+   * @return 开发者总数
+   * @author hankai
+   * @since Jan 5, 2017 9:54:26 AM
+   */
+  public long getNumberOfDevelopers() {
+    return pluginPackageRepo.countDevelopers();
+  }
+
+  /**
+   * 获取插件访问的平均用时（毫秒）。
+   *
+   * @return 平均用时
+   * @author hankai
+   * @since Jan 5, 2017 9:58:06 AM
+   */
+  public double getResponseTimeAverage() {
+    return pluginRequestRepo.getResponseTimeAvg();
+  }
+
+  /**
+   * 获取系统已安装的插件总故障率（百分比）。
+   *
+   * @return 总故障率
+   * @author hankai
+   * @since Jan 5, 2017 10:13:33 AM
+   */
+  public double getRequestFaultRate() {
+    final long all = pluginRequestRepo.count();
+    if (all == 0) {
+      return 0.0f;
+    }
+    final long failures = pluginRequestRepo.count(PluginRequestSpecs.failedRequests());
+    final double rate = (((double) failures) / ((double) all)) * 100;
+    return rate;
+  }
 }
