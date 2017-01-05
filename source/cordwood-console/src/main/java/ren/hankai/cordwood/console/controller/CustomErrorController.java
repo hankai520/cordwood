@@ -50,11 +50,6 @@ public class CustomErrorController implements ErrorController {
     return mav;
   }
 
-  @ExceptionHandler({CookieTheftException.class})
-  public String handleCookieTheftException(HttpServletRequest request, Exception exception) {
-    return "redirect:" + Route.BG_LOGIN;
-  }
-
   /**
    * 处理控制器中产生的异常。
    *
@@ -67,9 +62,14 @@ public class CustomErrorController implements ErrorController {
   @ExceptionHandler({Exception.class, Error.class})
   @RequestMapping(Route.ERROR_PREFIX)
   public ModelAndView handleException(HttpServletRequest request, Exception exception) {
-    final ModelAndView mav = new ModelAndView("error.html");
-    mav.addObject("exception", exception);
-    mav.addObject("errors", exception.toString());
+    final ModelAndView mav = new ModelAndView();
+    if (exception instanceof CookieTheftException) {
+      mav.setViewName("redirect:" + Route.BG_LOGIN);
+    } else {
+      mav.setViewName("error.html");
+      mav.addObject("exception", exception);
+      mav.addObject("errors", exception.toString());
+    }
     logger.warn(request.getRequestURL().toString(), exception);
     return mav;
   }

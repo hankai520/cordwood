@@ -3,7 +3,8 @@ package ren.hankai.cordwood.plugin;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.api.PluginLoader;
@@ -44,6 +45,27 @@ public final class PluginPackage {
   private ClassLoader classLoader;
   private final List<Plugin> plugins = new ArrayList<>();
 
+  private void escapeSpecialCharacters() {
+    if (StringUtils.isNotEmpty(identifier)) {
+      identifier = StringEscapeUtils.escapeHtml4(identifier);
+    }
+    if (StringUtils.isNotEmpty(groupId)) {
+      groupId = StringEscapeUtils.escapeHtml4(groupId);
+    }
+    if (StringUtils.isNotEmpty(artifactId)) {
+      artifactId = StringEscapeUtils.escapeHtml4(artifactId);
+    }
+    if (StringUtils.isNotEmpty(version)) {
+      version = StringEscapeUtils.escapeHtml4(version);
+    }
+    if (StringUtils.isNotEmpty(developer)) {
+      developer = StringEscapeUtils.escapeHtml4(developer);
+    }
+    if (StringUtils.isNotEmpty(description)) {
+      description = StringEscapeUtils.escapeHtml4(description);
+    }
+  }
+
   public PluginPackage() {}
 
   /**
@@ -75,6 +97,7 @@ public final class PluginPackage {
     }
     configClass = attributes.getValue(PluginLoader.PLUGIN_SPRING_CONFIG_CLASS);
     this.basePackages = basePackages.split(",");
+    escapeSpecialCharacters();
   }
 
   /**

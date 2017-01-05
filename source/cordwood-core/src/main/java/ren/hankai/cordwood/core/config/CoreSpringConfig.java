@@ -60,7 +60,7 @@ public class CoreSpringConfig {
 
   /**
    * Ehcache 缓存工厂。
-   * 
+   *
    * @return Ehcache 缓存工厂
    * @author hankai
    * @since Dec 26, 2016 11:33:58 AM
@@ -76,7 +76,7 @@ public class CoreSpringConfig {
 
   /**
    * Ehcache 管理器。
-   * 
+   *
    * @param factory 缓存工厂
    * @return Ehcache 管理器
    * @author hankai

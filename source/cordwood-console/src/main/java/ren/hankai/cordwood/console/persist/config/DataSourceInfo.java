@@ -13,7 +13,7 @@ package ren.hankai.cordwood.console.persist.config;
  * @version 1.0
  * @since Aug 18, 2016 2:29:26 PM
  */
-public final class DataSourceInfo {
+public class DataSourceInfo {
 
   private String databasePlatform; // 数据库平台
   private String[] entityBasePackages; // 实体类基包

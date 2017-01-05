@@ -13,7 +13,7 @@ jar {
             "Artifact-Id": "plugin.pojo",
             "Implementation-Version": mainVersion,
             "Developer": "cfg@sparksoft.com.cn",
-            "Description": "基于POJO的示例插件集合",
+            "Description": "<strong>基于POJO的示例插件集合</strong>",
             "Plugin-Packages": "ren.hankai.cordwood.plugin"
         )
     }

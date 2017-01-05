@@ -37,7 +37,7 @@ dependencies {
     compile "commons-io:commons-io:2.2"
     compile "com.fasterxml.jackson.core:jackson-databind:2.4.6"
     compile "commons-codec:commons-codec:1.9"
-    compile "commons-lang:commons-lang:2.6"
+    compile "org.apache.commons:commons-lang3:3.4"
     compile "net.sf.ehcache:ehcache:2.10.3"
 
     testCompile "org.springframework:spring-test:${springVersion}"

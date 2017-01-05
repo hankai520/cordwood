@@ -1,6 +1,8 @@
 
 package ren.hankai.cordwood.plugin;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -34,6 +36,27 @@ public final class Plugin {
   private Map<String, PluginFunction> functions = new HashMap<>();
   private MessageSource messageSource;
 
+  private void escapeSpecialCharacters() {
+    if (StringUtils.isNotEmpty(packageId)) {
+      packageId = StringEscapeUtils.escapeHtml4(packageId);
+    }
+    if (StringUtils.isNotEmpty(name)) {
+      name = StringEscapeUtils.escapeHtml4(name);
+    }
+    if (StringUtils.isNotEmpty(displayName)) {
+      displayName = StringEscapeUtils.escapeHtml4(displayName);
+    }
+    if (StringUtils.isNotEmpty(version)) {
+      version = StringEscapeUtils.escapeHtml4(version);
+    }
+    if (StringUtils.isNotEmpty(developer)) {
+      developer = StringEscapeUtils.escapeHtml4(developer);
+    }
+    if (StringUtils.isNotEmpty(description)) {
+      description = StringEscapeUtils.escapeHtml4(description);
+    }
+  }
+
   public Plugin() {}
 
   /**
@@ -64,6 +87,7 @@ public final class Plugin {
     this.name = name;
     instance = pluginInstance;
     messageSource = ms;
+    escapeSpecialCharacters();
   }
 
   /**

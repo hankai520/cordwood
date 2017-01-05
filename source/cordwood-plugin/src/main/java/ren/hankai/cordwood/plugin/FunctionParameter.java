@@ -1,6 +1,9 @@
 
 package ren.hankai.cordwood.plugin;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import ren.hankai.cordwood.plugin.api.annotation.Optional;
 
 import java.lang.reflect.Parameter;
@@ -17,11 +20,17 @@ public class FunctionParameter {
   private String description;
   private Parameter actualParameter;
 
+  private void escapeSpecialCharacters() {
+    if (StringUtils.isNotEmpty(description)) {
+      description = StringEscapeUtils.escapeHtml4(description);
+    }
+  }
+
   public FunctionParameter() {}
 
   /**
    * 构造插件功能参数。
-   * 
+   *
    * @param plugin 插件
    * @param function 插件功能
    * @param actualParameter 功能对应的方法参数
@@ -32,6 +41,7 @@ public class FunctionParameter {
         String.format("%s.%s.%s", plugin.getName(), function.getName(), actualParameter.getName());
     description = plugin.getMessageSource().getMessage(code, null, null);
     this.actualParameter = actualParameter;
+    escapeSpecialCharacters();
   }
 
   /**

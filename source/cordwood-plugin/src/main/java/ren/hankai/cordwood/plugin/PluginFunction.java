@@ -1,7 +1,8 @@
 
 package ren.hankai.cordwood.plugin;
 
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import ren.hankai.cordwood.plugin.api.annotation.Functional;
 import ren.hankai.cordwood.plugin.api.annotation.HeavyWeight;
@@ -29,6 +30,15 @@ public final class PluginFunction {
   private boolean checkAccessToken = false;
   private FunctionParameter[] parameters;
 
+  private void escapeSpecialCharacters() {
+    if (StringUtils.isNotEmpty(name)) {
+      name = StringEscapeUtils.escapeHtml4(name);
+    }
+    if (StringUtils.isNotEmpty(description)) {
+      description = StringEscapeUtils.escapeHtml4(description);
+    }
+  }
+
   public PluginFunction() {}
 
   /**
@@ -54,6 +64,7 @@ public final class PluginFunction {
         String.format("%s.%s.%s", owner.getName(), name, Functional.FUNCTION_DESCRIPTION_I18N_KEY);
     description = owner.getMessageSource().getMessage(code, null, null);
     this.method = method;
+    escapeSpecialCharacters();
   }
 
   /**
