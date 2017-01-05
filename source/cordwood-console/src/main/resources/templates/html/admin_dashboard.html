@@ -96,25 +96,45 @@
                                         <h5><i class="fa fa-database"></i> <strong>服务器资源使用情况</strong></h5>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <h5>内存 (1.2G / 4G) <small class="pull-right">已用 30%</small></h5>
+                                                <h5>内存 (
+                                                    <span th:text="${data.usedMemoryDesc}">1.2GB</span> / 
+                                                    <span th:text="${data.totalMemoryDesc}">4GB</span>) 
+                                                    <small class="pull-right">已用 
+                                                        <span th:text="${data.memoryUsage}">30</span>%
+                                                    </small>
+                                                </h5>
                                                 <div class="progress progress-sm">
-                                                    <div class="progress-bar progress-bar-success" style="width: 30%"></div>
+                                                    <div class="progress-bar progress-bar-success" style="width: 30%;"
+                                                    th:style="${'width: '+data.memoryUsage+'%;'}"></div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <h5>硬盘 (63G / 1.2T) <small class="pull-right">已用 5.1%</small></h5>
+                                                <h5>硬盘 (
+                                                    <span th:text="${data.usedStorageDesc}">63GB</span> / 
+                                                    <span th:text="${data.totalStorageDesc}">1.2TB</span>) 
+                                                    <small class="pull-right">已用 
+                                                        <span th:text="${data.storageUsage}">5.1</span>%
+                                                    </small>
+                                                </h5>
                                                 <div class="progress progress-sm">
-                                                    <div class="progress-bar progress-bar-blue" style="width: 5.1%"></div>
+                                                    <div class="progress-bar progress-bar-blue" style="width: 5.1%;"
+                                                    th:style="${'width: '+data.storageUsage+'%;'}"></div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <h5>带宽 (6.7G / 7.2G) <small class="pull-right">近1小时均值 46%</small></h5>
+                                                <h5>日均流量 (
+                                                    <span th:text="${data.dataVolumeDesc}">6G</span>)<small class="pull-right"></small>
+                                                    <small class="pull-right"> 
+                                                        <span th:text="${data.dataVolumePercent}">5.1</span>%
+                                                    </small>
+                                                </h5>
                                                 <div class="progress progress-sm">
-                                                    <div class="progress-bar progress-bar-warning" style="width: 46%"></div>
+                                                    <div class="progress-bar progress-bar-warning" style="width: 46%;"
+                                                    th:style="${'width: '+data.dataVolumePercent}+'%;'"></div>
                                                 </div>
                                             </div>
                                         </div>

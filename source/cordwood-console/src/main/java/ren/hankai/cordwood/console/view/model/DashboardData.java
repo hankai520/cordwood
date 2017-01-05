@@ -3,6 +3,9 @@ package ren.hankai.cordwood.console.view.model;
 
 import ren.hankai.cordwood.core.util.MathUtil;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 /**
  * 仪表盘页面所需数据。
  *
@@ -18,23 +21,136 @@ public class DashboardData {
   private double faultRate; // 故障率
   private double usedMemory; // 已用内存
   private double totalMemory; // 总内存
-  private double memoryUsage; // 内存使用占比
   private double usedStorage; // 已用硬盘存储空间
   private double totalStorage; // 硬盘总存储空间
-  private double storageUsage; // 存储空间使用率
   private double dataVolume; // 日均数据量
-  private double dataVolumePercent; // 日均数据量百分比（手工设置上限值）
 
   /**
    * 平均响应时间描述。
-   * 
-   * @return 平均响应时间描述。
+   *
+   * @return 平均响应时间描述
    * @author hankai
    * @since Jan 5, 2017 10:52:44 AM
    */
   public String getResponseTimeDesc() {
     return MathUtil.toHumanReadableString(responseTime, new long[] {1000, 60, 60, 24},
         new String[] {"ms", "s", "min", "h", "d"});
+  }
+
+  /**
+   * 获取已用内存描述。
+   *
+   * @return 已用内存描述
+   * @author hankai
+   * @since Jan 5, 2017 1:17:26 PM
+   */
+  public String getUsedMemoryDesc() {
+    return MathUtil.toHumanReadableString(usedMemory, new long[] {1024},
+        new String[] {"B", "KB", "MB", "GB", "TB"});
+  }
+
+  /**
+   * 获取内存总大小描述。
+   *
+   * @return 内存总大小描述
+   * @author hankai
+   * @since Jan 5, 2017 1:17:49 PM
+   */
+  public String getTotalMemoryDesc() {
+    return MathUtil.toHumanReadableString(totalMemory, new long[] {1024},
+        new String[] {"B", "KB", "MB", "GB", "TB"});
+  }
+
+  /**
+   * 获取内存使用率描述。
+   *
+   * @return 内存使用率百分比
+   * @author hankai
+   * @since Jan 5, 2017 1:10:32 PM
+   */
+  public String getMemoryUsage() {
+    if (totalMemory > 0) {
+      final double usage = (usedMemory / totalMemory) * 100;
+      final DecimalFormat df = new DecimalFormat();
+      df.setMaximumFractionDigits(2);
+      df.setMaximumIntegerDigits(3);
+      df.setRoundingMode(RoundingMode.HALF_UP);
+      return df.format(usage);
+    }
+    return "0";
+  }
+
+  /**
+   * 获取系统已使用存储空间大小的描述。
+   *
+   * @return 系统已使用存储空间大小的描述
+   * @author hankai
+   * @since Jan 5, 2017 1:48:21 PM
+   */
+  public String getUsedStorageDesc() {
+    return MathUtil.toHumanReadableString(usedStorage, new long[] {1024},
+        new String[] {"B", "KB", "MB", "GB", "TB"});
+  }
+
+  /**
+   * 获取系统存储空间总大小描述。
+   *
+   * @return 系统存储空间总大小描述
+   * @author hankai
+   * @since Jan 5, 2017 1:48:23 PM
+   */
+  public String getTotalStorageDesc() {
+    return MathUtil.toHumanReadableString(totalStorage, new long[] {1024},
+        new String[] {"B", "KB", "MB", "GB", "TB"});
+  }
+
+  /**
+   * 获取存储空间使用率。
+   *
+   * @return 存储空间使用率百分比
+   * @author hankai
+   * @since Jan 5, 2017 1:11:37 PM
+   */
+  public String getStorageUsage() {
+    if (totalStorage > 0) {
+      final double usage = (usedStorage / totalStorage) * 100;
+      final DecimalFormat df = new DecimalFormat();
+      df.setMaximumFractionDigits(2);
+      df.setMaximumIntegerDigits(3);
+      df.setRoundingMode(RoundingMode.HALF_UP);
+      return df.format(usage);
+    }
+    return "0";
+  }
+
+  /**
+   * 获取日均流量描述。
+   *
+   * @return 日均流量描述
+   * @author hankai
+   * @since Jan 5, 2017 2:45:49 PM
+   */
+  public String getDataVolumeDesc() {
+    return MathUtil.toHumanReadableString(dataVolume, new long[] {1024},
+        new String[] {"B", "KB", "MB", "GB", "TB"});
+  }
+
+  /**
+   * 获取日均流量与流量上限之比（百分比）。
+   *
+   * @return 日均流量与流量上限之比（百分比）
+   * @author hankai
+   * @since Jan 5, 2017 2:54:51 PM
+   */
+  public String getDataVolumePercent() {
+    final DecimalFormat df = new DecimalFormat();
+    df.setMaximumFractionDigits(3);
+    df.setMaximumIntegerDigits(3);
+    df.setRoundingMode(RoundingMode.HALF_UP);
+    // TODO: 硬编码的日均流量上限
+    final long max = 1024 * 1024 * 6;// 6MB
+    final double percent = (dataVolume / max) * 100;
+    return df.format(percent);
   }
 
   /**
@@ -145,23 +261,6 @@ public class DashboardData {
     this.totalMemory = totalMemory;
   }
 
-  /**
-   * 获取 memoryUsage 字段的值。
-   *
-   * @return memoryUsage 字段值
-   */
-  public double getMemoryUsage() {
-    return memoryUsage;
-  }
-
-  /**
-   * 设置 memoryUsage 字段的值。
-   *
-   * @param memoryUsage memoryUsage 字段的值
-   */
-  public void setMemoryUsage(double memoryUsage) {
-    this.memoryUsage = memoryUsage;
-  }
 
   /**
    * 获取 usedStorage 字段的值。
@@ -200,24 +299,6 @@ public class DashboardData {
   }
 
   /**
-   * 获取 storageUsage 字段的值。
-   *
-   * @return storageUsage 字段值
-   */
-  public double getStorageUsage() {
-    return storageUsage;
-  }
-
-  /**
-   * 设置 storageUsage 字段的值。
-   *
-   * @param storageUsage storageUsage 字段的值
-   */
-  public void setStorageUsage(double storageUsage) {
-    this.storageUsage = storageUsage;
-  }
-
-  /**
    * 获取 dataVolume 字段的值。
    *
    * @return dataVolume 字段值
@@ -234,23 +315,4 @@ public class DashboardData {
   public void setDataVolume(double dataVolume) {
     this.dataVolume = dataVolume;
   }
-
-  /**
-   * 获取 dataVolumePercent 字段的值。
-   *
-   * @return dataVolumePercent 字段值
-   */
-  public double getDataVolumePercent() {
-    return dataVolumePercent;
-  }
-
-  /**
-   * 设置 dataVolumePercent 字段的值。
-   *
-   * @param dataVolumePercent dataVolumePercent 字段的值
-   */
-  public void setDataVolumePercent(double dataVolumePercent) {
-    this.dataVolumePercent = dataVolumePercent;
-  }
-
 }

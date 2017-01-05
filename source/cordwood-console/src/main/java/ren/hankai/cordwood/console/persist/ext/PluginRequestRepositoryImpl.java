@@ -74,7 +74,9 @@ public class PluginRequestRepositoryImpl implements PluginRequestRepositoryCusto
     cq.multiselect(
         cb.sum(root.get("requestBytes")).alias("requestBytes"),
         cb.sum(root.get("responseBytes")).alias("responseBytes"));
-    cq.where(cb.between(root.get("createTime"), beginTime, endTime));
+    if ((beginTime != null) && (endTime != null)) {
+      cq.where(cb.between(root.get("createTime"), beginTime, endTime));
+    }
     final Tuple result = entityManager.createQuery(cq).getSingleResult();
     Long reqBytes = result.get("requestBytes", Long.class);
     reqBytes = (reqBytes == null) ? 0 : reqBytes;

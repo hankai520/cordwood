@@ -483,4 +483,18 @@ public class PluginService {
     final double rate = (((double) failures) / ((double) all)) * 100;
     return rate;
   }
+
+  /**
+   * 计算日均数据流量。
+   * 
+   * @return 日均数据流量
+   * @author hankai
+   * @since Jan 5, 2017 2:42:52 PM
+   */
+  public double getDataVolumeDailyAvg() {
+    double dataVolume = pluginRequestRepo.getPluginTotalDataBytes(null, null);
+    final long days = pluginRequestRepo.getNumberOfDays();
+    dataVolume = dataVolume / days;
+    return dataVolume;
+  }
 }

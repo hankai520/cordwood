@@ -8,6 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ren.hankai.cordwood.console.config.Route;
 import ren.hankai.cordwood.console.service.PluginService;
 import ren.hankai.cordwood.console.view.model.DashboardData;
+import ren.hankai.cordwood.core.util.OsUtil;
 import ren.hankai.cordwood.web.breadcrumb.NavigationItem;
 
 /**
@@ -37,6 +38,11 @@ public class DashboardController extends BaseController {
     dd.setNumberOfDevelopers(pluginService.getNumberOfDevelopers());
     dd.setResponseTime(pluginService.getResponseTimeAverage());
     dd.setFaultRate(pluginService.getRequestFaultRate());
+    dd.setTotalMemory(OsUtil.getSystemTotalRamSize());
+    dd.setUsedMemory(dd.getTotalMemory() - OsUtil.getSystemFreeRamSize());
+    dd.setTotalStorage(OsUtil.getSystemTotalHdSize());
+    dd.setUsedStorage(dd.getTotalStorage() - OsUtil.getSystemFreeHdSize());
+    dd.setDataVolume(pluginService.getDataVolumeDailyAvg());
     mav.addObject("data", dd);
     return mav;
   }

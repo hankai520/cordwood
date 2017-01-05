@@ -28,7 +28,7 @@ public final class MathUtil {
     int radixIndex = 0;
     while ((value >= radixes[radixIndex]) && (unitIndex < units.length)) {
       value /= radixes[radixIndex];
-      if (radixIndex < radixes.length) {
+      if (radixIndex < (radixes.length - 1)) {
         radixIndex++;
       }
       unitIndex++;
