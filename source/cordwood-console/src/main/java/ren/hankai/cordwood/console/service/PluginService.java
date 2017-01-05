@@ -4,7 +4,7 @@ package ren.hankai.cordwood.console.service;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -348,11 +348,11 @@ public class PluginService {
         pluginRequestRepo.getUserPluginAccessCount(userEmail, beginTime, endTime);
     stats.setAccessCount(userPluginAccessCount);
     stats.setAccessCountDesc(MathUtil.toHumanReadableString(userPluginAccessCount,
-        new long[] {1000}, new String[] {"", " K", " M", " B"}));
+        new long[] { 1000 }, new String[] { "", " K", " M", " B" }));
     final double avg = pluginRequestRepo.getUserPluginTimeUsageAvg(userEmail, beginTime, endTime);
     stats.setTimeUsageAvg(avg);
-    stats.setTimeUsageAvgDesc(MathUtil.toHumanReadableString(avg, new long[] {1000, 60, 60, 24},
-        new String[] {" ms", "s", "min", "h", "d"}));
+    stats.setTimeUsageAvgDesc(MathUtil.toHumanReadableString(avg, new long[] { 1000, 60, 60, 24 },
+        new String[] { " ms", "s", "min", "h", "d" }));
 
     final float failures =
         pluginRequestRepo.count(PluginRequestSpecs.userPluginRequests(userEmail, false));
@@ -486,7 +486,7 @@ public class PluginService {
 
   /**
    * 计算日均数据流量。
-   * 
+   *
    * @return 日均数据流量
    * @author hankai
    * @since Jan 5, 2017 2:42:52 PM

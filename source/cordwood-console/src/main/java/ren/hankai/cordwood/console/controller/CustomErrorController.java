@@ -1,6 +1,6 @@
 package ren.hankai.cordwood.console.controller;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ErrorController;
@@ -59,7 +59,7 @@ public class CustomErrorController implements ErrorController {
    * @author hankai
    * @since Dec 7, 2016 3:45:39 PM
    */
-  @ExceptionHandler({Exception.class, Error.class})
+  @ExceptionHandler({ Exception.class, Error.class })
   @RequestMapping(Route.ERROR_PREFIX)
   public ModelAndView handleException(HttpServletRequest request, Exception exception) {
     final ModelAndView mav = new ModelAndView();

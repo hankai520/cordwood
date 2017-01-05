@@ -7,7 +7,7 @@
 package ren.hankai.cordwood.mobile;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * APP 元数据。

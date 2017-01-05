@@ -1,7 +1,7 @@
 
 package ren.hankai.cordwood.console.persist;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,7 +45,7 @@ public interface AppRepository extends BaseRepository<AppBean, Integer> {
 
     /**
      * 搜索应用。
-     * 
+     *
      * @param keyword 关键字
      * @return 查询条件
      * @author hankai

@@ -6,7 +6,7 @@
 
 package ren.hankai.cordwood.console.persist.config;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -57,7 +57,7 @@ public class JpaConfiguration extends JpaBaseConfiguration {
     final String[] packages = super.getPackagesToScan();
     final String[] customPackages = dataSourceInfo.getEntityBasePackages();
     if ((customPackages != null) && (customPackages.length > 0)) {
-      return (String[]) ArrayUtils.addAll(packages, customPackages);
+      return ArrayUtils.addAll(packages, customPackages);
     }
     return packages;
   }
