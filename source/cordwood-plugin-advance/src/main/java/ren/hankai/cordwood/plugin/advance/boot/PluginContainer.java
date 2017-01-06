@@ -1,15 +1,16 @@
 package ren.hankai.cordwood.plugin.advance.boot;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 
 import ren.hankai.cordwood.core.ApplicationInitializer;
+import ren.hankai.cordwood.core.config.CoreSpringConfig;
 import ren.hankai.cordwood.plugin.advance.AdvancePlugin;
 import ren.hankai.cordwood.plugin.advance.config.PluginBootstrap;
 import ren.hankai.cordwood.plugin.api.PluginRegistry;
@@ -27,10 +28,8 @@ import ren.hankai.cordwood.plugin.support.PluginRequestDispatcher;
  * bean，而这一过程所使用的类加载器并不是由插件容器提供的，因此无法加载到插件所依赖的 jar 包，因而会 导致类加载问题。
  */
 @Profile(PluginRequestDispatcher.PROFILE_STANDALONE_MODE)
-@EnableAutoConfiguration(
-    exclude = {SecurityAutoConfiguration.class})
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @Import({PluginBootstrap.class})
-@ComponentScan(basePackages = "ren.hankai.cordwood")
 @Controller
 public class PluginContainer extends PluginRequestDispatcher {
 
@@ -72,5 +71,9 @@ public class PluginContainer extends PluginRequestDispatcher {
         pluginRegistry.registerTransientPlugin(context.getBean(clazz), true);
       }
     }
+  }
+
+  @Configuration
+  public static class InternalConfig extends CoreSpringConfig {
   }
 }

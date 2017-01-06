@@ -105,6 +105,7 @@ public class SpringablePluginLoader implements PluginLoader {
     configClasses.toArray(classes);
     ctx.register(classes);
     ctx.refresh();
+    ctx.scan(pluginPackage.getBasePackages());
     return ctx;
   }
 

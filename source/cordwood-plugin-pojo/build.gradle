@@ -32,7 +32,6 @@ configurations {
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web:1.4.1.RELEASE")
-    compile "javax.servlet:javax.servlet-api:3.1.0"
     compile project(":cordwood-plugin")
     
     testCompile "org.springframework:spring-aspects:${springVersion}"

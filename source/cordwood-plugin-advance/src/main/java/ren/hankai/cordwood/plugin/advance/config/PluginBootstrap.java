@@ -3,7 +3,6 @@ package ren.hankai.cordwood.plugin.advance.config;
 
 import org.eclipse.persistence.platform.database.HSQLPlatform;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
@@ -35,7 +34,6 @@ import javax.sql.DataSource;
 @EnableJpaRepositories(basePackages = {"ren.hankai.cordwood.plugin"})
 @EnableTransactionManagement
 @Import({PluginConfig.class})
-@ComponentScan(basePackages = "ren.hankai.cordwood.plugin")
 public class PluginBootstrap {
 
   /**
