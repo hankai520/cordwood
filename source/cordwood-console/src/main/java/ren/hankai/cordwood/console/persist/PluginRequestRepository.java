@@ -165,7 +165,7 @@ public interface PluginRequestRepository
    * @since Jan 5, 2017 9:57:09 AM
    */
   @Query(value = "select avg(cast(o.milliseconds as double)) from PluginRequestBean o")
-  public double getResponseTimeAvg();
+  public Double getResponseTimeAvg();
 
   /**
    * 查询有插件访问的天数。
@@ -175,5 +175,5 @@ public interface PluginRequestRepository
    * @since Jan 5, 2017 2:34:24 PM
    */
   @Query(value = "select count(distinct(cast(o.createTime as DATE))) from PluginRequestBean o")
-  public long getNumberOfDays();
+  public Long getNumberOfDays();
 }

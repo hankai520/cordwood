@@ -344,15 +344,19 @@ public class PluginService {
       Date endTime) {
     final PluginRequestStatistics stats = new PluginRequestStatistics();
 
-    final long userPluginAccessCount =
+    final Long userPluginAccessCount =
         pluginRequestRepo.getUserPluginAccessCount(userEmail, beginTime, endTime);
     stats.setAccessCount(userPluginAccessCount);
-    stats.setAccessCountDesc(MathUtil.toHumanReadableString(userPluginAccessCount,
-        new long[] { 1000 }, new String[] { "", " K", " M", " B" }));
-    final double avg = pluginRequestRepo.getUserPluginTimeUsageAvg(userEmail, beginTime, endTime);
-    stats.setTimeUsageAvg(avg);
-    stats.setTimeUsageAvgDesc(MathUtil.toHumanReadableString(avg, new long[] { 1000, 60, 60, 24 },
-        new String[] { " ms", "s", "min", "h", "d" }));
+    if (userPluginAccessCount != null) {
+      stats.setAccessCountDesc(MathUtil.toHumanReadableString(userPluginAccessCount,
+          new long[] {1000}, new String[] {"", " K", " M", " B"}));
+    }
+    final Double avg = pluginRequestRepo.getUserPluginTimeUsageAvg(userEmail, beginTime, endTime);
+    if (avg != null) {
+      stats.setTimeUsageAvg(avg);
+    }
+    stats.setTimeUsageAvgDesc(MathUtil.toHumanReadableString(avg, new long[] {1000, 60, 60, 24},
+        new String[] {" ms", "s", "min", "h", "d"}));
 
     final float failures =
         pluginRequestRepo.count(PluginRequestSpecs.userPluginRequests(userEmail, false));
@@ -371,14 +375,18 @@ public class PluginService {
       stats.setUsageRage((int) (usageRage * 100));
     }
 
-    final long totalBytes = pluginRequestRepo.getPluginTotalDataBytes(beginTime, endTime);
-    if (totalBytes == 0) {
+    final Long totalBytes = pluginRequestRepo.getPluginTotalDataBytes(beginTime, endTime);
+    if ((totalBytes == null) || (totalBytes == 0)) {
       stats.setDataShare(0);
     } else {
-      final long userPluginBytes =
+      final Long userPluginBytes =
           pluginRequestRepo.getUserPluginDataBytes(userEmail, beginTime, endTime);
-      final float dataShare = ((float) userPluginBytes) / totalBytes;
-      stats.setDataShare((int) (dataShare * 100));
+      if (userPluginBytes != null) {
+        final float dataShare = ((float) userPluginBytes) / totalBytes;
+        stats.setDataShare((int) (dataShare * 100));
+      } else {
+        stats.setDataShare(0);
+      }
     }
 
     stats.setChannelRequest(
@@ -464,7 +472,11 @@ public class PluginService {
    * @since Jan 5, 2017 9:58:06 AM
    */
   public double getResponseTimeAverage() {
-    return pluginRequestRepo.getResponseTimeAvg();
+    final Double value = pluginRequestRepo.getResponseTimeAvg();
+    if (value != null) {
+      return value;
+    }
+    return 0;
   }
 
   /**
@@ -492,9 +504,11 @@ public class PluginService {
    * @since Jan 5, 2017 2:42:52 PM
    */
   public double getDataVolumeDailyAvg() {
-    double dataVolume = pluginRequestRepo.getPluginTotalDataBytes(null, null);
-    final long days = pluginRequestRepo.getNumberOfDays();
-    dataVolume = dataVolume / days;
-    return dataVolume;
+    final Long dataVolume = pluginRequestRepo.getPluginTotalDataBytes(null, null);
+    final Long days = pluginRequestRepo.getNumberOfDays();
+    if ((days != null) && (dataVolume != null)) {
+      return ((double) dataVolume) / days;
+    }
+    return 0;
   }
 }

@@ -41,7 +41,7 @@ public class PluginRequestRepositoryImpl implements PluginRequestRepositoryCusto
   private PluginManager pluginManager;
 
   @Override
-  public long getUserPluginAccessCount(String userEmail, Date beginTime, Date endTime) {
+  public Long getUserPluginAccessCount(String userEmail, Date beginTime, Date endTime) {
     final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
     final CriteriaQuery<Long> cq = cb.createQuery(Long.class);
     final Root<PluginRequestBean> root = cq.from(PluginRequestBean.class);
@@ -54,7 +54,7 @@ public class PluginRequestRepositoryImpl implements PluginRequestRepositoryCusto
   }
 
   @Override
-  public double getUserPluginTimeUsageAvg(String userEmail, Date beginTime, Date endTime) {
+  public Double getUserPluginTimeUsageAvg(String userEmail, Date beginTime, Date endTime) {
     final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
     final CriteriaQuery<Double> cq = cb.createQuery(Double.class);
     final Root<PluginRequestBean> root = cq.from(PluginRequestBean.class);
@@ -67,7 +67,7 @@ public class PluginRequestRepositoryImpl implements PluginRequestRepositoryCusto
   }
 
   @Override
-  public long getPluginTotalDataBytes(Date beginTime, Date endTime) {
+  public Long getPluginTotalDataBytes(Date beginTime, Date endTime) {
     final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
     final CriteriaQuery<Tuple> cq = cb.createQuery(Tuple.class);
     final Root<PluginRequestBean> root = cq.from(PluginRequestBean.class);
@@ -86,7 +86,7 @@ public class PluginRequestRepositoryImpl implements PluginRequestRepositoryCusto
   }
 
   @Override
-  public long getUserPluginDataBytes(String userEmail, Date beginTime, Date endTime) {
+  public Long getUserPluginDataBytes(String userEmail, Date beginTime, Date endTime) {
     final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
     final CriteriaQuery<Tuple> cq = cb.createQuery(Tuple.class);
     final Root<PluginRequestBean> root = cq.from(PluginRequestBean.class);

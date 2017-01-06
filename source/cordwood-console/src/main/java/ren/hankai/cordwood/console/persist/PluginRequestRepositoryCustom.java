@@ -28,7 +28,7 @@ public interface PluginRequestRepositoryCustom {
    * @author hankai
    * @since Dec 12, 2016 1:55:20 PM
    */
-  long getUserPluginAccessCount(String userEmail, Date beginTime, Date endTime);
+  Long getUserPluginAccessCount(String userEmail, Date beginTime, Date endTime);
 
   /**
    * 获取用户插件的平均响应时间。
@@ -40,7 +40,7 @@ public interface PluginRequestRepositoryCustom {
    * @author hankai
    * @since Dec 12, 2016 1:40:34 PM
    */
-  double getUserPluginTimeUsageAvg(String userEmail, Date beginTime, Date endTime);
+  Double getUserPluginTimeUsageAvg(String userEmail, Date beginTime, Date endTime);
 
   /**
    * 所有插件的流量和（请求+响应数据字节数）。
@@ -51,7 +51,7 @@ public interface PluginRequestRepositoryCustom {
    * @author hankai
    * @since Dec 12, 2016 1:41:53 PM
    */
-  long getPluginTotalDataBytes(Date beginTime, Date endTime);
+  Long getPluginTotalDataBytes(Date beginTime, Date endTime);
 
   /**
    * 获取用户插件流量和。
@@ -63,7 +63,7 @@ public interface PluginRequestRepositoryCustom {
    * @author hankai
    * @since Dec 12, 2016 1:42:48 PM
    */
-  long getUserPluginDataBytes(String userEmail, Date beginTime, Date endTime);
+  Long getUserPluginDataBytes(String userEmail, Date beginTime, Date endTime);
 
   /**
    * 获取按插件分组汇总后的访问统计信息。
@@ -75,7 +75,7 @@ public interface PluginRequestRepositoryCustom {
    * @author hankai
    * @since Dec 12, 2016 1:26:24 PM
    */
-  public List<SummarizedRequest> getRequestsGroupByPlugin(String userEmail, Date beginTime,
+  List<SummarizedRequest> getRequestsGroupByPlugin(String userEmail, Date beginTime,
       Date endTime);
 
   /**
@@ -88,7 +88,7 @@ public interface PluginRequestRepositoryCustom {
    * @author hankai
    * @since Dec 14, 2016 11:37:55 AM
    */
-  public ChannelRequest getRequestCountGroupByChannel(String userEmail, Date beginTime,
+  ChannelRequest getRequestCountGroupByChannel(String userEmail, Date beginTime,
       Date endTime);
 
   /**
@@ -100,5 +100,5 @@ public interface PluginRequestRepositoryCustom {
    * @author hankai
    * @since Jan 3, 2017 1:50:40 PM
    */
-  public List<RequestCountAndVolume> getRequestCountAndVolume(Date beginTime, Date endTime);
+  List<RequestCountAndVolume> getRequestCountAndVolume(Date beginTime, Date endTime);
 }
