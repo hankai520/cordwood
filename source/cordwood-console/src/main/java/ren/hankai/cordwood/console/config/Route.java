@@ -21,7 +21,7 @@ public final class Route {
   public static final String BG_LOGOUT = BACKGROUND_PREFIX + "/logout";
   public static final String BG_MY_ACCOUNT = BACKGROUND_PREFIX + "/my_account";
   public static final String BG_MY_PLUGIN_STATS = BACKGROUND_PREFIX + "/my_plugin_stats.json";
-  public static final String BG_MY_PLUGINS = BACKGROUND_PREFIX + "/my_plugins";
+  public static final String BG_MY_PLUGIN_PACKAGES = BACKGROUND_PREFIX + "/my_plugin_packages";
   public static final String BG_MY_PLUGIN_LOGS = BACKGROUND_PREFIX + "/my_plugin_logs";
   public static final String BG_MY_PLUGIN_LOGS_JSON = BACKGROUND_PREFIX + "/my_plugin_logs.json";
   public static final String BG_MY_PROFILE = BACKGROUND_PREFIX + "/my_profile";

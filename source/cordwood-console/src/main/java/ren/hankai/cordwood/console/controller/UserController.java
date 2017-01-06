@@ -108,16 +108,16 @@ public class UserController extends BaseController {
   }
 
   /**
-   * 显示当前登录的用户所开发的插件。
+   * 显示当前登录的用户所开发的插件包。
    *
    * @return 插件列表页面
    * @author hankai
    * @since Dec 26, 2016 11:12:00 AM
    */
   @NavigationItem(label = "nav.my.plugins", parent = "nav.my.account")
-  @GetMapping(Route.BG_MY_PLUGINS)
-  public ModelAndView myPlugins() {
-    final ModelAndView mav = new ModelAndView("admin_my_plugins.html");
+  @GetMapping(Route.BG_MY_PLUGIN_PACKAGES)
+  public ModelAndView myPluginPackages() {
+    final ModelAndView mav = new ModelAndView("admin_my_plugin_packages.html");
     final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     final UserBean user = (UserBean) auth.getPrincipal();
     final List<PluginPackageBean> list = pluginService.getInstalledPackages(user.getEmail());

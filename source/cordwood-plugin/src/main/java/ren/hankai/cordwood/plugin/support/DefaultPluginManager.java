@@ -181,11 +181,15 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
       final File[] plugins = dir.listFiles();
       if ((plugins != null) && (plugins.length > 0)) {
         for (final File file : plugins) {
-          for (final PluginPackage pp : installedPackages) {
-            if (file.getName().equals(pp.getFileName())) {
-              registerPackage(pp, false);
-              break;
+          try {
+            for (final PluginPackage pp : installedPackages) {
+              if (file.getName().equals(pp.getFileName())) {
+                registerPackage(pp, false);
+                break;
+              }
             }
+          } catch (final Exception ex) {
+            logger.error("Failed to initialize plugin: " + file.getName(), ex);
           }
         }
       }

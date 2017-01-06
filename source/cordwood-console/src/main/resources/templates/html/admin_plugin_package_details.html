@@ -99,6 +99,10 @@
                                                             <li><strong>开发者：</strong><span th:text="${plugin.developer}">XXX</span></li>
                                                         </ul>
                                                         <hr/>
+                                                        <div class="alert alert-block alert-warning" 
+                                                            th:if="${#lists.isEmpty(plugin.features)}">
+                                                            <p><i class="fa fa-exclamation-circle"></i> 插件加载失败，请检查插件是否安装成功。若错误仍持续，请联系管理员！</p>
+                                                        </div>
                                                         <div class="well" th:each="feature : ${plugin.features}">
                                                             <h5><strong th:text="${feature.description}">功能简介</strong></h5>
                                                             <ul class="list-unstyled">
