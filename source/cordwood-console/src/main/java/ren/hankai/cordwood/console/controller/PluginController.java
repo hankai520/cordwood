@@ -228,9 +228,10 @@ public class PluginController extends BaseController {
         }
         if (copiedFiles.size() > 0) {
           for (final File file : copiedFiles) {
-            if (pluginService.installPluginPackage(file.toURI().toURL(), true)) {
-              FileUtils.deleteQuietly(file);
+            if (!pluginService.installPluginPackage(file.toURI().toURL(), true)) {
+              throw new RuntimeException("Failed to install plugin: " + file.getName());
             }
+            FileUtils.deleteQuietly(file);
           }
         }
       }

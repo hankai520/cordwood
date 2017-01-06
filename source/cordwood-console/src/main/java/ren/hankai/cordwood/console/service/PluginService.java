@@ -506,7 +506,7 @@ public class PluginService {
   public double getDataVolumeDailyAvg() {
     final Long dataVolume = pluginRequestRepo.getPluginTotalDataBytes(null, null);
     final Long days = pluginRequestRepo.getNumberOfDays();
-    if ((days != null) && (dataVolume != null)) {
+    if ((days != null) && (dataVolume != null) && (days > 0)) {
       return ((double) dataVolume) / days;
     }
     return 0;

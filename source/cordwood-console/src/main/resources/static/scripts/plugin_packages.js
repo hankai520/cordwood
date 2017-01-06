@@ -91,6 +91,8 @@ requirejs(['main'], function(app) {
       dictInvalidFileType: '文件格式不正确，请上传 .jar 格式的插件包文件！',
       dictRemoveFile: '删除',
       dictResponseError: '上传出现错误！',
+      dictCancelUpload: '取消上传',
+      dictCancelUploadConfirmation: '确定要取消上传？',
       dictFileTooBig: '文件太大！',
       dictFallbackMessage: '您的浏览器不支持拖拽上传！',
       dictDefaultMessage: '拖拽文件来上传',
@@ -100,16 +102,20 @@ requirejs(['main'], function(app) {
         $('#submitBtn').click(function(event) {
           myDropzone.processQueue();
         });
-        this.on("sending", function(file, jqXHR, data) {
+        this.on('sending', function(file, jqXHR, data) {
           var param = $("meta[name='_csrf_param']").attr("content");
           var token = $("meta[name='_csrf']").attr("content");
           data.append(param, token);
         });
-        this.on("success", function(file) {
+        this.on('success', function(file) {
           $("#uploadPlugin").modal('hide');
           $('#dataTable').bootstrapTable('refresh', {silent: true});
           myDropzone.removeFile(file);
           alert('插件上传成功!');
+        });
+        this.on('error', function(file) {
+          myDropzone.removeFile(file);
+          alert('插件上传失败！');
         });
       }
     });
