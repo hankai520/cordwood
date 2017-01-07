@@ -138,15 +138,16 @@ public class DefaultPluginManager implements PluginManager, PluginRegistry {
     final PluginPackage pp = packages.get(packageId);
     if (pp != null) {
       for (final Plugin p : pp.getPlugins()) {
-        pluginLoader.unloadPlugin(p.getInstance());
+        if (!pluginLoader.unloadPlugin(p.getInstance())) {
+          return false;
+        }
         plugins.remove(p.getName());
         pluginEventEmitter.emitEvent(PluginEventEmitter.PLUGIN_UNLOADED, p);
       }
       packages.remove(packageId);
       logger.info(String.format("Unloaded Plugin package [ %s ]", pp.getFileName()));
-      return true;
     }
-    return false;
+    return true;
   }
 
   @Override
