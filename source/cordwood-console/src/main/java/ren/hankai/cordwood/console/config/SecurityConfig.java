@@ -69,7 +69,7 @@ public class SecurityConfig {
           .hasAnyAuthority(PredefinedRoles.ADMIN, PredefinedRoles.CONFIG)
 
           .antMatchers(Route.BG_PLUGIN_LOGS + "/**")
-          .hasAnyAuthority(PredefinedRoles.ADMIN)
+          .hasAnyAuthority(PredefinedRoles.ADMIN, PredefinedRoles.CONFIG)
 
           .antMatchers(Route.BG_USERS + "/**")
           .hasAuthority(PredefinedRoles.ADMIN)
