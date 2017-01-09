@@ -238,7 +238,7 @@ public class UserController extends BaseController {
     try {
       if (avatar == null) {
         final InputStream is =
-            this.getClass().getResourceAsStream("static/images/default_avatar.jpg");
+            this.getClass().getResourceAsStream("/static/images/default_avatar.jpg");
         input = new InputStreamResource(is);
       } else {
         input = new InputStreamResource(new FileInputStream(avatar));
