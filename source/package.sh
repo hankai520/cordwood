@@ -22,6 +22,6 @@ echo 'copying startup scripts ...'
 cp "$PRGDIR"/scripts/* "$PRGDIR"/dist/
 
 echo 'copying README.md ...'
-cp "$PRGDIR"/README.md "$PRGDIR"/dist/
+cp "$PRGDIR"/../README.md "$PRGDIR"/dist/
 
 echo 'done!'
