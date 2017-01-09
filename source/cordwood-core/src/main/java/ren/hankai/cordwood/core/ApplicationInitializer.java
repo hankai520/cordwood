@@ -1,13 +1,16 @@
 
 package ren.hankai.cordwood.core;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.util.ResourceUtils;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -73,13 +76,16 @@ public class ApplicationInitializer {
     if (fileNames == null) {
       return true;
     }
+    InputStream in = null;
+    OutputStream out = null;
     try {
       for (final String fileName : fileNames) {
-        final File srcFile = ResourceUtils.getFile("classpath:support/" + fileName);
-        if (srcFile.exists()) {
+        in = ApplicationInitializer.class.getResourceAsStream("/support/" + fileName);
+        if (in != null) {
           final File destFile = new File(Preferences.getConfigDir() + File.separator + fileName);
           if (!destFile.exists()) {
-            FileCopyUtils.copy(srcFile, destFile);
+            out = new FileOutputStream(destFile);
+            FileCopyUtils.copy(in, out);
             logger.info(String.format("Copied support file: %s", fileName));
           }
         } else {
@@ -90,6 +96,13 @@ public class ApplicationInitializer {
     } catch (final IOException e) {
       logger.error("Error occurred while copying support files.", e);
       return false;
+    } finally {
+      if (out != null) {
+        IOUtils.closeQuietly(out);
+      }
+      if (in != null) {
+        IOUtils.closeQuietly(in);
+      }
     }
   }
 

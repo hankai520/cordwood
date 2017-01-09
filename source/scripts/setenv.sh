@@ -4,10 +4,10 @@
 #
 
 TCP_LISTEN=0.0.0.0
-TCP_PORT=8000
+TCP_PORT=9001
 
 PRGDIR=`dirname "$PRG"`
-APP_HOME=$PRGDIR/../data
+APP_HOME=$PRGDIR/data
 
 # specify absolute path of "java" command here or keep default to use java that configured
 # in environment variables

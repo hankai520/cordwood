@@ -4,7 +4,7 @@ package ren.hankai.cordwood.console.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ResourceUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -38,7 +37,8 @@ import ren.hankai.cordwood.core.util.DateUtil;
 import ren.hankai.cordwood.web.breadcrumb.NavigationItem;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -230,19 +230,24 @@ public class UserController extends BaseController {
    */
   @GetMapping(Route.BG_MY_AVATAR)
   @ResponseBody
-  public ResponseEntity<FileSystemResource> getMyAvatar() {
+  public ResponseEntity<InputStreamResource> getMyAvatar() {
     final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     final UserBean me = (UserBean) auth.getPrincipal();
-    File avatar = userService.getUserAvatar(me);
-    if (avatar == null) {
-      try {
-        avatar = ResourceUtils.getFile("classpath:static/images/default_avatar.jpg");
-      } catch (final FileNotFoundException ex) {
-        logger.warn("Failed to get default avatar file.", ex);
+    final File avatar = userService.getUserAvatar(me);
+    InputStreamResource input = null;
+    try {
+      if (avatar == null) {
+        final InputStream is =
+            this.getClass().getResourceAsStream("static/images/default_avatar.jpg");
+        input = new InputStreamResource(is);
+      } else {
+        input = new InputStreamResource(new FileInputStream(avatar));
       }
+    } catch (final Exception ex) {
+      logger.warn("Failed to get current user's avatar.", ex);
     }
-    if (avatar != null) {
-      return new ResponseEntity<>(new FileSystemResource(avatar), HttpStatus.OK);
+    if (input != null) {
+      return new ResponseEntity<>(input, HttpStatus.OK);
     }
     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
