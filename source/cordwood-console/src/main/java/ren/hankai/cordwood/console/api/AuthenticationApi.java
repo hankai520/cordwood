@@ -12,6 +12,7 @@ import ren.hankai.cordwood.console.api.payload.BusinessErrors;
 import ren.hankai.cordwood.console.config.Route;
 import ren.hankai.cordwood.console.persist.model.AppBean;
 import ren.hankai.cordwood.console.service.AppService;
+import ren.hankai.cordwood.core.api.support.ApiCode;
 import ren.hankai.cordwood.core.api.support.ApiResponse;
 import ren.hankai.cordwood.core.api.support.WebServiceSupport;
 import ren.hankai.cordwood.web.security.AccessAuthenticator;
@@ -60,6 +61,8 @@ public class AuthenticationApi extends WebServiceSupport {
     data.put("accessToken", appToken);
     data.put("expiry", tokenInfo.getExpiryTime() + "");
     response.getBody().setData(data);
+    response.getBody().setSuccess(true);
+    response.setCode(ApiCode.Success);
     return response;
   }
 }
