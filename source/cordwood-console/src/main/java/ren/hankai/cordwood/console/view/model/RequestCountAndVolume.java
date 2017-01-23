@@ -8,8 +8,10 @@ import ren.hankai.cordwood.jackson.TimeInMillisecondSerializer;
 import java.util.Date;
 
 /**
+ * 插件访问次数和访问量。
+ * 
  * @author hankai
- * @version TODO Missing version number
+ * @version 1.0.0
  * @since Jan 3, 2017 1:49:14 PM
  */
 public class RequestCountAndVolume {
