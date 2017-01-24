@@ -15,7 +15,7 @@
 }
 
 .login-box-plain {
-  margin: 50px auto;
+  margin: 30px auto;
   padding: 0px 60px 60px !important;
 }
 
@@ -137,4 +137,10 @@
 .sidebar-menu > ul > li.active > a {
   border-bottom: 1px solid #ffffff !important;
   border-top: 1px solid #ffffff !important;
+}
+
+.navbar .navbar-brand img {
+  height: 40px !important;
+  width: auto !important;
+  top: 5px !important;
 }

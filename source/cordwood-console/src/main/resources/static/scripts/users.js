@@ -54,8 +54,7 @@ requirejs(['main'], function(app) {
           field: 'updateTime',
           title: '更新时间',
           valign: 'middle',
-          sortable: true,
-          visible: false
+          sortable: true
       }, {
           field: 'statusName',
           title: '状态',
@@ -64,9 +63,12 @@ requirejs(['main'], function(app) {
       }, {
           title: '操作',
           valign: 'middle',
+          width: '120px',
           sortable: false,
           formatter: function (value, row, index) {
-              return '<a uid="'+row.id+'" class="text-danger delete-user" href="#">删除</a>';
+            var del = '<a uid="'+row.id+'" class="text-danger delete-user mr-1" href="#">删除</a>';
+            var chpwd = '<a uid="'+row.id+'" class="text-info reset-user-pwd" href="#">修改密码</a>';
+            return del + chpwd;
           }
       }],
       onLoadSuccess: function() {
@@ -82,6 +84,11 @@ requirejs(['main'], function(app) {
              });
            }
         });
+        $('.reset-user-pwd').click(function() {
+          var uid = $(this).attr('uid');
+          var url = '/admin/users/' + uid + '/change_pwd';
+          location.href=url;
+       });
       }
     });
   });

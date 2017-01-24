@@ -444,4 +444,41 @@ public class UserController extends BaseController {
     }
     return new ResponseEntity<>(HttpStatus.OK);
   }
+
+  @NavigationItem(label = "nav.users.reset.pwd", parent = "nav.users")
+  @GetMapping(Route.BG_CHANGE_USER_PWD)
+  public ModelAndView showResetUserPwdForm(@PathVariable("user_id") Integer uid) {
+    final ModelAndView mav = new ModelAndView("admin_reset_user_pwd.html");
+    final UserBean user = userService.getUserById(uid);
+    if (user == null) {
+      mav.setViewName("redirect:/404.html");
+    } else {
+      mav.addObject("user", user);
+    }
+    return mav;
+  }
+
+  @NavigationItem(label = "nav.users.reset.pwd", parent = "nav.users")
+  @PostMapping(Route.BG_CHANGE_USER_PWD)
+  public ModelAndView resetUserPwd(@PathVariable("user_id") Integer uid,
+      @ModelAttribute("user") UserBean user) {
+    final ModelAndView mav = new ModelAndView("admin_reset_user_pwd.html");
+    final UserBean existUser = userService.getUserById(uid);
+    if (existUser == null) {
+      mav.setViewName("redirect:/404.html");
+    } else {
+      try {
+        existUser.setPassword(user.getPassword());
+        existUser.setUpdateTime(new Date());
+        userService.save(existUser);
+        mav.addObject("user", existUser);
+        operationSucceeded(mav);
+      } catch (final Exception ex) {
+        operationFailed(mav);
+        logger.error(Route.BG_CHANGE_USER_PWD, ex);
+      }
+    }
+    return mav;
+  }
+
 }
