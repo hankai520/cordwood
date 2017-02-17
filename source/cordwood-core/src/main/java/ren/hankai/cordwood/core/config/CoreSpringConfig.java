@@ -3,17 +3,18 @@ package ren.hankai.cordwood.core.config;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import net.sf.ehcache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
+import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-
-import net.sf.ehcache.CacheManager;
 import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.core.cache.MethodSignatureKeyGenerator;
 
 /**
  * Spring 核心配置类，用于定义 cordwood-core 所必要的组件。
@@ -88,6 +89,11 @@ public class CoreSpringConfig {
     // 随 JVM 一起关闭
     System.setProperty(CacheManager.ENABLE_SHUTDOWN_HOOK_PROPERTY, "true");
     return cm;
+  }
+
+  @Bean(name = "methodSignatureKeyGenerator")
+  public KeyGenerator keyGenerator() {
+    return new MethodSignatureKeyGenerator();
   }
 
 }

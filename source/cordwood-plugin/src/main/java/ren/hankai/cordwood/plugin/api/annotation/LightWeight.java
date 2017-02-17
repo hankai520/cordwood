@@ -17,6 +17,6 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-@Cacheable(cacheNames = "lightWeightPlugin")
+@Cacheable(cacheNames = "lightWeightPlugin", keyGenerator = "methodSignatureKeyGenerator")
 public @interface LightWeight {
 }

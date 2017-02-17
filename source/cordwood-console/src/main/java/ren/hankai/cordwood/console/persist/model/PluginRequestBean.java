@@ -23,7 +23,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -45,7 +44,6 @@ public class PluginRequestBean implements Serializable {
   private Integer id;
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "pluginName", referencedColumnName = "name", nullable = false)
-  @NotNull
   private PluginBean plugin;
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "appId", referencedColumnName = "id")

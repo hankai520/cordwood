@@ -27,7 +27,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.util.SystemPropertyUtils;
-
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.PluginPackage;
 import ren.hankai.cordwood.plugin.api.PluginLoader;
@@ -36,13 +35,11 @@ import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 import java.beans.Introspector;
 import java.lang.reflect.Modifier;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.PostConstruct;
 
 /**
  * 默认插件加载器，支持基于spring框架的插件。
@@ -58,22 +55,6 @@ public class SpringablePluginLoader implements PluginLoader {
   @Autowired
   private AbstractApplicationContext context;
   private final Map<String, GenericApplicationContext> plugins = new HashMap<>();
-  /**
-   * 共享的类加载器，用于加载插件所依赖的包。
-   */
-  private static ClassLoader sharedClassLoader = null;
-
-  @PostConstruct
-  private void internalInit() {
-    if (sharedClassLoader == null) {
-      final URL[] urls = Preferences.getLibUrls();
-      if ((urls != null) && (urls.length != 0)) {
-        sharedClassLoader = new PluginDependenciesClassLoader(urls, context.getClassLoader());
-      } else {
-        sharedClassLoader = context.getClassLoader();
-      }
-    }
-  }
 
   /**
    * 加载插件包的 spring 上下文。
@@ -182,8 +163,15 @@ public class SpringablePluginLoader implements PluginLoader {
 
   @Override
   public List<Object> loadPlugins(PluginPackage pluginPackage) {
-    final URL[] urls = new URL[] {pluginPackage.getInstallationUrl()};
-    pluginPackage.setClassLoader(new URLClassLoader(urls, sharedClassLoader));
+    final List<URL> urls = new ArrayList<>();
+    urls.add(pluginPackage.getInstallationUrl());
+    final URL[] libUrls = Preferences.getLibUrls();
+    if ((libUrls != null) && (libUrls.length != 0)) {
+      urls.addAll(Arrays.asList(libUrls));
+    }
+    final URL[] urlArray = urls.toArray(new URL[urls.size()]);
+    final PluginClassLoader loader = new PluginClassLoader(urlArray, context.getClassLoader());
+    pluginPackage.setClassLoader(loader);
     /*
      * 设置线程的上下文类加载器，以便在运行时能动态加载插件需要的依赖包，不同插件不共享类加载器。
      */

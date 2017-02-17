@@ -12,18 +12,18 @@ import java.net.URLStreamHandlerFactory;
  * @version 1.0.0
  * @since Dec 26, 2016 4:26:05 PM
  */
-public class PluginDependenciesClassLoader extends URLClassLoader {
+public class PluginClassLoader extends URLClassLoader {
 
-  public PluginDependenciesClassLoader(URL[] urls, ClassLoader parent,
+  public PluginClassLoader(URL[] urls, ClassLoader parent,
       URLStreamHandlerFactory factory) {
     super(urls, parent, factory);
   }
 
-  public PluginDependenciesClassLoader(URL[] urls, ClassLoader parent) {
+  public PluginClassLoader(URL[] urls, ClassLoader parent) {
     super(urls, parent);
   }
 
-  public PluginDependenciesClassLoader(URL[] urls) {
+  public PluginClassLoader(URL[] urls) {
     super(urls);
   }
 
