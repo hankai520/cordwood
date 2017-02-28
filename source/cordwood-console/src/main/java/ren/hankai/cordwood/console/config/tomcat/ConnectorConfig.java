@@ -2,10 +2,10 @@
 package ren.hankai.cordwood.console.config.tomcat;
 
 import org.apache.catalina.connector.Connector;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import ren.hankai.cordwood.core.Preferences;
 
 /**
  * Tomcat Connector 配置。
@@ -17,13 +17,6 @@ import org.springframework.util.StringUtils;
 @Component
 public class ConnectorConfig implements TomcatConnectorCustomizer {
 
-  @Value("${proxy.name}")
-  private String proxyName;
-  @Value("${proxy.port}")
-  private Integer proxyPort;
-  @Value("${proxy.scheme}")
-  private String proxyScheme;
-
   /*
    * 用于自定义 tomcat connector 配置。默认提供 proxy 配置，这将用于将 tomcat 作为反向代理架构下 的后端服务器的场景。
    *
@@ -32,6 +25,9 @@ public class ConnectorConfig implements TomcatConnectorCustomizer {
    */
   @Override
   public void customize(Connector connector) {
+    final String proxyScheme = Preferences.getProxyScheme();
+    final String proxyName = Preferences.getProxyName();
+    final Integer proxyPort = Preferences.getProxyPort();
     if (!StringUtils.isEmpty(proxyScheme) && !StringUtils.isEmpty(proxyName) && (proxyPort != null)
         && (proxyPort > 0)) {
       connector.setProxyName(proxyName);

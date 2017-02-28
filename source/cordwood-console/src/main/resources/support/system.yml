@@ -11,3 +11,10 @@ transferKey: 51f72611acf6df792025ae5ce341b01f
 
 #API 鉴权码有效时长（天）
 apiAccessTokenExpiry: 7
+
+#要绑定的域名
+proxyName: 
+#要绑定的端口
+proxyPort: 
+#要绑定的协议
+proxyScheme: 

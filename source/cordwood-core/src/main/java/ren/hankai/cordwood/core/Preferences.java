@@ -354,4 +354,49 @@ public final class Preferences {
     }
     return null;
   }
+
+  /**
+   * 获取代理服务器域名或IP。
+   *
+   * @return 代理服务器域名或IP
+   * @author hankai
+   * @since Feb 28, 2017 7:21:46 PM
+   */
+  public static String getProxyName() {
+    final Object obj = getSystemPrefs().get("proxyName");
+    if (obj != null) {
+      return obj.toString();
+    }
+    return null;
+  }
+
+  /**
+   * 获取代理服务器端口。
+   *
+   * @return 代理服务器端口
+   * @author hankai
+   * @since Feb 28, 2017 7:22:13 PM
+   */
+  public static Integer getProxyPort() {
+    final Object obj = getSystemPrefs().get("proxyPort");
+    if (obj != null) {
+      return Integer.parseInt(obj.toString());
+    }
+    return null;
+  }
+
+  /**
+   * 获取代理服务器的协议。
+   *
+   * @return 代理服务器协议
+   * @author hankai
+   * @since Feb 28, 2017 7:22:34 PM
+   */
+  public static String getProxyScheme() {
+    final Object obj = getSystemPrefs().get("proxyScheme");
+    if (obj != null) {
+      return obj.toString();
+    }
+    return null;
+  }
 }
