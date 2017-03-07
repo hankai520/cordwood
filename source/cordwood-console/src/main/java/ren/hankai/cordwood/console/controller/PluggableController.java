@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import ren.hankai.cordwood.console.interceptor.PluginRequestInterceptor;
 import ren.hankai.cordwood.console.persist.model.AppBean;
 import ren.hankai.cordwood.console.persist.model.PluginRequestBean;
@@ -59,6 +58,9 @@ public class PluggableController extends PluginRequestDispatcher {
       pr.setApp(app);
     }
     pr.setClientIp(request.getRemoteAddr());
+    if (StringUtils.isEmpty(pr.getClientIp())) {
+      pr.setClientIp(PluginRequestBean.UNKOWN_IP);
+    }
     if (request.getContentLengthLong() > 0) {
       pr.setRequestBytes(request.getContentLengthLong());
     } else {

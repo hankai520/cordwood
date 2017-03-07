@@ -38,6 +38,7 @@ import javax.validation.constraints.Size;
 public class PluginRequestBean implements Serializable {
 
   private static final long serialVersionUID = 1L;
+  public static final String UNKOWN_IP = "unkown ip";
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
