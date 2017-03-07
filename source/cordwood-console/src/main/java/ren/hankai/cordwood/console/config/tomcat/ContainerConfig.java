@@ -8,8 +8,8 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomi
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.web.authentication.rememberme.CookieTheftException;
 import org.springframework.stereotype.Component;
-
 import ren.hankai.cordwood.console.config.Route;
 
 /**
@@ -40,6 +40,11 @@ public class ContainerConfig implements EmbeddedServletContainerCustomizer {
         new ErrorPage(HttpStatus.FORBIDDEN, Route.ERROR_PREFIX + "/403"),
         new ErrorPage(HttpStatus.NOT_FOUND, Route.ERROR_PREFIX + "/404"),
         new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, Route.ERROR_PREFIX + "/500"),
+        /*
+         * cookie被盗用。 或者登陆后cookie中的信息未被持久化到数据库。在使用HSQLDB时，由于HSQLDB不会
+         * 在每次写操作之后都立即将数据写入文件，此时如果断电或服务重启，会导致发回给客户端的cookie中的登录凭证实际上未被持久化，于是刷新页面后可能碰到此异常。
+         */
+        new ErrorPage(CookieTheftException.class, Route.BG_LOGIN),
         // 异常
         new ErrorPage(Exception.class, Route.ERROR_PREFIX),
         new ErrorPage(Error.class, Route.ERROR_PREFIX));
