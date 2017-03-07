@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import ren.hankai.cordwood.console.api.exception.AppNotFoundException;
 import ren.hankai.cordwood.console.api.payload.BusinessErrors;
 import ren.hankai.cordwood.console.config.Route;
@@ -57,9 +56,9 @@ public class AuthenticationApi extends WebServiceSupport {
     interval = ((interval <= 0) || (interval > (60 * 24 * 2))) ? 60 * 24 : interval;
     final TokenInfo tokenInfo = TokenInfo.withinMinutes(appKey, appSk, interval);
     final String appToken = accessAuthenticator.generateAccessToken(tokenInfo);
-    final HashMap<String, String> data = new HashMap<>();
+    final HashMap<String, Object> data = new HashMap<>();
     data.put("accessToken", appToken);
-    data.put("expiry", tokenInfo.getExpiryTime() + "");
+    data.put("expiry", new Long(tokenInfo.getExpiryTime()));
     response.getBody().setData(data);
     response.getBody().setSuccess(true);
     response.setCode(ApiCode.Success);

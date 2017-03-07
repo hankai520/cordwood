@@ -12,11 +12,17 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 import ren.hankai.cordwood.console.PluginInitializer;
+import ren.hankai.cordwood.console.persist.AppRepository;
 import ren.hankai.cordwood.console.persist.PluginPackageRepository;
 import ren.hankai.cordwood.console.persist.PluginRepository;
 import ren.hankai.cordwood.console.persist.PluginRequestRepository;
+import ren.hankai.cordwood.console.persist.model.AppBean;
+import ren.hankai.cordwood.console.persist.model.AppBean.AppPlatform;
+import ren.hankai.cordwood.console.persist.model.AppBean.AppStatus;
 import ren.hankai.cordwood.console.persist.model.PluginBean;
 import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
 import ren.hankai.cordwood.console.persist.model.PluginRequestBean;
@@ -58,6 +64,9 @@ public abstract class ConsoleTestSupport {
   }
 
   @Autowired
+  protected WebApplicationContext ctx;
+  protected MockMvc mockMvc;
+  @Autowired
   private PluginInitializer pluginInitializer;
   @Autowired
   protected PluginPackageRepository pluginPackageRepo;
@@ -67,6 +76,9 @@ public abstract class ConsoleTestSupport {
   protected PluginRequestRepository pluginRequestRepo;
   protected PluginPackageBean pluginPackageBean;
   protected PluginBean pluginBean;
+  @Autowired
+  protected AppRepository appRepo;
+  protected AppBean appBean;
 
   /**
    * 测试用例初始化。
@@ -77,6 +89,8 @@ public abstract class ConsoleTestSupport {
    */
   @Before
   public void setup() throws Exception {
+    mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
+
     pluginInitializer.suspend();
 
     pluginPackageBean = new PluginPackageBean();
@@ -111,11 +125,21 @@ public abstract class ConsoleTestSupport {
     pluginRequest.setChannel(RequestChannel.Desktop);
     pluginRequest.setRequestDigest("test only");
     pluginRequestRepo.save(pluginRequest);
+
+    appBean = new AppBean();
+    appBean.setAppKey("9380234f6107047b87f1278ef1eb5ec6");
+    appBean.setCreateTime(new Date());
+    appBean.setIntroduction("test only");
+    appBean.setName("testApp");
+    appBean.setPlatform(AppPlatform.iOS);
+    appBean.setSecretKey("dc4323fcf41cb73317630e04fd7e5be8");
+    appBean.setStatus(AppStatus.Enabled);
+    appRepo.save(appBean);
   }
 
   /**
    * 测试用例资源释放。
-   * 
+   *
    * @author hankai
    * @since Dec 26, 2016 11:19:11 AM
    */
@@ -124,6 +148,7 @@ public abstract class ConsoleTestSupport {
     pluginRequestRepo.deleteAll();
     pluginRepo.deleteAll();
     pluginPackageRepo.deleteAll();
+    appRepo.deleteAll();
   }
 
 }
