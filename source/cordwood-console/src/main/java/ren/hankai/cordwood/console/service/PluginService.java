@@ -16,7 +16,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
-
 import ren.hankai.cordwood.console.persist.PluginPackageRepository;
 import ren.hankai.cordwood.console.persist.PluginPackageRepository.PluginPackageSpecs;
 import ren.hankai.cordwood.console.persist.PluginRepository;
@@ -367,7 +366,7 @@ public class PluginService {
       stats.setFaultRate((int) (faultRate * 100));
     }
 
-    final long totalCount = pluginRequestRepo.count();
+    final long totalCount = pluginRequestRepo.count(PluginRequestSpecs.count(beginTime, endTime));
     if (totalCount == 0) {
       stats.setUsageRage(0);
     } else {

@@ -4,7 +4,6 @@ package ren.hankai.cordwood.console.persist;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.Query;
-
 import ren.hankai.cordwood.console.persist.model.PluginRequestBean;
 
 import java.util.Date;
@@ -152,6 +151,25 @@ public interface PluginRequestRepository
         public Predicate toPredicate(Root<PluginRequestBean> root, CriteriaQuery<?> query,
             CriteriaBuilder cb) {
           return cb.equal(root.get("succeeded"), false);
+        }
+      };
+    }
+
+    /**
+     * 查询指定时间范围内的插件访问次数。
+     * 
+     * @param beginTime 开始时间
+     * @param endTime 结束时间
+     * @return 查询条件
+     * @author hankai
+     * @since Mar 7, 2017 5:05:50 PM
+     */
+    public static Specification<PluginRequestBean> count(Date beginTime, Date endTime) {
+      return new Specification<PluginRequestBean>() {
+        @Override
+        public Predicate toPredicate(Root<PluginRequestBean> root, CriteriaQuery<?> query,
+            CriteriaBuilder cb) {
+          return cb.between(root.get("createTime"), beginTime, endTime);
         }
       };
     }

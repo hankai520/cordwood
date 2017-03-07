@@ -3,7 +3,6 @@ package ren.hankai.cordwood.console.persist.ext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import ren.hankai.cordwood.console.persist.PluginRequestRepositoryCustom;
 import ren.hankai.cordwood.console.persist.model.PluginRequestBean;
 import ren.hankai.cordwood.console.persist.model.PluginRequestBean.RequestChannel;
@@ -191,5 +190,4 @@ public class PluginRequestRepositoryImpl implements PluginRequestRepositoryCusto
     }
     return data;
   }
-
 }
