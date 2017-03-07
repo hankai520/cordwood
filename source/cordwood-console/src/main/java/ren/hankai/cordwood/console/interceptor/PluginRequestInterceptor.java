@@ -2,6 +2,8 @@
 package ren.hankai.cordwood.console.interceptor;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mobile.device.Device;
@@ -9,7 +11,6 @@ import org.springframework.mobile.device.DeviceUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
 import ren.hankai.cordwood.console.persist.model.PluginRequestBean;
 import ren.hankai.cordwood.console.persist.model.PluginRequestBean.RequestChannel;
 import ren.hankai.cordwood.console.service.PluginService;
@@ -26,6 +27,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Component
 public class PluginRequestInterceptor implements HandlerInterceptor {
+
+  private static final Logger logger = LoggerFactory.getLogger(PluginRequestInterceptor.class);
 
   public static final String PLUGIN_REQUEST = "plugin-request";
   public static final String REQUEST_TIMESTAMP = "request-timestamp";
@@ -70,7 +73,12 @@ public class PluginRequestInterceptor implements HandlerInterceptor {
     } else {
       pr.setChannel(RequestChannel.Other);
     }
-    pluginService.savePluginRequest(pr);
+    try {
+      pluginService.savePluginRequest(pr);
+    } catch (final Exception exception) {
+      logger.error("Failed to save plugin request! Request details are as below:");
+      logger.info(pr.toString());
+    }
   }
 
   /**

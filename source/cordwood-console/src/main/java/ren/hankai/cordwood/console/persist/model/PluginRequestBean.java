@@ -76,6 +76,25 @@ public class PluginRequestBean implements Serializable {
   @Temporal(TemporalType.TIMESTAMP)
   private Date createTime;
 
+  @Override
+  public String toString() {
+    final StringBuilder sb = new StringBuilder();
+    sb.append(String.format("Plugin: %s\n", plugin.getName()));
+    sb.append(String.format("App: %s\n", app == null ? "" : app.getName()));
+    sb.append(String.format("Client IP: %s\n", clientIp));
+    sb.append(String.format("Channel: %s\n", channel.toString()));
+    sb.append(String.format("Url: %s\n", requestUrl));
+    sb.append(String.format("Method: %s\n", requestMethod));
+    sb.append(String.format("Request digest: %s\n", requestDigest == null ? "" : requestDigest));
+    sb.append(String.format("Request bytes: %d\n", requestBytes));
+    sb.append(String.format("Response bytes: %d\n", responseBytes));
+    sb.append(String.format("Response code: %d\n", responseCode));
+    sb.append(String.format("Time usage: %d\n", milliseconds));
+    sb.append(String.format("Succeeded: %s\n", succeeded ? "yes" : "no"));
+    sb.append(String.format("Errors: %s", errors == null ? "" : errors));
+    return sb.toString();
+  }
+
   /**
    * 获取所访问的插件的显示名称。
    *
