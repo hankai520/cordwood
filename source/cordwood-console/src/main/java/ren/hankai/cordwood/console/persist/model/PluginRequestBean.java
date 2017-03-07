@@ -50,7 +50,7 @@ public class PluginRequestBean implements Serializable {
   @JoinColumn(name = "appId", referencedColumnName = "id")
   private AppBean app;
   @Column(length = 40, nullable = false)
-  @Size(min = 1, max = 20)
+  @Size(min = 1, max = 200)
   private String clientIp;
   private RequestChannel channel;
   @Column(length = 400, nullable = false)
@@ -79,7 +79,7 @@ public class PluginRequestBean implements Serializable {
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder();
-    sb.append(String.format("Plugin: %s\n", plugin.getName()));
+    sb.append(String.format("\n\nPlugin: %s\n", plugin.getName()));
     sb.append(String.format("App: %s\n", app == null ? "" : app.getName()));
     sb.append(String.format("Client IP: %s\n", clientIp));
     sb.append(String.format("Channel: %s\n", channel.toString()));
@@ -91,7 +91,7 @@ public class PluginRequestBean implements Serializable {
     sb.append(String.format("Response code: %d\n", responseCode));
     sb.append(String.format("Time usage: %d\n", milliseconds));
     sb.append(String.format("Succeeded: %s\n", succeeded ? "yes" : "no"));
-    sb.append(String.format("Errors: %s", errors == null ? "" : errors));
+    sb.append(String.format("Errors: %s\n\n", errors == null ? "" : errors));
     return sb.toString();
   }
 

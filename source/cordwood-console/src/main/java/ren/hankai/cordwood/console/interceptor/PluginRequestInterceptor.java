@@ -78,6 +78,7 @@ public class PluginRequestInterceptor implements HandlerInterceptor {
     } catch (final Exception exception) {
       logger.error("Failed to save plugin request! Request details are as below:");
       logger.info(pr.toString());
+      logger.error("", exception);
     }
   }
 
