@@ -3,7 +3,6 @@ package ren.hankai.cordwood.plugin.support;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
 import ren.hankai.cordwood.plugin.PluginPackage;
 import ren.hankai.cordwood.plugin.api.PluginValidator;
 

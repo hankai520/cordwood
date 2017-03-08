@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
  * @since Nov 14, 2016 6:33:36 PM
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ ElementType.METHOD })
 @Cacheable(cacheNames = "middleWeightPlugin", keyGenerator = "methodSignatureKeyGenerator")
 public @interface MiddleWeight {
 }

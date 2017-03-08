@@ -3,7 +3,6 @@ package ren.hankai.cordwood.plugin.pojo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
 import ren.hankai.cordwood.plugin.api.PluginResourceLoader;
 import ren.hankai.cordwood.plugin.api.annotation.Functional;
@@ -83,8 +82,8 @@ public class PojoPlugin implements PluginLifeCycleAware, PluginResourceLoader {
     if (url != null) {
       try {
         return url.openStream();
-      } catch (final IOException e) {
-        logger.error(String.format("Failed to open resource: \"%s\"", relativeUrl), e);
+      } catch (final IOException ex) {
+        logger.error(String.format("Failed to open resource: \"%s\"", relativeUrl), ex);
       }
     }
     return null;

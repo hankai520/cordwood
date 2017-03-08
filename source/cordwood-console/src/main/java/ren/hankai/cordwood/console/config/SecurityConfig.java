@@ -6,7 +6,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.authentication.RememberMeServices;
-
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.config.BaseSecurityConfig;
 import ren.hankai.cordwood.plugin.api.annotation.Pluggable;

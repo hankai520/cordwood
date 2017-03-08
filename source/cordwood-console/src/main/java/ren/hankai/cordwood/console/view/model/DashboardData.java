@@ -33,8 +33,8 @@ public class DashboardData {
    * @since Jan 5, 2017 10:52:44 AM
    */
   public String getResponseTimeDesc() {
-    return MathUtil.toHumanReadableString(responseTime, new long[] {1000, 60, 60, 24},
-        new String[] {"ms", "s", "min", "h", "d"});
+    return MathUtil.toHumanReadableString(responseTime, new long[] { 1000, 60, 60, 24 },
+        new String[] { "ms", "s", "min", "h", "d" });
   }
 
   /**
@@ -45,8 +45,8 @@ public class DashboardData {
    * @since Jan 5, 2017 1:17:26 PM
    */
   public String getUsedMemoryDesc() {
-    return MathUtil.toHumanReadableString(usedMemory, new long[] {1024},
-        new String[] {"B", "KB", "MB", "GB", "TB"});
+    return MathUtil.toHumanReadableString(usedMemory, new long[] { 1024 },
+        new String[] { "B", "KB", "MB", "GB", "TB" });
   }
 
   /**
@@ -57,8 +57,8 @@ public class DashboardData {
    * @since Jan 5, 2017 1:17:49 PM
    */
   public String getTotalMemoryDesc() {
-    return MathUtil.toHumanReadableString(totalMemory, new long[] {1024},
-        new String[] {"B", "KB", "MB", "GB", "TB"});
+    return MathUtil.toHumanReadableString(totalMemory, new long[] { 1024 },
+        new String[] { "B", "KB", "MB", "GB", "TB" });
   }
 
   /**
@@ -88,8 +88,8 @@ public class DashboardData {
    * @since Jan 5, 2017 1:48:21 PM
    */
   public String getUsedStorageDesc() {
-    return MathUtil.toHumanReadableString(usedStorage, new long[] {1024},
-        new String[] {"B", "KB", "MB", "GB", "TB"});
+    return MathUtil.toHumanReadableString(usedStorage, new long[] { 1024 },
+        new String[] { "B", "KB", "MB", "GB", "TB" });
   }
 
   /**
@@ -100,8 +100,8 @@ public class DashboardData {
    * @since Jan 5, 2017 1:48:23 PM
    */
   public String getTotalStorageDesc() {
-    return MathUtil.toHumanReadableString(totalStorage, new long[] {1024},
-        new String[] {"B", "KB", "MB", "GB", "TB"});
+    return MathUtil.toHumanReadableString(totalStorage, new long[] { 1024 },
+        new String[] { "B", "KB", "MB", "GB", "TB" });
   }
 
   /**
@@ -131,8 +131,8 @@ public class DashboardData {
    * @since Jan 5, 2017 2:45:49 PM
    */
   public String getDataVolumeDesc() {
-    return MathUtil.toHumanReadableString(dataVolume, new long[] {1024},
-        new String[] {"B", "KB", "MB", "GB", "TB"});
+    return MathUtil.toHumanReadableString(dataVolume, new long[] { 1024 },
+        new String[] { "B", "KB", "MB", "GB", "TB" });
   }
 
   /**

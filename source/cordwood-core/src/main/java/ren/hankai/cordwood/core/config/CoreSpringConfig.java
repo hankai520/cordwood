@@ -2,7 +2,6 @@ package ren.hankai.cordwood.core.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import net.sf.ehcache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
@@ -23,7 +22,7 @@ import ren.hankai.cordwood.core.cache.MethodSignatureKeyGenerator;
  * @version 1.0.0
  * @since Oct 28, 2016 4:42:14 PM
  */
-@ComponentScan(basePackages = {"ren.hankai.cordwood"})
+@ComponentScan(basePackages = { "ren.hankai.cordwood" })
 @EnableCaching
 public class CoreSpringConfig {
 

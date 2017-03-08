@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import ren.hankai.cordwood.console.config.Route;
 import ren.hankai.cordwood.console.persist.model.AppBean;
 import ren.hankai.cordwood.console.persist.model.AppBean.AppPlatform;

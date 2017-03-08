@@ -2,7 +2,6 @@
 package ren.hankai.cordwood.plugin.support;
 
 import org.springframework.stereotype.Component;
-
 import ren.hankai.cordwood.plugin.Plugin;
 import ren.hankai.cordwood.plugin.api.PluginEventEmitter;
 import ren.hankai.cordwood.plugin.api.PluginEventListener;

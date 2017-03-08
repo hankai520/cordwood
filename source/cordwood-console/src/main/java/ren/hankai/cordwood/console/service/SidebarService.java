@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 import ren.hankai.cordwood.console.persist.SidebarItemRepository;
 import ren.hankai.cordwood.console.persist.model.RoleBean;
 import ren.hankai.cordwood.console.persist.model.SidebarItemBean;

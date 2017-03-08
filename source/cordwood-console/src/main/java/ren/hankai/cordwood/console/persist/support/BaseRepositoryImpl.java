@@ -2,7 +2,6 @@ package ren.hankai.cordwood.console.persist.support;
 
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-
 import ren.hankai.cordwood.console.persist.BaseRepository;
 
 import java.io.Serializable;

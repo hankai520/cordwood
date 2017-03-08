@@ -10,7 +10,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import ren.hankai.cordwood.core.ApplicationInitializer;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.config.CoreSpringConfig;
@@ -25,9 +24,9 @@ import java.io.File;
  * @since Oct 21, 2016 1:05:07 PM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {CoreTestSupport.class, CoreSpringConfig.class})
+@ContextConfiguration(classes = { CoreTestSupport.class, CoreSpringConfig.class })
 @Configuration
-@ComponentScan(basePackages = {"ren.hankai"})
+@ComponentScan(basePackages = { "ren.hankai" })
 public abstract class CoreTestSupport {
 
   static {

@@ -5,7 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
-
 import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
 
 import javax.persistence.criteria.CriteriaBuilder;

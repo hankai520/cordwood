@@ -23,7 +23,6 @@ import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
-
 import ren.hankai.cordwood.console.interceptor.PluginRequestInterceptor;
 import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 import ren.hankai.cordwood.web.breadcrumb.BreadCrumbInterceptor;
@@ -157,7 +156,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     final ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
     viewResolver.setTemplateEngine(templateEngine);
     viewResolver.setOrder(1);
-    viewResolver.setViewNames(new String[] {"*.html", "*.js", "*.css"});
+    viewResolver.setViewNames(new String[] { "*.html", "*.js", "*.css" });
     viewResolver.setCharacterEncoding("UTF-8");
     return viewResolver;
   }

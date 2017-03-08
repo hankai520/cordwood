@@ -4,7 +4,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.web.security.AccessAuthenticator;
 import ren.hankai.cordwood.web.security.RequestInspector;
@@ -54,7 +53,7 @@ public class DefaultRequestInspector implements RequestInspector {
       if (value != null) {
         try {
           value = URLEncoder.encode(value, "UTF-8");
-        } catch (final UnsupportedEncodingException e) {
+        } catch (final UnsupportedEncodingException ex) {
           logger.warn(String.format("Failed to url encode request parameter: %s = ", param, value));
         }
         toBeSigned.append(param + "=" + value + "&");

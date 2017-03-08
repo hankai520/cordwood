@@ -5,7 +5,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
-
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.api.PluginLoader;
 
@@ -80,9 +79,10 @@ public final class PluginPackage {
     final String dest = Preferences.getPluginsDir() + File.separator + fileName;
     try {
       installationUrl = new File(dest).toURI().toURL();
-    } catch (final MalformedURLException e) {
+    } catch (final MalformedURLException ex) {
       throw new RuntimeException(
-          String.format("Failed to create installation url for package \"%s\"", url.toString()), e);
+          String.format("Failed to create installation url for package \"%s\"", url.toString()),
+          ex);
     }
     final Attributes attributes = manifest.getMainAttributes();
     groupId = attributes.getValue(PluginLoader.GROUP_ID);
@@ -126,9 +126,9 @@ public final class PluginPackage {
       jarStream = new JarInputStream(is);
       final Manifest manifest = jarStream.getManifest();
       return manifest;
-    } catch (final IOException e) {
+    } catch (final IOException ex) {
       throw new RuntimeException(
-          String.format("Failed to parse manifest of package \"%s\".", url.getPath()), e);
+          String.format("Failed to parse manifest of package \"%s\".", url.getPath()), ex);
     } finally {
       IOUtils.closeQuietly(jarStream);
     }
@@ -182,8 +182,8 @@ public final class PluginPackage {
   public boolean isInstalled() {
     try {
       return new File(installationUrl.toURI()).exists();
-    } catch (final URISyntaxException e) {
-      throw new RuntimeException("Failed to get installation uri.", e);
+    } catch (final URISyntaxException ex) {
+      throw new RuntimeException("Failed to get installation uri.", ex);
     }
   }
 

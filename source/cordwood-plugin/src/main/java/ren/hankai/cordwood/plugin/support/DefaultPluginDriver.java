@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import ren.hankai.cordwood.plugin.Plugin;
 import ren.hankai.cordwood.plugin.PluginFunction;
 import ren.hankai.cordwood.plugin.api.ParameterMapper;
@@ -91,8 +90,8 @@ public class DefaultPluginDriver implements PluginDriver {
       try {
         final Object[] args = parameterMapper.mapParameters(function, request, response);
         result = function.getMethod().invoke(plugin.getInstance(), args);
-      } catch (final Exception e) {
-        throw new PluginException("Plugin function invokation failure.", e);
+      } catch (final Exception ex) {
+        throw new PluginException("Plugin function invokation failure.", ex);
       }
       return result;
     }

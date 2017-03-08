@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import ren.hankai.cordwood.console.config.Route;
 import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
 import ren.hankai.cordwood.console.persist.model.PluginRequestBean;
@@ -445,6 +444,14 @@ public class UserController extends BaseController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
+  /**
+   * 显示重置密码表单。
+   *
+   * @param uid 用户ID
+   * @return 视图模型
+   * @author hankai
+   * @since Mar 8, 2017 10:16:45 PM
+   */
   @NavigationItem(label = "nav.users.reset.pwd", parent = "nav.users")
   @GetMapping(Route.BG_CHANGE_USER_PWD)
   public ModelAndView showResetUserPwdForm(@PathVariable("user_id") Integer uid) {
@@ -458,6 +465,15 @@ public class UserController extends BaseController {
     return mav;
   }
 
+  /**
+   * 重置用户密码。
+   *
+   * @param uid 用户ID
+   * @param user 用户信息
+   * @return 视图模型
+   * @author hankai
+   * @since Mar 8, 2017 10:17:14 PM
+   */
   @NavigationItem(label = "nav.users.reset.pwd", parent = "nav.users")
   @PostMapping(Route.BG_CHANGE_USER_PWD)
   public ModelAndView resetUserPwd(@PathVariable("user_id") Integer uid,

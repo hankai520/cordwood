@@ -1,6 +1,7 @@
 
 package ren.hankai.cordwood.plugin.advance.config;
 
+import freemarker.cache.ClassTemplateLoader;
 import org.eclipse.persistence.platform.database.HSQLPlatform;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +15,6 @@ import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean;
-
-import freemarker.cache.ClassTemplateLoader;
 import ren.hankai.cordwood.plugin.advance.util.Slf4jSessionLogger;
 import ren.hankai.cordwood.plugin.config.PluginConfig;
 
@@ -31,9 +30,9 @@ import javax.sql.DataSource;
  * @since Sep 30, 2016 8:48:53 AM
  */
 @Configuration
-@EnableJpaRepositories(basePackages = {"ren.hankai.cordwood.plugin"})
+@EnableJpaRepositories(basePackages = { "ren.hankai.cordwood.plugin" })
 @EnableTransactionManagement
-@Import({PluginConfig.class})
+@Import({ PluginConfig.class })
 public class PluginBootstrap {
 
   /**

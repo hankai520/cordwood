@@ -1,13 +1,11 @@
 package ren.hankai.cordwood.web.security.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.util.EncryptionUtil;
 import ren.hankai.cordwood.web.security.AccessAuthenticator;
@@ -34,8 +32,8 @@ public class DefaultAccessAuthenticator implements AccessAuthenticator {
       String token = objectMapper.writeValueAsString(tokenInfo);
       token = EncryptionUtil.aes(token, Preferences.getSystemSk(), true);
       return token;
-    } catch (final Exception e) {
-      logger.error("Failed to generate api access token!", e);
+    } catch (final Exception ex) {
+      logger.error("Failed to generate api access token!", ex);
     }
     return null;
   }
@@ -47,8 +45,8 @@ public class DefaultAccessAuthenticator implements AccessAuthenticator {
       final String decrypted = EncryptionUtil.aes(tokenString, Preferences.getSystemSk(), false);
       try {
         tokenInfo = objectMapper.readValue(decrypted, TokenInfo.class);
-      } catch (final Exception e) {
-        logger.error(String.format("Failed to parse token: \"%s\"", tokenString), e);
+      } catch (final Exception ex) {
+        logger.error(String.format("Failed to parse token: \"%s\"", tokenString), ex);
         logger.error(String.format("Decrypted data is: %s", decrypted));
       }
     }

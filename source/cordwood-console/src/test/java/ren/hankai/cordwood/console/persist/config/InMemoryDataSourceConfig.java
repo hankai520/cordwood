@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-
 import ren.hankai.cordwood.core.Preferences;
 
 import javax.sql.DataSource;
@@ -27,7 +26,7 @@ import javax.sql.DataSource;
 @Configuration
 public class InMemoryDataSourceConfig {
 
-  private static final String[] basePackages = {"ren.hankai.cordwood"};
+  private static final String[] basePackages = { "ren.hankai.cordwood" };
 
   /**
    * 数据源。

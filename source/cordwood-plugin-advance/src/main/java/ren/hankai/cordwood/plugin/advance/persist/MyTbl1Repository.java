@@ -1,7 +1,6 @@
 package ren.hankai.cordwood.plugin.advance.persist;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import ren.hankai.cordwood.plugin.advance.model.MyTbl1;
 
 

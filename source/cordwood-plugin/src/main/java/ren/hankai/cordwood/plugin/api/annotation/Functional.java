@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
  * @since Sep 30, 2016 1:44:55 PM
  * @see ren.hankai.cordwood.plugin.api.annotation.Pluggable
  */
-@Target({ElementType.METHOD})
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Functional {

@@ -21,7 +21,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
 import ren.hankai.cordwood.core.ApplicationInitializer;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.advance.util.Slf4jSessionLogger;
@@ -42,11 +41,11 @@ import javax.sql.DataSource;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ApplicationTests.class)
-@EnableJpaRepositories(basePackages = {"ren.hankai.cordwood"})
+@EnableJpaRepositories(basePackages = { "ren.hankai.cordwood" })
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"ren.hankai.cordwood"})
+@ComponentScan(basePackages = { "ren.hankai.cordwood" })
 @ActiveProfiles(PluginRequestDispatcher.PROFILE_STANDALONE_MODE)
-@Import({PluginConfig.class})
+@Import({ PluginConfig.class })
 @Configuration
 public abstract class ApplicationTests {
 

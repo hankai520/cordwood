@@ -93,8 +93,8 @@ public class ApplicationInitializer {
         }
       }
       return true;
-    } catch (final IOException e) {
-      logger.error("Error occurred while copying support files.", e);
+    } catch (final IOException ex) {
+      logger.error("Error occurred while copying support files.", ex);
       return false;
     } finally {
       if (out != null) {
@@ -115,10 +115,10 @@ public class ApplicationInitializer {
    */
   private static boolean checkHome() {
     logger.info(String.format("Application home is: \"%s\"", Preferences.getHomeDir()));
-    final String[] subDirs = {Preferences.getConfigDir(), Preferences.getDataDir(),
+    final String[] subDirs = { Preferences.getConfigDir(), Preferences.getDataDir(),
         Preferences.getCacheDir(), Preferences.getLogDir(), Preferences.getTempDir(),
         Preferences.getAttachmentDir(), Preferences.getBackupDir(), Preferences.getDbDir(),
-        Preferences.getPluginsDir(), Preferences.getLibsDir()};
+        Preferences.getPluginsDir(), Preferences.getLibsDir() };
     for (final String dir : subDirs) {
       final File file = new File(dir);
       if (!file.exists()) {

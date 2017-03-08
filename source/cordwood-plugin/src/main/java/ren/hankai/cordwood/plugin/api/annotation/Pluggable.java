@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  * @version 1.0.0
  * @since Sep 29, 2016 5:34:50 PM
  */
-@Target({ElementType.TYPE})
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Pluggable {

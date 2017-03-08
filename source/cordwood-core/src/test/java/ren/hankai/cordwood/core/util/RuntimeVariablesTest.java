@@ -3,7 +3,6 @@ package ren.hankai.cordwood.core.util;
 
 import org.junit.Assert;
 import org.junit.Test;
-
 import ren.hankai.cordwood.core.ApplicationInitializer;
 import ren.hankai.cordwood.core.test.CoreTestSupport;
 

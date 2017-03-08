@@ -295,9 +295,10 @@ public final class Preferences {
         if (FilenameUtils.isExtension(libFile.getName(), "jar")) {
           try {
             list.add(libFile.toURI().toURL());
-          } catch (final MalformedURLException e) {
+          } catch (final MalformedURLException ex) {
             throw new RuntimeException(
-                String.format("Failed to get url from lib path: %s", libFile.getAbsolutePath()), e);
+                String.format("Failed to get url from lib path: %s", libFile.getAbsolutePath()),
+                ex);
           }
         }
       }

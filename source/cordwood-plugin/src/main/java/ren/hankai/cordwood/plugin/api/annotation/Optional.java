@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  * @version 1.0.0
  * @since Nov 9, 2016 9:59:22 AM
  */
-@Target({ElementType.PARAMETER})
+@Target({ ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Optional {

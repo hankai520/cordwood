@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 import ren.hankai.cordwood.console.PluginInitializer;
 import ren.hankai.cordwood.console.config.Route;
 import ren.hankai.cordwood.console.persist.model.PluginPackageBean;
@@ -288,6 +287,13 @@ public class PluginController extends BaseController {
     return response;
   }
 
+  /**
+   * 用于获取插件访问统计图（折线图）数据的AJAX接口。
+   *
+   * @return 图表数据
+   * @author hankai
+   * @since Mar 8, 2017 10:14:50 PM
+   */
   @RequestMapping(Route.BG_DASHBOARD_REQUEST_CHARTS_JSON)
   @ResponseBody
   public List<RequestCountAndVolume> getPluginRequestCountAndVolume() {

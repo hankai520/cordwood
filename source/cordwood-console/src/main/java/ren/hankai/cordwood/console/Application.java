@@ -13,7 +13,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
 import ren.hankai.cordwood.console.persist.support.BaseRepositoryFactoryBean;
 import ren.hankai.cordwood.core.ApplicationInitializer;
 
@@ -28,12 +27,12 @@ import ren.hankai.cordwood.core.ApplicationInitializer;
 @EnableSpringConfigured
 @EnableAspectJAutoProxy
 @EnableConfigurationProperties
-@EnableJpaRepositories(basePackages = {"ren.hankai"},
+@EnableJpaRepositories(basePackages = { "ren.hankai" },
     repositoryFactoryBeanClass = BaseRepositoryFactoryBean.class)
 @EnableTransactionManagement
 @EnableJdbcHttpSession
 @EnableScheduling
-@ComponentScan(basePackages = {"ren.hankai.cordwood"})
+@ComponentScan(basePackages = { "ren.hankai.cordwood" })
 public class Application {
 
   private static final Logger logger = LoggerFactory.getLogger(Application.class);
@@ -46,7 +45,7 @@ public class Application {
    * @since Oct 25, 2016 10:53:27 AM
    */
   public static void main(String[] args) {
-    final String[] configs = {"hsql.properties", "system.yml", "ehcache.xml", "i18n.properties"};
+    final String[] configs = { "hsql.properties", "system.yml", "ehcache.xml", "i18n.properties" };
     if (ApplicationInitializer.initialize(configs)) {
       if (SpringApplication.run(Application.class, args) != null) {
         logger.info(

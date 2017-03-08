@@ -3,11 +3,9 @@ package ren.hankai.cordwood.console.persist.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import ren.hankai.cordwood.jackson.DateTimeSerializer;
 
 import java.io.Serializable;

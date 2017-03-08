@@ -2,14 +2,13 @@
 package ren.hankai.cordwood.console.view.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import ren.hankai.cordwood.jackson.TimeInMillisecondSerializer;
 
 import java.util.Date;
 
 /**
  * 插件访问次数和访问量。
- * 
+ *
  * @author hankai
  * @version 1.0.0
  * @since Jan 3, 2017 1:49:14 PM
@@ -20,6 +19,13 @@ public class RequestCountAndVolume {
   private Long count;
   private Long bytes;
 
+  /**
+   * 初始化插件访问次数和访问量信息。
+   * 
+   * @param createDate 访问时间
+   * @param count 访问次数
+   * @param bytes 数据量（字节）
+   */
   public RequestCountAndVolume(Date createDate, Long count, Long bytes) {
     this.createDate = createDate;
     this.count = count;

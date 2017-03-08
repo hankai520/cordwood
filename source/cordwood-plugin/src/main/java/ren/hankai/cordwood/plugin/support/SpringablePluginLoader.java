@@ -77,8 +77,8 @@ public class SpringablePluginLoader implements PluginLoader {
         if (bootClass != null) {
           configClasses.add(bootClass);
         }
-      } catch (final ClassNotFoundException e) {
-        logger.error("Plugin config class not found!", e);
+      } catch (final ClassNotFoundException ex) {
+        logger.error("Plugin config class not found!", ex);
       }
     }
     configClasses.add(PluginCacheConfig.class);
@@ -134,9 +134,9 @@ public class SpringablePluginLoader implements PluginLoader {
           }
         }
       }
-    } catch (final Exception e) {
+    } catch (final Exception ex) {
       throw new RuntimeException(
-          String.format("Failed to instantiate plugin in base package \"%s\"", basePackage), e);
+          String.format("Failed to instantiate plugin in base package \"%s\"", basePackage), ex);
     }
     return instances;
   }
@@ -201,10 +201,10 @@ public class SpringablePluginLoader implements PluginLoader {
         ctx.close();
       }
       return true;
-    } catch (final NoSuchBeanDefinitionException e) {
-      logger.warn("No plugin bean definition was found in spring context!", e);
-    } catch (final BeansException e) {
-      logger.warn("Failed to remove plugin bean from spring context!", e);
+    } catch (final NoSuchBeanDefinitionException ex) {
+      logger.warn("No plugin bean definition was found in spring context!", ex);
+    } catch (final BeansException ex) {
+      logger.warn("Failed to remove plugin bean from spring context!", ex);
     }
     return false;
   }

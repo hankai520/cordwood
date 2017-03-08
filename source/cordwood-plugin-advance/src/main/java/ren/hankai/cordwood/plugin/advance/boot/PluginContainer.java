@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
-
 import ren.hankai.cordwood.core.ApplicationInitializer;
 import ren.hankai.cordwood.core.config.CoreSpringConfig;
 import ren.hankai.cordwood.plugin.advance.AdvancePlugin;
@@ -28,15 +27,15 @@ import ren.hankai.cordwood.plugin.support.PluginRequestDispatcher;
  * bean，而这一过程所使用的类加载器并不是由插件容器提供的，因此无法加载到插件所依赖的 jar 包，因而会 导致类加载问题。
  */
 @Profile(PluginRequestDispatcher.PROFILE_STANDALONE_MODE)
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
-@Import({PluginBootstrap.class})
+@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+@Import({ PluginBootstrap.class })
 @Controller
 public class PluginContainer extends PluginRequestDispatcher {
 
   /**
    * 要调试的插件类。
    */
-  private static final Class<?>[] pluginClasses = new Class<?>[] {AdvancePlugin.class};
+  private static final Class<?>[] pluginClasses = new Class<?>[] { AdvancePlugin.class };
 
   /**
    * 嵌入式插件容器是否以调试模式启动。
@@ -60,7 +59,7 @@ public class PluginContainer extends PluginRequestDispatcher {
     if (enableDebug) {
       System.setProperty("debug", "true");
     }
-    final String[] configs = {"system.yml"};
+    final String[] configs = { "system.yml" };
     if (ApplicationInitializer.initialize(configs)) {
       final SpringApplication app = new SpringApplication(PluginContainer.class);
       app.setAdditionalProfiles(PluginRequestDispatcher.PROFILE_STANDALONE_MODE);

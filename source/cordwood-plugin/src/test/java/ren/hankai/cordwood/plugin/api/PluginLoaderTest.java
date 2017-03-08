@@ -4,7 +4,6 @@ package ren.hankai.cordwood.plugin.api;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import ren.hankai.cordwood.plugin.PluginPackage;
 import ren.hankai.cordwood.plugin.test.PluginTestSupport;
 

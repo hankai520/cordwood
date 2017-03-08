@@ -3,9 +3,7 @@ package ren.hankai.cordwood.plugin.api;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import ren.hankai.cordwood.plugin.Plugin;
-import ren.hankai.cordwood.plugin.api.PluginEventEmitter;
 import ren.hankai.cordwood.plugin.support.PluginLifeCycleNotifier;
 import ren.hankai.cordwood.plugin.test.PluginTestSupport;
 

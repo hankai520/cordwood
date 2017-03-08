@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-
 import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 
 import java.util.HashMap;

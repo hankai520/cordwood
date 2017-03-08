@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Service;
-
 import ren.hankai.cordwood.console.persist.LoginCredentialRepository;
 import ren.hankai.cordwood.console.persist.model.LoginCredentialBean;
 import ren.hankai.cordwood.console.persist.support.DeleteSpecification;

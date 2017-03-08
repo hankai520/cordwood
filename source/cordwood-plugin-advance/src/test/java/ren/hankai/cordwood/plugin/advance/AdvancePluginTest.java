@@ -4,7 +4,6 @@ package ren.hankai.cordwood.plugin.advance;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import ren.hankai.cordwood.plugin.ApplicationTests;
 import ren.hankai.cordwood.plugin.advance.model.MyTbl1;
 import ren.hankai.cordwood.plugin.advance.persist.MyTbl1Repository;

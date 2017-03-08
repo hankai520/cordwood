@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * @version 1.0.0
  * @since Oct 27, 2016 5:40:30 PM
  */
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Secure {

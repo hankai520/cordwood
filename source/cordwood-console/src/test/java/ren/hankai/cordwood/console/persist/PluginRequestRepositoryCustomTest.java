@@ -2,7 +2,6 @@
 package ren.hankai.cordwood.console.persist;
 
 import org.junit.Test;
-
 import ren.hankai.cordwood.console.test.ConsoleTestSupport;
 
 import java.util.Calendar;

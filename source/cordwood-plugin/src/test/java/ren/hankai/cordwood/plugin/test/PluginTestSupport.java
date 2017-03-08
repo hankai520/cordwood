@@ -14,7 +14,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.ResourceUtils;
-
 import ren.hankai.cordwood.core.ApplicationInitializer;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.config.CoreSpringConfig;
@@ -34,10 +33,10 @@ import java.net.URL;
  * @since Oct 21, 2016 1:05:07 PM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {PluginTestSupport.class})
-@Import({CoreSpringConfig.class, PluginConfig.class})
+@ContextConfiguration(classes = { PluginTestSupport.class })
+@Import({ CoreSpringConfig.class, PluginConfig.class })
 @Configuration
-@ComponentScan(basePackages = {"ren.hankai.cordwood"})
+@ComponentScan(basePackages = { "ren.hankai.cordwood" })
 public abstract class PluginTestSupport {
 
   protected URL testPluginPackageUrl;
@@ -78,8 +77,8 @@ public abstract class PluginTestSupport {
         output = new FileOutputStream(file);
         FileCopyUtils.copy(input, output);
       }
-    } catch (final Exception e) {
-      throw new RuntimeException(e);
+    } catch (final Exception ex) {
+      throw new RuntimeException(ex);
     } finally {
       IOUtils.closeQuietly(output);
       IOUtils.closeQuietly(input);

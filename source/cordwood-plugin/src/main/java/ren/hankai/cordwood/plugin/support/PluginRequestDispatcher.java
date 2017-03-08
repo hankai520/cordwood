@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import ren.hankai.cordwood.plugin.api.PluginDriver;
 import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 import ren.hankai.cordwood.plugin.exception.ParameterIntegrityException;
@@ -66,30 +65,30 @@ public abstract class PluginRequestDispatcher {
     try {
       final Object result = pluginDriver.handleRequest(pluginName, functionName, request, response);
       responseEntity = new ResponseEntity<>(result, HttpStatus.OK);
-    } catch (final ParameterIntegrityException e) {
-      errors = e;
-      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-    } catch (final AccessTokenException e) {
-      errors = e;
-      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-    } catch (final PluginStatusException e) {
-      errors = e;
+    } catch (final ParameterIntegrityException ex) {
+      errors = ex;
+      responseEntity = new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    } catch (final AccessTokenException ex) {
+      errors = ex;
+      responseEntity = new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    } catch (final PluginStatusException ex) {
+      errors = ex;
       responseEntity =
-          new ResponseEntity<>(e.getMessage(), HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
-    } catch (final PluginNotFoundException e) {
-      errors = e;
-      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-    } catch (final PluginException e) {
-      errors = e;
-      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    } catch (final Exception e) {
-      logger.error("Unkown error occurred while invoking plugin function.", e);
-      errors = e;
-      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    } catch (final Error e) {
-      logger.error("Unkown error occurred while invoking plugin function.", e);
-      errors = e;
-      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+          new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
+    } catch (final PluginNotFoundException ex) {
+      errors = ex;
+      responseEntity = new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    } catch (final PluginException ex) {
+      errors = ex;
+      responseEntity = new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    } catch (final Exception ex) {
+      logger.error("Unkown error occurred while invoking plugin function.", ex);
+      errors = ex;
+      responseEntity = new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    } catch (final Error ex) {
+      logger.error("Unkown error occurred while invoking plugin function.", ex);
+      errors = ex;
+      responseEntity = new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
     afterProcessingPluginRequest(pluginName, functionName, request, errors);
     return responseEntity;
@@ -139,19 +138,19 @@ public abstract class PluginRequestDispatcher {
     try {
       final InputStream is = pluginDriver.getResource(pluginName, request);
       responseEntity = new ResponseEntity<>(new InputStreamResource(is), HttpStatus.OK);
-    } catch (final PluginNotFoundException e) {
-      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-    } catch (final PluginStatusException e) {
+    } catch (final PluginNotFoundException ex) {
+      responseEntity = new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    } catch (final PluginStatusException ex) {
       responseEntity =
-          new ResponseEntity<>(e.getMessage(), HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
-    } catch (final PluginResourceNotFoundException e) {
-      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-    } catch (final Exception e) {
-      logger.error("Unkown error occurred while loading plugin resource.", e);
-      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    } catch (final Error e) {
-      logger.error("Unkown error occurred while loading plugin resource.", e);
-      responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+          new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
+    } catch (final PluginResourceNotFoundException ex) {
+      responseEntity = new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    } catch (final Exception ex) {
+      logger.error("Unkown error occurred while loading plugin resource.", ex);
+      responseEntity = new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    } catch (final Error ex) {
+      logger.error("Unkown error occurred while loading plugin resource.", ex);
+      responseEntity = new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
     afterProcessingPluginResource(pluginName, request);
     return responseEntity;

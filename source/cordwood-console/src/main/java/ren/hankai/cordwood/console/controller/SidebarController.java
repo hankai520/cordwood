@@ -1,12 +1,9 @@
 package ren.hankai.cordwood.console.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import ren.hankai.cordwood.console.config.Route;
 import ren.hankai.cordwood.console.persist.model.SidebarItemBean;
 import ren.hankai.cordwood.console.service.SidebarService;
@@ -23,7 +20,6 @@ import java.util.List;
 @Controller
 public class SidebarController {
 
-  private static final Logger logger = LoggerFactory.getLogger(SidebarController.class);
   @Autowired
   private SidebarService sidebarService;
 

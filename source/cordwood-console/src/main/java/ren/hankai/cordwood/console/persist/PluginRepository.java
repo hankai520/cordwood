@@ -2,7 +2,6 @@
 package ren.hankai.cordwood.console.persist;
 
 import org.springframework.transaction.annotation.Transactional;
-
 import ren.hankai.cordwood.console.persist.model.PluginBean;
 
 /**

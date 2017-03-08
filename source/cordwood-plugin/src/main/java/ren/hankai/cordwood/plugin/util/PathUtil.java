@@ -4,7 +4,6 @@ package ren.hankai.cordwood.plugin.util;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 
 import java.io.File;
@@ -53,8 +52,8 @@ public class PathUtil {
           return sb.toString();
         }
       }
-    } catch (final UnsupportedEncodingException e) {
-      logger.error(String.format("Failed to decode url: \"%s\"", url), e);
+    } catch (final UnsupportedEncodingException ex) {
+      logger.error(String.format("Failed to decode url: \"%s\"", url), ex);
     }
     return null;
   }

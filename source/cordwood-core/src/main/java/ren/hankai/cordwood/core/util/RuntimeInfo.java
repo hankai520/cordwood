@@ -26,8 +26,8 @@ public final class RuntimeInfo {
       final InetAddress addr = InetAddress.getLocalHost();
       props.put("hostName", addr.getHostName());
       props.put("hostIp", addr.getHostAddress());
-    } catch (final UnknownHostException e) {
-      throw new RuntimeException("Failed to initialize runtime info.", e);
+    } catch (final UnknownHostException ex) {
+      throw new RuntimeException("Failed to initialize runtime info.", ex);
     }
   }
 

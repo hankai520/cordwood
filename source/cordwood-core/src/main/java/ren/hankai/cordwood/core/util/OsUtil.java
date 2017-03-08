@@ -30,7 +30,7 @@ public final class OsUtil {
           new ObjectName("java.lang", "type", "OperatingSystem"), "TotalPhysicalMemorySize");
       return (Long) attribute;
     } catch (final Exception ex) {
-      return 0l;
+      return 0L;
     }
   }
 
@@ -48,19 +48,19 @@ public final class OsUtil {
           new ObjectName("java.lang", "type", "OperatingSystem"), "FreePhysicalMemorySize");
       return (Long) attribute;
     } catch (final Exception ex) {
-      return 0l;
+      return 0L;
     }
   }
 
   /**
    * 获取系统总存储大小（字节）。
-   * 
+   *
    * @return 系统总存储大小（字节）
    * @author hankai
    * @since Jan 5, 2017 1:44:16 PM
    */
   public static long getSystemTotalHdSize() {
-    long total = 0l;
+    long total = 0L;
     final File[] roots = File.listRoots();
     if (roots != null) {
       for (final File root : roots) {
@@ -72,13 +72,13 @@ public final class OsUtil {
 
   /**
    * 获取系统剩余存储空间大小（字节）。
-   * 
+   *
    * @return 系统剩余存储空间大小（字节）
    * @author hankai
    * @since Jan 5, 2017 1:45:22 PM
    */
   public static long getSystemFreeHdSize() {
-    long free = 0l;
+    long free = 0L;
     final File[] roots = File.listRoots();
     if (roots != null) {
       for (final File root : roots) {

@@ -4,7 +4,6 @@ package ren.hankai.cordwood.core.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.DefaultPropertiesPersister;
-
 import ren.hankai.cordwood.core.Preferences;
 
 import java.io.File;
@@ -47,11 +46,11 @@ public final class RuntimeVariables {
             variables.put(key, props.getProperty(key));
           }
         }
-      } catch (final FileNotFoundException e) {
-        logger.error(String.format("Runtime variables file \"%s\" not found!", savePath), e);
-      } catch (final IOException e) {
+      } catch (final FileNotFoundException ex) {
+        logger.error(String.format("Runtime variables file \"%s\" not found!", savePath), ex);
+      } catch (final IOException ex) {
         logger.error(String.format("Failed to load runtime variables from file \"%s\"!", savePath),
-            e);
+            ex);
       }
     }
     return variables;
@@ -75,8 +74,8 @@ public final class RuntimeVariables {
       final Properties props = new Properties();
       props.putAll(variables);
       dpp.store(props, new FileWriter(savePath), header);
-    } catch (final IOException e) {
-      logger.error(String.format("Failed to save runtime variables to file \"%s\"!", savePath), e);
+    } catch (final IOException ex) {
+      logger.error(String.format("Failed to save runtime variables to file \"%s\"!", savePath), ex);
     }
   }
 
@@ -100,8 +99,8 @@ public final class RuntimeVariables {
     final String value = getVariable(key);
     try {
       return Boolean.parseBoolean(value);
-    } catch (final Exception e) {
-      logger.warn(String.format("Failed to get boolean variable \"%s\"", key), e);
+    } catch (final Exception ex) {
+      logger.warn(String.format("Failed to get boolean variable \"%s\"", key), ex);
     }
     return false;
   }
@@ -118,8 +117,8 @@ public final class RuntimeVariables {
     final String value = getVariable(key);
     try {
       return Integer.parseInt(value);
-    } catch (final Exception e) {
-      logger.warn(String.format("Failed to get int variable \"%s\"", key), e);
+    } catch (final Exception ex) {
+      logger.warn(String.format("Failed to get int variable \"%s\"", key), ex);
     }
     return 0;
   }

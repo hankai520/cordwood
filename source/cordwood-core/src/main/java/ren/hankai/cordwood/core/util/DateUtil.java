@@ -34,7 +34,7 @@ public final class DateUtil {
     cal.set(Calendar.SECOND, 59);
     cal.set(Calendar.MILLISECOND, 999);
     final Date endTime = cal.getTime();
-    return new Date[] {beginTime, endTime};
+    return new Date[] { beginTime, endTime };
   }
 
 }

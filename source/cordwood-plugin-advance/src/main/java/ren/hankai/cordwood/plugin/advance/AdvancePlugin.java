@@ -1,14 +1,13 @@
 
 package ren.hankai.cordwood.plugin.advance;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 import ren.hankai.cordwood.plugin.advance.model.MyTbl1;
 import ren.hankai.cordwood.plugin.advance.persist.MyTbl1Repository;
 import ren.hankai.cordwood.plugin.api.PluginLifeCycleAware;
@@ -78,8 +77,8 @@ public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader
       final Template template = freeMarkerConfig.getTemplate("content.fm");
       final String tmpl = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
       return tmpl;
-    } catch (final Exception e) {
-      logger.error("Failed to render template!", e);
+    } catch (final Exception ex) {
+      logger.error("Failed to render template!", ex);
     }
     return "error";
   }
@@ -127,8 +126,8 @@ public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader
     if (url != null) {
       try {
         return url.openStream();
-      } catch (final IOException e) {
-        logger.error(String.format("Failed to open resource: \"%s\"", relativeUrl), e);
+      } catch (final IOException ex) {
+        logger.error(String.format("Failed to open resource: \"%s\"", relativeUrl), ex);
       }
     }
     return null;

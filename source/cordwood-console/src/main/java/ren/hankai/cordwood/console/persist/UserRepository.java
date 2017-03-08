@@ -3,7 +3,6 @@ package ren.hankai.cordwood.console.persist;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
-
 import ren.hankai.cordwood.console.persist.model.UserBean;
 
 import javax.persistence.criteria.CriteriaBuilder;

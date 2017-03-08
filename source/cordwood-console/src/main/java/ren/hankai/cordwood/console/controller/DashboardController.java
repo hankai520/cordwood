@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
-
 import ren.hankai.cordwood.console.config.Route;
 import ren.hankai.cordwood.console.service.PluginService;
 import ren.hankai.cordwood.console.view.model.DashboardData;
@@ -29,6 +28,13 @@ public class DashboardController extends BaseController {
     return "redirect:" + Route.BG_DASHBOARD;
   }
 
+  /**
+   * 仪表盘首页。
+   *
+   * @return 模型视图
+   * @author hankai
+   * @since Mar 8, 2017 10:14:15 PM
+   */
   @NavigationItem(label = "nav.dashboard")
   @GetMapping(Route.BG_DASHBOARD)
   public ModelAndView index() {

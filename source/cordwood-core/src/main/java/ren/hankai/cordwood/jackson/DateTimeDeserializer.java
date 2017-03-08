@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,8 +37,8 @@ public class DateTimeDeserializer extends JsonDeserializer<Date> {
     try {
       final SimpleDateFormat sdf = new SimpleDateFormat(format);
       return sdf.parse(jp.getText());
-    } catch (final Exception e) {
-      logger.warn(String.format("Failed to parse date from json string %s", jp.getText()), e);
+    } catch (final Exception ex) {
+      logger.warn(String.format("Failed to parse date from json string %s", jp.getText()), ex);
       return null;
     }
   }

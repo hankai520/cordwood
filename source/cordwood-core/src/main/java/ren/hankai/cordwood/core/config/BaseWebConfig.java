@@ -5,7 +5,6 @@
 package ren.hankai.cordwood.core.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -74,11 +73,11 @@ public abstract class BaseWebConfig extends WebMvcConfigurerAdapter {
         Date date = null;
         try {
           date = dateFormatter.parse(source);
-        } catch (final ParseException e) {
+        } catch (final ParseException ex) {
           try {
             date = dateTimeFormatter.parse(source);
           } catch (final ParseException e1) {
-            logger.warn(String.format("Failed to parse input date string \"%s\".", source), e);
+            logger.warn(String.format("Failed to parse input date string \"%s\".", source), ex);
           }
         }
         return date;

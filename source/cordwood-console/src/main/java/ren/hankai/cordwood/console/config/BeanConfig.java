@@ -1,7 +1,6 @@
 package ren.hankai.cordwood.console.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -10,7 +9,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
-
 import ren.hankai.cordwood.console.service.LoginCredentialService;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.config.CoreSpringConfig;

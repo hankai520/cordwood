@@ -2,7 +2,6 @@
 package ren.hankai.cordwood.console.persist.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import ren.hankai.cordwood.plugin.PluginFunction;
 import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 

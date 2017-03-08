@@ -2,7 +2,6 @@
 package ren.hankai.cordwood.console.view.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import ren.hankai.cordwood.jackson.DateTimeSerializer;
 
 import java.util.Date;

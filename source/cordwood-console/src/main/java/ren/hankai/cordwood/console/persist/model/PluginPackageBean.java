@@ -2,7 +2,6 @@
 package ren.hankai.cordwood.console.persist.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.jackson.DateTimeSerializer;
 
