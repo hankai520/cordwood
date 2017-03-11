@@ -9,11 +9,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import ren.hankai.cordwood.console.persist.support.BaseRepositoryFactoryBean;
 import ren.hankai.cordwood.core.ApplicationInitializer;
 
 /**
@@ -27,10 +23,6 @@ import ren.hankai.cordwood.core.ApplicationInitializer;
 @EnableSpringConfigured
 @EnableAspectJAutoProxy
 @EnableConfigurationProperties
-@EnableJpaRepositories(basePackages = { "ren.hankai" },
-    repositoryFactoryBeanClass = BaseRepositoryFactoryBean.class)
-@EnableTransactionManagement
-@EnableJdbcHttpSession
 @EnableScheduling
 @ComponentScan(basePackages = { "ren.hankai.cordwood" })
 public class Application {

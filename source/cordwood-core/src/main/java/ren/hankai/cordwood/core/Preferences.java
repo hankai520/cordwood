@@ -400,4 +400,20 @@ public final class Preferences {
     }
     return null;
   }
+
+  /**
+   * 获取用户自定义的配置。
+   *
+   * @param key 键名
+   * @return 值
+   * @author hankai
+   * @since Mar 8, 2017 11:08:01 PM
+   */
+  public static String getCustomConfig(String key) {
+    final Object obj = getSystemPrefs().get(key);
+    if (obj != null) {
+      return obj.toString();
+    }
+    return null;
+  }
 }

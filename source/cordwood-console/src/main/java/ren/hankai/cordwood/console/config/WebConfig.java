@@ -1,11 +1,15 @@
 package ren.hankai.cordwood.console.config;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
@@ -13,6 +17,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
 import org.springframework.http.converter.xml.SourceHttpMessageConverter;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -24,6 +29,7 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 import ren.hankai.cordwood.console.interceptor.PluginRequestInterceptor;
+import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
 import ren.hankai.cordwood.web.breadcrumb.BreadCrumbInterceptor;
 
@@ -40,7 +46,10 @@ import java.util.Set;
  * @since Oct 31, 2016 3:19:49 PM
  */
 @Configuration
+@EnableRedisHttpSession
 public class WebConfig extends WebMvcConfigurerAdapter {
+
+  private static final Logger logger = LoggerFactory.getLogger(WebConfig.class);
 
   /**
    * 用于在页面渲染前传递页面级提示消息。
@@ -184,6 +193,28 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     registry.addInterceptor(breadCrumbInterceptor).addPathPatterns(Route.BACKGROUND_PREFIX + "/**");
     registry.addInterceptor(pluginRequestInterceptor)
         .addPathPatterns(Pluggable.PLUGIN_BASE_URL + "/**");
+  }
+
+  @Bean
+  public LettuceConnectionFactory connectionFactory() {
+    final LettuceConnectionFactory factory = new LettuceConnectionFactory();
+    final String host = Preferences.getCustomConfig("redisHost");
+    if (StringUtils.isNotEmpty(host)) {
+      factory.setHostName(host);
+    }
+    final String port = Preferences.getCustomConfig("redisPort");
+    if (StringUtils.isNotEmpty(port)) {
+      try {
+        factory.setPort(Integer.parseInt(port));
+      } catch (final NumberFormatException ex) {
+        logger.error(String.format("Invalid redis server port specified: %s", port));
+      }
+    }
+    final String pwd = Preferences.getCustomConfig("redisPassword");
+    if (StringUtils.isNotEmpty(pwd)) {
+      factory.setPassword(pwd);
+    }
+    return factory;
   }
 
 }

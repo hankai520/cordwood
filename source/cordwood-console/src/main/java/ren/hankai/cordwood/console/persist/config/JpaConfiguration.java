@@ -14,9 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
+import ren.hankai.cordwood.console.persist.support.BaseRepositoryFactoryBean;
 import ren.hankai.cordwood.console.persist.util.Slf4jSessionLogger;
 import ren.hankai.cordwood.core.Preferences;
 
@@ -33,6 +36,9 @@ import javax.sql.DataSource;
  * @since Aug 18, 2016 9:57:22 AM
  */
 @Configuration
+@EnableJpaRepositories(basePackages = { "ren.hankai" },
+    repositoryFactoryBeanClass = BaseRepositoryFactoryBean.class)
+@EnableTransactionManagement
 public class JpaConfiguration extends JpaBaseConfiguration {
 
   /**
