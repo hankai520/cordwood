@@ -16,10 +16,10 @@ import java.util.Date;
 public final class SummarizedRequest {
   private String pluginName; // 插件显示名称
   private boolean pluginIsActive; // 插件是否已启用
-  private double inboundBytes; // 输入流量 KB
-  private double outboundBytes; // 输出流量 KB
+  private float inboundBytes; // 输入流量 KB
+  private float outboundBytes; // 输出流量 KB
   private long accessCount; // 访问次数
-  private double timeUsageAvg; // 平均耗时 ms
+  private float timeUsageAvg; // 平均耗时 ms
   private Date lastAccessTime; // 最近一次访问的时间
 
   /**
@@ -63,7 +63,7 @@ public final class SummarizedRequest {
    *
    * @return inboundBytes 字段值
    */
-  public double getInboundBytes() {
+  public float getInboundBytes() {
     return inboundBytes;
   }
 
@@ -72,7 +72,7 @@ public final class SummarizedRequest {
    *
    * @param inboundBytes inboundBytes 字段的值
    */
-  public void setInboundBytes(double inboundBytes) {
+  public void setInboundBytes(float inboundBytes) {
     this.inboundBytes = inboundBytes;
   }
 
@@ -81,7 +81,7 @@ public final class SummarizedRequest {
    *
    * @return outboundBytes 字段值
    */
-  public double getOutboundBytes() {
+  public float getOutboundBytes() {
     return outboundBytes;
   }
 
@@ -90,7 +90,7 @@ public final class SummarizedRequest {
    *
    * @param outboundBytes outboundBytes 字段的值
    */
-  public void setOutboundBytes(double outboundBytes) {
+  public void setOutboundBytes(float outboundBytes) {
     this.outboundBytes = outboundBytes;
   }
 
@@ -117,7 +117,7 @@ public final class SummarizedRequest {
    *
    * @return timeUsageAvg 字段值
    */
-  public double getTimeUsageAvg() {
+  public float getTimeUsageAvg() {
     return timeUsageAvg;
   }
 
@@ -126,7 +126,7 @@ public final class SummarizedRequest {
    *
    * @param timeUsageAvg timeUsageAvg 字段的值
    */
-  public void setTimeUsageAvg(double timeUsageAvg) {
+  public void setTimeUsageAvg(float timeUsageAvg) {
     this.timeUsageAvg = timeUsageAvg;
   }
 

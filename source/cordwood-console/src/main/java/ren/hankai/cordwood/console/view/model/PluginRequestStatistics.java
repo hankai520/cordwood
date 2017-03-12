@@ -12,7 +12,7 @@ public class PluginRequestStatistics {
 
   private long accessCount; // 访问次数
   private String accessCountDesc; // 访问次数描述信息
-  private double timeUsageAvg; // 平均响应时间
+  private float timeUsageAvg; // 平均响应时间
   private String timeUsageAvgDesc; // 平均响应时间描述信息
   private int faultRate; // 故障率的百分值
   private int usageRage; // 使用率的百分值
@@ -60,7 +60,7 @@ public class PluginRequestStatistics {
    *
    * @return timeUsageAvg 字段值
    */
-  public double getTimeUsageAvg() {
+  public float getTimeUsageAvg() {
     return timeUsageAvg;
   }
 
@@ -69,7 +69,7 @@ public class PluginRequestStatistics {
    *
    * @param timeUsageAvg timeUsageAvg 字段的值
    */
-  public void setTimeUsageAvg(double timeUsageAvg) {
+  public void setTimeUsageAvg(float timeUsageAvg) {
     this.timeUsageAvg = timeUsageAvg;
   }
 

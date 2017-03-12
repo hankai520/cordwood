@@ -17,13 +17,13 @@ public class DashboardData {
 
   private long numberOfPlugins; // 插件数
   private long numberOfDevelopers; // 开发者数
-  private double responseTime; // 平均响应时间
-  private double faultRate; // 故障率
-  private double usedMemory; // 已用内存
-  private double totalMemory; // 总内存
-  private double usedStorage; // 已用硬盘存储空间
-  private double totalStorage; // 硬盘总存储空间
-  private double dataVolume; // 日均数据量
+  private float responseTime; // 平均响应时间
+  private float faultRate; // 故障率
+  private float usedMemory; // 已用内存
+  private float totalMemory; // 总内存
+  private float usedStorage; // 已用硬盘存储空间
+  private float totalStorage; // 硬盘总存储空间
+  private float dataVolume; // 日均数据量
 
   /**
    * 平均响应时间描述。
@@ -194,7 +194,7 @@ public class DashboardData {
    *
    * @return responseTime 字段值
    */
-  public double getResponseTime() {
+  public float getResponseTime() {
     return responseTime;
   }
 
@@ -203,7 +203,7 @@ public class DashboardData {
    *
    * @param responseTime responseTime 字段的值
    */
-  public void setResponseTime(double responseTime) {
+  public void setResponseTime(float responseTime) {
     this.responseTime = responseTime;
   }
 
@@ -212,7 +212,7 @@ public class DashboardData {
    *
    * @return faultRate 字段值
    */
-  public double getFaultRate() {
+  public float getFaultRate() {
     return faultRate;
   }
 
@@ -221,7 +221,7 @@ public class DashboardData {
    *
    * @param faultRate faultRate 字段的值
    */
-  public void setFaultRate(double faultRate) {
+  public void setFaultRate(float faultRate) {
     this.faultRate = faultRate;
   }
 
@@ -230,7 +230,7 @@ public class DashboardData {
    *
    * @return usedMemory 字段值
    */
-  public double getUsedMemory() {
+  public float getUsedMemory() {
     return usedMemory;
   }
 
@@ -239,7 +239,7 @@ public class DashboardData {
    *
    * @param usedMemory usedMemory 字段的值
    */
-  public void setUsedMemory(double usedMemory) {
+  public void setUsedMemory(float usedMemory) {
     this.usedMemory = usedMemory;
   }
 
@@ -248,7 +248,7 @@ public class DashboardData {
    *
    * @return totalMemory 字段值
    */
-  public double getTotalMemory() {
+  public float getTotalMemory() {
     return totalMemory;
   }
 
@@ -257,7 +257,7 @@ public class DashboardData {
    *
    * @param totalMemory totalMemory 字段的值
    */
-  public void setTotalMemory(double totalMemory) {
+  public void setTotalMemory(float totalMemory) {
     this.totalMemory = totalMemory;
   }
 
@@ -267,7 +267,7 @@ public class DashboardData {
    *
    * @return usedStorage 字段值
    */
-  public double getUsedStorage() {
+  public float getUsedStorage() {
     return usedStorage;
   }
 
@@ -276,7 +276,7 @@ public class DashboardData {
    *
    * @param usedStorage usedStorage 字段的值
    */
-  public void setUsedStorage(double usedStorage) {
+  public void setUsedStorage(float usedStorage) {
     this.usedStorage = usedStorage;
   }
 
@@ -285,7 +285,7 @@ public class DashboardData {
    *
    * @return totalStorage 字段值
    */
-  public double getTotalStorage() {
+  public float getTotalStorage() {
     return totalStorage;
   }
 
@@ -294,7 +294,7 @@ public class DashboardData {
    *
    * @param totalStorage totalStorage 字段的值
    */
-  public void setTotalStorage(double totalStorage) {
+  public void setTotalStorage(float totalStorage) {
     this.totalStorage = totalStorage;
   }
 
@@ -303,7 +303,7 @@ public class DashboardData {
    *
    * @return dataVolume 字段值
    */
-  public double getDataVolume() {
+  public float getDataVolume() {
     return dataVolume;
   }
 
@@ -312,7 +312,7 @@ public class DashboardData {
    *
    * @param dataVolume dataVolume 字段的值
    */
-  public void setDataVolume(double dataVolume) {
+  public void setDataVolume(float dataVolume) {
     this.dataVolume = dataVolume;
   }
 }

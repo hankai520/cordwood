@@ -53,20 +53,20 @@ public class PluginRequestRepositoryImpl implements PluginRequestRepositoryCusto
   }
 
   @Override
-  public Double getUserPluginTimeUsageAvg(String userEmail, Date beginTime, Date endTime) {
+  public Float getUserPluginTimeUsageAvg(String userEmail, Date beginTime, Date endTime) {
     final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
     final CriteriaQuery<Double> cq = cb.createQuery(Double.class);
     final Root<PluginRequestBean> root = cq.from(PluginRequestBean.class);
-    cq.select(cb.avg(cb.sum(root.get("milliseconds"), 0.0f)));
+    cq.select(cb.avg(root.get("milliseconds")));
     cq.where(
         cb.like(root.get("plugin").get("pluginPackage").get("developer"), "%" + userEmail + "%"),
         cb.between(root.get("createTime"), beginTime, endTime));
     final Double result = entityManager.createQuery(cq).getSingleResult();
-    return result != null ? result : 0;
+    return result != null ? result.floatValue() : 0;
   }
 
   @Override
-  public Long getPluginTotalDataBytes(Date beginTime, Date endTime) {
+  public Float getPluginTotalDataBytes(Date beginTime, Date endTime) {
     final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
     final CriteriaQuery<Tuple> cq = cb.createQuery(Tuple.class);
     final Root<PluginRequestBean> root = cq.from(PluginRequestBean.class);
@@ -77,15 +77,15 @@ public class PluginRequestRepositoryImpl implements PluginRequestRepositoryCusto
       cq.where(cb.between(root.get("createTime"), beginTime, endTime));
     }
     final Tuple result = entityManager.createQuery(cq).getSingleResult();
-    Long reqBytes = result.get("requestBytes", Long.class);
+    Float reqBytes = result.get("requestBytes", Float.class);
     reqBytes = (reqBytes == null) ? 0 : reqBytes;
-    Long resBytes = result.get("responseBytes", Long.class);
+    Float resBytes = result.get("responseBytes", Float.class);
     resBytes = (resBytes == null) ? 0 : resBytes;
     return reqBytes + resBytes;
   }
 
   @Override
-  public Long getUserPluginDataBytes(String userEmail, Date beginTime, Date endTime) {
+  public Float getUserPluginDataBytes(String userEmail, Date beginTime, Date endTime) {
     final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
     final CriteriaQuery<Tuple> cq = cb.createQuery(Tuple.class);
     final Root<PluginRequestBean> root = cq.from(PluginRequestBean.class);
@@ -96,9 +96,9 @@ public class PluginRequestRepositoryImpl implements PluginRequestRepositoryCusto
         cb.like(root.get("plugin").get("pluginPackage").get("developer"), "%" + userEmail + "%"),
         cb.between(root.get("createTime"), beginTime, endTime));
     final Tuple result = entityManager.createQuery(cq).getSingleResult();
-    Long reqBytes = result.get("requestBytes", Long.class);
+    Float reqBytes = result.get("requestBytes", Float.class);
     reqBytes = (reqBytes == null) ? 0 : reqBytes;
-    Long resBytes = result.get("responseBytes", Long.class);
+    Float resBytes = result.get("responseBytes", Float.class);
     resBytes = (resBytes == null) ? 0 : resBytes;
     return reqBytes + resBytes;
   }
@@ -125,9 +125,9 @@ public class PluginRequestRepositoryImpl implements PluginRequestRepositoryCusto
     for (final Tuple tuple : results) {
       final SummarizedRequest sr = new SummarizedRequest();
       sr.setAccessCount(tuple.get("totalCount", Long.class));
-      sr.setTimeUsageAvg(tuple.get("timeUsageAvg", Double.class));
-      sr.setInboundBytes(tuple.get("totalRequestBytes", Double.class));
-      sr.setOutboundBytes(tuple.get("totalResponseBytes", Double.class));
+      sr.setTimeUsageAvg(tuple.get("timeUsageAvg", Double.class).floatValue());
+      sr.setInboundBytes(tuple.get("totalRequestBytes", Double.class).floatValue());
+      sr.setOutboundBytes(tuple.get("totalResponseBytes", Double.class).floatValue());
       final Plugin plugin = pluginManager.getPlugin(tuple.get("pluginName", String.class));
       sr.setPluginName(plugin.getDisplayName());
       sr.setPluginIsActive(plugin.isActive());
@@ -170,6 +170,7 @@ public class PluginRequestRepositoryImpl implements PluginRequestRepositoryCusto
 
   @Override
   public List<RequestCountAndVolume> getRequestCountAndVolume(Date beginTime, Date endTime) {
+    // 使用标准的sql数据类型进行日期转换 https://www.w3schools.com/sql/sql_datatypes_general.asp
     final String ql =
         "select cast(o.createTime as DATE) as createDate, "
             + "sum(o.requestBytes+o.responseBytes), "
@@ -184,9 +185,9 @@ public class PluginRequestRepositoryImpl implements PluginRequestRepositoryCusto
     final List<RequestCountAndVolume> data = new ArrayList<>(list.size());
     for (final Object[] result : list) {
       final Date createDate = (Date) result[0];
-      final Long dataVolume = (Long) result[1];
+      final Double dataVolume = (Double) result[1];
       final Long dataCount = (Long) result[2];
-      data.add(new RequestCountAndVolume(createDate, dataCount, dataVolume));
+      data.add(new RequestCountAndVolume(createDate, dataCount, dataVolume.floatValue()));
     }
     return data;
   }

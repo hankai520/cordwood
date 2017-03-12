@@ -17,16 +17,16 @@ public class RequestCountAndVolume {
 
   private Date createDate;
   private Long count;
-  private Long bytes;
+  private Float bytes;
 
   /**
    * 初始化插件访问次数和访问量信息。
-   * 
+   *
    * @param createDate 访问时间
    * @param count 访问次数
    * @param bytes 数据量（字节）
    */
-  public RequestCountAndVolume(Date createDate, Long count, Long bytes) {
+  public RequestCountAndVolume(Date createDate, Long count, Float bytes) {
     this.createDate = createDate;
     this.count = count;
     this.bytes = bytes;
@@ -74,7 +74,7 @@ public class RequestCountAndVolume {
    *
    * @return bytes 字段值
    */
-  public Long getBytes() {
+  public Float getBytes() {
     return bytes;
   }
 
@@ -83,7 +83,7 @@ public class RequestCountAndVolume {
    *
    * @param bytes bytes 字段的值
    */
-  public void setBytes(Long bytes) {
+  public void setBytes(Float bytes) {
     this.bytes = bytes;
   }
 

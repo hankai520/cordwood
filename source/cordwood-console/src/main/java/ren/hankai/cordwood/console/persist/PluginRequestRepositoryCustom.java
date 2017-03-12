@@ -40,7 +40,7 @@ public interface PluginRequestRepositoryCustom {
    * @author hankai
    * @since Dec 12, 2016 1:40:34 PM
    */
-  Double getUserPluginTimeUsageAvg(String userEmail, Date beginTime, Date endTime);
+  Float getUserPluginTimeUsageAvg(String userEmail, Date beginTime, Date endTime);
 
   /**
    * 所有插件的流量和（请求+响应数据字节数）。
@@ -51,7 +51,7 @@ public interface PluginRequestRepositoryCustom {
    * @author hankai
    * @since Dec 12, 2016 1:41:53 PM
    */
-  Long getPluginTotalDataBytes(Date beginTime, Date endTime);
+  Float getPluginTotalDataBytes(Date beginTime, Date endTime);
 
   /**
    * 获取用户插件流量和。
@@ -63,7 +63,7 @@ public interface PluginRequestRepositoryCustom {
    * @author hankai
    * @since Dec 12, 2016 1:42:48 PM
    */
-  Long getUserPluginDataBytes(String userEmail, Date beginTime, Date endTime);
+  Float getUserPluginDataBytes(String userEmail, Date beginTime, Date endTime);
 
   /**
    * 获取按插件分组汇总后的访问统计信息。

@@ -63,6 +63,7 @@ dependencies {
     compile "biz.paluch.redis:lettuce:3.5.0.Final"
     
     runtime "org.hsqldb:hsqldb:2.3.4"
+    runtime "mysql:mysql-connector-java"
     
     providedRuntime "org.springframework.boot:spring-boot-starter-tomcat"
     providedRuntime "org.apache.tomcat.embed:tomcat-embed-jasper"

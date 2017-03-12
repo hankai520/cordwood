@@ -350,7 +350,7 @@ public class PluginService {
       stats.setAccessCountDesc(MathUtil.toHumanReadableString(userPluginAccessCount,
           new long[] { 1000 }, new String[] { "", " K", " M", " B" }));
     }
-    final Double avg = pluginRequestRepo.getUserPluginTimeUsageAvg(userEmail, beginTime, endTime);
+    final Float avg = pluginRequestRepo.getUserPluginTimeUsageAvg(userEmail, beginTime, endTime);
     if (avg != null) {
       stats.setTimeUsageAvg(avg);
     }
@@ -374,14 +374,14 @@ public class PluginService {
       stats.setUsageRage((int) (usageRage * 100));
     }
 
-    final Long totalBytes = pluginRequestRepo.getPluginTotalDataBytes(beginTime, endTime);
+    final Float totalBytes = pluginRequestRepo.getPluginTotalDataBytes(beginTime, endTime);
     if ((totalBytes == null) || (totalBytes == 0)) {
       stats.setDataShare(0);
     } else {
-      final Long userPluginBytes =
+      final Float userPluginBytes =
           pluginRequestRepo.getUserPluginDataBytes(userEmail, beginTime, endTime);
       if (userPluginBytes != null) {
-        final float dataShare = ((float) userPluginBytes) / totalBytes;
+        final float dataShare = userPluginBytes / totalBytes;
         stats.setDataShare((int) (dataShare * 100));
       } else {
         stats.setDataShare(0);
@@ -470,8 +470,8 @@ public class PluginService {
    * @author hankai
    * @since Jan 5, 2017 9:58:06 AM
    */
-  public double getResponseTimeAverage() {
-    final Double value = pluginRequestRepo.getResponseTimeAvg();
+  public float getResponseTimeAverage() {
+    final Float value = pluginRequestRepo.getResponseTimeAvg();
     if (value != null) {
       return value;
     }
@@ -485,13 +485,13 @@ public class PluginService {
    * @author hankai
    * @since Jan 5, 2017 10:13:33 AM
    */
-  public double getRequestFaultRate() {
+  public float getRequestFaultRate() {
     final long all = pluginRequestRepo.count();
     if (all == 0) {
       return 0.0f;
     }
     final long failures = pluginRequestRepo.count(PluginRequestSpecs.failedRequests());
-    final double rate = (((double) failures) / ((double) all)) * 100;
+    final float rate = (failures / all) * 100;
     return rate;
   }
 
@@ -502,11 +502,11 @@ public class PluginService {
    * @author hankai
    * @since Jan 5, 2017 2:42:52 PM
    */
-  public double getDataVolumeDailyAvg() {
-    final Long dataVolume = pluginRequestRepo.getPluginTotalDataBytes(null, null);
+  public float getDataVolumeDailyAvg() {
+    final Float dataVolume = pluginRequestRepo.getPluginTotalDataBytes(null, null);
     final Long days = pluginRequestRepo.getNumberOfDays();
     if ((days != null) && (dataVolume != null) && (days > 0)) {
-      return ((double) dataVolume) / days;
+      return dataVolume / days;
     }
     return 0;
   }

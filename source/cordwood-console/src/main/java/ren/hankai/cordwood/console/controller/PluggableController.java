@@ -86,7 +86,8 @@ public class PluggableController extends PluginRequestDispatcher {
     if (errors != null) {
       if (errors instanceof PluginException) {
         logger.warn(
-            String.format("%s [%s] exception: %s", pluginName, functionName, errors.getMessage()));
+            String.format("%s [%s] exception: %s", pluginName, functionName, errors.getMessage()),
+            errors);
       } else {
         pr.setSucceeded(false);
       }

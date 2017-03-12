@@ -157,7 +157,7 @@ public interface PluginRequestRepository
 
     /**
      * 查询指定时间范围内的插件访问次数。
-     * 
+     *
      * @param beginTime 开始时间
      * @param endTime 结束时间
      * @return 查询条件
@@ -182,11 +182,11 @@ public interface PluginRequestRepository
    * @author hankai
    * @since Jan 5, 2017 9:57:09 AM
    */
-  @Query(value = "select avg(cast(o.milliseconds as double)) from PluginRequestBean o")
-  public Double getResponseTimeAvg();
+  @Query(value = "select avg(o.milliseconds) from PluginRequestBean o")
+  public Float getResponseTimeAvg();
 
   /**
-   * 查询有插件访问的天数。
+   * 查询有插件访问的天数（CAST expression added in SQL-92）。
    *
    * @return 访问的天数
    * @author hankai

@@ -62,11 +62,11 @@ public class PluginRequestBean implements Serializable {
   @Size(max = 360)
   private String requestDigest;
   @Column(nullable = false)
-  private long requestBytes;
+  private float requestBytes;
   @Column(nullable = false)
-  private long responseBytes;
+  private float responseBytes;
   @Column(nullable = false)
-  private long milliseconds;
+  private float milliseconds;
   @Column(nullable = false)
   private boolean succeeded;
   @Column(nullable = false)
@@ -273,7 +273,7 @@ public class PluginRequestBean implements Serializable {
    *
    * @return requestBytes 字段值
    */
-  public long getRequestBytes() {
+  public float getRequestBytes() {
     return requestBytes;
   }
 
@@ -282,7 +282,7 @@ public class PluginRequestBean implements Serializable {
    *
    * @param requestBytes requestBytes 字段的值
    */
-  public void setRequestBytes(long requestBytes) {
+  public void setRequestBytes(float requestBytes) {
     this.requestBytes = requestBytes;
   }
 
@@ -291,7 +291,7 @@ public class PluginRequestBean implements Serializable {
    *
    * @return responseBytes 字段值
    */
-  public long getResponseBytes() {
+  public float getResponseBytes() {
     return responseBytes;
   }
 
@@ -300,7 +300,7 @@ public class PluginRequestBean implements Serializable {
    *
    * @param responseBytes responseBytes 字段的值
    */
-  public void setResponseBytes(long responseBytes) {
+  public void setResponseBytes(float responseBytes) {
     this.responseBytes = responseBytes;
   }
 
@@ -309,7 +309,7 @@ public class PluginRequestBean implements Serializable {
    *
    * @return milliseconds 字段值
    */
-  public long getMilliseconds() {
+  public float getMilliseconds() {
     return milliseconds;
   }
 
@@ -318,7 +318,7 @@ public class PluginRequestBean implements Serializable {
    *
    * @param milliseconds milliseconds 字段的值
    */
-  public void setMilliseconds(long milliseconds) {
+  public void setMilliseconds(float milliseconds) {
     this.milliseconds = milliseconds;
   }
 
