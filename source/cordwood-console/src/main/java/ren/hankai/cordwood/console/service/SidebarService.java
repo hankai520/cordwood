@@ -10,6 +10,8 @@ import ren.hankai.cordwood.console.persist.model.SidebarItemBean;
 import ren.hankai.cordwood.console.persist.model.UserBean;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -46,6 +48,14 @@ public class SidebarService {
           items.add(sib);
         }
       }
+    }
+    if (items.size() > 0) {
+      Collections.sort(items, new Comparator<SidebarItemBean>() {
+        @Override
+        public int compare(SidebarItemBean o1, SidebarItemBean o2) {
+          return o1.getSink() - o2.getSink();
+        }
+      });
     }
     return items;
   }
