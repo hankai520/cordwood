@@ -348,14 +348,14 @@ public class PluginService {
     stats.setAccessCount(userPluginAccessCount);
     if (userPluginAccessCount != null) {
       stats.setAccessCountDesc(MathUtil.toHumanReadableString(userPluginAccessCount,
-          new long[] { 1000 }, new String[] { "", " K", " M", " B" }));
+          new long[] {1000}, new String[] {"", " K", " M", " B"}));
     }
     final Float avg = pluginRequestRepo.getUserPluginTimeUsageAvg(userEmail, beginTime, endTime);
     if (avg != null) {
       stats.setTimeUsageAvg(avg);
     }
-    stats.setTimeUsageAvgDesc(MathUtil.toHumanReadableString(avg, new long[] { 1000, 60, 60, 24 },
-        new String[] { " ms", "s", "min", "h", "d" }));
+    stats.setTimeUsageAvgDesc(MathUtil.toHumanReadableString(avg, new long[] {1000, 60, 60, 24},
+        new String[] {" ms", " s", " min", " h", " d"}));
 
     final float failures =
         pluginRequestRepo.count(PluginRequestSpecs.userPluginRequests(userEmail, false));
