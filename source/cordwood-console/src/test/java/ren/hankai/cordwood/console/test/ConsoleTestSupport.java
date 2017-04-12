@@ -41,10 +41,10 @@ import java.util.Date;
  * @since Dec 12, 2016 9:19:41 AM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = { ConsoleTestSupport.class })
-@ActiveProfiles({ Preferences.PROFILE_TEST })
+@SpringBootTest(classes = {ConsoleTestSupport.class})
+@ActiveProfiles({Preferences.PROFILE_TEST})
 @Configuration
-@ComponentScan(basePackages = { "ren.hankai" })
+@ComponentScan(basePackages = {"ren.hankai"})
 public abstract class ConsoleTestSupport {
 
   static {
@@ -54,6 +54,7 @@ public abstract class ConsoleTestSupport {
       @Override
       public void run() {
         try {
+          sleep(1000);
           FileUtils.deleteDirectory(new File(Preferences.getHomeDir()));
         } catch (final Exception ex) {
           // Kindly ignore this exception

@@ -41,4 +41,5 @@ dependencies {
     compile "net.sf.ehcache:ehcache:2.10.3"
 
     testCompile "org.springframework:spring-test:${springVersion}"
+    testCompile "org.yaml:snakeyaml:1.17"
 }

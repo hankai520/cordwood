@@ -41,11 +41,11 @@ import javax.sql.DataSource;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ApplicationTests.class)
-@EnableJpaRepositories(basePackages = { "ren.hankai.cordwood" })
+@EnableJpaRepositories(basePackages = {"ren.hankai.cordwood"})
 @EnableTransactionManagement
-@ComponentScan(basePackages = { "ren.hankai.cordwood" })
+@ComponentScan(basePackages = {"ren.hankai.cordwood"})
 @ActiveProfiles(PluginRequestDispatcher.PROFILE_STANDALONE_MODE)
-@Import({ PluginConfig.class })
+@Import({PluginConfig.class})
 @Configuration
 public abstract class ApplicationTests {
 
@@ -56,6 +56,7 @@ public abstract class ApplicationTests {
       @Override
       public void run() {
         try {
+          sleep(1000);
           FileUtils.deleteDirectory(new File(Preferences.getHomeDir()));
         } catch (final Exception ex) {
           // Kindly ignore this exception

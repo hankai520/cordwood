@@ -33,10 +33,10 @@ import java.net.URL;
  * @since Oct 21, 2016 1:05:07 PM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { PluginTestSupport.class })
-@Import({ CoreSpringConfig.class, PluginConfig.class })
+@ContextConfiguration(classes = {PluginTestSupport.class})
+@Import({CoreSpringConfig.class, PluginConfig.class})
 @Configuration
-@ComponentScan(basePackages = { "ren.hankai.cordwood" })
+@ComponentScan(basePackages = {"ren.hankai.cordwood"})
 public abstract class PluginTestSupport {
 
   protected URL testPluginPackageUrl;
@@ -48,6 +48,7 @@ public abstract class PluginTestSupport {
       @Override
       public void run() {
         try {
+          sleep(1000);
           FileUtils.deleteDirectory(new File(Preferences.getHomeDir()));
         } catch (final Exception ex) {
           // Kindly ignore this exception

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * API 响应代码。
+ * API 响应代码。代码值分配规则：负值表示服务器端错误，正值表示客户端错误；代码绝对值越大，表示错误越严重。
  *
  * @author hankai
  * @version 1.0
@@ -13,33 +13,34 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public enum ApiCode {
   /**
-   * API 已禁用。
+   * 未知错误。
    */
-  ApiDisabled(-2),
+  UnknownError(-2),
   /**
-   * 签名错误。
+   * 系统内部错误。
    */
-  BadSignature(-1),
+  InternalError(-1),
   /**
    * 成功。
    */
   Success(1),
   /**
-   * 参数错误。
+   * API 已禁用。
    */
-  BadParams(2),
-  /**
-   * 系统内部错误。
-   */
-  InternalError(3),
-  /**
-   * 未知错误。
-   */
-  UnknownError(4),
+  ApiDisabled(2),
   /**
    * 需要授权。
    */
-  AuthorizationRequired(5),;
+  AuthorizationRequired(3),
+  /**
+   * 参数错误。
+   */
+  BadParams(4),
+  /**
+   * 签名错误。
+   */
+  BadSignature(5),
+  ;
 
   /**
    * 从整型数字构造 API 响应代码。
@@ -51,18 +52,20 @@ public enum ApiCode {
    */
   @JsonCreator
   public static ApiCode fromInteger(Integer value) {
-    if (value == Success.value) {
-      return Success;
-    } else if (value == BadParams.value) {
-      return BadParams;
-    } else if (value == UnknownError.value) {
+    if (value == UnknownError.value) {
       return UnknownError;
-    } else if (value == AuthorizationRequired.value) {
-      return AuthorizationRequired;
-    } else if (value == BadSignature.value) {
-      return BadSignature;
+    } else if (value == InternalError.value) {
+      return InternalError;
+    } else if (value == Success.value) {
+      return Success;
     } else if (value == ApiDisabled.value) {
       return ApiDisabled;
+    } else if (value == AuthorizationRequired.value) {
+      return AuthorizationRequired;
+    } else if (value == BadParams.value) {
+      return BadParams;
+    } else if (value == BadSignature.value) {
+      return BadSignature;
     }
     return null;
   }

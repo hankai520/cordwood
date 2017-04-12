@@ -24,18 +24,20 @@ import java.io.File;
  * @since Oct 21, 2016 1:05:07 PM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = { CoreTestSupport.class, CoreSpringConfig.class })
+@ContextConfiguration(classes = {CoreTestSupport.class, CoreSpringConfig.class})
 @Configuration
-@ComponentScan(basePackages = { "ren.hankai" })
+@ComponentScan(basePackages = {"ren.hankai"})
 public abstract class CoreTestSupport {
 
   static {
     System.setProperty(Preferences.ENV_APP_HOME_DIR, "./test-home");
-    Assert.assertTrue(ApplicationInitializer.initialize("testSupport.txt", "ehcache.xml"));
+    Assert.assertTrue(
+        ApplicationInitializer.initialize("testSupport.txt", "system.yml", "ehcache.xml"));
     Runtime.getRuntime().addShutdownHook(new Thread() {
       @Override
       public void run() {
         try {
+          sleep(1000);
           FileUtils.deleteDirectory(new File(Preferences.getHomeDir()));
         } catch (final Exception ex) {
           // Kindly ignore this exception
