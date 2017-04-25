@@ -29,10 +29,22 @@ public final class RuntimeVariables {
   private static Map<String, String> variables = null;
   // 运行时变量保存路径
   private static final String savePath = Preferences.getDataDir() + "/runtime.properties";
+  // 缓存时长（秒）
+  private static long cacheSeconds = 60 * 2;
+  // 上次从文件中加载变量的时间戳
+  private static long lastScanTimestamp = -1;
 
   private RuntimeVariables() {}
 
+  // 获取所有运行时变量字典
   private static Map<String, String> getVariables() {
+    // 如果缓存的变量过期了，则清空
+    if (cacheSeconds > 0) {
+      final long timestamp = System.currentTimeMillis() / 1000;
+      if ((timestamp - lastScanTimestamp) > cacheSeconds) {
+        variables = null;
+      }
+    }
     if (variables == null) {
       variables = new HashMap<>();
       try {
@@ -46,6 +58,7 @@ public final class RuntimeVariables {
             variables.put(key, props.getProperty(key));
           }
         }
+        lastScanTimestamp = System.currentTimeMillis() / 1000;
       } catch (final FileNotFoundException ex) {
         logger.error(String.format("Runtime variables file \"%s\" not found!", savePath), ex);
       } catch (final IOException ex) {
@@ -56,6 +69,25 @@ public final class RuntimeVariables {
     return variables;
   }
 
+  /**
+   * 设置从文件中读取变量后，缓存的时长（秒）。
+   *
+   * @param seconds 缓存时长
+   * @author hankai
+   * @since Apr 25, 2017 5:13:45 PM
+   */
+  public static void setCacheSeconds(long seconds) {
+    seconds = (seconds > (60 * 60 * 24)) ? 60 * 60 * 24 : seconds; // 最多缓存1天
+    cacheSeconds = seconds;
+  }
+
+  /**
+   * 获取保存运行时变量的文件。
+   *
+   * @return
+   * @author hankai
+   * @since Apr 25, 2017 5:11:37 PM
+   */
   public static File getVariablesFile() {
     return new File(savePath);
   }
