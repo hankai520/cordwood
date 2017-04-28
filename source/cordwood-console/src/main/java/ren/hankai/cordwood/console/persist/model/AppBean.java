@@ -4,6 +4,7 @@ package ren.hankai.cordwood.console.persist.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import ren.hankai.cordwood.jackson.DateTimeSerializer;
 
 import java.io.Serializable;
@@ -317,6 +318,9 @@ public class AppBean implements Serializable {
 
     /**
      * 获取用于国际化的键名。
+     *
+     * @param withStyle 是否返回带HTML样式的值
+     * @return 国际化后的值
      */
     public String i18nKey(boolean withStyle) {
       if (withStyle) {
@@ -382,6 +386,9 @@ public class AppBean implements Serializable {
 
     /**
      * 获取用于国际化的键名。
+     *
+     * @param withStyle 是否返回带HTML样式的值
+     * @return 国际化后的值
      */
     public String i18nKey(boolean withStyle) {
       if (withStyle) {

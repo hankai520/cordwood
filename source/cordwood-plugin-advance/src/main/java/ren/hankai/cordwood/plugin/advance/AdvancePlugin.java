@@ -58,6 +58,7 @@ public class AdvancePlugin implements PluginLifeCycleAware, PluginResourceLoader
    *
    * @param op1 左操作数
    * @param op2 右操作数
+   * @param echo 回显信息
    * @return 和
    * @author hankai
    * @since Nov 8, 2016 8:55:38 AM

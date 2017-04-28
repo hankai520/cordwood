@@ -50,6 +50,7 @@ subprojects {
         compile "org.slf4j:log4j-over-slf4j:1.7.12"
         
         compile "ch.qos.logback:logback-classic:1.1.7"
+        compile "javax.interceptor:javax.interceptor-api:1.+"
 
         testCompile "junit:junit:4.12"
         testCompile "com.jayway.jsonpath:json-path-assert:0.8.1"
@@ -65,5 +66,10 @@ subprojects {
     task copyDependencies(type: Copy) {
        from configurations.compile
        into "dependencies"
+    }
+    
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
     }
 }

@@ -91,6 +91,8 @@ public final class Preferences {
   /**
    * 获取程序数据根目录。
    *
+   * @return 数据根目录路径
+   *
    * @author hankai
    * @since Jul 28, 2015 10:51:49 AM
    */
@@ -118,6 +120,8 @@ public final class Preferences {
   /**
    * 获取程序缓存目录。
    *
+   * @return 缓存目录路径
+   *
    * @author hankai
    * @since Jul 28, 2015 10:52:19 AM
    */
@@ -130,6 +134,7 @@ public final class Preferences {
   /**
    * 获取程序外部配置文件存储目录。
    *
+   * @return 配置目录路径
    * @author hankai
    * @since Jul 28, 2015 10:52:44 AM
    */
@@ -154,6 +159,7 @@ public final class Preferences {
   /**
    * 获取程序数据存储目录。
    *
+   * @return 数据目录路径
    * @author hankai
    * @since Jul 28, 2015 10:53:05 AM
    */
@@ -203,6 +209,7 @@ public final class Preferences {
   /**
    * 获取程序日志目录。
    *
+   * @return 日志目录路径
    * @author hankai
    * @since Jul 28, 2015 10:53:49 AM
    */
@@ -215,6 +222,7 @@ public final class Preferences {
   /**
    * 获取程序临时数据目录。
    *
+   * @return 临时目录路径
    * @author hankai
    * @since Jul 28, 2015 10:54:02 AM
    */
@@ -227,6 +235,7 @@ public final class Preferences {
   /**
    * 获取程序附件存储目录。
    *
+   * @return 附件目录路径
    * @author hankai
    * @since Jul 28, 2015 10:54:16 AM
    */

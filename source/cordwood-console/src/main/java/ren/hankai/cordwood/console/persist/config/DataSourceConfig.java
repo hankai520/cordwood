@@ -38,12 +38,13 @@ import javax.sql.DataSource;
 public class DataSourceConfig {
 
   private static final Logger logger = LoggerFactory.getLogger(DataSourceConfig.class);
-  private static final String[] basePackages = { "ren.hankai.cordwood" };
+  private static final String[] basePackages = {"ren.hankai.cordwood"};
 
   /**
    * 从外部配置文件加载数据库连接配置。如果数据库配置子类需要在程序启动时，从程序包外部获取配置文件， 则调用此方法获取外部文件配置参数。
    *
-   * @return 是否加载成功
+   * @param fileName 外部配置文件名
+   * @return 加载到的配置内容
    * @author hankai
    * @since Jun 21, 2016 10:45:48 AM
    */

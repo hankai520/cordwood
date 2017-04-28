@@ -31,11 +31,11 @@ import java.util.Map;
  * </ul>
  * 以下是 eclipse link 和 SLF4J 日志级别的对应关系
  * <ul>
- * <li>ALL,FINER,FINEST -> TRACE
- * <li>FINE -> DEBUG
- * <li>CONFIG,INFO -> INFO
- * <li>WARNING -> WARN
- * <li>SEVERE -> ERROR
+ * <li>ALL,FINER,FINEST 映射为 TRACE
+ * <li>FINE 映射为 DEBUG
+ * <li>CONFIG,INFO 映射为 INFO
+ * <li>WARNING 映射为 WARN
+ * <li>SEVERE 映射为 ERROR
  * </ul>
  *
  * @author hankai

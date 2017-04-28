@@ -29,6 +29,7 @@ public abstract class EntitySpecs {
    *
    * @param fieldName 字段名称
    * @param value 字段值
+   * @param <T> 实体类型
    * @return 查询条件
    * @author hankai
    * @since Aug 18, 2016 10:45:18 AM
@@ -48,6 +49,7 @@ public abstract class EntitySpecs {
    *
    * @param fieldName 字段
    * @param values 取值范围
+   * @param <T> 实体类型
    * @return 查询条件
    * @author hankai
    * @since Oct 13, 2016 2:58:59 PM
@@ -64,9 +66,10 @@ public abstract class EntitySpecs {
 
   /**
    * 查询字段的值不在指定范围内的实体。
-   *
+   * 
    * @param fieldName 字段
    * @param values 取值范围
+   * @param <T> 实体类型
    * @return 查询条件
    * @author hankai
    * @since Oct 14, 2016 1:07:16 PM

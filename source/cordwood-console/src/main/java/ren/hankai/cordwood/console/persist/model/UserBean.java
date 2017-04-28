@@ -3,6 +3,7 @@ package ren.hankai.cordwood.console.persist.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -444,6 +445,9 @@ public class UserBean implements Serializable, UserDetails {
 
     /**
      * 获取用于国际化的键名。
+     * 
+     * @param withStyle 是否返回带HTML样式的值
+     * @return 国际化后的用户状态描述
      */
     public String i18nKey(boolean withStyle) {
       if (withStyle) {

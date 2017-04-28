@@ -84,7 +84,7 @@ public final class RuntimeVariables {
   /**
    * 获取保存运行时变量的文件。
    *
-   * @return
+   * @return 变量文件
    * @author hankai
    * @since Apr 25, 2017 5:11:37 PM
    */
@@ -115,6 +115,14 @@ public final class RuntimeVariables {
     getVariables().put(key, value);
   }
 
+  /**
+   * 根据键获取变量值。
+   *
+   * @param key 变量的键
+   * @return 变量值
+   * @author hankai
+   * @since Apr 28, 2017 7:16:18 PM
+   */
   public static String getVariable(String key) {
     return getVariables().get(key);
   }
@@ -181,6 +189,12 @@ public final class RuntimeVariables {
     }
   }
 
+  /**
+   * 强制重新从文件中载入运行时变量。
+   *
+   * @author hankai
+   * @since Apr 28, 2017 7:17:20 PM
+   */
   public static void reloadVariables() {
     variables = null;
     getVariables();

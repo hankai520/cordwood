@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import ren.hankai.cordwood.jackson.DateTimeSerializer;
 
 import java.io.Serializable;
@@ -463,6 +464,8 @@ public class PluginRequestBean implements Serializable {
 
     /**
      * 获取用于国际化的键名。
+     * 
+     * @return 请求渠道国际化后的描述
      */
     public String i18nKey() {
       return String.format("plugin.request.channel.%d", value);

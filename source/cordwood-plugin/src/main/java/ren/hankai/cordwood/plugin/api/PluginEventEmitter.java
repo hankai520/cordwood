@@ -9,7 +9,7 @@ import ren.hankai.cordwood.plugin.Plugin;
  * @author hankai
  * @version 1.0.0
  * @since Oct 8, 2016 4:50:32 PM
- * @see ren.hankai.cordwood.plugin.PluginEventListener
+ * @see ren.hankai.cordwood.plugin.api.PluginEventListener
  */
 public interface PluginEventEmitter {
 
