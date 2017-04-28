@@ -13,31 +13,31 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public enum ApiCode {
   /**
-   * 未知错误。
+   * 未知错误（-2）。
    */
   UnknownError(-2),
   /**
-   * 系统内部错误。
+   * 系统内部错误（-1）。
    */
   InternalError(-1),
   /**
-   * 成功。
+   * 成功（1）。
    */
   Success(1),
   /**
-   * API 已禁用。
+   * API 已禁用（2）。
    */
   ApiDisabled(2),
   /**
-   * 需要授权。
+   * 需要授权（3）。
    */
   AuthorizationRequired(3),
   /**
-   * 参数错误。
+   * 参数错误（4）。
    */
   BadParams(4),
   /**
-   * 签名错误。
+   * 签名错误（5）。
    */
   BadSignature(5),
   ;
