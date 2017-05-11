@@ -49,7 +49,7 @@
                             <div class="alert alert-success" th:if="${param.logout}">
                                 <span th:text="#{admin.logout.success}">您已注销，任何自动化登录都已停止。</span>
                             </div>
-                            <form role="form" th:action="@{~/admin/login}" method="post">
+                            <form id="loginForm" role="form" th:action="@{~/admin/login}" method="post">
                                 <div class="form-group" th:classappend="${param.error} ? 'has-error' : ''">
                                     <label class="control-label" for="email">邮箱</label>
                                     <i class="fa fa-envelope"></i>
