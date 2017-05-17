@@ -92,4 +92,25 @@ public interface BaseRepository<T, I extends Serializable> extends JpaRepository
    */
   T findOne(Specification<T> spec);
 
+  /**
+   * 查询唯一满足条件的实体。
+   *
+   * @param specification 查询条件
+   * @param sort 排序条件
+   * @return 实体实例
+   * @author hankai
+   * @since May 11, 2017 10:41:09 AM
+   */
+  T findOne(Specification<T> specification, Sort sort);
+
+  /**
+   * 查询满足条件的第一个实体。
+   *
+   * @param specification 查询条件
+   * @return 实体实例
+   * @author hankai
+   * @since May 3, 2017 10:24:54 AM
+   */
+  T findFirst(Specification<T> specification);
+
 }
