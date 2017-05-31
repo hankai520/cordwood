@@ -35,6 +35,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -227,7 +228,8 @@ public class PluginController extends BaseController {
         }
         if (copiedFiles.size() > 0) {
           for (final File file : copiedFiles) {
-            if (!pluginService.installPluginPackage(file.toURI().toURL(), true)) {
+            final URL url = file.getAbsoluteFile().toURI().toURL();
+            if (!pluginService.installPluginPackage(url, true)) {
               throw new RuntimeException("Failed to install plugin: " + file.getName());
             }
             FileUtils.deleteQuietly(file);
