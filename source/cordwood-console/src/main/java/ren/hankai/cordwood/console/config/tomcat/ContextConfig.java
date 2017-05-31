@@ -2,6 +2,7 @@
 package ren.hankai.cordwood.console.config.tomcat;
 
 import org.apache.catalina.Context;
+import org.apache.catalina.webresources.StandardRoot;
 import org.springframework.boot.context.embedded.tomcat.TomcatContextCustomizer;
 
 /**
@@ -21,5 +22,10 @@ public class ContextConfig implements TomcatContextCustomizer {
    * .catalina.Context)
    */
   @Override
-  public void customize(Context context) {}
+  public void customize(Context context) {
+    final int cacheSize = 40 * 1024;
+    final StandardRoot standardRoot = new StandardRoot(context);
+    standardRoot.setCacheMaxSize(cacheSize);
+    context.setResources(standardRoot);
+  }
 }
