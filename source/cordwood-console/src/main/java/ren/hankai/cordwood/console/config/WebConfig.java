@@ -28,6 +28,7 @@ import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
+import ren.hankai.cordwood.console.interceptor.LoginInterceptor;
 import ren.hankai.cordwood.console.interceptor.PluginRequestInterceptor;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
@@ -66,6 +67,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   private BreadCrumbInterceptor breadCrumbInterceptor;
   @Autowired
   private PluginRequestInterceptor pluginRequestInterceptor;
+  @Autowired
+  private LoginInterceptor loginInterceptor;
 
   /**
    * HTML 模板解析器。
@@ -165,7 +168,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     final ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
     viewResolver.setTemplateEngine(templateEngine);
     viewResolver.setOrder(1);
-    viewResolver.setViewNames(new String[] { "*.html", "*.js", "*.css" });
+    viewResolver.setViewNames(new String[] {"*.html", "*.js", "*.css"});
     viewResolver.setCharacterEncoding("UTF-8");
     return viewResolver;
   }
@@ -190,6 +193,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(loginInterceptor).addPathPatterns(Route.BG_LOGIN + "/**");
     registry.addInterceptor(breadCrumbInterceptor).addPathPatterns(Route.BACKGROUND_PREFIX + "/**");
     registry.addInterceptor(pluginRequestInterceptor)
         .addPathPatterns(Pluggable.PLUGIN_BASE_URL + "/**");

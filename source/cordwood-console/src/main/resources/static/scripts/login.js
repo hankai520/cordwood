@@ -22,6 +22,9 @@ requirejs(['crypto-js','bootstrap','uniform'], function(CryptoJS) {
   if (!$('#email').val()) {
     $('#email').focus();
   }
+  if (!$('#password').val()) {
+    $('#password').focus();
+  }
   $('#loginForm').submit(function() {
     var pwd = $('#loginForm #password').val();
     pwd = CryptoJS.SHA1(pwd);

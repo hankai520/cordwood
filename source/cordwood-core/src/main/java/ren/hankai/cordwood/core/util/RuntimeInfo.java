@@ -1,9 +1,14 @@
 
 package ren.hankai.cordwood.core.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Properties;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 系统运行时信息。
@@ -13,6 +18,8 @@ import java.util.Properties;
  * @since Aug 12, 2016 10:27:55 AM
  */
 public final class RuntimeInfo {
+
+  private static final Logger logger = LoggerFactory.getLogger(RuntimeInfo.class);
 
   private final Properties props;
 
@@ -253,5 +260,28 @@ public final class RuntimeInfo {
    */
   public String getOsVersion() {
     return props.getProperty("os.version");
+  }
+
+  /**
+   * 获取当前web程序包的版本。
+   *
+   * @param clazz 程序包中的任意类
+   * @param request servlet请求
+   * @return 版本号
+   * @author hankai
+   * @since Jul 11, 2017 9:43:25 AM
+   */
+  public String getWarPackageVersion(Class<?> clazz, HttpServletRequest request) {
+    String version = clazz.getPackage().getImplementationVersion();
+    if (version == null) {
+      final Properties prop = new Properties();
+      try {
+        prop.load(request.getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF"));
+        version = prop.getProperty("Implementation-Version");
+      } catch (final Exception e) {
+        logger.trace("", e);
+      }
+    }
+    return version;
   }
 }

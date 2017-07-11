@@ -6,6 +6,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.authentication.RememberMeServices;
+import ren.hankai.cordwood.console.interceptor.CacheUserNameFailureHandler;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.config.BaseSecurityConfig;
 import ren.hankai.cordwood.plugin.api.annotation.Pluggable;
@@ -59,6 +60,8 @@ public class SecurityConfig {
 
     @Autowired
     private RememberMeServices rememberMeServices;
+    @Autowired
+    private CacheUserNameFailureHandler cacheUserNameFailureHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -74,10 +77,14 @@ public class SecurityConfig {
           .hasAuthority(PredefinedRoles.ADMIN)
 
           .anyRequest().authenticated();
-
-      http.formLogin().loginPage(Route.BG_LOGIN).defaultSuccessUrl(Route.BG_DASHBOARD).permitAll();
+      http.formLogin()
+          .loginPage(Route.BG_LOGIN)
+          .failureHandler(cacheUserNameFailureHandler)
+          .defaultSuccessUrl(Route.BG_DASHBOARD).permitAll();
       http.logout().logoutUrl(Route.BG_LOGOUT).permitAll();
-      http.rememberMe().rememberMeServices(rememberMeServices).key(Preferences.getSystemSk())
+      http.rememberMe()
+          .rememberMeServices(rememberMeServices)
+          .key(Preferences.getSystemSk())
           .tokenValiditySeconds(60 * 60 * 24 * 7);
     }
   }
