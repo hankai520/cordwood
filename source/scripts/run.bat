@@ -7,7 +7,6 @@ if not exist "%_PRG_DIR%setenv.bat" goto SKIPENV
 call "%_PRG_DIR%setenv.bat"
 :SKIPENV
 
-set HOME_DIR=%_PRG_DIR%data
 set _JAVA_EXEC=%JRE_HOME%\bin\java.exe
 set _ARGS=--server.address=%TCP_LISTEN% --server.port=%TCP_PORT% EXTRA_ARGS
 
@@ -23,7 +22,7 @@ echo found jre %_JAVA_EXEC%
 
 echo startting application in foreground ...
 
-"%_JAVA_EXEC%" -jar %_PRG_DIR%%_EXEC_NAME% %_ARGS%
+"%_JAVA_EXEC%" -Dapp.home=%APP_HOME% -jar %_PRG_DIR%%_EXEC_NAME% %_ARGS%
 
 :END
 pause
