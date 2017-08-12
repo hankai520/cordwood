@@ -157,6 +157,19 @@ public final class Preferences {
   }
 
   /**
+   * 模板文件目录。
+   *
+   * @return 模板文件目录路径
+   * @author hankai
+   * @since Aug 10, 2017 9:11:48 PM
+   */
+  public static String getTemplatesDir() {
+    final String dir = getConfigDir() + File.separator + "templates";
+    System.setProperty("app.templates", dir);
+    return dir;
+  }
+
+  /**
    * 获取程序数据存储目录。
    *
    * @return 数据目录路径

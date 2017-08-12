@@ -115,10 +115,10 @@ public class ApplicationInitializer {
    */
   private static boolean checkHome() {
     logger.info(String.format("Application home is: \"%s\"", Preferences.getHomeDir()));
-    final String[] subDirs = { Preferences.getConfigDir(), Preferences.getDataDir(),
+    final String[] subDirs = {Preferences.getConfigDir(), Preferences.getDataDir(),
         Preferences.getCacheDir(), Preferences.getLogDir(), Preferences.getTempDir(),
         Preferences.getAttachmentDir(), Preferences.getBackupDir(), Preferences.getDbDir(),
-        Preferences.getPluginsDir(), Preferences.getLibsDir() };
+        Preferences.getPluginsDir(), Preferences.getLibsDir(), Preferences.getTemplatesDir()};
     for (final String dir : subDirs) {
       final File file = new File(dir);
       if (!file.exists()) {
