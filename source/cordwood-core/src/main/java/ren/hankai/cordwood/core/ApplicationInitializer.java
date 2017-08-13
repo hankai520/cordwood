@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.List;
 
 /**
  * 程序初始化类，用于自检，修复错误，初始化依赖项等。
@@ -34,12 +35,17 @@ public class ApplicationInitializer {
    * @since Jun 21, 2016 12:52:30 PM
    */
   public static boolean initialize(String... supportFileNames) {
+    return initialize(true, ApplicationInitInfo.initWithConfigs(supportFileNames));
+  }
+
+  public static boolean initialize(boolean printClassPaths, ApplicationInitInfo appInitInfo) {
     printClassPaths();
     boolean success = false;
     logger.info("Initializing application ...");
     success = checkHome();
     if (success) {
-      success = checkConfigurations(supportFileNames);
+      success = checkConfigurations(appInitInfo.getConfigFiles());
+      success = checkTemplates(appInitInfo.getTemplates());
     }
     if (success) {
       logger.info("Application initialized successfully.");
@@ -72,7 +78,35 @@ public class ApplicationInitializer {
    * @author hankai
    * @since Jun 21, 2016 12:52:59 PM
    */
-  private static boolean checkConfigurations(String... fileNames) {
+  private static boolean checkConfigurations(List<String> fileNames) {
+    return checkSupportFiles("/support/", Preferences.getConfigDir(), fileNames);
+  }
+
+  /**
+   * 检查数据根目录下的模板文件，如果有丢失，则复制默认模板。
+   *
+   * @param fileNames 模板文件名
+   * @return 是否正常
+   * @author hankai
+   * @since Aug 13, 2017 12:07:21 PM
+   */
+  private static boolean checkTemplates(List<String> fileNames) {
+    return checkSupportFiles("/support/templates/",
+        Preferences.getConfigDir() + File.separator + "templates", fileNames);
+  }
+
+  /**
+   * 检查数据。
+   *
+   * @param basePath
+   * @param targetDir
+   * @param fileNames
+   * @return
+   * @author hankai
+   * @since Aug 13, 2017 12:08:07 PM
+   */
+  private static boolean checkSupportFiles(String basePath, String targetDir,
+      List<String> fileNames) {
     if (fileNames == null) {
       return true;
     }
@@ -80,9 +114,9 @@ public class ApplicationInitializer {
     OutputStream out = null;
     try {
       for (final String fileName : fileNames) {
-        in = ApplicationInitializer.class.getResourceAsStream("/support/" + fileName);
+        in = ApplicationInitializer.class.getResourceAsStream(basePath + fileName);
         if (in != null) {
-          final File destFile = new File(Preferences.getConfigDir() + File.separator + fileName);
+          final File destFile = new File(targetDir + File.separator + fileName);
           if (!destFile.exists()) {
             out = new FileOutputStream(destFile);
             FileCopyUtils.copy(in, out);
