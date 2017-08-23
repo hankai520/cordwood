@@ -87,8 +87,15 @@ public class DefaultRequestInspector implements RequestInspector {
     }
     final String expSign = signRequestParameters(parameters);
     final Object sign = parameters.get(RequestInspector.REQUEST_SIGN);
-    if ((sign instanceof String) && expSign.equalsIgnoreCase((String) sign)) {
-      return true;
+    if (sign != null) {
+      if ((sign instanceof String) && expSign.equalsIgnoreCase((String) sign)) {
+        return true;
+      } else if (sign instanceof String[]) {
+        final String[] strArr = (String[]) sign;
+        if ((strArr.length > 0) && expSign.equalsIgnoreCase(strArr[0])) {
+          return true;
+        }
+      }
     }
     return false;
   }
