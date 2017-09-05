@@ -199,4 +199,15 @@ public final class RuntimeVariables {
     variables = null;
     getVariables();
   }
+
+  /**
+   * 删除运行时变量。
+   *
+   * @param key 变量名
+   * @author hankai
+   * @since Sep 5, 2017 5:45:44 PM
+   */
+  public static void removeVariable(String key) {
+    variables.remove(key);
+  }
 }
