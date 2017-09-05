@@ -8,7 +8,7 @@ call "%_PRG_DIR%setenv.bat"
 :SKIPENV
 
 set _JAVA_EXEC=%JRE_HOME%\bin\java.exe
-set _ARGS=--server.address=%TCP_LISTEN% --server.port=%TCP_PORT% EXTRA_ARGS
+set _ARGS=--server.address=%TCP_LISTEN% --server.port=%TCP_PORT% "%EXTRA_ARGS%"
 
 echo checking executable existance ...
 if not exist "%_PRG_DIR%%_EXEC_NAME%" echo Executable %_PRG_DIR%%_EXEC_NAME% not found! goto END
