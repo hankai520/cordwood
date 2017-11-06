@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +24,7 @@ public class DateDeserializer extends JsonDeserializer<Date> {
 
   private static final Logger logger = LoggerFactory.getLogger(DateDeserializer.class);
 
-  private String format = "yyyy-MM-dd HH:mm:ss";
+  private String format = "yyyy-MM-dd";
 
   public DateDeserializer() {}
 
