@@ -1,6 +1,7 @@
 package ren.hankai.cordwood.web.security.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,14 @@ public class DefaultAccessAuthenticator implements AccessAuthenticator {
 
   @Override
   public String generateAccessToken(TokenInfo tokenInfo) {
+    return generateAccessToken(tokenInfo, Preferences.getSystemSk());
+  }
+
+  @Override
+  public String generateAccessToken(TokenInfo tokenInfo, String secretKey) {
     try {
       String token = objectMapper.writeValueAsString(tokenInfo);
-      token = EncryptionUtil.aes(token, Preferences.getSystemSk(), true);
+      token = EncryptionUtil.aes(token, secretKey, true);
       return token;
     } catch (final Exception ex) {
       logger.error("Failed to generate api access token!", ex);
@@ -40,9 +46,14 @@ public class DefaultAccessAuthenticator implements AccessAuthenticator {
 
   @Override
   public TokenInfo parseAccessToken(String tokenString) {
+    return parseAccessToken(tokenString, Preferences.getSystemSk());
+  }
+
+  @Override
+  public TokenInfo parseAccessToken(String tokenString, String secretKey) {
     TokenInfo tokenInfo = null;
     if (!StringUtils.isEmpty(tokenString)) {
-      final String decrypted = EncryptionUtil.aes(tokenString, Preferences.getSystemSk(), false);
+      final String decrypted = EncryptionUtil.aes(tokenString, secretKey, false);
       try {
         tokenInfo = objectMapper.readValue(decrypted, TokenInfo.class);
       } catch (final Exception ex) {
@@ -55,7 +66,12 @@ public class DefaultAccessAuthenticator implements AccessAuthenticator {
 
   @Override
   public int verifyAccessToken(String tokenString) {
-    final TokenInfo tokenInfo = parseAccessToken(tokenString);
+    return verifyAccessToken(tokenString, Preferences.getSystemSk());
+  }
+
+  @Override
+  public int verifyAccessToken(String tokenString, String secretKey) {
+    final TokenInfo tokenInfo = parseAccessToken(tokenString, secretKey);
     if (tokenInfo == null) {
       return TokenInfo.TOKEN_ERROR_INVALID;
     } else if ((tokenInfo.getExpiryTime() >= 0)

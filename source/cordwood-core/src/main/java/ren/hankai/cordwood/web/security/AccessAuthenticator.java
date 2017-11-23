@@ -26,6 +26,17 @@ public interface AccessAuthenticator {
   String generateAccessToken(TokenInfo tokenInfo);
 
   /**
+   * 根据鉴权信息和秘钥生成授权令牌。
+   *
+   * @param tokenInfo 鉴权信息
+   * @param secretKey 秘钥
+   * @return 授权令牌字符串
+   * @author hankai
+   * @since Nov 8, 2017 9:29:57 AM
+   */
+  String generateAccessToken(TokenInfo tokenInfo, String secretKey);
+
+  /**
    * 解析授权令牌。
    *
    * @param tokenString 授权令牌字符串
@@ -36,6 +47,17 @@ public interface AccessAuthenticator {
   TokenInfo parseAccessToken(String tokenString);
 
   /**
+   * 解析授权令牌。
+   *
+   * @param tokenString 授权令牌字符串
+   * @param secretKey 秘钥
+   * @return 鉴权信息
+   * @author hankai
+   * @since Nov 8, 2017 9:30:57 AM
+   */
+  TokenInfo parseAccessToken(String tokenString, String secretKey);
+
+  /**
    * 验证授权令牌是否有效。
    *
    * @param tokenString 授权令牌字符串。
@@ -44,6 +66,17 @@ public interface AccessAuthenticator {
    * @since Oct 31, 2016 10:18:03 PM
    */
   int verifyAccessToken(String tokenString);
+
+  /**
+   * 验证授权令牌是否有效。
+   *
+   * @param tokenString 授权令牌字符串。
+   * @param secretKey 秘钥
+   * @return 验证结果，参考 TokenInfo 中的错误信息定义。
+   * @author hankai
+   * @since Nov 8, 2017 9:31:08 AM
+   */
+  int verifyAccessToken(String tokenString, String secretKey);
 
   /**
    * 鉴权码信息。
@@ -116,7 +149,7 @@ public interface AccessAuthenticator {
 
     /**
      * 生成一个永不过期的令牌。
-     * 
+     *
      * @param userKey 用户标识
      * @param userSk 用户秘钥
      * @return 令牌
