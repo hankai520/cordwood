@@ -39,7 +39,9 @@ public class ApplicationInitializer {
   }
 
   public static boolean initialize(boolean printClassPaths, ApplicationInitInfo appInitInfo) {
-    printClassPaths();
+    if (printClassPaths) {
+      printClassPaths();
+    }
     boolean success = false;
     logger.info("Initializing application ...");
     success = checkHome();

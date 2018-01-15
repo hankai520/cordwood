@@ -1,11 +1,8 @@
 //core projects
-include "cordwood-plugin", "cordwood-core", "cordwood-console"
+include "cordwood-core"
 
 //security
-include "cordwood-oauth2-server"
+include "cordwood-oauth2"
 
 //mobile
 include "cordwood-mobile"
-
-//demo plugins
-include "cordwood-plugin-advance", "cordwood-plugin-pojo"

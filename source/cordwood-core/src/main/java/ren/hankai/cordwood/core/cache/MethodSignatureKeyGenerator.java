@@ -21,6 +21,9 @@ public class MethodSignatureKeyGenerator implements KeyGenerator {
     builder.append(method.getName());
     if (params != null) {
       for (final Object object : params) {
+        if (object == null) {
+          continue;
+        }
         builder.append(object.getClass().toString() + object.hashCode());
       }
     }

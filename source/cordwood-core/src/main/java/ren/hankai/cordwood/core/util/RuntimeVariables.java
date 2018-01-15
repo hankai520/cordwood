@@ -1,6 +1,7 @@
 
 package ren.hankai.cordwood.core.util;
 
+import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.DefaultPropertiesPersister;
@@ -9,7 +10,6 @@ import ren.hankai.cordwood.core.Preferences;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -105,7 +105,7 @@ public final class RuntimeVariables {
           "These are the runtime variables for the application, do not change it manually!";
       final Properties props = new Properties();
       props.putAll(variables);
-      dpp.store(props, new FileWriter(savePath), header);
+      dpp.store(props, new FileWriterWithEncoding(savePath, "UTF-8"), header);
     } catch (final IOException ex) {
       logger.error(String.format("Failed to save runtime variables to file \"%s\"!", savePath), ex);
     }

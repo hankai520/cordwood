@@ -2,11 +2,14 @@
 package ren.hankai.cordwood.core;
 
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.YamlMapFactoryBean;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -23,6 +26,8 @@ import java.util.Map;
  * @since Jun 21, 2016 12:54:36 PM
  */
 public final class Preferences {
+
+  private static final Logger logger = LoggerFactory.getLogger(Preferences.class);
 
   /**
    * 测试 运行时配置，启用后所有添加了 @profile(Bootstrap.PROFILE_TEST) 标记的配置将被加载。
@@ -48,6 +53,16 @@ public final class Preferences {
    * .启用 Oracle 数据库。
    */
   public static final String PROFILE_ORACLE = "oracle";
+
+  /**
+   * 启用 Redis 来存储会话。
+   */
+  public static final String PROFILE_REDIS_SESSION = "redis-session";
+
+  /**
+   * 启用 redis 来缓存数据。
+   */
+  public static final String PROFILE_REDIS_CACHE = "redis-cache";
 
   /**
    * 命令行参数：程序数据根目录。
@@ -111,6 +126,12 @@ public final class Preferences {
       if (StringUtils.isEmpty(appHome)) {
         // 如果没有检测到任何环境变量设置了home目录，则使用默认目录。取名 home-not-set 是为了提示用户环境变量没有正确设置
         appHome = System.getProperty("user.dir") + File.separator + "home-not-set";
+      }
+      try {
+        appHome = new File(appHome).getCanonicalPath();
+      } catch (final IOException ex) {
+        logger.error("Failed to ge canonical path of app.home", ex);
+        throw new RuntimeException(ex);
       }
       System.setProperty(ENV_APP_HOME_DIR, appHome);
     }

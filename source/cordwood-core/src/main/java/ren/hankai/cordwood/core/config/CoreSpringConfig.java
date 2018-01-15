@@ -2,18 +2,10 @@ package ren.hankai.cordwood.core.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.sf.ehcache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.ehcache.EhCacheCacheManager;
-import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
-import org.springframework.cache.interceptor.KeyGenerator;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-import ren.hankai.cordwood.core.Preferences;
-import ren.hankai.cordwood.core.cache.MethodSignatureKeyGenerator;
 
 /**
  * Spring 核心配置类，用于定义 cordwood-core 所必要的组件。
@@ -22,8 +14,7 @@ import ren.hankai.cordwood.core.cache.MethodSignatureKeyGenerator;
  * @version 1.0.0
  * @since Oct 28, 2016 4:42:14 PM
  */
-@ComponentScan(basePackages = { "ren.hankai.cordwood" })
-@EnableCaching
+@ComponentScan(basePackages = {"ren.hankai.cordwood"})
 public class CoreSpringConfig {
 
   /**
@@ -57,42 +48,4 @@ public class CoreSpringConfig {
     ms.setUseCodeAsDefaultMessage(true);
     return ms;
   }
-
-  /**
-   * Ehcache 缓存工厂。
-   *
-   * @return Ehcache 缓存工厂
-   * @author hankai
-   * @since Dec 26, 2016 11:33:58 AM
-   */
-  @Bean
-  public EhCacheManagerFactoryBean cacheManagerFactoryBean() {
-    final EhCacheManagerFactoryBean bean = new EhCacheManagerFactoryBean();
-    final String path = Preferences.getConfigFilePath("ehcache.xml");
-    final Resource resource = new FileSystemResource(path);
-    bean.setConfigLocation(resource);
-    return bean;
-  }
-
-  /**
-   * Ehcache 管理器。
-   *
-   * @param factory 缓存工厂
-   * @return Ehcache 管理器
-   * @author hankai
-   * @since Dec 26, 2016 11:32:41 AM
-   */
-  @Bean
-  public EhCacheCacheManager cacheCacheManager(EhCacheManagerFactoryBean factory) {
-    final EhCacheCacheManager cm = new EhCacheCacheManager(factory.getObject());
-    // 随 JVM 一起关闭
-    System.setProperty(CacheManager.ENABLE_SHUTDOWN_HOOK_PROPERTY, "true");
-    return cm;
-  }
-
-  @Bean(name = "methodSignatureKeyGenerator")
-  public KeyGenerator keyGenerator() {
-    return new MethodSignatureKeyGenerator();
-  }
-
 }
