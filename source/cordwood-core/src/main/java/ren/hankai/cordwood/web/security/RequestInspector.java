@@ -17,7 +17,7 @@ public interface RequestInspector {
   static final String REQUEST_SIGN = "sign";
 
   /**
-   * 计算参数签名。
+   * 计算参数签名（使用首选项中配置的传输秘钥 Preferences.getTransferKey()）。
    *
    * @param parameters 参数集合
    * @return 签名字符串
@@ -27,7 +27,18 @@ public interface RequestInspector {
   String signRequestParameters(Map<String, ?> parameters);
 
   /**
-   * 验证请求参数是否未篡改。
+   * 用自定义秘钥计算参数签名。
+   *
+   * @param parameters 参数集合
+   * @param sk 秘钥
+   * @return 签名字符串
+   * @author hankai
+   * @since Jan 26, 2018 8:44:36 PM
+   */
+  String signRequestParameters(Map<String, ?> parameters, String sk);
+
+  /**
+   * 验证请求参数是否未篡改（使用首选项中配置的传输秘钥 Preferences.getTransferKey()）。
    *
    * @param parameters 参数集合
    * @return 是否被篡改
@@ -35,4 +46,15 @@ public interface RequestInspector {
    * @since Oct 31, 2016 10:24:55 PM
    */
   boolean verifyRequestParameters(Map<String, ?> parameters);
+
+  /**
+   * 用自定义秘钥验证请求参数是否未篡改。
+   *
+   * @param parameters 参数集合
+   * @param sk 秘钥
+   * @return 是否被篡改
+   * @author hankai
+   * @since Jan 26, 2018 8:44:39 PM
+   */
+  boolean verifyRequestParameters(Map<String, ?> parameters, String sk);
 }

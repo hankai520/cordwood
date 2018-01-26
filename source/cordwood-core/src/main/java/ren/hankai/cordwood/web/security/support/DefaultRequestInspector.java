@@ -31,6 +31,11 @@ public class DefaultRequestInspector implements RequestInspector {
 
   @Override
   public String signRequestParameters(Map<String, ?> parameters) {
+    return signRequestParameters(parameters, Preferences.getTransferKey());
+  }
+
+  @Override
+  public String signRequestParameters(Map<String, ?> parameters, String sk) {
     final StringBuffer toBeSigned = new StringBuffer();
     final List<String> paramNames = new ArrayList<>();
     paramNames.addAll(parameters.keySet());
@@ -62,13 +67,18 @@ public class DefaultRequestInspector implements RequestInspector {
     if (toBeSigned.length() > 0) {
       toBeSigned.deleteCharAt(toBeSigned.length() - 1);
     }
-    toBeSigned.append(Preferences.getTransferKey());
+    toBeSigned.append(sk);
     final String expSign = DigestUtils.sha1Hex(toBeSigned.toString());
     return expSign;
   }
 
   @Override
   public boolean verifyRequestParameters(Map<String, ?> parameters) {
+    return verifyRequestParameters(parameters, Preferences.getTransferKey());
+  }
+
+  @Override
+  public boolean verifyRequestParameters(Map<String, ?> parameters, String sk) {
     boolean hasParams = false;
     final Iterator<String> it = parameters.keySet().iterator();
     // 检查是否有入参，若无，则不会验证
@@ -85,7 +95,7 @@ public class DefaultRequestInspector implements RequestInspector {
     if (!hasParams) {
       return true;
     }
-    final String expSign = signRequestParameters(parameters);
+    final String expSign = signRequestParameters(parameters, sk);
     final Object sign = parameters.get(RequestInspector.REQUEST_SIGN);
     if (sign != null) {
       if ((sign instanceof String) && expSign.equalsIgnoreCase((String) sign)) {
