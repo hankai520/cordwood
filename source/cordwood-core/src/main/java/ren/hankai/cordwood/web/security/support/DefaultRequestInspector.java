@@ -11,6 +11,7 @@ import ren.hankai.cordwood.web.security.RequestInspector;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -49,8 +50,10 @@ public class DefaultRequestInspector implements RequestInspector {
       String value = null;
       if (objValue instanceof String[]) {
         final String[] array = (String[]) objValue;
-        if (array.length > 0) {
+        if (array.length == 1) {
           value = array[0];
+        } else if (array.length > 1) {
+          value = Arrays.toString(array);
         }
       } else {
         value = objValue.toString();
