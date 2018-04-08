@@ -4,7 +4,6 @@ package ren.hankai.cordwood.core.util;
 import org.apache.commons.io.output.FileWriterWithEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.DefaultPropertiesPersister;
 import ren.hankai.cordwood.core.Preferences;
 
 import java.io.File;
@@ -48,11 +47,10 @@ public final class RuntimeVariables {
     if (variables == null) {
       variables = new HashMap<>();
       try {
-        final DefaultPropertiesPersister dpp = new DefaultPropertiesPersister();
         final Properties props = new Properties();
         final File file = getVariablesFile();
         if (file.exists()) {
-          dpp.load(props, new FileReader(file));
+          props.load(new FileReader(file));
           final Set<String> keyset = props.stringPropertyNames();
           for (final String key : keyset) {
             variables.put(key, props.getProperty(key));
@@ -103,12 +101,11 @@ public final class RuntimeVariables {
       return;
     }
     try {
-      final DefaultPropertiesPersister dpp = new DefaultPropertiesPersister();
       final String header =
           "These are the runtime variables for the application, do not change it manually!";
       final Properties props = new Properties();
       props.putAll(variables);
-      dpp.store(props, new FileWriterWithEncoding(savePath, "UTF-8"), header);
+      props.store(new FileWriterWithEncoding(savePath, "UTF-8"), header);
     } catch (final IOException ex) {
       logger.error(String.format("Failed to save runtime variables to file \"%s\"!", savePath), ex);
     }
