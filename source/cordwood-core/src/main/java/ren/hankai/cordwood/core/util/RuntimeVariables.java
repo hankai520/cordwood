@@ -99,6 +99,9 @@ public final class RuntimeVariables {
    * @since Oct 25, 2016 10:45:14 AM
    */
   public static void saveVariables() {
+    if ((variables == null) || variables.isEmpty()) {
+      return;
+    }
     try {
       final DefaultPropertiesPersister dpp = new DefaultPropertiesPersister();
       final String header =

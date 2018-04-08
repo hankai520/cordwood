@@ -32,7 +32,7 @@ public abstract class CoreTestSupport {
   static {
     System.setProperty(Preferences.ENV_APP_HOME_DIR, "./test-home");
     Assert.assertTrue(
-        ApplicationInitializer.initialize("testSupport.txt", "system.yml", "ehcache.xml"));
+        ApplicationInitializer.initialize("testSupport.txt", "system.yml"));
     Runtime.getRuntime().addShutdownHook(new Thread() {
       @Override
       public void run() {

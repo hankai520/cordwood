@@ -38,6 +38,15 @@ public class ApplicationInitializer {
     return initialize(true, ApplicationInitInfo.initWithConfigs(supportFileNames));
   }
 
+  /**
+   * 程序初始化（重载版本，可制定更多配置参数）。
+   * 
+   * @param printClassPaths 是否打印雷路径
+   * @param appInitInfo 应用初始化信息
+   * @return 是否初始化成功
+   * @author hankai
+   * @since Mar 23, 2018 12:58:24 AM
+   */
   public static boolean initialize(boolean printClassPaths, ApplicationInitInfo appInitInfo) {
     if (printClassPaths) {
       printClassPaths();
@@ -98,14 +107,14 @@ public class ApplicationInitializer {
   }
 
   /**
-   * 检查数据。
-   *
-   * @param basePath
-   * @param targetDir
-   * @param fileNames
-   * @return
+   * 检查默认配置文件是否丢失，若丢失，则复制应用内置配置文件。
+   * 
+   * @param basePath 应用内默认配置文件根路径
+   * @param targetDir 配置文件存储目录
+   * @param fileNames 配置文件名称列表
+   * @return 是否成功检查配置文件并恢复丢失的文件
    * @author hankai
-   * @since Aug 13, 2017 12:08:07 PM
+   * @since Mar 23, 2018 12:56:15 AM
    */
   private static boolean checkSupportFiles(String basePath, String targetDir,
       List<String> fileNames) {

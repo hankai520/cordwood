@@ -4,13 +4,12 @@ import com.dd.plist.NSArray;
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListParser;
 
+import net.dongliu.apk.parser.ApkParser;
+import net.dongliu.apk.parser.bean.ApkMeta;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import net.dongliu.apk.parser.ApkParser;
-import net.dongliu.apk.parser.bean.ApkMeta;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;

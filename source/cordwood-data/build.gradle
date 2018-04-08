@@ -1,15 +1,11 @@
-ext {
-    springVersion = "4.3.3.RELEASE"
-}
-
 eclipse {
     project {
-        name="cordwood-oauth2"
+        name="cordwood-data"
     }
 }
 
 jar {
-    baseName = "cordwood-oauth2"
+    baseName = "cordwood-data"
     version = mainVersion
     manifest {
         attributes(
@@ -26,8 +22,13 @@ sourceSets {
 }
 
 dependencies {
-    compile 'org.springframework.security.oauth:spring-security-oauth2:2.1.1.RELEASE'
+    compile "commons-io:commons-io:2.2"
+    compile "commons-codec:commons-codec:1.9"
+    compile "org.apache.commons:commons-lang3:3.4"
+    
     compile project(":cordwood-core")
     
-    testCompile "org.springframework:spring-test:${springVersion}"
+    compile "org.springframework.data:spring-data-jpa:1.10.3.RELEASE"
+    compile "org.eclipse.persistence:eclipselink:2.5.0"
+    compile "org.apache.tomcat:tomcat-jdbc:8.5.5"
 }

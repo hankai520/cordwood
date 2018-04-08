@@ -1,8 +1,8 @@
 //core projects
 include "cordwood-core"
 
-//security
-include "cordwood-oauth2"
-
 //mobile
 include "cordwood-mobile"
+
+//data processing
+include "cordwood-data"
