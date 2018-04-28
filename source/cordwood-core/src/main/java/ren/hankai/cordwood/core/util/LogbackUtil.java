@@ -7,6 +7,7 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.PatternLayout;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
 import ch.qos.logback.core.rolling.RollingFileAppender;
@@ -14,8 +15,10 @@ import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.core.logging.LogbackLevelFilter;
 
 import java.io.File;
+import java.util.List;
 
 
 
@@ -90,25 +93,45 @@ public final class LogbackUtil {
    * 为指定的类或包添加控制台日志器。
    *
    * @param name 类或包名
-   * @param level 日志级别
+   * @param level 保留的最低日志级别
    * @author hankai
    * @since Oct 13, 2016 10:22:28 AM
    */
   public static void setupConsoleLoggerFor(String name, Level level) {
     final LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
     if (StringUtils.isEmpty(name)) {
-      name = "ROOT";
+      name = Logger.ROOT_LOGGER_NAME;
     }
     final Logger logger = lc.getLogger(name);
-    logger.addAppender(getConsoleAppender(lc));
-    logger.setLevel(level);
+    final ConsoleAppender<ILoggingEvent> appender = getConsoleAppender(lc);
+    final LogbackLevelFilter filter = new LogbackLevelFilter(level);
+    appender.addFilter(filter);
+    filter.start();
+    logger.addAppender(appender);
+  }
+
+  /**
+   * 为所有的类或包添加控制台日志器。
+   *
+   * @param level 保留的最低日志级别
+   * @author hankai
+   * @since Apr 28, 2018 1:48:47 PM
+   */
+  public static void setupConsoleLoggerFor(Level level) {
+    final LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+    final List<Logger> loggers = lc.getLoggerList();
+    if (null != loggers) {
+      for (final Logger logger : loggers) {
+        setupConsoleLoggerFor(logger.getName(), level);
+      }
+    }
   }
 
   /**
    * 为指定的类或包添加文件日志器。
    *
    * @param name 类或包名（传入空，将使用 ROOT）
-   * @param level 日志级别
+   * @param level 保留的最低日志级别
    * @param logFileName 日志物理文件名
    * @author hankai
    * @since Oct 13, 2016 10:23:04 AM
@@ -116,10 +139,31 @@ public final class LogbackUtil {
   public static void setupFileLoggerFor(String name, Level level, String logFileName) {
     final LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
     if (StringUtils.isEmpty(name)) {
-      name = "ROOT";
+      name = Logger.ROOT_LOGGER_NAME;
     }
     final Logger logger = lc.getLogger(name);
-    logger.addAppender(getFileAppender(name, lc, logFileName));
-    logger.setLevel(level);
+    final Appender<ILoggingEvent> appender = getFileAppender(name, lc, logFileName);
+    final LogbackLevelFilter filter = new LogbackLevelFilter(level);
+    appender.addFilter(filter);
+    filter.start();
+    logger.addAppender(appender);
+  }
+
+  /**
+   * 为所有的类或包添加文件日志器。
+   *
+   * @param level 保留的最低日志级别
+   * @param logFileName 日志物理文件名
+   * @author hankai
+   * @since Apr 28, 2018 1:45:43 PM
+   */
+  public static void setupFileLoggerFor(Level level, String logFileName) {
+    final LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+    final List<Logger> loggers = lc.getLoggerList();
+    if (null != loggers) {
+      for (final Logger logger : loggers) {
+        setupFileLoggerFor(logger.getName(), level, logFileName);
+      }
+    }
   }
 }
