@@ -11,6 +11,7 @@ import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import ren.hankai.cordwood.core.Preferences;
 
@@ -95,6 +96,9 @@ public final class LogbackUtil {
    */
   public static void setupConsoleLoggerFor(String name, Level level) {
     final LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+    if (StringUtils.isEmpty(name)) {
+      name = "ROOT";
+    }
     final Logger logger = lc.getLogger(name);
     logger.addAppender(getConsoleAppender(lc));
     logger.setLevel(level);
@@ -103,7 +107,7 @@ public final class LogbackUtil {
   /**
    * 为指定的类或包添加文件日志器。
    *
-   * @param name 类或包名
+   * @param name 类或包名（传入空，将使用 ROOT）
    * @param level 日志级别
    * @param logFileName 日志物理文件名
    * @author hankai
@@ -111,6 +115,9 @@ public final class LogbackUtil {
    */
   public static void setupFileLoggerFor(String name, Level level, String logFileName) {
     final LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+    if (StringUtils.isEmpty(name)) {
+      name = "ROOT";
+    }
     final Logger logger = lc.getLogger(name);
     logger.addAppender(getFileAppender(name, lc, logFileName));
     logger.setLevel(level);
