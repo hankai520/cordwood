@@ -21,6 +21,14 @@ import javax.persistence.EntityManager;
 public class BaseRepositoryFactoryBean<R extends JpaRepository<T, I>, T, I extends Serializable>
     extends JpaRepositoryFactoryBean<R, T, I> {
 
+  /**
+   * @param repositoryInterface
+   */
+  public BaseRepositoryFactoryBean(Class<? extends R> repositoryInterface) {
+    super(repositoryInterface);
+    // TODO Auto-generated constructor stub
+  }
+
   @Override
   protected RepositoryFactorySupport createRepositoryFactory(EntityManager em) {
     return new BaseRepositoryFactory<T, I>(em);
