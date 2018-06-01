@@ -22,15 +22,17 @@ public class ServerTimeUtil {
   private static final Logger logger = LoggerFactory.getLogger(ServerTimeUtil.class);
 
   /**
-   * 通过HTTP协议获取服务器时间，如果无法获取到目标服务器时间，则返回本地时间（连接超时为2s）。
+   * 通过HTTP协议获取服务器时间（连接超时为2s），如果无法获取到目标服务器时间，则返回 null。
    *
    * @param httpUrl HTTP 访问地址
    * @return GMT时间（秒）
    * @author hankai
    * @since Apr 28, 2018 11:30:47 AM
    */
-  public static long getServerTimeViaHttp(String httpUrl) {
+  public static Long getServerTimeViaHttp(String httpUrl) {
     try {
+      HttpSslUtil.trustAllHostnames();
+      HttpSslUtil.trustAllHttpsCertificates();
       final URL url = new URL(httpUrl);
       final URLConnection connection = url.openConnection();
       connection.setConnectTimeout(2 * 1000);
@@ -47,7 +49,7 @@ public class ServerTimeUtil {
     } catch (final Exception ex) {
       logger.debug("Failed to get server time via http.", ex);
     }
-    return System.currentTimeMillis() / 1000;
+    return null;
   }
 
 }
