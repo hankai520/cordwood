@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -40,7 +41,7 @@ public class ServerTimeUtil {
       connection.setDoOutput(false);
       final String dateStr = connection.getHeaderField("Date");
       final SimpleDateFormat dateFormat =
-          new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz");
+          new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US);
       dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
       final Date time = dateFormat.parse(dateStr);
       if (null != time) {
