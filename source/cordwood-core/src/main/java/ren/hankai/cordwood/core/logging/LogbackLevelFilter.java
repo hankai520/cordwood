@@ -42,7 +42,7 @@ public class LogbackLevelFilter extends AbstractMatcherFilter<ILoggingEvent> {
   /**
    * 构造过滤器，保留指定级别或更高级别的日志。
    *
-   * @param level
+   * @param level 需要保留的级别（包含更高级别）
    */
   public LogbackLevelFilter(Level level) {
     super();

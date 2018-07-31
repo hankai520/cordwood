@@ -1,8 +1,7 @@
 Cordwood
 ========
 
-cordwood 是一个基于 Spring
-框架的web插件容器，可实现基于cordwood插件API的插件包热拔插。
+cordwood 是一个基于 Spring-boot 的 Web 应用代码级快速开发框架。
 
  
 
@@ -24,13 +23,9 @@ cordwood
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 cordwood
-    - cordwood-console //控制台程序（插件容器、插件管理）
     - cordwood-core //核心类库
+    - cordwood-data //数据持久化
     - cordwood-mobile //移动端工具库
-    - cordwood-oauth2-server //基于oauth2协议的单点登录服务器
-    - cordwood-plugin //插件核心类库（插件开发SDK）
-    - cordwood-plugin-advance //示例高级插件（HTML渲染+数据库访问）
-    - cordwood-plugin-pojo //示例POJO插件
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
@@ -39,320 +34,257 @@ cordwood
 --------
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-cordwood-console
-    - cordwood-core
 cordwood-mobile
-cordwood-oauth2-server
-cordwood-plugin
+
+cordwood-data
     - cordwood-core
-cordwood-plugin-advance
-    - cordwood-core
-    - cordwood-plugin
-cordwood-plugin-pojo
-    - cordwood-core
-    - cordwood-plugin
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
 
-词汇表
-------
-
-| 控制台 Home 目录    | cordwood-console 运行所产生的程序数据根目录                                                 |
-|---------------------|---------------------------------------------------------------------------------------------|
-| 插件 web 根路径     | 表示所有插件 web URL 的根路径，即 service 目录：http://localhost:8000/service               |
-| 插件 web 资源根路径 | 表示所有插件静态资源的 web URL 的根路径，即 resources 目录：http://localhost:8000/resources |
-
- 
-
-启动 cordwood 控制台
---------------------
-
-当需要安装部署插件来验证功能时，需要启动控制台程序，然后将插件安装到控制台，再进行访问。
-
- 
-
-### 用 IDE 调试模式启动
-
-build.gradle 默认提供了eclipse插件配置项，因此可以直接导入到 eclipse 及 eclipse
-衍生类 IDE，因为使用了 spring-boot，所以建议使用 eclipse 的 spring boot
-插件来启动，具体的，在安装了 spring 插件后，打开 “Boot Dashboard”，在列表中选中
-cordwood-console，选择 debug，等待控制台启动成功。
-
- 
-
-以此方式启动控制台后，home 目录将位于：
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.../cordwood-console/home-not-set/
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
- 
-
-### 用脚本方式运行
-
-对于不需要调试控制台程序的场景，可以将控制台程序打包，然后通过脚本来运行，具体做法如下：
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-cd {source 目录}
-./package.sh
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-执行完毕后，将在source目录下生成一个 dist 目录，结构如下：
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-app.war  控制台可执行文件
-README.md 发行包介绍信息（发行包中各个脚本使用方法，见此文件）
-run.bat
-run.sh
-setenv.bat
-setenv.sh
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-执行 ./run.sh start 来启动控制台程序。
-
- 
-
-以此方式启动控制台后，home 目录将位于：
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.../dist/data
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
- 
-
-控制台 Home 目录结构
---------------------
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-cache   - 缓存
-config  - 配置
-data    - 数据
-    attachment - 附件
-    backups - 备份
-    database - 数据库
-    plugins - 插件安装目录
-libs    - 插件所依赖的类库
-logs    - 日志
-temp    - 临时
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
- 
-
-开发插件
+集成框架
 --------
 
-在对整个 cordwood 根工程编译后
+1.  下载框架源代码
+
+2.  编译源代码
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-source/gradlew clean build -x test
+//linux shell
+cd source
+chmod +x ./gradlew
+./gradlew build -x test
+
+//windows cmd
+cd source
+gradlew.bat build -x test
+
+编译结果位于 cordwood-core/build/libs （其他模块编译结果在类似位置）
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-将生成的插件包开发所需API类库文件（如下）复制到你自己的插件工程任意目录，然后将其添加到构建路径中
+3. 在您的主工程中增加以下第三方依赖，便于编译和运行
+
+ 
+
+cordwood-core 所依赖的第三方框架：
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-cordwood-core/build/libs/cordwood-core-0.0.1.RELEASE.jar
-cordwood-plugin/build/libs/cordwood-plugin-0.0.1.RELEASE.jar
+compile "org.slf4j:slf4j-api:1.7.12"
+compile "org.slf4j:jcl-over-slf4j:1.7.12"
+compile "org.slf4j:log4j-over-slf4j:1.7.12"
+compile "ch.qos.logback:logback-classic:1.1.7"
+compile "javax.interceptor:javax.interceptor-api:1.+"
+
+testCompile "junit:junit:4.12"
+testCompile "com.jayway.jsonpath:json-path-assert:0.8.1"
+testCompile "org.easymock:easymock:3.1"
+testCompile "com.google.inject:guice:4.0"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
 
-安装插件包
-----------
-
-启动cordwood控制台之后，将插件工程编译打包得到的 .jar
-文件上传到控制台即完成安装。
-
- 
-
-注意：请不要在控制台正在启动或停止的时候，安装、更新或卸载插件，因为插件包的变化会登记到数据库中，而控制台正在启动/停止的时候，数据库连接也许暂时无法使用。
-
- 
-
-卸载/更新插件包
----------------
-
-在cordwood控制台重新上传插件包，新插件包会覆盖标识相同的老插件包，完成更新；在插件管理页面可以卸载已安装的插件。
-
- 
-
-部署插件依赖的类库
-------------------
-
-对于使用了第三方类库的插件包，在启动 cordwood 控制台之前，需要将所依赖的 .jar
-文件复制到：
+cordwood-data 所依赖的第三方框架
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-控制台home目录/libs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compile "commons-io:commons-io:2.2"
+compile "commons-codec:commons-codec:1.9"
+compile "org.apache.commons:commons-lang3:3.4"
 
-这些依赖的类库只在控制台启动期间会加载一次，所以在控制台运行期间，复制新的依赖包到此目录是无效的，需要通过重启控制台使其生效。
-
- 
-
-访问安装的插件功能
-------------------
-
-所有的插件被安装后，通过访问：
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-http://host:port/service/{plugin name}/{plugin function}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-来调用插件功能。
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-@Pluggable(
-    name = "demo",  // plugin name 即取的此属性值
-    version = "1.0.0")
-public class ... {
-
-    @Functional(
-        name = "hello",  //plugin function 即取的此属性值
-        resultType = "text/html" )
-    public String ... () {}
-
-}
+compile "org.springframework.data:spring-data-jpa:1.11.10.RELEASE"
+compile "org.eclipse.persistence:eclipselink:2.5.0"
+compile "org.apache.tomcat:tomcat-jdbc:8.5.5"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
 
-cordwood-console web服务
-------------------------
-
-cordwood-console
-对于需要调用插件功能的客户端提供了若干web服务，以便支撑诸如插件访问授权等需求。
-
- 
-
-### web服务规范
-
-对于接口访问的请求示例，若支持POST，则给出POST
-报文样例（仅供参考，若要调试，请使用调试工具自行按要求设置入参），否则给出GET样例，若同时支持，则只给出POST样例，GET方式的请求，请参见HTTP规范自行组织。
-
-对于入参组织结构，若入参为非结构化数据（比如：登录账号、密码，无需作为对象结构传入），则均采用
-application/x-www-form-urlencoded 内容类型，否则，采用 application/json。
-
- 
-
-**连接参数**
-
-host: 192.168.10.70
-
-port: 8001
-
-请在构造API地址时，将 **host** 和 **port** 部分用上述参数替换
-
- 
-
-**安全性**
-
-所有 API 均通过传输秘钥来对请求信息签名，以此保证信息不被篡改
-
-transfer_key : 51f72611acf6df792025ae5ce341b01f
-
- 
-
-入参签名算法为 SHA1。具体签名规则如下：
+cordwood-mobile 所依赖的第三方框架
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-sign = sha1( (k1=v1&k2=v2...) + transfer_key )
+compile "commons-io:commons-io:2.2"
+compile "commons-codec:commons-codec:1.9"
+compile "org.apache.commons:commons-lang3:3.4"
+compile "com.googlecode.plist:dd-plist:1.16"
+compile "net.dongliu:apk-parser:2.1.2"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-其中，k1=v1&k2=v2... 为参数键值列表，列表中的每一项格式为
-“键=值”，列表项需要根据键名升序排列，然后用 “&” 进行连接。最后将数据传输秘钥
-transfer_key 拼接至尾端（不含 + 号）。整体作 sha1 运算得到最终的签名。
-
-由于所有 API 入参均需签名，因此接口详细定义节不在赘述该参数含义。
 
  
 
-**通用响应格式**
+3. 在您的主工程中依赖 cordwood（根据需要依赖 core, data 或者mobile）
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compile project(":jsgs-core")
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+框架功能
+--------
+
+ 
+
+### 应用数据读写
+
+框架提供预定义的应用数据目录，用于读写应用数据。以下为标准的应用数据目录结构：
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//假设 /opt/app/data 为数据根目录，以下目录均相对于此目录
+
+cache //缓存目录
+config //配置文件目录
+data //用户数据目录
+    attachment //用户附件目录
+    backups //备份目录
+    database //数据库目录（e.g. 嵌入式数据库）
+    plugins //插件（预留目录，用于实现插件架构）
+    runtime.properties //运行时配置文件
+libs //第三方类库目录
+logs //日志目录
+temp //临时目录
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 应用配置参数
+
+在您的主工程中，构建根路径下，添加 system.yml
+文件，用于配置系统参数，以下为标准配置。
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#系统秘钥
+systemSk: 46ee56cd32f85727
+
+#数据传输秘钥
+transferKey: 8dffab6aafc8ebc974bd82364ef9516b
+
+#API 默认鉴权码有效时长（天）
+apiAccessTokenExpiry: 7
+
+#要绑定的域名
+proxyName: 
+
+#要绑定的端口
+proxyPort: 
+
+#要绑定的协议
+proxyScheme: 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+配置的参数通过 ren.hankai.cordwood.core.Preferences 类读取:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//读取 systemSk
+public static String getSystemSk();
+//读取 transferKey
+public static String getTransferKey();
+...
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 运行时参数
+
+通过
+
+ren.hankai.cordwood.core.util.RuntimeVariables
+类，可以配置运行时参数，参数支持热修改，因此适用于配置允许在运行时动态调整的参数。参数基于键值对，使用
+properties 文件进行持久化，内存中使用 HashMap 来存储键值。
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//设置参数
+public static void setVariable(String key, String value);
+
+//获取参数
+public static String getVariable(String key);
+public static boolean getBool(String key);
+public static int getInt(String key);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### Web Service 支持
+
+ren.hankai.cordwood.core.api.support 包下面提供了一组用于开发 Web Service
+的基础类：
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ApiCode //提供了一组标准的接口相应代码，用于返回接口处理结果代码
+ApiResponse //提供 Web Service 相应内容包装类
+WebServiceSupport // Web Service 基类，处理异常，转义为标准的响应
+
+//标准 Web Service 响应格式（以 JSON 为例）
 {
-  "code" : 1,
-  "message" : "本地化错误消息",
-  "body" : {
-    ...
-  }
-}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
- 
-
-**响应通用字段说明**
-
-| 字段    | 含义                | 必传 | 备注                                                              |
-|---------|---------------------|------|-------------------------------------------------------------------|
-| code    | 本次 API 调用的结果 | Y    | 指示API调用过程是否完整（无网络错误或异常），详见接口常量定义一节 |
-| message | 异常或错误调试信息  | N    |                                                                   |
-| body    | 响应的数据根节点    | N    | 根据具体业务逻辑，非数据接口可能不包含该节点                      |
-
- 
-
-**常量定义**
-
-| 代码 | 含义                     |
-|------|--------------------------|
-| \-2  | 未知错误 （联系技术）    |
-| \-1  | 系统内部错误（联系技术） |
-| 1    | 成功                     |
-| 2    | API 已禁用               |
-| 3    | 访问未经授权             |
-| 4    | 请求参数错误             |
-| 5    | 请求参数签名错误         |
-
- 
-
-**业务错误代码**
-
-| 代码 | 含义 |
-|------|------|
-|      |      |
-
- 
-
-### 认证及授权接口
-
-客户端通过管理员分配的应用 appkey 和 appsk 调用此接口获取插件功能访问权限。
-
-地址：http://host:port/api/authenticate
-
-方法：POST
-
- 
-
-**入参**
-
-| 字段     | 含义             | 必传 | 备注       |
-|----------|------------------|------|------------|
-| app_key  | 应用唯一标识     | Y    |            |
-| app_sk   | 应用秘钥         | Y    |            |
-| interval | 此次授权有效时长 | Y    | 单位为分钟 |
-
- 
-
-**响应**
-
-| 字段        | 含义                                   |
-|-------------|----------------------------------------|
-| accessToken | 鉴权码（调用其他接口或插件服务的凭据） |
-| expiry      | 到期时间（1970年距今的毫秒数）         |
-
- 
-
-响应示例
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-{
-  "code": "1",
-  "body": {
-    "success": true,
-    "data": {
-      "expiry": "1483948867138",
-      "accessToken": "ZVBgqvxLU7gO7-HL_riMnvhzf42AIQwqiLA9Jwlrytr765XZKe3wWghNd0vhFXgscoeiIdAvmtqUBGr6RhRQCAoisMLubaPr2ItfLrE4D2cnRxcselxe_Tb19-kOIXuQdzfkbxahVgL0twQogDHak39pUD_wMeOAiaROvgqHuD4="
+    "code": 1,
+    "message": "调试信息",
+    "body": {
+        "success": true,
+        "error": "错误代码",
+        "message": "用于调试的信息",
+        "data": {
+            ... //响应数据区域
+        }
     }
-  }
+}
+
+code: 服务响应代码，侧重于服务执行结果而不是业务执行结果
+message: 用于调试的信息，例如返回服务器的一些参数信息，生产环境可通过设置 api.allow.debug 运行时参数来关闭
+body.success: 业务是否执行成功
+body.error: 业务逻辑错误代码，例如密码错误，用户不存在
+body.message: 业务调试信息，例如返回订单号啥的
+body.data: 响应的数据
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 缓存
+
+通过继承 ren.hankai.cordwood.core.config.CoreCacheConfig
+并开启缓存，即可启用默认缓存配置（spring-boot 默认缓存配置）:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+@Configuration
+@EnableCaching
+public class CacheConfig extends CoreCacheConfig {
+    //..自定义缓存配置，可配置 redis, memcache, ehcache 等
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 示例
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+public static void main(String[] args) {
+
+    final String[] configs = {
+        "mysql.properties", "keystore.jks",
+        "system.yml", "i18n.properties"};
+
+    final ApplicationInitInfo initInfo = ApplicationInitInfo.initWithConfigs(configs);
+    final String[] templates = { //模板文件
+        "simsun.ttc",
+        "1.html", "2.html", "3.html", "4.html", "5.html"
+    };
+    initInfo.addTemplates(templates);
+
+    //初始化应用
+    if (ApplicationInitializer.initialize(false, initInfo)) {
+      RuntimeVariables.setCacheSeconds(10); //设置运行时配置缓存10秒
+
+      //... 配置运行时参数的初值
+
+      RuntimeVariables.saveVariables(); //保存运行时参数，生成 runtime.properties
+      if (SpringApplication.run(Application.class, args) != null) {
+        logger.info("Application started successfully!");
+
+        //设置日志过滤，将警告及更高级别日志单独写入 errors.txt
+        LogbackUtil.setupFileLoggerFor(Level.WARN, "errors.txt");
+      }
+    }
+  }
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+-

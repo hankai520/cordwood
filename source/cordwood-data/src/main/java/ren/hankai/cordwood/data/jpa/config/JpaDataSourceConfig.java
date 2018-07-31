@@ -57,6 +57,9 @@ public abstract class JpaDataSourceConfig {
     return null;
   }
 
+  /**
+   * 默认构造方法，用当前类所在包作为默认值，初始化基包。
+   */
   public JpaDataSourceConfig() {
     String pkg = this.getClass().getPackage().getName();
     if (StringUtils.isNotEmpty(pkg) && (basePackages == null)) {
@@ -65,6 +68,97 @@ public abstract class JpaDataSourceConfig {
     }
   }
 
+  /**
+   * 配置连接池。将连接池配置文件中的参数配置到连接池属性中。
+   *
+   * @param props 数据源配置文件（e.g. mysql.properties）
+   * @param poolProps 连接池属性
+   * @author hankai
+   * @since Jul 31, 2018 3:21:48 PM
+   */
+  private static void configureDataSourcePool(Properties props, PoolProperties poolProps) {
+    poolProps.setJmxEnabled(false);
+    poolProps.setTestWhileIdle(false); // 在连接空闲时，是否检查连接可用性，关闭以提高性能
+    poolProps.setTestOnBorrow(true); // 是否检查在从池中获取的链接的可用性，打开，避免无效连接导致语句执行失败
+    poolProps.setTestOnReturn(false); // 归还连接到池中时，是否检查连接可用性，关闭以提高性能，因为获取连接时已检查
+    poolProps.setLogAbandoned(true); // 当连接被丢弃时，是否打印日志，关闭以提高性能
+    poolProps.setRemoveAbandoned(true); // 是否清除被丢弃的连接（关闭连接，从池中移除）
+
+    // 每次做空闲检查、丢弃清理和池大小伸缩作业之间的休息时间
+    String param = props.getProperty("pool.time.between.eviction.runs.millis");
+    if (StringUtils.isEmpty(param)) {
+      poolProps.setTimeBetweenEvictionRunsMillis(10 * 1000);
+    } else {
+      poolProps.setTimeBetweenEvictionRunsMillis(Integer.parseInt(param));
+    }
+
+    // 最快多长时间检查一次连接可用性，用于限制频繁检查带来的性能下降
+    param = props.getProperty("pool.validation.interval");
+    if (StringUtils.isEmpty(param)) {
+      poolProps.setValidationInterval(30 * 1000);
+    } else {
+      poolProps.setValidationInterval(Integer.parseInt(param));
+    }
+
+    // 最大激活连接数
+    param = props.getProperty("pool.max.active");
+    if (StringUtils.isEmpty(param)) {
+      poolProps.setMaxActive(20);
+    } else {
+      poolProps.setMaxActive(Integer.parseInt(param));
+    }
+
+    // 池初始连接数
+    param = props.getProperty("pool.initial.size");
+    if (StringUtils.isEmpty(param)) {
+      poolProps.setInitialSize(4);
+    } else {
+      poolProps.setInitialSize(Integer.parseInt(param));
+    }
+
+    // 从池中获取连接时，最长等待多长时间
+    param = props.getProperty("pool.max.wait");
+    if (StringUtils.isEmpty(param)) {
+      poolProps.setMaxWait(20 * 1000);
+    } else {
+      poolProps.setMaxWait(Integer.parseInt(param));
+    }
+
+    // 多长时间内，不考虑丢弃连接
+    param = props.getProperty("pool.remove.abandoned.timeout");
+    if (StringUtils.isEmpty(param)) {
+      poolProps.setRemoveAbandonedTimeout(60);
+    } else {
+      poolProps.setRemoveAbandonedTimeout(Integer.parseInt(param));
+    }
+
+    // 连接在池中必须存在多长时间后，才能被标记为可回收的
+    param = props.getProperty("pool.min.evictable.idle.time.millis");
+    if (StringUtils.isEmpty(param)) {
+      poolProps.setMinEvictableIdleTimeMillis(30 * 1000);
+    } else {
+      poolProps.setMinEvictableIdleTimeMillis(Integer.parseInt(param));
+    }
+
+    // 池中至少保持多少个空闲连接
+    param = props.getProperty("pool.min.idle");
+    if (StringUtils.isEmpty(param)) {
+      poolProps.setMinIdle(4);
+    } else {
+      poolProps.setMinIdle(Integer.parseInt(param));
+    }
+
+    poolProps.setJdbcInterceptors(
+        ConnectionState.class.getName() + ";" + StatementFinalizer.class.getName());
+  }
+
+  /**
+   * HSQL 数据源配置。
+   *
+   * @author hankai
+   * @version 1.0.0
+   * @since Jul 31, 2018 2:59:52 PM
+   */
   @Profile(Preferences.PROFILE_HSQL)
   @Configuration
   public static class HsqlConfig {
@@ -101,6 +195,13 @@ public abstract class JpaDataSourceConfig {
     }
   }
 
+  /**
+   * MySQL 数据源配置。
+   *
+   * @author hankai
+   * @version 1.0.0
+   * @since Jul 31, 2018 3:00:14 PM
+   */
   @Configuration
   @Profile(Preferences.PROFILE_MYSQL)
   public static class MySqlConfig {
@@ -120,28 +221,10 @@ public abstract class JpaDataSourceConfig {
       pp.setDriverClassName(props.getProperty("driverClassName"));
       pp.setUsername(props.getProperty("username"));
       pp.setPassword(props.getProperty("password"));
-      pp.setJmxEnabled(false);
-
-      pp.setTestWhileIdle(false); // 在连接空闲时，是否检查连接可用性，关闭以提高性能
-      pp.setTimeBetweenEvictionRunsMillis(10 * 1000); // 每次做空闲检查、丢弃清理和池大小伸缩作业之间的休息时间
 
       pp.setValidationQuery("select 1"); // 用于检查连接是否可用的sql语句
-      pp.setTestOnBorrow(true); // 是否检查在从池中获取的链接的可用性，打开，避免无效连接导致语句执行失败
-      pp.setTestOnReturn(false); // 归还连接到池中时，是否检查连接可用性，关闭以提高性能，因为获取连接时已检查
+      JpaDataSourceConfig.configureDataSourcePool(props, pp);
 
-      pp.setValidationInterval(30 * 1000); // 最快多长时间检查一次连接可用性，用于限制频繁检查带来的性能下降
-
-      pp.setMaxActive(50); // 最大激活连接数
-      pp.setInitialSize(4); // 池初始连接数
-      pp.setMaxWait(20 * 1000); // 从池中获取连接时，最长等待多长时间
-
-      pp.setRemoveAbandonedTimeout(60); // 多长时间内，不考虑丢弃连接
-      pp.setMinEvictableIdleTimeMillis(30 * 1000); // 连接在池中必须存在多长时间后，才能被标记为可回收的
-      pp.setMinIdle(4); // 池中至少保持多少个空闲连接
-      pp.setLogAbandoned(false); // 当连接被丢弃时，是否打印日志，关闭以提高性能
-      pp.setRemoveAbandoned(true); // 是否清除被丢弃的连接（关闭连接，从池中移除）
-      pp.setJdbcInterceptors(
-          ConnectionState.class.getName() + ";" + StatementFinalizer.class.getName());
       final org.apache.tomcat.jdbc.pool.DataSource ds =
           new org.apache.tomcat.jdbc.pool.DataSource();
       ds.setPoolProperties(pp);
@@ -154,6 +237,13 @@ public abstract class JpaDataSourceConfig {
     }
   }
 
+  /**
+   * Oracle 数据源配置。
+   *
+   * @author hankai
+   * @version 1.0.0
+   * @since Jul 31, 2018 3:00:41 PM
+   */
   @Configuration
   @Profile(Preferences.PROFILE_ORACLE)
   public static class OracleConfig {
@@ -173,23 +263,10 @@ public abstract class JpaDataSourceConfig {
       pp.setDriverClassName(props.getProperty("driverClassName"));
       pp.setUsername(props.getProperty("username"));
       pp.setPassword(props.getProperty("password"));
-      pp.setJmxEnabled(true);
-      pp.setTestWhileIdle(false);
-      pp.setTestOnBorrow(true);
+
       pp.setValidationQuery("select * from dual");
-      pp.setTestOnReturn(false);
-      pp.setValidationInterval(30000);
-      pp.setTimeBetweenEvictionRunsMillis(30000);
-      pp.setMaxActive(100);
-      pp.setInitialSize(10);
-      pp.setMaxWait(10000);
-      pp.setRemoveAbandonedTimeout(60);
-      pp.setMinEvictableIdleTimeMillis(30000);
-      pp.setMinIdle(10);
-      pp.setLogAbandoned(true);
-      pp.setRemoveAbandoned(true);
-      pp.setJdbcInterceptors(
-          ConnectionState.class.getName() + ";" + StatementFinalizer.class.getName());
+      JpaDataSourceConfig.configureDataSourcePool(props, pp);
+
       final org.apache.tomcat.jdbc.pool.DataSource ds =
           new org.apache.tomcat.jdbc.pool.DataSource();
       ds.setPoolProperties(pp);
