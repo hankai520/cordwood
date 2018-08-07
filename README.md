@@ -60,10 +60,9 @@ cd source
 gradlew.bat build -x test
 
 编译结果位于 cordwood-core/build/libs （其他模块编译结果在类似位置）
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-3. 在您的主工程中增加以下第三方依赖，便于编译和运行
+1.  在您的主工程中增加以下第三方依赖，便于编译和运行
 
  
 
@@ -76,10 +75,26 @@ compile "org.slf4j:log4j-over-slf4j:1.7.12"
 compile "ch.qos.logback:logback-classic:1.1.7"
 compile "javax.interceptor:javax.interceptor-api:1.+"
 
+compile "org.springframework:spring-core:4.3.3.RELEASE"
+compile "org.springframework:spring-context:4.3.3.RELEASE"
+compile "org.springframework:spring-beans:4.3.3.RELEASE"
+compile "org.springframework:spring-webmvc:4.3.3.RELEASE"
+compile "org.springframework:spring-context-support:4.3.3.RELEASE"
+compile "org.springframework.security:spring-security-web:4.1.3.RELEASE"
+compile "org.springframework.security:spring-security-config:4.1.3.RELEASE"
+compile "javax.servlet:javax.servlet-api:3.1.0"
+compile "commons-io:commons-io:2.2"
+compile "com.fasterxml.jackson.core:jackson-databind:2.4.6"
+compile "commons-codec:commons-codec:1.9"
+compile "org.apache.commons:commons-lang3:3.4"
+compile "net.sf.ehcache:ehcache:2.10.3"
+
 testCompile "junit:junit:4.12"
 testCompile "com.jayway.jsonpath:json-path-assert:0.8.1"
 testCompile "org.easymock:easymock:3.1"
 testCompile "com.google.inject:guice:4.0"
+testCompile "org.springframework:spring-test:${springVersion}"
+testCompile "org.yaml:snakeyaml:1.17"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
@@ -110,7 +125,7 @@ compile "net.dongliu:apk-parser:2.1.2"
 
  
 
-3. 在您的主工程中依赖 cordwood（根据需要依赖 core, data 或者mobile）
+1.  在您的主工程中依赖 cordwood（根据需要依赖 core, data 或者mobile）
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 compile project(":jsgs-core")
@@ -253,7 +268,52 @@ public class CacheConfig extends CoreCacheConfig {
 
  
 
-### 示例
+通过为需要缓存的方法签名增加缓存注解，实现缓存。框架采用 ehcache
+2实现缓存机制，根据经验，对需要缓存的方法划分了三个量级：轻量级、中量级、重量级。缓存级别的区别主要是缓存时长，缓存数据量。
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//使用 ren.hankai.cordwood.core.cache 包下的缓存注解
+
+@HeavyWeight //重量级缓存
+public String hello() {...}
+
+@MiddleWeight //中量级缓存
+public String hello() {...}
+
+@LightWeight //轻量级缓存
+public String hello() {...}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+通过继承
+ren.hankai.cordwood.core.config.CoreCacheConfig，重写下面的方法，可以自定义各个级别缓存的配置：
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+public CacheManager cacheManager() {...}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+下面是 CoreCacheConfig 类部分源代码：
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//ren.hankai.cordwood.core.config.CoreCacheConfig 源代码示例：
+
+final CacheConfiguration heavyWeightCache = new CacheConfiguration();
+heavyWeightCache.setName("heavyWeight"); // 定义重量级缓存
+heavyWeightCache.setMaxEntriesLocalHeap(4000);
+heavyWeightCache.setTimeToIdleSeconds(60 * 60 * 24); // 缓存1天
+// heavyWeightCache.setMemoryStoreEvictionPolicy("LRU"); // One of "LRU", "LFU" or "FIFO".
+heavyWeightCache.persistence(pc);
+config.addCache(heavyWeightCache);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+应用入口类示例
+--------------
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 public static void main(String[] args) {
