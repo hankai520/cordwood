@@ -17,6 +17,17 @@ public interface RequestInspector {
   static final String REQUEST_SIGN = "sign";
 
   /**
+   * 构建签名明文。
+   *
+   * @param parameters 入参
+   * @param sk 秘钥
+   * @return 签名原文
+   * @author hankai
+   * @since Aug 28, 2018 9:44:40 PM
+   */
+  String buildSignText(Map<String, ?> parameters, String sk);
+
+  /**
    * 计算参数签名（使用首选项中配置的传输秘钥 Preferences.getTransferKey()）。
    *
    * @param parameters 参数集合

@@ -31,12 +31,7 @@ public class DefaultRequestInspector implements RequestInspector {
   private static final Logger logger = LoggerFactory.getLogger(DefaultRequestInspector.class);
 
   @Override
-  public String signRequestParameters(Map<String, ?> parameters) {
-    return signRequestParameters(parameters, Preferences.getTransferKey());
-  }
-
-  @Override
-  public String signRequestParameters(Map<String, ?> parameters, String sk) {
+  public String buildSignText(Map<String, ?> parameters, String sk) {
     final StringBuffer toBeSigned = new StringBuffer();
     final List<String> paramNames = new ArrayList<>();
     paramNames.addAll(parameters.keySet());
@@ -71,7 +66,18 @@ public class DefaultRequestInspector implements RequestInspector {
       toBeSigned.deleteCharAt(toBeSigned.length() - 1);
     }
     toBeSigned.append(sk);
-    final String expSign = DigestUtils.sha1Hex(toBeSigned.toString());
+    return toBeSigned.toString();
+  }
+
+  @Override
+  public String signRequestParameters(Map<String, ?> parameters) {
+    return signRequestParameters(parameters, Preferences.getTransferKey());
+  }
+
+  @Override
+  public String signRequestParameters(Map<String, ?> parameters, String sk) {
+    final String toBeSigned = buildSignText(parameters, sk);
+    final String expSign = DigestUtils.sha1Hex(toBeSigned);
     return expSign;
   }
 
