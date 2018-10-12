@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.util.EncryptionUtil;
@@ -25,6 +26,7 @@ public class DefaultAccessAuthenticator implements AccessAuthenticator {
   private static final Logger logger = LoggerFactory.getLogger(DefaultAccessAuthenticator.class);
 
   @Autowired
+  @Lazy
   private ObjectMapper objectMapper;
 
   @Override

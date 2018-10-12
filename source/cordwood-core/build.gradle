@@ -39,7 +39,8 @@ dependencies {
     compile "commons-codec:commons-codec:1.9"
     compile "org.apache.commons:commons-lang3:3.4"
     compile "net.sf.ehcache:ehcache:2.10.3"
-
+    compile "com.google.guava:guava:19.0"
+    
     testCompile "org.springframework:spring-test:${springVersion}"
     testCompile "org.yaml:snakeyaml:1.17"
 }
