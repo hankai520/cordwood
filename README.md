@@ -45,9 +45,7 @@ cordwood-data
 集成框架
 --------
 
-1.  下载框架源代码
-
-2.  编译源代码
+编译源代码
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //linux shell
@@ -62,13 +60,13 @@ gradlew.bat build -x test
 编译结果位于 cordwood-core/build/libs （其他模块编译结果在类似位置）
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  在您的主工程中增加以下第三方依赖，便于编译和运行
-
  
 
-cordwood-core 所依赖的第三方框架：
+在您的主工程中增加以下第三方依赖，便于编译和运行
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//cordwood-core 所依赖的第三方框架
+
 compile "org.slf4j:slf4j-api:1.7.12"
 compile "org.slf4j:jcl-over-slf4j:1.7.12"
 compile "org.slf4j:log4j-over-slf4j:1.7.12"
@@ -88,6 +86,7 @@ compile "com.fasterxml.jackson.core:jackson-databind:2.4.6"
 compile "commons-codec:commons-codec:1.9"
 compile "org.apache.commons:commons-lang3:3.4"
 compile "net.sf.ehcache:ehcache:2.10.3"
+compile "com.google.guava:guava:19.0"
 
 testCompile "junit:junit:4.12"
 testCompile "com.jayway.jsonpath:json-path-assert:0.8.1"
@@ -99,9 +98,9 @@ testCompile "org.yaml:snakeyaml:1.17"
 
  
 
-cordwood-data 所依赖的第三方框架
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//cordwood-data 所依赖的第三方框架
+
 compile "commons-io:commons-io:2.2"
 compile "commons-codec:commons-codec:1.9"
 compile "org.apache.commons:commons-lang3:3.4"
@@ -113,9 +112,9 @@ compile "org.apache.tomcat:tomcat-jdbc:8.5.5"
 
  
 
-cordwood-mobile 所依赖的第三方框架
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//cordwood-mobile 所依赖的第三方框架
+
 compile "commons-io:commons-io:2.2"
 compile "commons-codec:commons-codec:1.9"
 compile "org.apache.commons:commons-lang3:3.4"
@@ -125,10 +124,10 @@ compile "net.dongliu:apk-parser:2.1.2"
 
  
 
-1.  在您的主工程中依赖 cordwood（根据需要依赖 core, data 或者mobile）
+在您的主工程中依赖 cordwood（根据需要依赖 core, data 或者mobile）
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compile project(":jsgs-core")
+compile files("../libs/cordwood-core-0.0.1.RELEASE.jar")
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
@@ -162,7 +161,7 @@ temp //临时目录
 
 ### 应用配置参数
 
-在您的主工程中，构建根路径下，添加 system.yml
+在您的主工程中，根构建路径下新建 support 目录，添加 system.yml
 文件，用于配置系统参数，以下为标准配置。
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -201,9 +200,7 @@ public static String getTransferKey();
 
 ### 运行时参数
 
-通过
-
-ren.hankai.cordwood.core.util.RuntimeVariables
+通过 ren.hankai.cordwood.core.util.RuntimeVariables
 类，可以配置运行时参数，参数支持热修改，因此适用于配置允许在运行时动态调整的参数。参数基于键值对，使用
 properties 文件进行持久化，内存中使用 HashMap 来存储键值。
 
@@ -262,7 +259,7 @@ body.data: 响应的数据
 @Configuration
 @EnableCaching
 public class CacheConfig extends CoreCacheConfig {
-    //..自定义缓存配置，可配置 redis, memcache, ehcache 等
+    //..自定义缓存配置，可配置 redis, memcache, ehcache 等，默认采用 ehcache
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -282,7 +279,6 @@ public String hello() {...}
 
 @LightWeight //轻量级缓存
 public String hello() {...}
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
@@ -308,6 +304,59 @@ heavyWeightCache.setTimeToIdleSeconds(60 * 60 * 24); // 缓存1天
 // heavyWeightCache.setMemoryStoreEvictionPolicy("LRU"); // One of "LRU", "LFU" or "FIFO".
 heavyWeightCache.persistence(pc);
 config.addCache(heavyWeightCache);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+### 访问限流、熔断
+
+框架内部采用 Google Guava 的 RateLimiter
+类实现基于令牌通的限流器。支持对QPS进行控制，基于限流器超时，实现熔断机制，熔断后，将返回HTTP代码
+503 。
+
+ 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//核心接口及默认实现
+ren.hankai.cordwood.web.security.AccessLimiter //访问限制器
+ren.hankai.cordwood.web.security.support.DefaultAccessLimiter //默认访问限制器实现
+ren.hankai.cordwood.web.security.support.RateLimitInfo //限流信息类，用于缓存限流配置
+ren.hankai.cordwood.web.pfms.StabilizationInterceptor //访问限流拦截器
+ren.hankai.cordwood.web.security.annotation.Stabilized //限流器配置注解
+
+//使用步骤
+@Configuration
+public class WebMvcConfig extends WebMvcConfigurerAdapter {
+...
+    //1. 在自定义的 MVC 配置类中，注入 StabilizationInterceptor：
+    @Autowired
+    private StabilizationInterceptor stabilizationInterceptor;
+...
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        ...
+        //2. 配置拦截器，拦截所有请求。也可根据需要拦截部分请求。注意拦截器一定要配置在最前面
+        //否则可能因为其他拦截器干预，导致限流器不工作
+        registry.addInterceptor(stabilizationInterceptor).addPathPatterns("/**");
+        ...
+    }
+...
+}
+
+//3. 为所有控制器创建基类便于统一限流配置，基类可继承框架提供的 WebServiceSupport。
+
+@Stabilized //4. 为基类增加注解，启用限流配置
+public abstract class CustomWebServiceSupport extends WebServiceSupport {
+    ...
+}
+
+//可根据需要配置 Stabilized 注解中的参数，具体如下：
+maxQps: 最大QPS（Query per second），默认 100
+timeout: 请求受理的超时时长（毫秒），默认1000
+warmupPeriod: 热身时长（毫秒），详见源代码，默认2000
+fusingThreshold: 熔断阈值，默认3
+fusingInterval: 熔断恢复间隔，默认5000
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
