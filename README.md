@@ -107,7 +107,7 @@ compile "org.apache.commons:commons-lang3:3.4"
 
 compile "org.springframework.data:spring-data-jpa:1.11.10.RELEASE"
 compile "org.eclipse.persistence:eclipselink:2.5.0"
-compile "org.apache.tomcat:tomcat-jdbc:8.5.5"
+compile "com.alibaba:druid:1.1.10"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  

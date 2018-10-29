@@ -1,9 +1,11 @@
 package ren.hankai.cordwood.data.jpa.config;
 
+import com.alibaba.druid.filter.Filter;
+import com.alibaba.druid.filter.logging.Slf4jLogFilter;
+import com.alibaba.druid.filter.stat.StatFilter;
+import com.alibaba.druid.pool.DruidDataSource;
+
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.jdbc.pool.PoolProperties;
-import org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;
-import org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer;
 import org.eclipse.persistence.platform.database.HSQLPlatform;
 import org.eclipse.persistence.platform.database.MySQLPlatform;
 import org.eclipse.persistence.platform.database.OraclePlatform;
@@ -18,6 +20,8 @@ import ren.hankai.cordwood.core.Preferences;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -58,6 +62,78 @@ public abstract class JpaDataSourceConfig {
   }
 
   /**
+   * 配置连接池。将连接池配置文件中的参数配置到连接池属性中。
+   *
+   * @param props 数据源配置文件（e.g. mysql.properties）
+   * @param poolProps 连接池属性
+   * @author hankai
+   * @since Jul 31, 2018 3:21:48 PM
+   */
+  private static void configureDataSourcePool(Properties props, DruidDataSource dataSource) {
+    // 基本属性 url、user、password
+    dataSource.setDriverClassName(props.getProperty("driverClassName"));
+    dataSource.setUrl(props.getProperty("url"));
+    dataSource.setUsername(props.getProperty("username"));
+    dataSource.setPassword(props.getProperty("password"));
+
+    // 配置初始化大小、最小、最大
+    String param = props.getProperty("pool.initial.size", "1");
+    dataSource.setInitialSize(Integer.parseInt(param));
+    param = props.getProperty("pool.min.idle", "1");
+    dataSource.setMinIdle(Integer.parseInt(param));
+    param = props.getProperty("pool.max.active", "20");
+    dataSource.setMaxActive(Integer.parseInt(param));
+
+    // 配置获取连接等待超时的时间
+    param = props.getProperty("pool.max.wait", "60000");
+    dataSource.setMaxWait(Long.parseLong(param));
+
+    // 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    param = props.getProperty("pool.time.between.eviction.runs.millis", "60000");
+    dataSource.setTimeBetweenEvictionRunsMillis(Long.parseLong(param));
+
+    // 配置一个连接在池中最小生存的时间，单位是毫秒
+    param = props.getProperty("pool.min.evictable.idle.time.millis", "300000");
+    dataSource.setMinEvictableIdleTimeMillis(Long.parseLong(param));
+
+    dataSource.setTestWhileIdle(true);// 是否在连接空闲时检查连接可用性
+    dataSource.setTestOnBorrow(false);// 在从池中获取连接时是否检查连接可用性
+    dataSource.setTestOnReturn(false);// 是否在归还连接到池中时检查连接可用性
+
+    // 打开PSCache，并且指定每个连接上PSCache的大小
+    dataSource.setPoolPreparedStatements(true);
+    dataSource.setMaxPoolPreparedStatementPerConnectionSize(20);
+
+    param = props.getProperty("pool.debug", "false");
+    if (Boolean.parseBoolean(param)) {
+      // 超过时间限制是否回收
+      dataSource.setRemoveAbandoned(true);
+      // 超时时间：单位为秒
+      param = props.getProperty("pool.remove.abandoned.timeout", "180");
+      dataSource.setRemoveAbandonedTimeout(Integer.parseInt(param));
+      dataSource.setLogAbandoned(true);
+    } else {
+      dataSource.setRemoveAbandoned(false);
+    }
+
+    // 配置过滤器
+    final List<Filter> filters = new ArrayList<>();
+    final StatFilter statFilter = new StatFilter();
+    param = props.getProperty("pool.slow.sql.millis", "5000");
+    statFilter.setSlowSqlMillis(Long.parseLong(param));
+    param = props.getProperty("pool.log.slow.sql", "true");
+    statFilter.setLogSlowSql(Boolean.parseBoolean(param));
+    statFilter.setMergeSql(true); // 合并统计没有参数化的sql
+    filters.add(statFilter); // 启用统计过滤器
+
+    final Slf4jLogFilter slf4jLogFilter = new Slf4jLogFilter();
+    slf4jLogFilter.setResultSetLogEnabled(false);
+    filters.add(slf4jLogFilter);
+
+    dataSource.setProxyFilters(filters);
+  }
+
+  /**
    * 默认构造方法，用当前类所在包作为默认值，初始化基包。
    */
   public JpaDataSourceConfig() {
@@ -66,90 +142,6 @@ public abstract class JpaDataSourceConfig {
       pkg = pkg.split("\\.")[0];
       basePackages = new String[] {pkg};
     }
-  }
-
-  /**
-   * 配置连接池。将连接池配置文件中的参数配置到连接池属性中。
-   *
-   * @param props 数据源配置文件（e.g. mysql.properties）
-   * @param poolProps 连接池属性
-   * @author hankai
-   * @since Jul 31, 2018 3:21:48 PM
-   */
-  private static void configureDataSourcePool(Properties props, PoolProperties poolProps) {
-    poolProps.setJmxEnabled(false);
-    poolProps.setTestWhileIdle(false); // 在连接空闲时，是否检查连接可用性，关闭以提高性能
-    poolProps.setTestOnBorrow(true); // 是否检查在从池中获取的链接的可用性，打开，避免无效连接导致语句执行失败
-    poolProps.setTestOnReturn(false); // 归还连接到池中时，是否检查连接可用性，关闭以提高性能，因为获取连接时已检查
-    poolProps.setLogAbandoned(true); // 当连接被丢弃时，是否打印日志，关闭以提高性能
-    poolProps.setRemoveAbandoned(true); // 是否清除被丢弃的连接（关闭连接，从池中移除）
-
-    // 每次做空闲检查、丢弃清理和池大小伸缩作业之间的休息时间
-    String param = props.getProperty("pool.time.between.eviction.runs.millis");
-    if (StringUtils.isEmpty(param)) {
-      poolProps.setTimeBetweenEvictionRunsMillis(10 * 1000);
-    } else {
-      poolProps.setTimeBetweenEvictionRunsMillis(Integer.parseInt(param));
-    }
-
-    // 最快多长时间检查一次连接可用性，用于限制频繁检查带来的性能下降
-    param = props.getProperty("pool.validation.interval");
-    if (StringUtils.isEmpty(param)) {
-      poolProps.setValidationInterval(30 * 1000);
-    } else {
-      poolProps.setValidationInterval(Integer.parseInt(param));
-    }
-
-    // 最大激活连接数
-    param = props.getProperty("pool.max.active");
-    if (StringUtils.isEmpty(param)) {
-      poolProps.setMaxActive(20);
-    } else {
-      poolProps.setMaxActive(Integer.parseInt(param));
-    }
-
-    // 池初始连接数
-    param = props.getProperty("pool.initial.size");
-    if (StringUtils.isEmpty(param)) {
-      poolProps.setInitialSize(4);
-    } else {
-      poolProps.setInitialSize(Integer.parseInt(param));
-    }
-
-    // 从池中获取连接时，最长等待多长时间
-    param = props.getProperty("pool.max.wait");
-    if (StringUtils.isEmpty(param)) {
-      poolProps.setMaxWait(20 * 1000);
-    } else {
-      poolProps.setMaxWait(Integer.parseInt(param));
-    }
-
-    // 多长时间内，不考虑丢弃连接
-    param = props.getProperty("pool.remove.abandoned.timeout");
-    if (StringUtils.isEmpty(param)) {
-      poolProps.setRemoveAbandonedTimeout(60);
-    } else {
-      poolProps.setRemoveAbandonedTimeout(Integer.parseInt(param));
-    }
-
-    // 连接在池中必须存在多长时间后，才能被标记为可回收的
-    param = props.getProperty("pool.min.evictable.idle.time.millis");
-    if (StringUtils.isEmpty(param)) {
-      poolProps.setMinEvictableIdleTimeMillis(30 * 1000);
-    } else {
-      poolProps.setMinEvictableIdleTimeMillis(Integer.parseInt(param));
-    }
-
-    // 池中至少保持多少个空闲连接
-    param = props.getProperty("pool.min.idle");
-    if (StringUtils.isEmpty(param)) {
-      poolProps.setMinIdle(4);
-    } else {
-      poolProps.setMinIdle(Integer.parseInt(param));
-    }
-
-    poolProps.setJdbcInterceptors(
-        ConnectionState.class.getName() + ";" + StatementFinalizer.class.getName());
   }
 
   /**
@@ -216,19 +208,10 @@ public abstract class JpaDataSourceConfig {
     @Bean
     public DataSource dataSource() {
       final Properties props = loadExternalConfig("mysql.properties");
-      final PoolProperties pp = new PoolProperties();
-      pp.setUrl(props.getProperty("url"));
-      pp.setDriverClassName(props.getProperty("driverClassName"));
-      pp.setUsername(props.getProperty("username"));
-      pp.setPassword(props.getProperty("password"));
-
-      pp.setValidationQuery("select 1"); // 用于检查连接是否可用的sql语句
-      JpaDataSourceConfig.configureDataSourcePool(props, pp);
-
-      final org.apache.tomcat.jdbc.pool.DataSource ds =
-          new org.apache.tomcat.jdbc.pool.DataSource();
-      ds.setPoolProperties(pp);
-      return ds;
+      final DruidDataSource dataSource = new DruidDataSource();
+      configureDataSourcePool(props, dataSource);
+      dataSource.setValidationQuery("select 1");// 用于检查连接是否可用的sql语句
+      return dataSource;
     }
 
     @Bean
@@ -258,19 +241,10 @@ public abstract class JpaDataSourceConfig {
     @Bean
     public DataSource dataSource() {
       final Properties props = loadExternalConfig("oracle.properties");
-      final PoolProperties pp = new PoolProperties();
-      pp.setUrl(props.getProperty("url"));
-      pp.setDriverClassName(props.getProperty("driverClassName"));
-      pp.setUsername(props.getProperty("username"));
-      pp.setPassword(props.getProperty("password"));
-
-      pp.setValidationQuery("select * from dual");
-      JpaDataSourceConfig.configureDataSourcePool(props, pp);
-
-      final org.apache.tomcat.jdbc.pool.DataSource ds =
-          new org.apache.tomcat.jdbc.pool.DataSource();
-      ds.setPoolProperties(pp);
-      return ds;
+      final DruidDataSource dataSource = new DruidDataSource();
+      configureDataSourcePool(props, dataSource);
+      dataSource.setValidationQuery("select * from dual");// 用于检查连接是否可用的sql语句
+      return dataSource;
     }
 
     @Bean
