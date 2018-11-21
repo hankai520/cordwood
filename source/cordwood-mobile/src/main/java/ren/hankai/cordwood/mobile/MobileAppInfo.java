@@ -1,6 +1,5 @@
 /*
  * Copyright © 2016 Jiangsu Sparknet Software Co., Ltd. All rights reserved.
- *
  * http://www.sparksoft.com.cn
  */
 
@@ -24,7 +23,6 @@ public class MobileAppInfo {
   private String iconName; // 图标文件名
   private byte[] icon; // 应用图标
   private String bundlePath;// 应用包缓存位置
-
 
   /**
    * 获取 name 字段的值。

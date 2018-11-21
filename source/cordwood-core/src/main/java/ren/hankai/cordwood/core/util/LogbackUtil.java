@@ -20,8 +20,6 @@ import ren.hankai.cordwood.core.logging.LogbackLevelFilter;
 import java.io.File;
 import java.util.List;
 
-
-
 /**
  * Logback 日志助手类。
  *

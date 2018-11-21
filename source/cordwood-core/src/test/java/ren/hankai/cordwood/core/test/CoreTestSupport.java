@@ -34,6 +34,7 @@ public abstract class CoreTestSupport {
     Assert.assertTrue(
         ApplicationInitializer.initialize("testSupport.txt", "system.yml"));
     Runtime.getRuntime().addShutdownHook(new Thread() {
+
       @Override
       public void run() {
         try {

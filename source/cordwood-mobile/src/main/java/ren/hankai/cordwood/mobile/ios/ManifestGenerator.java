@@ -4,10 +4,8 @@ package ren.hankai.cordwood.mobile.ios;
 import com.dd.plist.BinaryPropertyListWriter;
 import com.dd.plist.NSArray;
 import com.dd.plist.NSDictionary;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ren.hankai.cordwood.mobile.MobileAppInfo;
 
 import java.io.IOException;

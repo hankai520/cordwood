@@ -29,7 +29,7 @@ public abstract class WebServiceSupport {
    * @author hankai
    * @since Dec 26, 2016 11:28:14 AM
    */
-  @ExceptionHandler({ Exception.class, Error.class })
+  @ExceptionHandler({Exception.class, Error.class})
   @ResponseBody
   public ApiResponse handleInternalError(HttpServletRequest request, Exception exception) {
     final ApiResponse response = new ApiResponse();
@@ -48,7 +48,7 @@ public abstract class WebServiceSupport {
    * @author hankai
    * @since Dec 26, 2016 11:31:57 AM
    */
-  @ExceptionHandler({ ApiException.class })
+  @ExceptionHandler({ApiException.class})
   @ResponseBody
   public ApiResponse handleBusinessError(HttpServletRequest request, ApiException exception) {
     final ApiResponse response = new ApiResponse();

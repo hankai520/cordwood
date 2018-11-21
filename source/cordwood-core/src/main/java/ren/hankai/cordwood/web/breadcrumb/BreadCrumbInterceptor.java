@@ -84,7 +84,6 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
     session.setAttribute(BREAD_CRUMB_LINKS, breadCrumb);
   }
 
-
   private BreadCrumbLink getBreadCrumbLink(HttpServletRequest request, NavigationItem link,
       LinkedHashMap<String, BreadCrumbLink> familyMap) {
     BreadCrumbLink breadCrumbLink;
@@ -105,7 +104,6 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
     createRelationships(familyMap, breadCrumbLink);
     return breadCrumbLink;
   }
-
 
   @SuppressWarnings("unchecked")
   private Map<String, LinkedHashMap<String, BreadCrumbLink>> getBreadCrumbLinksFromSession(
@@ -140,7 +138,6 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
     }
     breadCrumbLinks.add(link);
   }
-
 
   private void createRelationships(LinkedHashMap<String, BreadCrumbLink> familyMap,
       BreadCrumbLink newLink) {

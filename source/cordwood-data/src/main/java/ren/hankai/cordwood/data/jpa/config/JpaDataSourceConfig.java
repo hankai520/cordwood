@@ -4,7 +4,6 @@ import com.alibaba.druid.filter.Filter;
 import com.alibaba.druid.filter.logging.Slf4jLogFilter;
 import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
-
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.platform.database.HSQLPlatform;
 import org.eclipse.persistence.platform.database.MySQLPlatform;

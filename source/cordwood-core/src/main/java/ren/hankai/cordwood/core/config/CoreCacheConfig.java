@@ -46,16 +46,6 @@ public class CoreCacheConfig extends CachingConfigurerSupport {
     final PersistenceConfiguration pc = new PersistenceConfiguration();
     pc.setStrategy(PersistenceConfiguration.Strategy.LOCALTEMPSWAP.name());
 
-    /*
-     * no expiry this means cache mappings will never expire,
-     *
-     * time-to-live this means cache mappings will expire after a fixed duration following their
-     * creation,
-     *
-     * time-to-idle this means cache mappings will expire after a fixed duration following the time
-     * they were last accessed.
-     */
-
     // 定义重量级缓存
     final CacheConfiguration heavyWeightCache = new CacheConfiguration();
     heavyWeightCache.setName("heavyWeight");

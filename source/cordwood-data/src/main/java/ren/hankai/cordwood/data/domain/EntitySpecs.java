@@ -1,6 +1,5 @@
 /*
  * Copyright © 2016 hankai.ren, All rights reserved.
- *
  * http://www.hankai.ren
  */
 

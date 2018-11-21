@@ -2,7 +2,6 @@
 package ren.hankai.cordwood.web.security.support;
 
 import com.google.common.util.concurrent.RateLimiter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ren.hankai.cordwood.web.security.annotation.Stabilized;

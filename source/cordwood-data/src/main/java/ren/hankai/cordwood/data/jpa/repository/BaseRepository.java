@@ -21,7 +21,6 @@ import java.util.List;
 @NoRepositoryBean
 public interface BaseRepository<T, I extends Serializable> extends JpaRepository<T, I> {
 
-
   /**
    * 分离实体对象，将其转换为游离状态。
    *

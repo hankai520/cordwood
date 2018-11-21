@@ -11,6 +11,7 @@ import java.util.Map;
  *
  */
 public interface RequestInspector {
+
   /**
    * 请求入参的签名字段名。
    */

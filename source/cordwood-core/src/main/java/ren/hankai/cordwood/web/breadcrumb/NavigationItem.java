@@ -13,6 +13,7 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface NavigationItem {
+
   /**
    * 标签名（支持i18n）。
    *

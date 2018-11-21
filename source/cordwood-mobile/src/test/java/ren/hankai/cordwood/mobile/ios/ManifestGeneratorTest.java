@@ -3,7 +3,6 @@ package ren.hankai.cordwood.mobile.ios;
 
 import org.junit.Assert;
 import org.junit.Test;
-
 import ren.hankai.cordwood.mobile.MobileAppInfo;
 import ren.hankai.cordwood.mobile.MobileAppScanner;
 
