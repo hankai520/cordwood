@@ -2,17 +2,21 @@
 package ren.hankai.cordwood.core.api.exception;
 
 /**
- * Ajax接口异常基类。
+ * Ajax接口异常基类，用于在web应用中处理ajax调用时发生的异常。
  *
  * @author hankai
  * @version 1.0.0
  * @since Dec 8, 2016 2:13:24 PM
  */
-public class AjaxException extends RuntimeException {
+public class AjaxException extends ApiException {
 
   private static final long serialVersionUID = 1L;
 
-  public AjaxException(String message, Throwable cause) {
-    super(message, cause);
+  public AjaxException(String code) {
+    super(code);
+  }
+
+  public AjaxException(String code, String message) {
+    super(code, message);
   }
 }

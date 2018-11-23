@@ -12,7 +12,7 @@ public class ApiException extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
 
-  private final String code;
+  protected final String code;
 
   public ApiException(String code) {
     super();

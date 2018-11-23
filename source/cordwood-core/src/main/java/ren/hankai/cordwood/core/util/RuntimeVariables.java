@@ -35,7 +35,13 @@ public final class RuntimeVariables {
 
   private RuntimeVariables() {}
 
-  // 获取所有运行时变量字典
+  /**
+   * 获取所有运行时变量字典。
+   *
+   * @return 运行时变量字典
+   * @author hankai
+   * @since Nov 22, 2018 3:46:56 PM
+   */
   private static Map<String, String> getVariables() {
     // 如果缓存的变量过期了，则清空
     if (cacheSeconds > 0) {

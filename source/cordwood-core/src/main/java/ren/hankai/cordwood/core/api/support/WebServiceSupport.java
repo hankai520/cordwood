@@ -22,7 +22,7 @@ public abstract class WebServiceSupport {
 
   /**
    * 处理内部异常导致的接口调用错误。
-   * 
+   *
    * @param request HTTP请求
    * @param exception 异常
    * @return 错误
@@ -41,7 +41,7 @@ public abstract class WebServiceSupport {
 
   /**
    * 处理接口业务逻辑错误。
-   * 
+   *
    * @param request HTTP 请求
    * @param exception 异常
    * @return 错误

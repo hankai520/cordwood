@@ -6,13 +6,20 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 import ren.hankai.cordwood.core.ApplicationInitializer;
 import ren.hankai.cordwood.core.Preferences;
-import ren.hankai.cordwood.core.config.CoreSpringConfig;
+import ren.hankai.cordwood.core.test.config.BeanConfig;
+import ren.hankai.cordwood.core.test.config.WebConfig;
 
 import java.io.File;
 
@@ -24,7 +31,9 @@ import java.io.File;
  * @since Oct 21, 2016 1:05:07 PM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {CoreTestSupport.class, CoreSpringConfig.class})
+@WebAppConfiguration
+@ContextConfiguration(classes = {CoreTestSupport.class, BeanConfig.class, WebConfig.class})
+@ActiveProfiles({Preferences.PROFILE_TEST})
 @Configuration
 @ComponentScan(basePackages = {"ren.hankai"})
 public abstract class CoreTestSupport {
@@ -48,9 +57,13 @@ public abstract class CoreTestSupport {
     });
   }
 
+  @Autowired
+  protected WebApplicationContext ctx;
+  protected MockMvc mockMvc;
+
   @Before
   public void setup() throws Exception {
-
+    mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
   }
 
   @After

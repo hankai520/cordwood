@@ -64,7 +64,7 @@ public abstract class JpaDataSourceConfig {
    * 配置连接池。将连接池配置文件中的参数配置到连接池属性中。
    *
    * @param props 数据源配置文件（e.g. mysql.properties）
-   * @param poolProps 连接池属性
+   * @param dataSource Druid 数据源
    * @author hankai
    * @since Jul 31, 2018 3:21:48 PM
    */

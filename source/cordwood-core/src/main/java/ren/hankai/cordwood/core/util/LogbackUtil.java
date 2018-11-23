@@ -124,11 +124,14 @@ public final class LogbackUtil {
       name = Logger.ROOT_LOGGER_NAME;
     }
     final Logger logger = lc.getLogger(name);
+    logger.setLevel(level);
     final ConsoleAppender<ILoggingEvent> appender = getConsoleAppender(lc, pattern);
     final LogbackLevelFilter filter = new LogbackLevelFilter(level);
     appender.addFilter(filter);
     filter.start();
+    logger.detachAppender(appender.getName());
     logger.addAppender(appender);
+    appender.start();
   }
 
   /**
@@ -191,12 +194,15 @@ public final class LogbackUtil {
       name = Logger.ROOT_LOGGER_NAME;
     }
     final Logger logger = lc.getLogger(name);
+    logger.setLevel(level);
     final Appender<ILoggingEvent> appender =
         getFileAppender(name, lc, logFileName, pattern, maxHistory);
     final LogbackLevelFilter filter = new LogbackLevelFilter(level);
     appender.addFilter(filter);
     filter.start();
+    logger.detachAppender(appender.getName());
     logger.addAppender(appender);
+    appender.start();
   }
 
   /**

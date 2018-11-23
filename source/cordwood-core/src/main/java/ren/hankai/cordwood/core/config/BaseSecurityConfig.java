@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  */
 public abstract class BaseSecurityConfig extends WebSecurityConfigurerAdapter {
 
+  // TODO: spring security 单元测试
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     super.configure(auth);

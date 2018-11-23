@@ -2,6 +2,8 @@ package ren.hankai.cordwood.web.security;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 请求检查接口，用于检查参数是否被篡改。
  *
@@ -50,6 +52,27 @@ public interface RequestInspector {
   String signRequestParameters(Map<String, ?> parameters, String sk);
 
   /**
+   * 对请求体进行签名。
+   *
+   * @param requestBody HTTP请求体
+   * @return 签名字符串
+   * @author hankai
+   * @since Nov 22, 2018 3:27:34 PM
+   */
+  String signRequestBody(String requestBody);
+
+  /**
+   * 对请求体进行签名。
+   *
+   * @param requestBody 请求体（Http body）
+   * @param sk 秘钥
+   * @return 签名字符串
+   * @author hankai
+   * @since Nov 22, 2018 3:27:34 PM
+   */
+  String signRequestBody(String requestBody, String sk);
+
+  /**
    * 验证请求参数是否未篡改（使用首选项中配置的传输秘钥 Preferences.getTransferKey()）。
    *
    * @param parameters 参数集合
@@ -69,4 +92,25 @@ public interface RequestInspector {
    * @since Jan 26, 2018 8:44:39 PM
    */
   boolean verifyRequestParameters(Map<String, ?> parameters, String sk);
+
+  /**
+   * 用自定义秘钥验证请求参数是否未篡改。
+   *
+   * @param request HTTP请求
+   * @return 是否被篡改
+   * @author hankai
+   * @since Nov 22, 2018 3:28:41 PM
+   */
+  boolean verifyRequestParameters(HttpServletRequest request);
+
+  /**
+   * 用自定义秘钥验证请求参数是否未篡改。
+   *
+   * @param request HTTP请求
+   * @param sk 秘钥
+   * @return 是否被篡改
+   * @author hankai
+   * @since Nov 22, 2018 3:28:41 PM
+   */
+  boolean verifyRequestParameters(HttpServletRequest request, String sk);
 }

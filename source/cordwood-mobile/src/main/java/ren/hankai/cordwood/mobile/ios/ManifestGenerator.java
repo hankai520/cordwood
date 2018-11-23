@@ -21,6 +21,17 @@ public class ManifestGenerator {
 
   private static final Logger logger = LoggerFactory.getLogger(ManifestGenerator.class);
 
+  /**
+   * 根据APP包信息生成并设置Assets节点信息。
+   *
+   * @param mobileApp APP应用包信息
+   * @param dict Manifest信息
+   * @param packageUrl 应用包下载链接
+   * @param displayImageUrl 应用图标下载链接
+   * @param fullSizeImageUrl 全尺寸应用图标下载链接
+   * @author hankai
+   * @since Nov 22, 2018 3:59:00 PM
+   */
   private static void setAssetsInfo(MobileAppInfo mobileApp, NSDictionary dict, String packageUrl,
       String displayImageUrl, String fullSizeImageUrl) {
     final NSDictionary packageDict = new NSDictionary();
@@ -35,6 +46,14 @@ public class ManifestGenerator {
     dict.put("assets", new NSArray(packageDict, displayImageDict, fullSizeImageDict));
   }
 
+  /**
+   * 根据APP应用包信息生成并设置APP元数据。
+   *
+   * @param mobileApp APP应用包信息
+   * @param dict Manifest数据
+   * @author hankai
+   * @since Nov 22, 2018 4:01:02 PM
+   */
   private static void setMetaData(MobileAppInfo mobileApp, NSDictionary dict) {
     final NSDictionary metadata = new NSDictionary();
     metadata.put("bundle-identifier", mobileApp.getBundleId());

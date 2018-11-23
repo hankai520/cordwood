@@ -1,13 +1,16 @@
 package ren.hankai.cordwood.web.security.support;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.web.security.AccessAuthenticator;
 import ren.hankai.cordwood.web.security.RequestInspector;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -16,6 +19,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 请求检查接口默认实现。
@@ -82,6 +87,18 @@ public class DefaultRequestInspector implements RequestInspector {
   }
 
   @Override
+  public String signRequestBody(String requestBody) {
+    return signRequestBody(requestBody, Preferences.getTransferKey());
+  }
+
+  @Override
+  public String signRequestBody(String requestBody, String sk) {
+    final String toBeSigned = requestBody + sk;
+    final String expSign = DigestUtils.sha1Hex(toBeSigned);
+    return expSign;
+  }
+
+  @Override
   public boolean verifyRequestParameters(Map<String, ?> parameters) {
     return verifyRequestParameters(parameters, Preferences.getTransferKey());
   }
@@ -119,4 +136,41 @@ public class DefaultRequestInspector implements RequestInspector {
     return false;
   }
 
+  @Override
+  public boolean verifyRequestParameters(HttpServletRequest request) {
+    return verifyRequestParameters(request, Preferences.getTransferKey());
+  }
+
+  @Override
+  public boolean verifyRequestParameters(HttpServletRequest request, String sk) {
+    final Map<String, String[]> params = request.getParameterMap();
+    // 检查请求是否是 form
+    final MediaType contentType = MediaType.valueOf(request.getContentType());
+    if (MediaType.APPLICATION_FORM_URLENCODED.isCompatibleWith(contentType)) {
+      // 请求是一个标准的URL编码表单
+      return verifyRequestParameters(params, sk);
+    }
+    // 非URL编码表单，对整个请求体进行验签
+    String requestBody = null;
+    try {
+      requestBody = IOUtils.toString(request.getInputStream());
+    } catch (final IOException ex) {
+      logger.warn("Failed to verify request parameters due to io error while parsing request body.",
+          ex);
+      return false;
+    }
+    final String expSign = signRequestBody(requestBody, sk);
+    final Object sign = params.get(RequestInspector.REQUEST_SIGN);
+    if (sign != null) {
+      if ((sign instanceof String) && expSign.equalsIgnoreCase((String) sign)) {
+        return true;
+      } else if (sign instanceof String[]) {
+        final String[] strArr = (String[]) sign;
+        if ((strArr.length > 0) && expSign.equalsIgnoreCase(strArr[0])) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 }

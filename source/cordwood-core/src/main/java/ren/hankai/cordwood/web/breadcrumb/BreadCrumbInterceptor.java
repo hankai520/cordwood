@@ -30,6 +30,7 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
   private static final String BREAD_CRUMB_LINKS = "breadCrumb";
   private static final String CURRENT_BREAD_CRUMB = "currentBreadCrumb";
 
+  // TODO: 面包屑导航单元测试
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {
@@ -58,6 +59,15 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
     session.setAttribute(CURRENT_BREAD_CRUMB, new LinkedList<BreadCrumbLink>());
   }
 
+  /**
+   * 根据HTTP请求对应的Handler中的注解，解析导航配置并加入导航分组。
+   *
+   * @param request HTTP请求
+   * @param session HTTP会话
+   * @param annotation handler的注解
+   * @author hankai
+   * @since Nov 22, 2018 3:54:10 PM
+   */
   private void processAnnotation(HttpServletRequest request, HttpSession session,
       Annotation annotation) {
     final NavigationItem link = (NavigationItem) annotation;
@@ -84,6 +94,16 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
     session.setAttribute(BREAD_CRUMB_LINKS, breadCrumb);
   }
 
+  /**
+   * 根据当前导航项对应的面包屑导航数据。
+   *
+   * @param request HTTP请求
+   * @param link 当前导航项
+   * @param familyMap 导航项分组
+   * @return 面包屑导航数据
+   * @author hankai
+   * @since Nov 22, 2018 3:55:39 PM
+   */
   private BreadCrumbLink getBreadCrumbLink(HttpServletRequest request, NavigationItem link,
       LinkedHashMap<String, BreadCrumbLink> familyMap) {
     BreadCrumbLink breadCrumbLink;
@@ -105,6 +125,14 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
     return breadCrumbLink;
   }
 
+  /**
+   * 从HTTP会话中获取面包屑导航项。
+   *
+   * @param session HTTP会话
+   * @return 面包屑导航数据集合
+   * @author hankai
+   * @since Nov 22, 2018 3:57:00 PM
+   */
   @SuppressWarnings("unchecked")
   private Map<String, LinkedHashMap<String, BreadCrumbLink>> getBreadCrumbLinksFromSession(
       HttpSession session) {
@@ -114,6 +142,14 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
     return breadCrumb;
   }
 
+  /**
+   * 获取HTTP请求Handler中的注解。
+   *
+   * @param handler HTTP请求Handler
+   * @return 注解数组
+   * @author hankai
+   * @since Nov 22, 2018 3:58:22 PM
+   */
   private Annotation[] getDeclaredAnnotationsForHandler(Object handler) {
     if (handler instanceof HandlerMethod) {
       final HandlerMethod handlerMethod = (HandlerMethod) handler;
@@ -125,12 +161,27 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
     }
   }
 
+  /**
+   * 重置面包屑导航。
+   *
+   * @param familyMap 导航数据表
+   * @author hankai
+   * @since Nov 22, 2018 3:47:13 PM
+   */
   private void resetBreadCrumbs(LinkedHashMap<String, BreadCrumbLink> familyMap) {
     for (final BreadCrumbLink breadCrumbLink : familyMap.values()) {
       breadCrumbLink.setCurrentPage(false);
     }
   }
 
+  /**
+   * 递归地生成面包屑导航。
+   *
+   * @param link 导航项
+   * @param breadCrumbLinks 导航项集合
+   * @author hankai
+   * @since Nov 22, 2018 3:48:35 PM
+   */
   private void generateBreadCrumbsRecursively(BreadCrumbLink link,
       LinkedList<BreadCrumbLink> breadCrumbLinks) {
     if (link.getPrevious() != null) {
@@ -139,6 +190,14 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
     breadCrumbLinks.add(link);
   }
 
+  /**
+   * 为新的导航项构建关系链接。
+   *
+   * @param familyMap 导航项分组
+   * @param newLink 新项
+   * @author hankai
+   * @since Nov 22, 2018 3:50:12 PM
+   */
   private void createRelationships(LinkedHashMap<String, BreadCrumbLink> familyMap,
       BreadCrumbLink newLink) {
     final Collection<BreadCrumbLink> values = familyMap.values();

@@ -21,9 +21,7 @@ public class LogbackLevelFilter extends AbstractMatcherFilter<ILoggingEvent> {
 
   private final List<Level> levelsToKeep = new ArrayList<>();
 
-  public LogbackLevelFilter() {
-
-  }
+  private LogbackLevelFilter() {}
 
   /**
    * 构造过滤器，只保留特定级别的日志。
@@ -68,6 +66,17 @@ public class LogbackLevelFilter extends AbstractMatcherFilter<ILoggingEvent> {
       }
     }
     return FilterReply.DENY;
+  }
+
+  /**
+   * 获取被保留的日志级别。
+   *
+   * @return 被保留的日志级别
+   * @author hankai
+   * @since Nov 22, 2018 5:27:56 PM
+   */
+  public List<Level> getLevelsToKeep() {
+    return levelsToKeep;
   }
 
 }

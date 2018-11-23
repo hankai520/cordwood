@@ -21,6 +21,7 @@ import ren.hankai.cordwood.core.cache.MethodSignatureKeyGenerator;
  */
 public class CoreCacheConfig extends CachingConfigurerSupport {
 
+  // TODO: 缓存配置单元测试
   /**
    * 基于方法签名的缓存键生成器。
    *
