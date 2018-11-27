@@ -146,7 +146,8 @@ public class DefaultRequestInspector implements RequestInspector {
     final Map<String, String[]> params = request.getParameterMap();
     // 检查请求是否是 form
     final MediaType contentType = MediaType.valueOf(request.getContentType());
-    if (MediaType.APPLICATION_FORM_URLENCODED.isCompatibleWith(contentType)) {
+    if (MediaType.APPLICATION_FORM_URLENCODED.isCompatibleWith(contentType)
+        || MediaType.MULTIPART_FORM_DATA.isCompatibleWith(contentType)) {
       // 请求是一个标准的URL编码表单
       return verifyRequestParameters(params, sk);
     }
