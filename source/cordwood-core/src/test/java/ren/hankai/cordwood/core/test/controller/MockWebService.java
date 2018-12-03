@@ -9,6 +9,7 @@ import ren.hankai.cordwood.core.api.exception.AjaxException;
 import ren.hankai.cordwood.core.api.exception.ApiException;
 import ren.hankai.cordwood.core.api.support.WebServiceSupport;
 import ren.hankai.cordwood.core.test.Route;
+import ren.hankai.cordwood.web.security.annotation.Stabilized;
 
 /**
  * 仅用于单元测试的 Web Service。
@@ -36,4 +37,9 @@ public class MockWebService extends WebServiceSupport {
     throw new AjaxException("-2", "expected");
   }
 
+  @Stabilized(maxQps = 1, fusingThreshold = 1, fusingInterval = 5)
+  @RequestMapping(Route.S5)
+  public String s5() throws Exception {
+    return "";
+  }
 }

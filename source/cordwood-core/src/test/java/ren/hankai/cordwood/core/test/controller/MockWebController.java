@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.test.Route;
+import ren.hankai.cordwood.web.breadcrumb.NavigationItem;
 import ren.hankai.cordwood.web.exception.NotFoundException;
 import ren.hankai.cordwood.web.support.BaseViewController;
 
@@ -48,4 +49,15 @@ public class MockWebController extends BaseViewController {
     throw new RuntimeException("expected");
   }
 
+  @NavigationItem(family = "test", label = "s6_1")
+  @RequestMapping(Route.S6_1)
+  public String s6_1() throws Exception {
+    return "";
+  }
+
+  @NavigationItem(family = "test", label = "s6_2", parent = "s6_1")
+  @RequestMapping(Route.S6_2)
+  public String s6_2() throws Exception {
+    return "";
+  }
 }

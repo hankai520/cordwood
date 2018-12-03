@@ -25,6 +25,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
 
+/**
+ * Logback 工具类测试。
+ *
+ * @author hankai
+ * @version 1.0.0
+ * @since Nov 30, 2018 4:58:53 PM
+ */
 public class LogbackUtilTest extends CoreTestSupport {
 
   @Test
@@ -74,8 +81,7 @@ public class LogbackUtilTest extends CoreTestSupport {
           }
           Assert.assertNotNull(expFilter);
           Assert.assertTrue(expFilter.isStarted());
-          Assert.assertTrue(expFilter.getLevelsToKeep().size() == 1);
-          Assert.assertEquals(Level.INFO, expFilter.getLevelsToKeep().get(0));
+          Assert.assertEquals(Level.INFO, expFilter.getLevelToKeep());
         }
       }
     }
@@ -108,15 +114,11 @@ public class LogbackUtilTest extends CoreTestSupport {
           final LayoutWrappingEncoder<ILoggingEvent> encoder =
               (LayoutWrappingEncoder<ILoggingEvent>) appender.getEncoder();
           final PatternLayout layout = (PatternLayout) encoder.getLayout();
-          if (!layout.getPattern().equals(pattern)) {
-            System.out.println();
-          }
           Assert.assertEquals(pattern, layout.getPattern());
 
           Assert.assertNotNull(expFilter);
           Assert.assertTrue(expFilter.isStarted());
-          Assert.assertTrue(expFilter.getLevelsToKeep().size() == 1);
-          Assert.assertEquals(Level.DEBUG, expFilter.getLevelsToKeep().get(0));
+          Assert.assertEquals(Level.DEBUG, expFilter.getLevelToKeep());
         }
       }
     }

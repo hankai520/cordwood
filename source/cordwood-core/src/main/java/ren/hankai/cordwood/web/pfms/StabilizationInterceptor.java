@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class StabilizationInterceptor implements HandlerInterceptor {
 
-  // TODO: 单元测试稳定器
   @Autowired
   @Lazy
   private RequestMappingHandlerMapping requestMappingHandlerMapping;

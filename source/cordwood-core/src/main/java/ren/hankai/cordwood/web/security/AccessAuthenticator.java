@@ -86,7 +86,6 @@ public interface AccessAuthenticator {
    * @since Jun 28, 2016 1:34:50 PM
    */
   public static class TokenInfo {
-    // TODO: TokenInfo 单元测试
 
     /**
      * 令牌数据错误。

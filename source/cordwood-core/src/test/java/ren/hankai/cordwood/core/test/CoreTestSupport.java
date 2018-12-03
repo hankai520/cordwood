@@ -1,6 +1,7 @@
 
 package ren.hankai.cordwood.core.test;
 
+import ch.qos.logback.classic.Level;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
@@ -16,10 +17,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import ren.hankai.cordwood.core.ApplicationInitInfo;
 import ren.hankai.cordwood.core.ApplicationInitializer;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.test.config.BeanConfig;
 import ren.hankai.cordwood.core.test.config.WebConfig;
+import ren.hankai.cordwood.core.util.LogbackUtil;
 
 import java.io.File;
 
@@ -40,8 +43,41 @@ public abstract class CoreTestSupport {
 
   static {
     System.setProperty(Preferences.ENV_APP_HOME_DIR, "./test-home");
+
+    LogbackUtil.setupConsoleLoggerFor(Level.WARN);
+    LogbackUtil.setupConsoleLoggerFor("ren.hankai.cordwood", Level.DEBUG);
+
+    final ApplicationInitInfo initInfo =
+        ApplicationInitInfo.initWithConfigs("testSupport.txt");
+    initInfo.addSupportFiles("system.yml");
+    initInfo.addTemplates("ut_only.txt");
     Assert.assertTrue(
-        ApplicationInitializer.initialize("testSupport.txt", "system.yml"));
+        ApplicationInitializer.initialize(false, initInfo));
+
+    Assert.assertNotNull(Preferences.getAttachmentDir());
+    Assert.assertNotNull(Preferences.getBackupDir());
+    Assert.assertNotNull(Preferences.getCacheDir());
+    Assert.assertNotNull(Preferences.getConfigDir());
+    Assert.assertTrue(Preferences.getConfigFilePath("test.conf").contains("test.conf"));
+    Assert.assertEquals("1", Preferences.getCustomConfig("test"));
+    Assert.assertNotNull(Preferences.getDataDir());
+    Assert.assertNotNull(Preferences.getDbConfigFile());
+    Assert.assertTrue(Preferences.getDbConfigFile("db.conf").contains("db.conf"));
+    Assert.assertNotNull(Preferences.getDbDir());
+    Assert.assertNotNull(Preferences.getHomeDir());
+    Assert.assertNotNull(Preferences.getLibsDir());
+    Assert.assertNotNull(Preferences.getLogDir());
+    Assert.assertNotNull(Preferences.getPluginsDir());
+    Assert.assertNotNull(Preferences.getTempDir());
+    Assert.assertNotNull(Preferences.getTemplatesDir());
+
+    Assert.assertEquals(7, Preferences.getApiAccessTokenExpiry().intValue());
+    Assert.assertEquals("ut.test", Preferences.getProxyName());
+    Assert.assertEquals(123, Preferences.getProxyPort().intValue());
+    Assert.assertEquals("https", Preferences.getProxyScheme());
+    Assert.assertEquals("46ee56cd32f85737", Preferences.getSystemSk());
+    Assert.assertEquals("51f72611acf6df792025ae5ce341b01f", Preferences.getTransferKey());
+
     Runtime.getRuntime().addShutdownHook(new Thread() {
 
       @Override

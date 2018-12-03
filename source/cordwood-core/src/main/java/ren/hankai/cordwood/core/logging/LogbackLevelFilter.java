@@ -6,9 +6,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.filter.AbstractMatcherFilter;
 import ch.qos.logback.core.spi.FilterReply;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.util.Assert;
 
 /**
  * Logback 日志级别过滤器，可按需要过滤日志。
@@ -19,34 +17,17 @@ import java.util.List;
  */
 public class LogbackLevelFilter extends AbstractMatcherFilter<ILoggingEvent> {
 
-  private final List<Level> levelsToKeep = new ArrayList<>();
-
-  private LogbackLevelFilter() {}
+  private Level levelToKeep = null;
 
   /**
    * 构造过滤器，只保留特定级别的日志。
    *
-   * @param levels 需保留的日志级别（除此以外的级别将不被记录）
-   */
-  public LogbackLevelFilter(Level... levels) {
-    super();
-    if ((levels != null) && (levels.length > 0)) {
-      for (final Level level : levels) {
-        levelsToKeep.add(level);
-      }
-    }
-  }
-
-  /**
-   * 构造过滤器，保留指定级别或更高级别的日志。
-   *
-   * @param level 需要保留的级别（包含更高级别）
+   * @param level 需保留的日志级别（除此以外的级别将不被记录）
    */
   public LogbackLevelFilter(Level level) {
     super();
-    if (null != level) {
-      levelsToKeep.add(level);
-    }
+    Assert.notNull(level, "Level to keep must not be null!");
+    levelToKeep = level;
   }
 
   @Override
@@ -55,15 +36,8 @@ public class LogbackLevelFilter extends AbstractMatcherFilter<ILoggingEvent> {
       return FilterReply.NEUTRAL;
     }
     final LoggingEvent loggingEvent = (LoggingEvent) event;
-    if (levelsToKeep.size() == 1) {
-      final Level level = levelsToKeep.get(0);
-      if (loggingEvent.getLevel().isGreaterOrEqual(level)) {
-        return FilterReply.NEUTRAL;
-      }
-    } else {
-      if (levelsToKeep.contains(loggingEvent.getLevel())) {
-        return FilterReply.NEUTRAL;
-      }
+    if (loggingEvent.getLevel().isGreaterOrEqual(levelToKeep)) {
+      return FilterReply.NEUTRAL;
     }
     return FilterReply.DENY;
   }
@@ -75,8 +49,8 @@ public class LogbackLevelFilter extends AbstractMatcherFilter<ILoggingEvent> {
    * @author hankai
    * @since Nov 22, 2018 5:27:56 PM
    */
-  public List<Level> getLevelsToKeep() {
-    return levelsToKeep;
+  public Level getLevelToKeep() {
+    return levelToKeep;
   }
 
 }

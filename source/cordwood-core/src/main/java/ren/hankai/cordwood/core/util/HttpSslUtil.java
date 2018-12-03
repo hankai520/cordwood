@@ -40,10 +40,11 @@ public final class HttpSslUtil {
   /**
    * 信任所有 HTTPS协议的 SSL证书。
    *
+   * @return 安全连接上下文
    * @author hankai
    * @since Jul 31, 2018 2:57:00 PM
    */
-  public static void trustAllHttpsCertificates() {
+  public static SSLContext trustAllHttpsCertificates() {
     SSLContext context = null;
     if (trustManagers == null) {
       trustManagers = new TrustManager[] {new FakeX509TrustManager()};
@@ -55,6 +56,7 @@ public final class HttpSslUtil {
       throw new IllegalStateException(gse.getMessage());
     }
     HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
+    return context;
   }
 
   /**

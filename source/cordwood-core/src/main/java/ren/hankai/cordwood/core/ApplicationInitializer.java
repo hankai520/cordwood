@@ -39,8 +39,21 @@ public class ApplicationInitializer {
   }
 
   /**
+   * 程序初始化。
+   *
+   * @param printClassPaths 是否打印雷路径
+   * @param supportFileNames 主程序位于 support 目录的预定义配置文件名称列表
+   * @return 是否成功
+   * @author hankai
+   * @since Nov 29, 2018 5:42:18 PM
+   */
+  public static boolean initialize(boolean printClassPaths, String... supportFileNames) {
+    return initialize(printClassPaths, ApplicationInitInfo.initWithConfigs(supportFileNames));
+  }
+
+  /**
    * 程序初始化（重载版本，可制定更多配置参数）。
-   * 
+   *
    * @param printClassPaths 是否打印雷路径
    * @param appInitInfo 应用初始化信息
    * @return 是否初始化成功
@@ -108,7 +121,7 @@ public class ApplicationInitializer {
 
   /**
    * 检查默认配置文件是否丢失，若丢失，则复制应用内置配置文件。
-   * 
+   *
    * @param basePath 应用内默认配置文件根路径
    * @param targetDir 配置文件存储目录
    * @param fileNames 配置文件名称列表

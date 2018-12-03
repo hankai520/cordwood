@@ -39,9 +39,12 @@ dependencies {
     compile "commons-codec:commons-codec:1.9"
     compile "org.apache.commons:commons-lang3:3.4"
     compile "net.sf.ehcache:ehcache:2.10.3"
-    compile "com.google.guava:guava:19.0"
+    compile "com.google.guava:guava:25.1-jre"
+    compile "com.jcabi:jcabi-manifests:1.1"
     
     testCompile "org.springframework:spring-test:${springVersion}"
     testCompile "org.yaml:snakeyaml:1.17"
     testCompile "com.jayway.jsonpath:json-path:2.2.0"
+    testCompile "com.jcabi:jcabi-manifests:1.1"
+    testCompile 'org.simpleframework:simple:5.1.6'
 }

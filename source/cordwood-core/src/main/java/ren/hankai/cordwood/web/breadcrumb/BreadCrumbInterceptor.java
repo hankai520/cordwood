@@ -19,18 +19,57 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * 面包屑导航拦截器。
+ * <p>面包屑导航拦截器。分组类似命名空间，用于提高导航项检索效率，同时避免类似的导航项重名。通过为控制器方法增加
+ * <b>NavigationItem</b> 注解，构建不同页面之间的导航关系。拦截器在收到请求后，会构建导航关系并设置到<b>用户会话</b>中。
+ * 通过 {@link BreadCrumbInterceptor#BREAD_CRUMB_LINKS BREAD_CRUMB_LINKS} 可获取到整个导航中所有项，通过
+ * {@link BreadCrumbInterceptor#CURRENT_BREAD_CRUMB CURRENT_BREAD_CRUMB} 可获取当前访问的页面对应的导航项。</p>
+ * <p>初始状态：{} </p>
+ *
+ * <pre>
+ * 访问 "首页"：
+ * "分组" <=> LinkedHashMap {
+ *     "首页" <=> BreadCrumbLink("分组", "首页",     true, null)
+ * }
+ *
+ * 访问 “用户管理”：
+ * "分组(family)" <=> LinkedHashMap {
+ *    "用户管理" <=> BreadCrumbLink("分组", "用户管理", true, "首页"),
+ *    "首页" <=> BreadCrumbLink("分组", "首页",     false, null)
+ * }
+ *
+ * 访问 “添加用户”：
+ * "分组(family)" <=> LinkedHashMap {
+ *    "添加用户(label)" <=> BreadCrumbLink("分组", "添加用户", true, "用户管理"),
+ *    "用户管理(label)" <=> BreadCrumbLink("分组", "用户管理", false, "首页"),
+ *    "首页(label)" <=> BreadCrumbLink("分组", "首页",  false, null)
+ * }
+ *
+ * 此时，页面可利用面包屑导航数据生成导航路径：首页 \ 用户管理 \ <b>添加用户</b>。
+ *
+ * 返回 “用户管理”：
+ * "分组(family)" <=> LinkedHashMap {
+ *    "用户管理" <=> BreadCrumbLink("分组", "用户管理", true, "首页"),
+ *    "首页" <=> BreadCrumbLink("分组", "首页", false, null)
+ * }
+ * </pre>
  *
  * @author hankai
  * @version 1.0.0
  * @since Dec 6, 2016 2:56:50 PM
+ * @see ren.hankai.cordwood.web.breadcrumb.NavigationItem
+ * @see ren.hankai.cordwood.web.breadcrumb.BreadCrumbLink
  */
 public class BreadCrumbInterceptor implements HandlerInterceptor {
 
-  private static final String BREAD_CRUMB_LINKS = "breadCrumb";
-  private static final String CURRENT_BREAD_CRUMB = "currentBreadCrumb";
+  /**
+   * 面包屑导航项集合，类型为 <code>Map&lt;String, LinkedHashMap&lt;String, BreadCrumbLink&gt;&gt;</code>。
+   */
+  public static final String BREAD_CRUMB_LINKS = "breadCrumb";
+  /**
+   * 当前访问的页面所在导航项，类型为 <code>LinkedList&lt;BreadCrumbLink&gt;</code>。
+   */
+  public static final String CURRENT_BREAD_CRUMB = "currentBreadCrumb";
 
-  // TODO: 面包屑导航单元测试
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {

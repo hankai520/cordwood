@@ -105,6 +105,7 @@ public class DefaultAccessLimiter implements AccessLimiter {
                 limitInfo.getLimiter().tryAcquire(1, anno.timeout(), TimeUnit.MICROSECONDS);
             if (success) {
               limitInfo.resetFailures(); // 重置熔断状态，恢复工作
+              logger.debug("Token acquired, service is now available.");
             } else {
               logger.debug("Failed to acquire token, service will be unavailable temporarily.");
               limitInfo.addFailures(); // 增加失败次数，达到熔断阈值则触发熔断

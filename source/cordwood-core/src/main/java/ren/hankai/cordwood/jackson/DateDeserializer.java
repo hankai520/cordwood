@@ -21,7 +21,6 @@ import java.util.Date;
  */
 public class DateDeserializer extends JsonDeserializer<Date> {
 
-  // TODO: 序列化相关类单元测试
   private static final Logger logger = LoggerFactory.getLogger(DateDeserializer.class);
 
   private String format = "yyyy-MM-dd";

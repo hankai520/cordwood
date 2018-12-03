@@ -12,9 +12,11 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
 import org.springframework.http.converter.xml.SourceHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.config.BaseWebConfig;
+import ren.hankai.cordwood.web.pfms.StabilizationInterceptor;
 
 import java.nio.charset.Charset;
 import java.util.List;
@@ -34,6 +36,9 @@ public class WebConfig extends BaseWebConfig {
   @Autowired
   private MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter;
 
+  @Autowired
+  private StabilizationInterceptor stabilizationInterceptor;
+
   @Override
   public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
     converters.add(new ByteArrayHttpMessageConverter());
@@ -47,6 +52,11 @@ public class WebConfig extends BaseWebConfig {
   @Override
   public void addViewControllers(ViewControllerRegistry registry) {
 
+  }
+
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
+    registry.addInterceptor(stabilizationInterceptor).addPathPatterns("/**");
   }
 
 }
