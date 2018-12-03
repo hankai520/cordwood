@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import ren.hankai.cordwood.core.Preferences;
 
 import java.io.File;
@@ -165,13 +164,20 @@ public abstract class JpaDataSourceConfig {
     @Bean
     public DataSource dataSource() {
       final Properties props = loadExternalConfig("hsql.properties");
-      final DriverManagerDataSource ds = new DriverManagerDataSource();
-      ds.setDriverClassName(props.getProperty("driverClassName"));
-      final String dbPath = Preferences.getDbDir() + File.separator + "application";
-      ds.setUrl(String.format(props.getProperty("url"), dbPath));
-      ds.setUsername(props.getProperty("username"));
-      ds.setPassword(props.getProperty("password"));
-      return ds;
+      // 由于配置文件中无法指定在运行时才能确定的数据库文件存储目录，需要在此处重新设定
+      String url = props.getProperty("url");
+      if (url.contains("%s")) {
+        // 包含通配符，说明需要设置数据库文件路径
+        final String dbPath = Preferences.getDbDir() + File.separator + "application";
+        url = String.format(props.getProperty("url"), dbPath);
+        props.setProperty("url", url);
+      }
+
+      final DruidDataSource dataSource = new DruidDataSource();
+      configureDataSourcePool(props, dataSource);
+      // 用于检查连接是否可用的sql语句
+      dataSource.setValidationQuery("SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS");
+      return dataSource;
     }
 
     /**
