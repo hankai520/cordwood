@@ -4,6 +4,7 @@ import com.alibaba.druid.filter.Filter;
 import com.alibaba.druid.filter.logging.Slf4jLogFilter;
 import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.wall.WallFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.platform.database.HSQLPlatform;
 import org.eclipse.persistence.platform.database.MySQLPlatform;
@@ -61,6 +62,40 @@ public abstract class JpaDataSourceConfig {
   }
 
   /**
+   * 配置过滤器。
+   *
+   * @param props 从数据库连接配置文件中读取的参数
+   * @param dataSource Druid数据源
+   * @author hankai
+   * @since Dec 3, 2018 5:23:54 PM
+   */
+  private static void configureFilters(Properties props, DruidDataSource dataSource) {
+    final List<Filter> filters = new ArrayList<>();
+    // 记录慢SQL
+    final StatFilter statFilter = new StatFilter();
+    String param = props.getProperty("pool.slow.sql.millis", "5000");
+    statFilter.setSlowSqlMillis(Long.parseLong(param));
+    param = props.getProperty("pool.log.slow.sql", "true");
+    statFilter.setLogSlowSql(Boolean.parseBoolean(param));
+    statFilter.setMergeSql(true); // 合并统计没有参数化的sql
+    filters.add(statFilter); // 启用统计过滤器
+    // 将日志桥接到SLF4J
+    final Slf4jLogFilter slf4jLogFilter = new Slf4jLogFilter();
+    slf4jLogFilter.setResultSetLogEnabled(false);
+    filters.add(slf4jLogFilter);
+    // 防止SQL注入攻击
+    param = props.getProperty("pool.check.sql.injection", "false");
+    if (Boolean.parseBoolean(param)) {
+      // 更多Druid wall filter 配置，请访问 https://github.com/alibaba/druid/wiki/配置-wallfilter
+      final WallFilter wallFilter = new WallFilter();
+      // wallFilter.getConfig().setXX
+      wallFilter.setLogViolation(true);// 记录被认为是SQL攻击的语句
+      filters.add(wallFilter);
+    }
+    dataSource.setProxyFilters(filters);
+  }
+
+  /**
    * 配置连接池。将连接池配置文件中的参数配置到连接池属性中。
    *
    * @param props 数据源配置文件（e.g. mysql.properties）
@@ -114,22 +149,8 @@ public abstract class JpaDataSourceConfig {
     } else {
       dataSource.setRemoveAbandoned(false);
     }
-
     // 配置过滤器
-    final List<Filter> filters = new ArrayList<>();
-    final StatFilter statFilter = new StatFilter();
-    param = props.getProperty("pool.slow.sql.millis", "5000");
-    statFilter.setSlowSqlMillis(Long.parseLong(param));
-    param = props.getProperty("pool.log.slow.sql", "true");
-    statFilter.setLogSlowSql(Boolean.parseBoolean(param));
-    statFilter.setMergeSql(true); // 合并统计没有参数化的sql
-    filters.add(statFilter); // 启用统计过滤器
-
-    final Slf4jLogFilter slf4jLogFilter = new Slf4jLogFilter();
-    slf4jLogFilter.setResultSetLogEnabled(false);
-    filters.add(slf4jLogFilter);
-
-    dataSource.setProxyFilters(filters);
+    configureFilters(props, dataSource);
   }
 
   /**
