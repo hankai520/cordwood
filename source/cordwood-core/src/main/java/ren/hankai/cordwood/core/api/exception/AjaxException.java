@@ -12,10 +12,6 @@ public class AjaxException extends ApiException {
 
   private static final long serialVersionUID = 1L;
 
-  public AjaxException(String code) {
-    super(code);
-  }
-
   public AjaxException(String code, String message) {
     super(code, message);
   }

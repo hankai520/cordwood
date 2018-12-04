@@ -62,7 +62,7 @@ public class MobileAppScanner {
           }
         }
       }
-    } catch (final Exception e) {
+    } catch (final Exception ex) {
       logger.error(String.format("Failed to parse apk file at %s", filePath));
     } finally {
       try {
@@ -75,8 +75,8 @@ public class MobileAppScanner {
         if (inputStream != null) {
           inputStream.close();
         }
-      } catch (final Exception e) {
-        logger.trace("Failed to close stream.", e);
+      } catch (final Exception ex) {
+        logger.trace("Failed to close stream.", ex);
       }
     }
     return appInfo;
@@ -107,7 +107,7 @@ public class MobileAppScanner {
         if (iconFiles.count() > 0) {
           appInfo.setIconName(iconFiles.lastObject().toString());
         }
-      } catch (final Exception e) {
+      } catch (final Exception ex) {
         logger.error(String.format("Failed to parse entry %s", entry.getName()));
       } finally {
         IOUtils.closeQuietly(stream);
@@ -133,8 +133,8 @@ public class MobileAppScanner {
           try {
             stream = zipFile.getInputStream(images.get(key));
             appInfo.setIcon(IOUtils.toByteArray(stream));
-          } catch (final Exception e) {
-            logger.error("Failed to read app icon from package.", e);
+          } catch (final Exception ex) {
+            logger.error("Failed to read app icon from package.", ex);
           } finally {
             IOUtils.closeQuietly(stream);
           }
@@ -167,15 +167,15 @@ public class MobileAppScanner {
         }
       }
       parseIosAppIcon(appInfo, zipFile, images);
-    } catch (final Exception e) {
+    } catch (final Exception ex) {
       logger.error(String.format("Failed to parse ipa file at %s", filePath));
     } finally {
       try {
         if (zipFile != null) {
           zipFile.close();
         }
-      } catch (final Exception e) {
-        logger.trace("Failed to close stream.", e);
+      } catch (final Exception ex) {
+        logger.trace("Failed to close stream.", ex);
       }
     }
     return appInfo;

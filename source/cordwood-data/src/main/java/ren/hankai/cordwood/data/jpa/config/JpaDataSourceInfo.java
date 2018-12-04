@@ -23,10 +23,8 @@ import java.util.Map;
  */
 public class JpaDataSourceInfo {
 
-  private String databasePlatform; // 数据库平台
-  private String[] entityBasePackages; // 实体类基包
-
-  public JpaDataSourceInfo() {}
+  private final String databasePlatform; // 数据库平台
+  private final String[] entityBasePackages; // 实体类基包
 
   public JpaDataSourceInfo(String platform, String... basePackages) {
     databasePlatform = platform;
@@ -57,15 +55,15 @@ public class JpaDataSourceInfo {
    */
   public Map<String, Object> getVendorProperties() {
     final Map<String, Object> jpaProperties = new HashMap<>();
-    jpaProperties.put("eclipselink.target-database", this.databasePlatform);
+    jpaProperties.put("eclipselink.target-database", getDatabasePlatform());
     /*
      * create-tables, create-or-extend-tables, drop-and-create-tables, none
      */
-    jpaProperties.put("eclipselink.ddl-generation", "create-or-extend-tables");
+    // jpaProperties.put("eclipselink.ddl-generation", "create-or-extend-tables");
     /*
      * both, database, sql-script
      */
-    jpaProperties.put("eclipselink.ddl-generation.output-mode", "sql-script");
+    // jpaProperties.put("eclipselink.ddl-generation.output-mode", "sql-script");
     jpaProperties.put("eclipselink.application-location", Preferences.getTempDir());
     jpaProperties.put("eclipselink.create-ddl-jdbc-file-name", "eclipselink_create.sql");
     jpaProperties.put("eclipselink.drop-ddl-jdbc-file-name", "eclipselink_drop.sql");
@@ -73,6 +71,7 @@ public class JpaDataSourceInfo {
     jpaProperties.put("eclipselink.logging.level", "FINE");
     jpaProperties.put("eclipselink.logging.parameters", "true");
     jpaProperties.put("eclipselink.logging.logger", Slf4jSessionLogger.class.getName());
+
     return jpaProperties;
   }
 
@@ -85,17 +84,6 @@ public class JpaDataSourceInfo {
    */
   public String getDatabasePlatform() {
     return databasePlatform;
-  }
-
-  /**
-   * 设置数据库平台。
-   *
-   * @param databasePlatform 数据库平台
-   * @author hankai
-   * @since Mar 29, 2018 11:02:25 PM
-   */
-  public void setDatabasePlatform(String databasePlatform) {
-    this.databasePlatform = databasePlatform;
   }
 
   /**
@@ -126,16 +114,5 @@ public class JpaDataSourceInfo {
       }
     }
     return defaultPackages;
-  }
-
-  /**
-   * 设置要扫描的基包。
-   *
-   * @param entityBasePackages 实体类基包
-   * @author hankai
-   * @since Mar 29, 2018 11:01:23 PM
-   */
-  public void setPackagesToScan(String[] entityBasePackages) {
-    this.entityBasePackages = entityBasePackages;
   }
 }

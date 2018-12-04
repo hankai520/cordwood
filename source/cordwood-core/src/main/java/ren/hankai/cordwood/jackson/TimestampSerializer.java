@@ -21,6 +21,6 @@ public class TimestampSerializer extends JsonSerializer<Date> {
   @Override
   public void serialize(Date value, JsonGenerator jgen, SerializerProvider provider)
       throws IOException, JsonProcessingException {
-    jgen.writeString((value.getTime() / 1000) + "");
+    jgen.writeNumber((value.getTime() / 1000) + "");
   }
 }

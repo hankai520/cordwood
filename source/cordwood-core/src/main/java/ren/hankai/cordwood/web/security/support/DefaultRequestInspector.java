@@ -149,27 +149,34 @@ public class DefaultRequestInspector implements RequestInspector {
     if (MediaType.APPLICATION_FORM_URLENCODED.isCompatibleWith(contentType)) {
       // 请求是一个标准的URL编码表单
       return verifyRequestParameters(params, sk);
-    }
-    // 非URL编码表单，对整个请求体进行验签
-    String requestBody = null;
-    try {
-      requestBody = IOUtils.toString(request.getInputStream());
-    } catch (final IOException ex) {
-      logger.warn("Failed to verify request parameters due to io error while parsing request body.",
-          ex);
-      return false;
-    }
-    final String expSign = signRequestBody(requestBody, sk);
-    final Object sign = params.get(RequestInspector.REQUEST_SIGN);
-    if (sign != null) {
-      if ((sign instanceof String) && expSign.equalsIgnoreCase((String) sign)) {
-        return true;
-      } else if (sign instanceof String[]) {
-        final String[] strArr = (String[]) sign;
-        if ((strArr.length > 0) && expSign.equalsIgnoreCase(strArr[0])) {
+    } else if (MediaType.APPLICATION_JSON.isCompatibleWith(contentType)
+        || MediaType.APPLICATION_XML.isCompatibleWith(contentType)) {
+      // 非URL编码表单，对整个请求体进行验签
+      String requestBody = null;
+      try {
+        requestBody = IOUtils.toString(request.getInputStream());
+      } catch (final IOException ex) {
+        logger.warn(
+            "Failed to verify request parameters due to io error while parsing request body.",
+            ex);
+        return false;
+      }
+      final String expSign = signRequestBody(requestBody, sk);
+      final Object sign = params.get(RequestInspector.REQUEST_SIGN);
+      if (sign != null) {
+        if ((sign instanceof String) && expSign.equalsIgnoreCase((String) sign)) {
           return true;
+        } else if (sign instanceof String[]) {
+          final String[] strArr = (String[]) sign;
+          if ((strArr.length > 0) && expSign.equalsIgnoreCase(strArr[0])) {
+            return true;
+          }
         }
       }
+      return false;
+    } else if (MediaType.MULTIPART_FORM_DATA.isCompatibleWith(contentType)) {
+      // TODO: 设计对复合内容的验签
+      return true;
     }
     return false;
   }

@@ -14,11 +14,6 @@ public class ApiException extends RuntimeException {
 
   protected final String code;
 
-  public ApiException(String code) {
-    super();
-    this.code = code;
-  }
-
   public ApiException(String code, String message) {
     super(message);
     this.code = code;

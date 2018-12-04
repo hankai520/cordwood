@@ -31,4 +31,9 @@ dependencies {
     
     compile "org.springframework.data:spring-data-jpa:1.11.10.RELEASE"
     compile "org.eclipse.persistence:eclipselink:2.5.0"
+    
+    testCompile "org.springframework.boot:spring-boot-starter-test:1.5.10.RELEASE"
+    testRuntime "org.hsqldb:hsqldb:2.3.4"
+    testRuntime "org.yaml:snakeyaml:1.18"
+    
 }

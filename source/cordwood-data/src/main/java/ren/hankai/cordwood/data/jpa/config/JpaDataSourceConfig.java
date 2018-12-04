@@ -4,6 +4,7 @@ import com.alibaba.druid.filter.Filter;
 import com.alibaba.druid.filter.logging.Slf4jLogFilter;
 import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.wall.WallFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.platform.database.HSQLPlatform;
 import org.eclipse.persistence.platform.database.MySQLPlatform;
@@ -13,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import ren.hankai.cordwood.core.Preferences;
 
 import java.io.File;
@@ -34,6 +34,7 @@ import javax.sql.DataSource;
  */
 public abstract class JpaDataSourceConfig {
 
+  // TODO: 单元测试数据读写
   private static final Logger logger = LoggerFactory.getLogger(JpaDataSourceConfig.class);
 
   protected static String[] basePackages = null;
@@ -58,6 +59,40 @@ public abstract class JpaDataSourceConfig {
       return props;
     }
     return null;
+  }
+
+  /**
+   * 配置过滤器。
+   *
+   * @param props 从数据库连接配置文件中读取的参数
+   * @param dataSource Druid数据源
+   * @author hankai
+   * @since Dec 3, 2018 5:23:54 PM
+   */
+  private static void configureFilters(Properties props, DruidDataSource dataSource) {
+    final List<Filter> filters = new ArrayList<>();
+    // 记录慢SQL
+    final StatFilter statFilter = new StatFilter();
+    String param = props.getProperty("pool.slow.sql.millis", "5000");
+    statFilter.setSlowSqlMillis(Long.parseLong(param));
+    param = props.getProperty("pool.log.slow.sql", "true");
+    statFilter.setLogSlowSql(Boolean.parseBoolean(param));
+    statFilter.setMergeSql(true); // 合并统计没有参数化的sql
+    filters.add(statFilter); // 启用统计过滤器
+    // 将日志桥接到SLF4J
+    final Slf4jLogFilter slf4jLogFilter = new Slf4jLogFilter();
+    slf4jLogFilter.setResultSetLogEnabled(false);
+    filters.add(slf4jLogFilter);
+    // 防止SQL注入攻击
+    param = props.getProperty("pool.check.sql.injection", "false");
+    if (Boolean.parseBoolean(param)) {
+      // 更多Druid wall filter 配置，请访问 https://github.com/alibaba/druid/wiki/配置-wallfilter
+      final WallFilter wallFilter = new WallFilter();
+      // wallFilter.getConfig().setXX
+      wallFilter.setLogViolation(true);// 记录被认为是SQL攻击的语句
+      filters.add(wallFilter);
+    }
+    dataSource.setProxyFilters(filters);
   }
 
   /**
@@ -114,22 +149,8 @@ public abstract class JpaDataSourceConfig {
     } else {
       dataSource.setRemoveAbandoned(false);
     }
-
     // 配置过滤器
-    final List<Filter> filters = new ArrayList<>();
-    final StatFilter statFilter = new StatFilter();
-    param = props.getProperty("pool.slow.sql.millis", "5000");
-    statFilter.setSlowSqlMillis(Long.parseLong(param));
-    param = props.getProperty("pool.log.slow.sql", "true");
-    statFilter.setLogSlowSql(Boolean.parseBoolean(param));
-    statFilter.setMergeSql(true); // 合并统计没有参数化的sql
-    filters.add(statFilter); // 启用统计过滤器
-
-    final Slf4jLogFilter slf4jLogFilter = new Slf4jLogFilter();
-    slf4jLogFilter.setResultSetLogEnabled(false);
-    filters.add(slf4jLogFilter);
-
-    dataSource.setProxyFilters(filters);
+    configureFilters(props, dataSource);
   }
 
   /**
@@ -164,13 +185,20 @@ public abstract class JpaDataSourceConfig {
     @Bean
     public DataSource dataSource() {
       final Properties props = loadExternalConfig("hsql.properties");
-      final DriverManagerDataSource ds = new DriverManagerDataSource();
-      ds.setDriverClassName(props.getProperty("driverClassName"));
-      final String dbPath = Preferences.getDbDir() + File.separator + "application";
-      ds.setUrl(String.format(props.getProperty("url"), dbPath));
-      ds.setUsername(props.getProperty("username"));
-      ds.setPassword(props.getProperty("password"));
-      return ds;
+      // 由于配置文件中无法指定在运行时才能确定的数据库文件存储目录，需要在此处重新设定
+      String url = props.getProperty("url");
+      if (url.contains("%s")) {
+        // 包含通配符，说明需要设置数据库文件路径
+        final String dbPath = Preferences.getDbDir() + File.separator + "application";
+        url = String.format(props.getProperty("url"), dbPath);
+        props.setProperty("url", url);
+      }
+
+      final DruidDataSource dataSource = new DruidDataSource();
+      configureDataSourcePool(props, dataSource);
+      // 用于检查连接是否可用的sql语句
+      dataSource.setValidationQuery("SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS");
+      return dataSource;
     }
 
     /**

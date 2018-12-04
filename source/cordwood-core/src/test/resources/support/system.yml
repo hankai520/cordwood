@@ -11,3 +11,11 @@ transferKey: 51f72611acf6df792025ae5ce341b01f
 
 #API 鉴权码有效时长（天）
 apiAccessTokenExpiry: 7
+
+proxyName: ut.test
+proxyPort: 123
+proxyScheme: https
+
+#仅供UT
+test: 1
+

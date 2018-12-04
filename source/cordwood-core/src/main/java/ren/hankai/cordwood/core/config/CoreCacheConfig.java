@@ -13,15 +13,73 @@ import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.cache.MethodSignatureKeyGenerator;
 
 /**
- * 核心缓存配置，提供缓存基础配置。
+ * 核心缓存配置，提供缓存基础配置。缓存基于 Ehcache 实现，默认提供三个级别的缓存，子类可继承此类自定义缓存配置，
+ * 但不可自定义新的缓存级别，这是因为缓存级别已经与对应的注解绑定。
  *
  * @author hankai
  * @version 1.0.0
  * @since Nov 29, 2017 6:12:31 PM
+ * @see ren.hankai.cordwood.core.cache.LightWeight
+ * @see ren.hankai.cordwood.core.cache.MiddleWeight
+ * @see ren.hankai.cordwood.core.cache.HeavyWeight
  */
-public class CoreCacheConfig extends CachingConfigurerSupport {
+public abstract class CoreCacheConfig extends CachingConfigurerSupport {
 
-  // TODO: 缓存配置单元测试
+  /**
+   * 获取重量级缓存配置，子类可重写此方法自定义缓存配置。
+   *
+   * @return 缓存配置
+   * @author hankai
+   * @since Nov 30, 2018 1:19:05 PM
+   */
+  protected CacheConfiguration getHeavyWeightCacheConfig() {
+    final PersistenceConfiguration pc = new PersistenceConfiguration();
+    pc.setStrategy(PersistenceConfiguration.Strategy.LOCALTEMPSWAP.name());
+
+    final CacheConfiguration heavyWeightCache = new CacheConfiguration();
+    heavyWeightCache.setMaxEntriesLocalHeap(4000);
+    heavyWeightCache.setTimeToIdleSeconds(60 * 60 * 24); // 缓存1天
+    // heavyWeightCache.setMemoryStoreEvictionPolicy("LRU"); // One of "LRU", "LFU" or "FIFO".
+    heavyWeightCache.persistence(pc);
+    return heavyWeightCache;
+  }
+
+  /**
+   * 获取中量级缓存配置，子类可重写此方法自定义缓存配置。
+   *
+   * @return 缓存配置
+   * @author hankai
+   * @since Nov 30, 2018 1:19:21 PM
+   */
+  protected CacheConfiguration getMiddleWeightCacheConfig() {
+    final PersistenceConfiguration pc = new PersistenceConfiguration();
+    pc.setStrategy(PersistenceConfiguration.Strategy.LOCALTEMPSWAP.name());
+
+    final CacheConfiguration middleWeightCache = new CacheConfiguration();
+    middleWeightCache.setMaxEntriesLocalHeap(2000);
+    middleWeightCache.setTimeToIdleSeconds(60 * 60 * 12); // 缓存12小时
+    middleWeightCache.persistence(pc);
+    return middleWeightCache;
+  }
+
+  /**
+   * 获取轻量级缓存配置，子类可重写此方法自定义缓存配置。
+   *
+   * @return 缓存配置
+   * @author hankai
+   * @since Nov 30, 2018 1:19:35 PM
+   */
+  protected CacheConfiguration getLightWeightCacheConfig() {
+    final PersistenceConfiguration pc = new PersistenceConfiguration();
+    pc.setStrategy(PersistenceConfiguration.Strategy.LOCALTEMPSWAP.name());
+
+    final CacheConfiguration lightWeightCache = new CacheConfiguration();
+    lightWeightCache.setMaxEntriesLocalHeap(1000);
+    lightWeightCache.setTimeToIdleSeconds(60 * 60 * 4); // 缓存4小时
+    lightWeightCache.persistence(pc);
+    return lightWeightCache;
+  }
+
   /**
    * 基于方法签名的缓存键生成器。
    *
@@ -44,32 +102,19 @@ public class CoreCacheConfig extends CachingConfigurerSupport {
     dsc.setPath(Preferences.getCacheDir());
     config.diskStore(dsc);
 
-    final PersistenceConfiguration pc = new PersistenceConfiguration();
-    pc.setStrategy(PersistenceConfiguration.Strategy.LOCALTEMPSWAP.name());
-
     // 定义重量级缓存
-    final CacheConfiguration heavyWeightCache = new CacheConfiguration();
+    final CacheConfiguration heavyWeightCache = getHeavyWeightCacheConfig();
     heavyWeightCache.setName("heavyWeight");
-    heavyWeightCache.setMaxEntriesLocalHeap(4000);
-    heavyWeightCache.setTimeToIdleSeconds(60 * 60 * 24); // 缓存1天
-    // heavyWeightCache.setMemoryStoreEvictionPolicy("LRU"); // One of "LRU", "LFU" or "FIFO".
-    heavyWeightCache.persistence(pc);
     config.addCache(heavyWeightCache);
 
     // 定义中量级缓存
-    final CacheConfiguration middleWeightCache = new CacheConfiguration();
+    final CacheConfiguration middleWeightCache = getMiddleWeightCacheConfig();
     middleWeightCache.setName("middleWeight");
-    middleWeightCache.setMaxEntriesLocalHeap(2000);
-    middleWeightCache.setTimeToIdleSeconds(60 * 60 * 12); // 缓存12小时
-    middleWeightCache.persistence(pc);
     config.addCache(middleWeightCache);
 
     // 定义轻量级缓存
-    final CacheConfiguration lightWeightCache = new CacheConfiguration();
+    final CacheConfiguration lightWeightCache = getLightWeightCacheConfig();
     lightWeightCache.setName("lightWeight");
-    lightWeightCache.setMaxEntriesLocalHeap(1000);
-    lightWeightCache.setTimeToIdleSeconds(60 * 60 * 4); // 缓存4小时
-    lightWeightCache.persistence(pc);
     config.addCache(lightWeightCache);
 
     final net.sf.ehcache.CacheManager cm = net.sf.ehcache.CacheManager.newInstance(config);

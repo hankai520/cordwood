@@ -12,9 +12,19 @@ public class Route {
 
   public static final String MOCK_PRIFIX = "/test/mock";
 
+  // 测试webservice基类提供的异常处理
   public static final String S1 = MOCK_PRIFIX + "/s1";
   public static final String S2 = MOCK_PRIFIX + "/s2";
   public static final String S3 = MOCK_PRIFIX + "/s3";
+
+  // 测试控制器基类提供的功能
   public static final String S4 = MOCK_PRIFIX + "/s4";
+
+  // 测试稳定器
+  public static final String S5 = MOCK_PRIFIX + "/s5";
+
+  // 测试面包屑导航
+  public static final String S6_1 = MOCK_PRIFIX + "/s6_1";
+  public static final String S6_2 = MOCK_PRIFIX + "/s6_2";
 
 }
