@@ -101,7 +101,7 @@ public final class RuntimeInfo {
   public static String jvmTotalMemory() {
     final long bytes = Runtime.getRuntime().totalMemory();
     final String memory =
-        MathUtil.toHumanReadableString(bytes, 1024, new String[] {" B", " KB", " MB"});
+        MathUtil.shortenNumber(bytes, 1024, true, new String[] {" B", " KB", " MB"});
     return memory;
   }
 
@@ -127,7 +127,7 @@ public final class RuntimeInfo {
   public static String jvmFreeMemory() {
     final long bytes = Runtime.getRuntime().freeMemory();
     final String memory =
-        MathUtil.toHumanReadableString(bytes, 1024, new String[] {" B", " KB", " MB"});
+        MathUtil.shortenNumber(bytes, 1024, true, new String[] {" B", " KB", " MB"});
     return memory;
   }
 

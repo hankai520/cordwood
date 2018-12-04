@@ -87,6 +87,7 @@ compile "commons-codec:commons-codec:1.9"
 compile "org.apache.commons:commons-lang3:3.4"
 compile "net.sf.ehcache:ehcache:2.10.3"
 compile "com.google.guava:guava:19.0"
+compile "com.jcabi:jcabi-manifests:1.1"
 
 testCompile "junit:junit:4.12"
 testCompile "com.jayway.jsonpath:json-path-assert:0.8.1"
@@ -94,6 +95,7 @@ testCompile "org.easymock:easymock:3.1"
 testCompile "com.google.inject:guice:4.0"
 testCompile "org.springframework:spring-test:${springVersion}"
 testCompile "org.yaml:snakeyaml:1.17"
+testCompile 'org.simpleframework:simple:5.1.6'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
@@ -104,10 +106,9 @@ testCompile "org.yaml:snakeyaml:1.17"
 compile "commons-io:commons-io:2.2"
 compile "commons-codec:commons-codec:1.9"
 compile "org.apache.commons:commons-lang3:3.4"
-
+compile "com.alibaba:druid:1.1.10"
 compile "org.springframework.data:spring-data-jpa:1.11.10.RELEASE"
 compile "org.eclipse.persistence:eclipselink:2.5.0"
-compile "com.alibaba:druid:1.1.10"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
  
