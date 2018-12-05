@@ -4,6 +4,7 @@ package ren.hankai.cordwood.web.security.support;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExecutionChain;
@@ -40,15 +41,18 @@ public class DefaultAccessLimiterTest extends CoreTestSupport {
       response = new MockHttpServletResponse();
       result = limiter.handleAccess(chain, response);
       Assert.assertFalse(result);
+      Assert.assertEquals(HttpStatus.SERVICE_UNAVAILABLE.value(), response.getStatus());
 
       response = new MockHttpServletResponse();
       result = limiter.handleAccess(chain, response);
       Assert.assertFalse(result);
+      Assert.assertEquals(HttpStatus.SERVICE_UNAVAILABLE.value(), response.getStatus());
 
       // 第四次调用，测试是否已熔断
       response = new MockHttpServletResponse();
       result = limiter.handleAccess(chain, response);
       Assert.assertFalse(result);
+      Assert.assertEquals(HttpStatus.SERVICE_UNAVAILABLE.value(), response.getStatus());
 
       // 第五次调用， 在独立线程中调用，验证熔断是否已恢复。
       final AsyncExecut ae = new AsyncExecut(limiter, chain);
