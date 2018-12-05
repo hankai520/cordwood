@@ -21,7 +21,8 @@ public class Route {
   public static final String S4 = MOCK_PRIFIX + "/s4";
 
   // 测试稳定器
-  public static final String S5 = MOCK_PRIFIX + "/s5";
+  public static final String S5_1 = MOCK_PRIFIX + "/s5_1";
+  public static final String S5_2 = MOCK_PRIFIX + "/s5_2";
 
   // 测试面包屑导航
   public static final String S6_1 = MOCK_PRIFIX + "/s6_1";

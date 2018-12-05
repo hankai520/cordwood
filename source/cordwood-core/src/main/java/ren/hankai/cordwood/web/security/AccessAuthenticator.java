@@ -98,7 +98,7 @@ public interface AccessAuthenticator {
 
     private String userKey; // 用户唯一标识
     private String userSk; // 用户秘钥
-    private long expiryTime;
+    private long expiryTime;// 到期时间（毫秒）
 
     /**
      * 生成一个将在若干分钟后过期的令牌。

@@ -1,6 +1,5 @@
 package ren.hankai.cordwood.core.util;
 
-import com.fasterxml.jackson.core.ObjectCodec;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +23,7 @@ public class EncryptionUtil {
    * AES 加密/解密（支持128位或256位秘钥，其中256位秘钥需要解除JRE算法出口限制）。
    *
    * @param value 待加密的字符串
-   * @param sk 秘钥
+   * @param sk 秘钥（最低16个字符，即128位）
    * @param encrypt true表示加密，false表示解密
    * @return 密文字符串（base64 编码，为了便于传输，'+'和'/'已被替换为'-'和'_'）
    * @author hankai
@@ -32,8 +31,6 @@ public class EncryptionUtil {
    */
   public static String aes(String value, String sk, boolean encrypt) {
     try {
-      final ObjectCodec d = null;
-      System.out.println(d);
       final IvParameterSpec iv = new IvParameterSpec("RandomInitVector".getBytes("UTF-8"));
       final SecretKeySpec skeySpec = new SecretKeySpec(sk.getBytes("UTF-8"), "AES");
       final Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
@@ -52,7 +49,10 @@ public class EncryptionUtil {
         return new String(original);
       }
     } catch (final Exception ex) {
-      logger.error("Error occurred while encrypting/decrypting data.", ex);
+      logger.error(
+          String.format("AES encryption failed! %s\n{ Value: %s, sk: %s, encrypt:%s }\n",
+              ex.getMessage(),
+              value, sk, encrypt));
     }
     return null;
   }

@@ -55,11 +55,13 @@ public class DefaultAccessAuthenticator implements AccessAuthenticator {
     TokenInfo tokenInfo = null;
     if (!StringUtils.isEmpty(tokenString)) {
       final String decrypted = EncryptionUtil.aes(tokenString, secretKey, false);
-      try {
-        tokenInfo = objectMapper.readValue(decrypted, TokenInfo.class);
-      } catch (final Exception ex) {
-        logger.error(String.format("Failed to parse token: \"%s\"", tokenString), ex);
-        logger.error(String.format("Decrypted data is: %s", decrypted));
+      if (StringUtils.isNotEmpty(decrypted)) {
+        try {
+          tokenInfo = objectMapper.readValue(decrypted, TokenInfo.class);
+        } catch (final Exception ex) {
+          logger.error(String.format("Failed to parse token: \"%s\"", tokenString), ex);
+          logger.error(String.format("Decrypted data is: %s", decrypted));
+        }
       }
     }
     return tokenInfo;

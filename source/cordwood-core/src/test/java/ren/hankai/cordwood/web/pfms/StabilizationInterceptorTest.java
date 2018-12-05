@@ -22,7 +22,7 @@ public class StabilizationInterceptorTest extends CoreTestSupport {
   public void testStabilizationMaxQps() throws Exception {
     mockMvc
         .perform(
-            post(Route.S5).contentType(MediaType.APPLICATION_FORM_URLENCODED))
+            post(Route.S5_1).contentType(MediaType.APPLICATION_FORM_URLENCODED))
         .andExpect(status().isOk());
   }
 

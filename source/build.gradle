@@ -5,6 +5,7 @@ ext {
 
 apply plugin: "eclipse"
 apply plugin: "eclipse-wtp"
+apply plugin: 'maven-publish'
 
 eclipse {
     project {

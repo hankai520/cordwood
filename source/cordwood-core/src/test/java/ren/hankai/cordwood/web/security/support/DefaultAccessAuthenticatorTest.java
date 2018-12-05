@@ -31,12 +31,35 @@ public class DefaultAccessAuthenticatorTest extends CoreTestSupport {
 
   @Test
   public void testParseAccessToken() {
-
+    final TokenInfo tokenInfo = TokenInfo.withinMinutes("a1e30f", "abc", 10);
+    final String token = authenticator.generateAccessToken(tokenInfo);
+    final int result = authenticator.verifyAccessToken(token);
+    Assert.assertEquals(0, result);
   }
 
   @Test
   public void testVerifyAccessToken() {
+    final String sk = "123456789abcdefg";
+    final TokenInfo tokenInfo = TokenInfo.withinMinutes("a1e30f", "abc", 10);
+    String token = authenticator.generateAccessToken(tokenInfo, sk);
+    int result = authenticator.verifyAccessToken(token, sk);
+    Assert.assertEquals(0, result);
 
+    // 错误的token
+    result = authenticator.verifyAccessToken("invalid token", sk);
+    Assert.assertEquals(TokenInfo.TOKEN_ERROR_INVALID, result);
+
+    // 过期的token
+    tokenInfo.setExpiryTime(System.currentTimeMillis() - 1000);
+    token = authenticator.generateAccessToken(tokenInfo, sk);
+    result = authenticator.verifyAccessToken(token, sk);
+    Assert.assertEquals(TokenInfo.TOKEN_ERROR_EXPIRED, result);
+
+    // 错误的秘钥
+    tokenInfo.setExpiryTime(System.currentTimeMillis() - 1000);
+    token = authenticator.generateAccessToken(tokenInfo, sk);
+    result = authenticator.verifyAccessToken(token);
+    Assert.assertEquals(TokenInfo.TOKEN_ERROR_INVALID, result);
   }
 
 }

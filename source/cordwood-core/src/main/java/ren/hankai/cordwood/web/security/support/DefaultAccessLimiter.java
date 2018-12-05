@@ -58,13 +58,12 @@ public class DefaultAccessLimiter implements AccessLimiter {
    */
   private Stabilized getStabilizations(HandlerMethod handlerMethod) {
     // 方法级别的注解优先
-    final Stabilized methodAnno = handlerMethod.getMethodAnnotation(Stabilized.class);
-    if (null != methodAnno) {
-      return methodAnno;
+    Stabilized anno = handlerMethod.getMethodAnnotation(Stabilized.class);
+    if (null == anno) {
+      // 搜索类级别注解
+      final Class<?> beanType = handlerMethod.getBeanType();
+      anno = beanType.getAnnotation(Stabilized.class);
     }
-    // 搜索类级别注解
-    final Class<?> beanType = handlerMethod.getBeanType();
-    final Stabilized anno = beanType.getAnnotation(Stabilized.class);
     if (anno != null) {
       logger.debug(String.format("Access limit configuration: \n\n%s\n\n",
           getStabilizationDescription(anno)));

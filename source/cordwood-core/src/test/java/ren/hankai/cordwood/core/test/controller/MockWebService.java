@@ -19,6 +19,7 @@ import ren.hankai.cordwood.web.security.annotation.Stabilized;
  * @since Nov 23, 2018 3:36:21 PM
  */
 @Controller
+@Stabilized(maxQps = 1, fusingThreshold = 1, fusingInterval = 5)
 @Profile(Preferences.PROFILE_TEST)
 public class MockWebService extends WebServiceSupport {
 
@@ -38,8 +39,13 @@ public class MockWebService extends WebServiceSupport {
   }
 
   @Stabilized(maxQps = 1, fusingThreshold = 1, fusingInterval = 5)
-  @RequestMapping(Route.S5)
-  public String s5() throws Exception {
+  @RequestMapping(Route.S5_1)
+  public String s5_1() throws Exception {
+    return "";
+  }
+
+  @RequestMapping(Route.S5_2)
+  public String s5_2() throws Exception {
     return "";
   }
 }

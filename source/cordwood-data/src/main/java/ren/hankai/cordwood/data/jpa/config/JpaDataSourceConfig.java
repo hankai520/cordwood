@@ -34,7 +34,6 @@ import javax.sql.DataSource;
  */
 public abstract class JpaDataSourceConfig {
 
-  // TODO: 单元测试数据读写
   private static final Logger logger = LoggerFactory.getLogger(JpaDataSourceConfig.class);
 
   protected static String[] basePackages = null;
