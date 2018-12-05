@@ -17,14 +17,11 @@ public class RateLimitInfo {
 
   private static final Logger logger = LoggerFactory.getLogger(RateLimitInfo.class);
 
-  private RateLimiter limiter;// 限流器
+  private final RateLimiter limiter;// 限流器
 
   private int failures;// 失败次数
 
   private long lastFailureTime;// 上次失败的时间
-
-  // 禁止无参构造，必须要有限流器
-  private RateLimitInfo() {}
 
   /**
    * 用限流器来构造限流信息。
