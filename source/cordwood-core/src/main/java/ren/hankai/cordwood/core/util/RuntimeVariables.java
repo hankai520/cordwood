@@ -26,8 +26,10 @@ public final class RuntimeVariables {
 
   private static final Logger logger = LoggerFactory.getLogger(RuntimeVariables.class);
   private static Map<String, String> variables = null;
-  // 运行时变量保存路径
-  private static final String savePath = Preferences.getDataDir() + "/runtime.properties";
+  /**
+   * 运行时变量保存路径。
+   */
+  public static final String savePath = Preferences.getDataDir() + "/runtime.properties";
   // 缓存时长（秒）
   private static long cacheSeconds = 60 * 2;
   // 上次从文件中加载变量的时间戳
