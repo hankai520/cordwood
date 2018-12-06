@@ -20,7 +20,7 @@ ext {
 	developerEmail = "john.han.kai@gmail.com"
 	
 	licenseName = "The MIT License (MIT)"
-	licenseUrl = "https://mit-license.org"
+	licenseUrl = "https://github.com/hankai520/cordwood/blob/master/LICENSE"
 	licenseDistribution = "repo"
 	
 	sonatypeRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
