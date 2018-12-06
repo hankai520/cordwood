@@ -19,6 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+
 package ren.hankai.cordwood.data.jpa.config;
 
 import com.alibaba.druid.filter.Filter;

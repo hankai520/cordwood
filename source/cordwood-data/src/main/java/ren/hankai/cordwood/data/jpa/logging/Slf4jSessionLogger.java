@@ -19,6 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+
 package ren.hankai.cordwood.data.jpa.logging;
 
 import org.apache.commons.lang3.StringUtils;
