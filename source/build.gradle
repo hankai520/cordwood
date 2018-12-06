@@ -1,20 +1,38 @@
+plugins {
+	id "io.codearte.nexus-staging" version "0.11.0"
+}
+
+nexusStaging {
+    packageGroup = "ren.hankai"
+}
+
 ext {
-    mainVersion = "0.0.1.RELEASE"
+    mainVersion = "0.0.1.SNAPSHOT"
     springVersion = "4.3.3.RELEASE"
+    
+    linkHomepage = "https://github.com/hankai520/cordwood"
+    linkScmUrl = "https://github.com/hankai520/cordwood"
+	linkScmConnection = "https://github.com/hankai520/cordwood.git"
+	linkScmDevConnection = "https://github.com/hankai520/cordwood.git"
+	
+	developerId = "hankai945"
+	developerName = "Kai Han"
+	developerEmail = "john.han.kai@gmail.com"
+	
+	licenseName = "The Apache Software License, Version 2.0"
+	licenseUrl = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+	licenseDistribution = "repo"
+	
+	sonatypeRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+	sonatypeSnapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
 }
 
 apply plugin: "eclipse"
-apply plugin: "eclipse-wtp"
-apply plugin: 'maven-publish'
 
 eclipse {
     project {
         name="cordwood"
     }
-}
-
-allprojects {
-	
 }
 
 subprojects {
@@ -28,13 +46,14 @@ subprojects {
     buildscript {
         repositories {
             maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
-            mavenCentral()
+        }
+        dependencies {
+        	classpath "com.bmuschko:gradle-nexus-plugin:2.3.1"
         }
     }
 
     repositories {
         maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
-        mavenCentral()
     }
 
     eclipse {
@@ -61,14 +80,8 @@ subprojects {
         options.compilerArgs << "-parameters"
         options.encoding = "UTF-8"
     }
-
-    task copyDependencies(type: Copy) {
-       from configurations.compile
-       into "dependencies"
-    }
     
-    task sourcesJar(type: Jar, dependsOn: classes) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
-    }
+    javadoc {
+    	options.addStringOption('encoding', 'UTF-8')
+	}
 }

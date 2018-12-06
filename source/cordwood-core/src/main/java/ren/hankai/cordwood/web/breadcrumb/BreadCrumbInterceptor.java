@@ -27,29 +27,29 @@ import javax.servlet.http.HttpSession;
  *
  * <pre>
  * 访问 "首页"：
- * "分组" <=> LinkedHashMap {
- *     "首页" <=> BreadCrumbLink("分组", "首页",     true, null)
+ * "分组" &lt;=&gt; LinkedHashMap {
+ *     "首页" &lt;=&gt; BreadCrumbLink("分组", "首页",     true, null)
  * }
  *
  * 访问 “用户管理”：
- * "分组(family)" <=> LinkedHashMap {
- *    "用户管理" <=> BreadCrumbLink("分组", "用户管理", true, "首页"),
- *    "首页" <=> BreadCrumbLink("分组", "首页",     false, null)
+ * "分组(family)" &lt;=&gt; LinkedHashMap {
+ *    "用户管理" &lt;=&gt; BreadCrumbLink("分组", "用户管理", true, "首页"),
+ *    "首页" &lt;=&gt; BreadCrumbLink("分组", "首页",     false, null)
  * }
  *
  * 访问 “添加用户”：
- * "分组(family)" <=> LinkedHashMap {
- *    "添加用户(label)" <=> BreadCrumbLink("分组", "添加用户", true, "用户管理"),
- *    "用户管理(label)" <=> BreadCrumbLink("分组", "用户管理", false, "首页"),
- *    "首页(label)" <=> BreadCrumbLink("分组", "首页",  false, null)
+ * "分组(family)" &lt;=&gt; LinkedHashMap {
+ *    "添加用户(label)" &lt;=&gt; BreadCrumbLink("分组", "添加用户", true, "用户管理"),
+ *    "用户管理(label)" &lt;=&gt; BreadCrumbLink("分组", "用户管理", false, "首页"),
+ *    "首页(label)" &lt;=&gt; BreadCrumbLink("分组", "首页",  false, null)
  * }
  *
  * 此时，页面可利用面包屑导航数据生成导航路径：首页 \ 用户管理 \ <b>添加用户</b>。
  *
  * 返回 “用户管理”：
- * "分组(family)" <=> LinkedHashMap {
- *    "用户管理" <=> BreadCrumbLink("分组", "用户管理", true, "首页"),
- *    "首页" <=> BreadCrumbLink("分组", "首页", false, null)
+ * "分组(family)" &lt;=&gt; LinkedHashMap {
+ *    "用户管理" &lt;=&gt; BreadCrumbLink("分组", "用户管理", true, "首页"),
+ *    "首页" &lt;=&gt; BreadCrumbLink("分组", "首页", false, null)
  * }
  * </pre>
  *

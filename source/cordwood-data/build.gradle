@@ -37,3 +37,48 @@ dependencies {
     testRuntime "org.yaml:snakeyaml:1.18"
     
 }
+
+apply plugin: "com.bmuschko.nexus"
+
+group = "ren.hankai"
+archivesBaseName = jar.baseName
+version = mainVersion
+
+modifyPom {
+    project {
+        name "Cordwood data"
+        description "Cordwood data"
+        url = linkHomepage
+        scm {
+            url = linkScmUrl
+            connection = linkScmConnection
+            developerConnection = linkScmDevConnection
+        }
+        licenses {
+            license {
+                name = licenseName
+                url = licenseUrl
+                distribution = licenseDistribution
+            }
+        }
+        developers {
+            developer {
+                id = developerId
+                name = developerName
+                email = developerEmail
+            }
+        }
+    }
+}
+
+extraArchive {
+    sources = true
+    tests = true
+    javadoc = true
+}
+
+nexus {
+    sign = true
+    repositoryUrl = sonatypeRepositoryUrl
+    snapshotRepositoryUrl = sonatypeSnapshotRepositoryUrl
+}

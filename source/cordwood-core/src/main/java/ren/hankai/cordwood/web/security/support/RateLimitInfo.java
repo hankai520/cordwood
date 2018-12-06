@@ -78,6 +78,7 @@ public class RateLimitInfo {
   /**
    * 判断是否已触发熔断。
    *
+   * @param stabilize 稳定器注解
    * @return 是否已熔断
    * @author hankai
    * @since Oct 12, 2018 9:33:17 AM

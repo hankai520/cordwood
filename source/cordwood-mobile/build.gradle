@@ -28,3 +28,48 @@ dependencies {
     compile "com.googlecode.plist:dd-plist:1.16"
     compile "net.dongliu:apk-parser:2.1.2"
 }
+
+apply plugin: "com.bmuschko.nexus"
+
+group = "ren.hankai"
+archivesBaseName = jar.baseName
+version = mainVersion
+
+modifyPom {
+    project {
+        name "Cordwood mobile"
+        description "Cordwood mobile"
+        url = linkHomepage
+        scm {
+            url = linkScmUrl
+            connection = linkScmConnection
+            developerConnection = linkScmDevConnection
+        }
+        licenses {
+            license {
+                name = licenseName
+                url = licenseUrl
+                distribution = licenseDistribution
+            }
+        }
+        developers {
+            developer {
+                id = developerId
+                name = developerName
+                email = developerEmail
+            }
+        }
+    }
+}
+
+extraArchive {
+    sources = true
+    tests = true
+    javadoc = true
+}
+
+nexus {
+    sign = true
+    repositoryUrl = sonatypeRepositoryUrl
+    snapshotRepositoryUrl = sonatypeSnapshotRepositoryUrl
+}

@@ -20,7 +20,7 @@ public final class MathUtil {
    *
    * @param value 数值
    * @param radix 基数（例如：时间是60进制，基数为60，计算机存储为1024进制，则基数为1024）
-   * @param units 单位数组（从小到大，例如：B, KB, MB），首元素为 value < radix时的单位
+   * @param units 单位数组（从小到大，例如：B, KB, MB），首元素为 value 小于 radix时的单位
    * @return 阅读友好的数值字符串
    * @author hankai
    * @since Jan 5, 2017 10:42:31 AM
@@ -37,7 +37,7 @@ public final class MathUtil {
    * @param radix 基数（例如：时间是60进制，基数为60，计算机存储为1024进制，则基数为1024）。
    *          不支持可变基数，例如时间是60进制，但大于24小时后的天、月，基数都会变动
    * @param useMaxUnit 是否只用最大单位来表示数字，useMaxUnit为true，返回形如 1.32GB，useMaxUnit为false，返回形如 1h30m28s
-   * @param units 数字的单位（从小到大，例如：B, KB, MB），首元素为 value < radix时的单位
+   * @param units 数字的单位（从小到大，例如：B, KB, MB），首元素为 value 小于 radix时的单位
    * @return 格式化后的数字
    * @author hankai
    * @since Dec 1, 2018 9:59:08 PM

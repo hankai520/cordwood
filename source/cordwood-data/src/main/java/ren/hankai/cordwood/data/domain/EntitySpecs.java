@@ -26,6 +26,7 @@ public abstract class EntitySpecs {
   /**
    * 单字段查询条件。
    *
+   * @param <T> 实体类型
    * @param fieldName 字段名称
    * @param value 字段值
    * @return 查询条件
@@ -45,6 +46,7 @@ public abstract class EntitySpecs {
   /**
    * 字段值在给定范围内的查询条件。
    *
+   * @param <T> 实体类型
    * @param fieldName 字段
    * @param values 取值范围
    * @return 查询条件
@@ -64,6 +66,7 @@ public abstract class EntitySpecs {
   /**
    * 查询字段的值不在指定范围内的实体。
    *
+   * @param <T> 实体类型
    * @param fieldName 字段
    * @param values 取值范围
    * @return 查询条件
