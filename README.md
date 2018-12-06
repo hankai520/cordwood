@@ -217,6 +217,169 @@ public static int getInt(String key);
 
  
 
+### JPA（Eclipselink）支持
+
+ren.hankai.cordwood.data.jpa.config 包下提供了 JpaDataSourceConfig
+抽象类，编写基于注解的配置类并继承此类，即可默认具备对接Hsqldb, MySQL, Oracle
+三类数据库的能力。在你主工程的
+applications.properties（或者xml）中，激活对应数据源配置即可。示例如下：
+
+ 
+
+第一步：在application.properties中激活对应数据源配置：
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 目前可用的配置为 prod, test, hsql, mysql, oracle，其中 （hsql, mysql, oracle）为数据库配置
+# 目前只支持单数据库配置，因此此3个配置是互斥的。如需要切换数据库，将以上三个选项中的某一个填入下面的设置中即可。
+
+spring.profiles.active=security,prod,mysql
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+springboot的配置文件参数均支持命令行参数，可在启动boot时，通过
+—spring.profiles.active 激活不同数据源来实现数据库平台的切换。
+
+ 
+
+第二步：编写数据源连接参数配置文件并在应用初始化时指定此配置文件：
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//在你工程的根类路径下新建 support 文件夹，根据需要在此文件夹下新建
+//hsql.properties/mysql.properties/oracle.properties 配置文件
+
+//以 gradle 工程结构为例，下为示意图（在cordwood-core/src/test/resources中有示例配置）：
+src/main/resources
+  - hsql.properties
+  - mysql.properties
+  - oracle.properties
+
+/* 以MySQL数据库连接为例，配置文件类似这样： */
+//JDBC基本参数
+url=jdbc:mysql://localhost:3306/mydb?characterEncoding=utf-8
+username=root
+password=123456
+driverClassName=com.mysql.jdbc.Driver
+
+//数据库连接池配置（cordwood-data内部使用阿里的Druid连接池，下面的参数含义请看源代码）
+pool.validation.interval=30000
+pool.time.between.eviction.runs.millis=30000
+pool.max.active=100
+pool.initial.size=10
+pool.max.wait=10000
+pool.remove.abandoned.timeout=600
+pool.min.evictable.idle.time.millis=30000
+pool.min.idle=10
+
+//隐藏参数
+pool.debug=false //是否启用调试，启用将会降低性能以进行更多连接管理并打印日志，详见源码
+pool.remove.abandoned.timeout=秒 //每隔多久移出被丢弃的连接
+
+pool.slow.sql.millis=5000 //慢SQL执行时间阈值
+pool.log.slow.sql=true //是否在日志中记录慢SQL
+pool.check.sql.injection=false //是否检查SQL注入攻击
+
+//初始化Spring boot 应用时，指定拷贝此配置文件
+ApplicationInitializer.initialize("mysql.properties")
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
+第三步：编写数据源配置类：
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import org.springframework.context.annotation.Configuration;
+import ren.hankai.cordwood.data.jpa.config.JpaDataSourceConfig;
+
+@Configuration
+public class DataSourceConfig extends JpaDataSourceConfig {
+    //默认无需额外配置，如需连接其他数据库平台，可参照父类源代码编写。
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+第三步：编写JPA配置类：
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import org.apache.commons.lang3.ArrayUtils;
+import org.eclipse.persistence.tools.profiler.PerformanceProfiler;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.boot.autoconfigure.transaction.TransactionManagerCustomizers;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.jta.JtaTransactionManager;
+import ren.hankai.cordwood.core.Preferences;
+import ren.hankai.cordwood.data.jpa.config.JpaDataSourceInfo;
+import ren.hankai.cordwood.data.jpa.support.BaseRepositoryFactoryBean;
+import sparksoft.jsgsmh.persist.util.Slf4jSessionLogger;
+
+import java.io.File;
+import java.util.Map;
+
+import javax.sql.DataSource;
+
+@Configuration
+@EnableJpaRepositories(basePackages = {"基包名称，用于扫描JPA实体仓库接口和实现"},
+    repositoryFactoryBeanClass = BaseRepositoryFactoryBean.class)
+@EnableTransactionManagement
+public class JpaConfiguration extends JpaBaseConfiguration {
+
+  @Autowired
+  private JpaDataSourceInfo dataSourceInfo;
+
+  /**
+   * 初始化 JPA 配置。
+   *
+   * @param dataSource 数据源
+   * @param properties JPA配置属性
+   * @param jtaTransactionManager 事务管理器
+   * @param transactionManagerCustomizers 自定义事务管理
+   */
+  protected JpaConfiguration(DataSource dataSource, JpaProperties properties,
+      ObjectProvider<JtaTransactionManager> jtaTransactionManager,
+      ObjectProvider<TransactionManagerCustomizers> transactionManagerCustomizers) {
+    super(dataSource, properties, jtaTransactionManager, transactionManagerCustomizers);
+  }
+
+  //重写此方法，可指定需要扫描的包（必须）
+  @Override
+  protected String[] getPackagesToScan() {
+    final String[] defaultPackages = ArrayUtils.add(super.getPackagesToScan(), "除基类包名外，额外需要扫描的包，一般是你工程中用于处理持久化的实体及仓库所在基包");
+    final String[] packages = dataSourceInfo.getPackagesToScan(defaultPackages);
+    return packages;
+  }
+
+  //重写此方法，提供cordwood默认准备的JPA供应商参数（必须）
+  @Override
+  protected AbstractJpaVendorAdapter createJpaVendorAdapter() {
+    return dataSourceInfo.createJpaVendorAdapter(true);
+  }
+
+  //重写此方法，重写cordwood默认准备的JPA供应商参数（可选）
+  @Override
+  protected Map<String, Object> getVendorProperties() {
+    final Map<String, Object> jpaProperties = dataSourceInfo.getVendorProperties();
+    final boolean enabled =
+        Boolean.parseBoolean(Preferences.getCustomConfig("persistence.profiler.enabled"));
+    if (enabled) {
+      jpaProperties.put("eclipselink.profiler", PerformanceProfiler.class.getName());
+      jpaProperties.put("eclipselink.logging.file",
+          Preferences.getTempDir() + File.separator + "eclipselink_performance.txt");
+    } else {
+      jpaProperties.put("eclipselink.logging.logger", Slf4jSessionLogger.class.getName());
+    }
+    return jpaProperties;
+  }
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ 
+
 ### Web Service 支持
 
 ren.hankai.cordwood.core.api.support 包下面提供了一组用于开发 Web Service
