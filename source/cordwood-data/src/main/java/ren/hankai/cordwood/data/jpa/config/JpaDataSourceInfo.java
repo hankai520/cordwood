@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018 hankai
+ * Copyright (C) 2019 hankai
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,10 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-/*
- * Copyright © 2016 hankai.ren, All rights reserved.
- * http://www.hankai.ren
- */
 
 package ren.hankai.cordwood.data.jpa.config;
 
@@ -47,7 +43,7 @@ public class JpaDataSourceInfo {
   private final String databasePlatform; // 数据库平台
   private final String[] entityBasePackages; // 实体类基包
 
-  public JpaDataSourceInfo(String platform, String... basePackages) {
+  public JpaDataSourceInfo(final String platform, final String... basePackages) {
     databasePlatform = platform;
     entityBasePackages = basePackages;
   }
@@ -60,7 +56,7 @@ public class JpaDataSourceInfo {
    * @author hankai
    * @since Mar 29, 2018 10:59:51 PM
    */
-  public AbstractJpaVendorAdapter createJpaVendorAdapter(boolean showSql) {
+  public AbstractJpaVendorAdapter createJpaVendorAdapter(final boolean showSql) {
     final EclipseLinkJpaVendorAdapter adapter = new EclipseLinkJpaVendorAdapter();
     adapter.setDatabasePlatform(this.databasePlatform);
     adapter.setShowSql(showSql);
@@ -126,7 +122,7 @@ public class JpaDataSourceInfo {
    * @author hankai
    * @since Mar 29, 2018 11:01:46 PM
    */
-  public String[] getPackagesToScan(String... defaultPackages) {
+  public String[] getPackagesToScan(final String... defaultPackages) {
     if ((entityBasePackages != null) && (entityBasePackages.length > 0)) {
       if (defaultPackages != null) {
         return ArrayUtils.addAll(defaultPackages, entityBasePackages);

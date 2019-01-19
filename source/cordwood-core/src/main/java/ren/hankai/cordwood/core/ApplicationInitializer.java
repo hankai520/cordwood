@@ -1,16 +1,16 @@
 /*******************************************************************************
- * Copyright (C) 2018 hankai
- *
+ * Copyright (C) 2019 hankai
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -55,7 +55,7 @@ public class ApplicationInitializer {
    * @author hankai
    * @since Jun 21, 2016 12:52:30 PM
    */
-  public static boolean initialize(String... supportFileNames) {
+  public static boolean initialize(final String... supportFileNames) {
     return initialize(true, ApplicationInitInfo.initWithConfigs(supportFileNames));
   }
 
@@ -68,7 +68,8 @@ public class ApplicationInitializer {
    * @author hankai
    * @since Nov 29, 2018 5:42:18 PM
    */
-  public static boolean initialize(boolean printClassPaths, String... supportFileNames) {
+  public static boolean initialize(final boolean printClassPaths,
+      final String... supportFileNames) {
     return initialize(printClassPaths, ApplicationInitInfo.initWithConfigs(supportFileNames));
   }
 
@@ -81,7 +82,8 @@ public class ApplicationInitializer {
    * @author hankai
    * @since Mar 23, 2018 12:58:24 AM
    */
-  public static boolean initialize(boolean printClassPaths, ApplicationInitInfo appInitInfo) {
+  public static boolean initialize(final boolean printClassPaths,
+      final ApplicationInitInfo appInitInfo) {
     if (printClassPaths) {
       printClassPaths();
     }
@@ -123,7 +125,7 @@ public class ApplicationInitializer {
    * @author hankai
    * @since Jun 21, 2016 12:52:59 PM
    */
-  private static boolean checkConfigurations(List<String> fileNames) {
+  private static boolean checkConfigurations(final List<String> fileNames) {
     return checkSupportFiles("/support/", Preferences.getConfigDir(), fileNames);
   }
 
@@ -135,7 +137,7 @@ public class ApplicationInitializer {
    * @author hankai
    * @since Aug 13, 2017 12:07:21 PM
    */
-  private static boolean checkTemplates(List<String> fileNames) {
+  private static boolean checkTemplates(final List<String> fileNames) {
     return checkSupportFiles("/support/templates/",
         Preferences.getConfigDir() + File.separator + "templates", fileNames);
   }
@@ -150,8 +152,8 @@ public class ApplicationInitializer {
    * @author hankai
    * @since Mar 23, 2018 12:56:15 AM
    */
-  private static boolean checkSupportFiles(String basePath, String targetDir,
-      List<String> fileNames) {
+  private static boolean checkSupportFiles(final String basePath, final String targetDir,
+      final List<String> fileNames) {
     if (fileNames == null) {
       return true;
     }

@@ -1,0 +1,94 @@
+eclipse {
+    project {
+        name="cordwood-web"
+    }
+}
+
+jar {
+    baseName = "cordwood-web"
+    version = mainVersion
+    manifest {
+        attributes(
+            "Implementation-Version": mainVersion
+        )
+    }
+}
+
+sourceSets {
+    main.java.srcDirs = ["src/main/java"]
+    main.resources.srcDirs = ["src/main/resources"]
+    test.java.srcDirs = ["src/test/java"]
+    test.resources.srcDirs = ["src/test/resources"]
+}
+
+dependencies {
+    compile "org.springframework:spring-core:${springVersion}"
+    compile "org.springframework:spring-context:${springVersion}"
+    compile "org.springframework:spring-beans:${springVersion}"
+    compile "org.springframework:spring-webmvc:${springVersion}"
+    compile "org.springframework:spring-context-support:${springVersion}"
+    compile "org.springframework.security:spring-security-web:4.1.3.RELEASE"
+    compile "org.springframework.security:spring-security-config:4.1.3.RELEASE"
+    compile "javax.servlet:javax.servlet-api:3.1.0"
+    compile "commons-io:commons-io:2.2"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.4.6"
+    compile "commons-codec:commons-codec:1.9"
+    compile "org.apache.commons:commons-lang3:3.4"
+    compile "net.sf.ehcache:ehcache:2.10.3"
+    compile "com.google.guava:guava:25.1-jre"
+    compile "com.jcabi:jcabi-manifests:1.1"
+    
+    compile project(":cordwood-core")
+    
+    testCompile "org.springframework:spring-test:${springVersion}"
+    testCompile "org.yaml:snakeyaml:1.17"
+    testCompile "com.jayway.jsonpath:json-path:2.2.0"
+    testCompile "com.jcabi:jcabi-manifests:1.1"
+    testCompile 'org.simpleframework:simple:5.1.6'
+}
+
+/* 上传到 sonatype nexus */
+apply plugin: "com.bmuschko.nexus"
+
+group = "ren.hankai"
+archivesBaseName = jar.baseName
+version = mainVersion
+
+modifyPom {
+    project {
+        name "Cordwood web"
+        description "Cordwood web"
+        url = linkHomepage
+        scm {
+            url = linkScmUrl
+            connection = linkScmConnection
+            developerConnection = linkScmDevConnection
+        }
+        licenses {
+            license {
+                name = licenseName
+                url = licenseUrl
+                distribution = licenseDistribution
+            }
+        }
+        developers {
+            developer {
+                id = developerId
+                name = developerName
+                email = developerEmail
+            }
+        }
+    }
+}
+
+extraArchive {
+    sources = true
+    tests = true
+    javadoc = true
+}
+
+nexus {
+    sign = true
+    repositoryUrl = sonatypeRepositoryUrl
+    snapshotRepositoryUrl = sonatypeSnapshotRepositoryUrl
+}

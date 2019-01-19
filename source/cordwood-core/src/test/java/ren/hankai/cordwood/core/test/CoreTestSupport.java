@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018 hankai
+ * Copyright (C) 2019 hankai
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,26 +27,18 @@ import static org.junit.Assert.fail;
 import ch.qos.logback.classic.Level;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.context.WebApplicationContext;
 import ren.hankai.cordwood.core.ApplicationInitInfo;
 import ren.hankai.cordwood.core.ApplicationInitializer;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.test.config.BeanConfig;
-import ren.hankai.cordwood.core.test.config.WebConfig;
 import ren.hankai.cordwood.core.util.LogbackUtil;
 
 import java.io.File;
@@ -62,8 +54,7 @@ import java.net.URL;
  * @since Oct 21, 2016 1:05:07 PM
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(classes = {CoreTestSupport.class, BeanConfig.class, WebConfig.class})
+@ContextConfiguration(classes = {CoreTestSupport.class, BeanConfig.class})
 @ActiveProfiles({Preferences.PROFILE_TEST})
 @Configuration
 @ComponentScan(basePackages = {"ren.hankai"})
@@ -129,19 +120,5 @@ public abstract class CoreTestSupport {
         }
       }
     });
-  }
-
-  @Autowired
-  protected WebApplicationContext ctx;
-  protected MockMvc mockMvc;
-
-  @Before
-  public void setup() throws Exception {
-    mockMvc = MockMvcBuilders.webAppContextSetup(ctx).build();
-  }
-
-  @After
-  public void teardown() {
-
   }
 }

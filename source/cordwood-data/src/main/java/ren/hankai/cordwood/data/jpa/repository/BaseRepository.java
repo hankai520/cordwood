@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018 hankai
+ * Copyright (C) 2019 hankai
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -60,7 +60,7 @@ public interface BaseRepository<T, I extends Serializable> extends JpaRepository
    * @author hankai
    * @since Nov 22, 2016 10:45:14 AM
    */
-  public int delete(DeleteSpecification<T> spec);
+  int delete(DeleteSpecification<T> spec);
 
   /**
    * 根据查询条件超照复合要求的实体。
@@ -134,5 +134,9 @@ public interface BaseRepository<T, I extends Serializable> extends JpaRepository
    * @since May 3, 2017 10:24:54 AM
    */
   T findFirst(Specification<T> specification);
+
+  int executeNativeUpdate(String sql);
+
+  List<T> executeNativeQuery(String sql);
 
 }

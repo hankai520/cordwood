@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018 hankai
+ * Copyright (C) 2019 hankai
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -124,6 +124,16 @@ public class BaseRepositoryImpl<T, I extends Serializable> extends SimpleJpaRepo
       return results.get(0);
     }
     return null;
+  }
+
+  @Override
+  public int executeNativeUpdate(String sql) {
+    return entityManager.createNativeQuery(sql).executeUpdate();
+  }
+
+  @Override
+  public List<T> executeNativeQuery(String sql) {
+    return entityManager.createNativeQuery(sql, domainClass).getResultList();
   }
 
 }

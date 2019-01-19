@@ -7,7 +7,8 @@ nexusStaging {
 }
 
 ext {
-    mainVersion = "0.0.1.SNAPSHOT"
+    mainVersion = "0.0.2.SNAPSHOT"
+    
     springVersion = "4.3.3.RELEASE"
     
     linkHomepage = "https://github.com/hankai520/cordwood"

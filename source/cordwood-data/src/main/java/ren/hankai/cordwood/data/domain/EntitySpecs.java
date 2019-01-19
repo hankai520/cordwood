@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018 hankai
+ * Copyright (C) 2019 hankai
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,10 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-/*
- * Copyright © 2016 hankai.ren, All rights reserved.
- * http://www.hankai.ren
- */
 
 package ren.hankai.cordwood.data.domain;
 

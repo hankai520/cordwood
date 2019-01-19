@@ -6,3 +6,9 @@ include "cordwood-mobile"
 
 //data processing
 include "cordwood-data"
+
+//java web support
+include "cordwood-web"
+
+//oauth2 support lib
+include "cordwood-oauth2"

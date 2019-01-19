@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2018 hankai
+ * Copyright (C) 2019 hankai
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,6 @@ import com.jcabi.manifests.Manifests;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Properties;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * 系统运行时信息。
@@ -159,6 +157,7 @@ public final class RuntimeInfo {
    * @author hankai
    * @since Oct 13, 2016 10:25:28 AM
    */
+  @Deprecated
   public String getJvmAvailableProcessors() {
     return RuntimeInfo.jvmAvailableProcessors();
   }
@@ -517,20 +516,6 @@ public final class RuntimeInfo {
    */
   public static String osVersion() {
     return props.getProperty("os.version");
-  }
-
-  /**
-   * 获取当前web程序包的版本。
-   *
-   * @param clazz 程序包中的任意类
-   * @param request servlet请求
-   * @return 版本号
-   * @author hankai
-   * @since Jul 11, 2017 9:43:25 AM
-   */
-  @Deprecated
-  public String getWarPackageVersion(Class<?> clazz, HttpServletRequest request) {
-    return RuntimeInfo.packageVersion();
   }
 
   /**
