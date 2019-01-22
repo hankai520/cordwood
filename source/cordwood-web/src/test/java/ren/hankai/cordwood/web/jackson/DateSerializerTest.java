@@ -27,7 +27,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import ren.hankai.cordwood.web.jackson.DateSerializer;
 
 import java.io.StringWriter;
 import java.util.Date;

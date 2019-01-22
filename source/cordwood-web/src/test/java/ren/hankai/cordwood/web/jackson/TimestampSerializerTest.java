@@ -26,7 +26,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;
-import ren.hankai.cordwood.web.jackson.TimestampSerializer;
 
 import java.io.StringWriter;
 import java.util.Date;

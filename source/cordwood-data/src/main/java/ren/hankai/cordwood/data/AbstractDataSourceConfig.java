@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 hankai
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -58,7 +58,7 @@ public abstract class AbstractDataSourceConfig {
    * @author hankai
    * @since Jun 21, 2016 10:45:48 AM
    */
-  protected static Properties loadExternalConfig(String fileName) {
+  protected static Properties loadExternalConfig(final String fileName) {
     Properties props = null;
     try {
       props = new Properties();
@@ -81,7 +81,7 @@ public abstract class AbstractDataSourceConfig {
    * @author hankai
    * @since Dec 3, 2018 5:23:54 PM
    */
-  protected static void configureFilters(Properties props, DruidDataSource dataSource) {
+  protected static void configureFilters(final Properties props, final DruidDataSource dataSource) {
     final List<Filter> filters = new ArrayList<>();
     // 记录慢SQL
     final StatFilter statFilter = new StatFilter();
@@ -89,7 +89,9 @@ public abstract class AbstractDataSourceConfig {
     statFilter.setSlowSqlMillis(Long.parseLong(param));
     param = props.getProperty("pool.log.slow.sql", "true");
     statFilter.setLogSlowSql(Boolean.parseBoolean(param));
-    statFilter.setMergeSql(true); // 合并统计没有参数化的sql
+    // 合并统计没有参数化的sql
+    param = props.getProperty("pool.merge.sql", "false");
+    statFilter.setMergeSql(Boolean.parseBoolean(param));
     filters.add(statFilter); // 启用统计过滤器
     // 将日志桥接到SLF4J
     final Slf4jLogFilter slf4jLogFilter = new Slf4jLogFilter();
@@ -115,7 +117,8 @@ public abstract class AbstractDataSourceConfig {
    * @author hankai
    * @since Jul 31, 2018 3:21:48 PM
    */
-  protected static void configureDataSourcePool(Properties props, DruidDataSource dataSource) {
+  protected static void configureDataSourcePool(final Properties props,
+      final DruidDataSource dataSource) {
     // 基本属性 url、user、password
     dataSource.setDriverClassName(props.getProperty("driverClassName"));
     dataSource.setUrl(props.getProperty("url"));
