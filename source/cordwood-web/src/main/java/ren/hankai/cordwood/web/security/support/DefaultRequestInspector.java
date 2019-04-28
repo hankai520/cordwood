@@ -166,6 +166,10 @@ public class DefaultRequestInspector implements RequestInspector {
   @Override
   public boolean verifyRequestParameters(final HttpServletRequest request, final String sk) {
     final Map<String, String[]> params = request.getParameterMap();
+    // 如果是GET请求方法，其content-type不是表单，因此需单独处理
+    if ("GET".equals(request.getMethod())) {
+      return verifyRequestParameters(params, sk);
+    }
     // 检查请求是否是 form
     final MediaType contentType = MediaType.valueOf(request.getContentType());
     if (MediaType.APPLICATION_FORM_URLENCODED.isCompatibleWith(contentType)) {
