@@ -33,23 +33,40 @@ public final class TokenInfo {
    */
   public static final int TOKEN_ERROR_NOT_PERMITTED = -3;
 
-  /** 用于支持用户验证 */
-  // 用户唯一标识
+  /**
+   * 用户唯一标识，用于支持用户验证。
+   */
   private String userKey;
-  // 用户秘钥
+
+  /**
+   * 用户秘钥。
+   */
   private String userSk;
-  // 到期时间（毫秒）
+
+  /**
+   * 到期时间（毫秒）。
+   */
   private long expiryTime;
 
-  /** 用于支持 OAuth 2.0 客户端验证 */
-  // 客户端ID
+  // 用于支持 OAuth 2.0 客户端验证。
+  /**
+   * 客户端ID。
+   */
   private String clientId;
-  // 授权类型
+
+  /**
+   * 授权类型。
+   */
   private String grantType;
-  // 授权范围
+
+  /**
+   * 授权范围。
+   */
   private String scope;
 
-  // 额外的信息
+  /**
+   * 额外的信息。
+   */
   private Map<String, String> extraInfo;
 
   /**

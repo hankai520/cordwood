@@ -63,8 +63,8 @@ public class DefaultOauth2AccessAuthenticator implements Oauth2AccessAuthenticat
   private static final Logger logger =
       LoggerFactory.getLogger(DefaultOauth2AccessAuthenticator.class);
 
-  private OAuth2RequestFactory oAuth2RequestFactory;
-  private final OAuth2RequestValidator oAuth2RequestValidator = new DefaultOAuth2RequestValidator();
+  private OAuth2RequestFactory oauth2RequestFactory;
+  private final OAuth2RequestValidator oauth2RequestValidator = new DefaultOAuth2RequestValidator();
 
   @Autowired
   private ClientDetailsService clientDetailsService;
@@ -77,7 +77,7 @@ public class DefaultOauth2AccessAuthenticator implements Oauth2AccessAuthenticat
 
   @PostConstruct
   private void init() {
-    oAuth2RequestFactory = new DefaultOAuth2RequestFactory(clientDetailsService);
+    oauth2RequestFactory = new DefaultOAuth2RequestFactory(clientDetailsService);
   }
 
   private boolean isRefreshTokenRequest(final Map<String, String> parameters) {
@@ -104,13 +104,13 @@ public class DefaultOauth2AccessAuthenticator implements Oauth2AccessAuthenticat
       parameters.putAll(tokenInfo.getExtraInfo());
     }
     final TokenRequest tokenRequest =
-        oAuth2RequestFactory.createTokenRequest(parameters, client);
+        oauth2RequestFactory.createTokenRequest(parameters, client);
 
     if (!client.getClientId().equals(tokenRequest.getClientId())) {
       return null;
     }
     if (client != null) {
-      oAuth2RequestValidator.validateScope(tokenRequest, client);
+      oauth2RequestValidator.validateScope(tokenRequest, client);
     }
     if (tokenRequest.getGrantType().equals("implicit")) {
       logger.warn("Implicit grant type not supported from token endpoint");

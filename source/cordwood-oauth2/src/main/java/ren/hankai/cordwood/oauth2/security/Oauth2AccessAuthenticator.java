@@ -72,7 +72,6 @@ public interface Oauth2AccessAuthenticator {
    *
    * @param token 授权令牌字符串。
    * @param requiredScopes 必须具备的范围
-   * @param requiredScopes
    * @return 验证结果，参考 TokenInfo 中的错误信息定义，返回0表示有效。
    */
   VerifyResult verifyAccessToken(OAuth2AccessToken token, String requiredScopes);
