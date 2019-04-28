@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 hankai
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,8 +29,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import ren.hankai.cordwood.core.Preferences;
-import ren.hankai.cordwood.web.security.AccessAuthenticator;
 import ren.hankai.cordwood.web.security.RequestInspector;
+import ren.hankai.cordwood.web.security.TokenInfo;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -58,13 +58,13 @@ public class DefaultRequestInspector implements RequestInspector {
   private static final Logger logger = LoggerFactory.getLogger(DefaultRequestInspector.class);
 
   @Override
-  public String buildSignText(Map<String, ?> parameters, String sk) {
+  public String buildSignText(final Map<String, ?> parameters, final String sk) {
     final StringBuffer toBeSigned = new StringBuffer();
     final List<String> paramNames = new ArrayList<>();
     paramNames.addAll(parameters.keySet());
     Collections.sort(paramNames);
     for (final String param : paramNames) {
-      if (param.equalsIgnoreCase(AccessAuthenticator.ACCESS_TOKEN)
+      if (param.equalsIgnoreCase(TokenInfo.ACCESS_TOKEN)
           || param.equalsIgnoreCase(RequestInspector.REQUEST_SIGN)) {
         continue;
       }
@@ -97,43 +97,43 @@ public class DefaultRequestInspector implements RequestInspector {
   }
 
   @Override
-  public String signRequestParameters(Map<String, ?> parameters) {
+  public String signRequestParameters(final Map<String, ?> parameters) {
     return signRequestParameters(parameters, Preferences.getTransferKey());
   }
 
   @Override
-  public String signRequestParameters(Map<String, ?> parameters, String sk) {
+  public String signRequestParameters(final Map<String, ?> parameters, final String sk) {
     final String toBeSigned = buildSignText(parameters, sk);
     final String expSign = DigestUtils.sha1Hex(toBeSigned);
     return expSign;
   }
 
   @Override
-  public String signRequestBody(String requestBody) {
+  public String signRequestBody(final String requestBody) {
     return signRequestBody(requestBody, Preferences.getTransferKey());
   }
 
   @Override
-  public String signRequestBody(String requestBody, String sk) {
+  public String signRequestBody(final String requestBody, final String sk) {
     final String toBeSigned = requestBody + sk;
     final String expSign = DigestUtils.sha1Hex(toBeSigned);
     return expSign;
   }
 
   @Override
-  public boolean verifyRequestParameters(Map<String, ?> parameters) {
+  public boolean verifyRequestParameters(final Map<String, ?> parameters) {
     return verifyRequestParameters(parameters, Preferences.getTransferKey());
   }
 
   @Override
-  public boolean verifyRequestParameters(Map<String, ?> parameters, String sk) {
+  public boolean verifyRequestParameters(final Map<String, ?> parameters, final String sk) {
     boolean hasParams = false;
     final Iterator<String> it = parameters.keySet().iterator();
     // 检查是否有入参，若无，则不会验证
     while (it.hasNext()) {
       final String key = it.next();
       // 忽略白名单字段
-      if (key.equalsIgnoreCase(AccessAuthenticator.ACCESS_TOKEN)
+      if (key.equalsIgnoreCase(TokenInfo.ACCESS_TOKEN)
           || key.equalsIgnoreCase(RequestInspector.REQUEST_SIGN)) {
         continue;
       }
@@ -159,12 +159,12 @@ public class DefaultRequestInspector implements RequestInspector {
   }
 
   @Override
-  public boolean verifyRequestParameters(HttpServletRequest request) {
+  public boolean verifyRequestParameters(final HttpServletRequest request) {
     return verifyRequestParameters(request, Preferences.getTransferKey());
   }
 
   @Override
-  public boolean verifyRequestParameters(HttpServletRequest request, String sk) {
+  public boolean verifyRequestParameters(final HttpServletRequest request, final String sk) {
     final Map<String, String[]> params = request.getParameterMap();
     // 检查请求是否是 form
     final MediaType contentType = MediaType.valueOf(request.getContentType());

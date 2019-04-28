@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 hankai
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -69,7 +69,19 @@ public class JwtTokenVerifier {
     } catch (final Exception ex) {
       logger.debug("Error occurred while verifying access token.", ex);
     }
-    final VerifyResult result = new VerifyResult(token, requiredScopes);
+    return verifyAccessToken(token, requiredScopes);
+  }
+
+  /**
+   * 检查访问令牌是否有效。
+   *
+   * @param accessToken 访问令牌
+   * @param requiredScopes 必须具备的访问权限（逗号或空格分隔多个权限）
+   * @return 验证结果
+   */
+  public VerifyResult verifyAccessToken(final OAuth2AccessToken accessToken,
+      final String requiredScopes) {
+    final VerifyResult result = new VerifyResult(accessToken, requiredScopes);
     return result;
   }
 

@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 hankai
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -68,7 +68,7 @@ public class MathUtilTest {
   }
 
   @Test
-  public void testShortenNumber() {
+  public void testShortenNumberForTime() {
     String result = MathUtil.shortenNumber(4520, 60, false, timeUnits);
     Assert.assertEquals("1h15m20s", result);
     result = MathUtil.shortenNumber(3600, 60, false, timeUnits);
@@ -81,9 +81,22 @@ public class MathUtilTest {
     Assert.assertEquals("20s", result);
     result = MathUtil.shortenNumber(0, 60, false, timeUnits);
     Assert.assertEquals("0s", result);
-
-    result = MathUtil.shortenNumber((long) (1024 * 1024 * 1024 * 3.576), 1024, false, storeUnits);
-    Assert.assertEquals("3GB589MB843KB794B", result);
   }
 
+  @Test
+  public void testShortenNumberForMemory() {
+    final String result =
+        MathUtil.shortenNumber((long) (1024 * 1024 * 1024 * 3.576), 1024, false, storeUnits);
+    Assert.assertEquals("3GB589MB843KB794B", result);
+
+    long bytes = (long) (1024 * 1024 * 1024 * 1.5);
+    String memory =
+        MathUtil.shortenNumber(bytes, 1024, true, new String[] {"B", "KB", "MB"});
+    Assert.assertEquals("1,536MB", memory);
+
+    bytes = (long) (1024 * 1024 * 1024 * 1.5) + 1039;
+    memory =
+        MathUtil.shortenNumber(bytes, 1024, false, new String[] {"B", "KB", "MB"});
+    Assert.assertEquals("1536MB1KB15B", memory);
+  }
 }

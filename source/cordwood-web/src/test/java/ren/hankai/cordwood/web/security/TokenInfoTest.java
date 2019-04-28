@@ -24,7 +24,6 @@ package ren.hankai.cordwood.web.security;
 
 import org.junit.Assert;
 import org.junit.Test;
-import ren.hankai.cordwood.web.security.AccessAuthenticator.TokenInfo;
 
 public class TokenInfoTest {
 

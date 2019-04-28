@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 hankai
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,6 +32,7 @@ import org.springframework.stereotype.Component;
 import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.core.util.EncryptionUtil;
 import ren.hankai.cordwood.web.security.AccessAuthenticator;
+import ren.hankai.cordwood.web.security.TokenInfo;
 
 /**
  * 访问认证接口默认实现。
@@ -51,12 +52,12 @@ public class DefaultAccessAuthenticator implements AccessAuthenticator {
   private ObjectMapper objectMapper;
 
   @Override
-  public String generateAccessToken(TokenInfo tokenInfo) {
+  public String generateAccessToken(final TokenInfo tokenInfo) {
     return generateAccessToken(tokenInfo, Preferences.getSystemSk());
   }
 
   @Override
-  public String generateAccessToken(TokenInfo tokenInfo, String secretKey) {
+  public String generateAccessToken(final TokenInfo tokenInfo, final String secretKey) {
     try {
       String token = objectMapper.writeValueAsString(tokenInfo);
       token = EncryptionUtil.aes(token, secretKey, true);
@@ -68,12 +69,12 @@ public class DefaultAccessAuthenticator implements AccessAuthenticator {
   }
 
   @Override
-  public TokenInfo parseAccessToken(String tokenString) {
+  public TokenInfo parseAccessToken(final String tokenString) {
     return parseAccessToken(tokenString, Preferences.getSystemSk());
   }
 
   @Override
-  public TokenInfo parseAccessToken(String tokenString, String secretKey) {
+  public TokenInfo parseAccessToken(final String tokenString, final String secretKey) {
     TokenInfo tokenInfo = null;
     if (!StringUtils.isEmpty(tokenString)) {
       final String decrypted = EncryptionUtil.aes(tokenString, secretKey, false);
@@ -90,12 +91,12 @@ public class DefaultAccessAuthenticator implements AccessAuthenticator {
   }
 
   @Override
-  public int verifyAccessToken(String tokenString) {
+  public int verifyAccessToken(final String tokenString) {
     return verifyAccessToken(tokenString, Preferences.getSystemSk());
   }
 
   @Override
-  public int verifyAccessToken(String tokenString, String secretKey) {
+  public int verifyAccessToken(final String tokenString, final String secretKey) {
     final TokenInfo tokenInfo = parseAccessToken(tokenString, secretKey);
     if (tokenInfo == null) {
       return TokenInfo.TOKEN_ERROR_INVALID;

@@ -25,7 +25,7 @@ package ren.hankai.cordwood.web.security.support;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import ren.hankai.cordwood.web.security.AccessAuthenticator.TokenInfo;
+import ren.hankai.cordwood.web.security.TokenInfo;
 import ren.hankai.cordwood.web.test.WebTestSupport;
 
 /**

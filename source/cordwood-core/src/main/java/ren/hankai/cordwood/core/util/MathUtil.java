@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 hankai
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -47,7 +47,8 @@ public final class MathUtil {
    * @since Jan 5, 2017 10:42:31 AM
    */
   @Deprecated
-  public static String toHumanReadableString(double value, long radix, String[] units) {
+  public static String toHumanReadableString(final double value, final long radix,
+      final String[] units) {
     return shortenNumber((long) value, radix, true, units);
   }
 
@@ -63,8 +64,8 @@ public final class MathUtil {
    * @author hankai
    * @since Dec 1, 2018 9:59:08 PM
    */
-  public static String shortenNumber(long number, long radix, boolean useMaxUnit,
-      String... units) {
+  public static String shortenNumber(long number, final long radix, final boolean useMaxUnit,
+      final String... units) {
     Assert.notNull(units, "Units cannot be null!");
     Assert.notEmpty(units, "Units cannot be empty!");
     Assert.isTrue(radix > 0, "Radix must be greater than zero!");
@@ -75,7 +76,7 @@ public final class MathUtil {
     if (useMaxUnit) {
       double value = number;
       int unitIndex = 0;
-      while ((value >= radix) && (unitIndex < units.length)) {
+      while ((value >= radix) && (unitIndex < (units.length - 1))) {
         value /= radix;
         unitIndex++;
       }
