@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 hankai
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,6 +22,8 @@
 
 package ren.hankai.cordwood.web.api.support;
 
+import java.io.Serializable;
+
 /**
  * API 返回的响应信息包装类。
  *
@@ -29,8 +31,9 @@ package ren.hankai.cordwood.web.api.support;
  * @version 1.0
  * @since Jan 7, 2016 3:09:54 PM
  */
-public class ApiResponse {
+public class ApiResponse implements Serializable {
 
+  private static final long serialVersionUID = 1L;
   private ApiCode code = ApiCode.InternalError;
   private String message;
   private ApiResponseBody body = new ApiResponseBody();
@@ -39,7 +42,7 @@ public class ApiResponse {
     return code;
   }
 
-  public void setCode(ApiCode code) {
+  public void setCode(final ApiCode code) {
     this.code = code;
   }
 
@@ -47,7 +50,7 @@ public class ApiResponse {
     return message;
   }
 
-  public void setMessage(String message) {
+  public void setMessage(final String message) {
     this.message = message;
   }
 
@@ -55,7 +58,7 @@ public class ApiResponse {
     return body;
   }
 
-  public void setBody(ApiResponseBody body) {
+  public void setBody(final ApiResponseBody body) {
     this.body = body;
   }
 }

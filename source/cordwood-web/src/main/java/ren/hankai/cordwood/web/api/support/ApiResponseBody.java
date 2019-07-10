@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 hankai
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,6 +22,8 @@
 
 package ren.hankai.cordwood.web.api.support;
 
+import java.io.Serializable;
+
 /**
  * API 响应的内容部分。
  *
@@ -29,7 +31,9 @@ package ren.hankai.cordwood.web.api.support;
  * @version 1.0
  * @since Jan 7, 2016 4:32:46 PM
  */
-public class ApiResponseBody {
+public class ApiResponseBody implements Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   private boolean success = false;
   private String error;
@@ -40,7 +44,7 @@ public class ApiResponseBody {
     return error;
   }
 
-  public void setError(String error) {
+  public void setError(final String error) {
     this.error = error;
   }
 
@@ -48,7 +52,7 @@ public class ApiResponseBody {
     return message;
   }
 
-  public void setMessage(String message) {
+  public void setMessage(final String message) {
     this.message = message;
   }
 
@@ -56,7 +60,7 @@ public class ApiResponseBody {
     return data;
   }
 
-  public void setData(Object data) {
+  public void setData(final Object data) {
     this.data = data;
   }
 
@@ -64,7 +68,7 @@ public class ApiResponseBody {
     return success;
   }
 
-  public void setSuccess(boolean success) {
+  public void setSuccess(final boolean success) {
     this.success = success;
   }
 }
