@@ -68,7 +68,8 @@ public class ApiInternalExceptionHandler extends ResponseEntityExceptionHandler 
       final HttpServletRequest hsr = swr.getRequest();
       final String supported = ex.getSupportedMediaTypes().toString();
       logger.warn(
-          "Response media type '{}' not acceptable by client. Request URL is {}, request media type is '{}'",
+          "Response media type '{}' not acceptable by client. Request URL is {},"
+              + " request media type is '{}'",
           supported, hsr.getRequestURL().toString(), hsr.getContentType());
     }
     return response;
