@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 hankai
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -58,8 +58,9 @@ public abstract class CoreCacheConfig extends CachingConfigurerSupport {
     pc.setStrategy(PersistenceConfiguration.Strategy.LOCALTEMPSWAP.name());
 
     final CacheConfiguration heavyWeightCache = new CacheConfiguration();
-    heavyWeightCache.setMaxEntriesLocalHeap(4000);
-    heavyWeightCache.setTimeToIdleSeconds(60 * 60 * 24); // 缓存1天
+    heavyWeightCache.setMaxEntriesLocalHeap(2000);
+    heavyWeightCache.setTimeToIdleSeconds(60 * 60 * 4); // 缓存4小时
+    heavyWeightCache.setTimeToLiveSeconds(60 * 60 * 4); // 缓存4小时
     // heavyWeightCache.setMemoryStoreEvictionPolicy("LRU"); // One of "LRU", "LFU" or "FIFO".
     heavyWeightCache.persistence(pc);
     return heavyWeightCache;
@@ -77,8 +78,9 @@ public abstract class CoreCacheConfig extends CachingConfigurerSupport {
     pc.setStrategy(PersistenceConfiguration.Strategy.LOCALTEMPSWAP.name());
 
     final CacheConfiguration middleWeightCache = new CacheConfiguration();
-    middleWeightCache.setMaxEntriesLocalHeap(2000);
-    middleWeightCache.setTimeToIdleSeconds(60 * 60 * 12); // 缓存12小时
+    middleWeightCache.setMaxEntriesLocalHeap(1000);
+    middleWeightCache.setTimeToIdleSeconds(60 * 60); // 缓存1小时
+    middleWeightCache.setTimeToLiveSeconds(60 * 60); // 缓存1小时
     middleWeightCache.persistence(pc);
     return middleWeightCache;
   }
@@ -95,8 +97,9 @@ public abstract class CoreCacheConfig extends CachingConfigurerSupport {
     pc.setStrategy(PersistenceConfiguration.Strategy.LOCALTEMPSWAP.name());
 
     final CacheConfiguration lightWeightCache = new CacheConfiguration();
-    lightWeightCache.setMaxEntriesLocalHeap(1000);
-    lightWeightCache.setTimeToIdleSeconds(60 * 60 * 4); // 缓存4小时
+    lightWeightCache.setMaxEntriesLocalHeap(250);
+    lightWeightCache.setTimeToIdleSeconds(60 * 15); // 缓存15分钟
+    lightWeightCache.setTimeToLiveSeconds(60 * 15); // 缓存15分钟
     lightWeightCache.persistence(pc);
     return lightWeightCache;
   }
