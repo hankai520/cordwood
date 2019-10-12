@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2019 hankai
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -92,15 +92,17 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
   public static final String CURRENT_BREAD_CRUMB = "currentBreadCrumb";
 
   @Override
-  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+  public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response,
+      final Object handler)
       throws Exception {
     final Annotation[] declaredAnnotations = getDeclaredAnnotationsForHandler(handler);
     if ((declaredAnnotations != null) && (declaredAnnotations.length > 0)) {
       final HttpSession session = request.getSession();
-      emptyCurrentBreadCrumb(session);
       for (final Annotation annotation : declaredAnnotations) {
         if (annotation.annotationType().equals(NavigationItem.class)) {
+          emptyCurrentBreadCrumb(session);
           processAnnotation(request, session, annotation);
+          break;
         }
       }
     }
@@ -108,14 +110,15 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
   }
 
   @Override
-  public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-      ModelAndView modelAndView) throws Exception {}
+  public void postHandle(final HttpServletRequest request, final HttpServletResponse response,
+      final Object handler,
+      final ModelAndView modelAndView) throws Exception {}
 
   @Override
-  public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
-      Object handler, Exception ex) throws Exception {}
+  public void afterCompletion(final HttpServletRequest request, final HttpServletResponse response,
+      final Object handler, final Exception ex) throws Exception {}
 
-  private void emptyCurrentBreadCrumb(HttpSession session) {
+  private void emptyCurrentBreadCrumb(final HttpSession session) {
     session.setAttribute(CURRENT_BREAD_CRUMB, new LinkedList<BreadCrumbLink>());
   }
 
@@ -128,8 +131,8 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
    * @author hankai
    * @since Nov 22, 2018 3:54:10 PM
    */
-  private void processAnnotation(HttpServletRequest request, HttpSession session,
-      Annotation annotation) {
+  private void processAnnotation(final HttpServletRequest request, final HttpSession session,
+      final Annotation annotation) {
     final NavigationItem link = (NavigationItem) annotation;
     final String family = link.family();
 
@@ -164,8 +167,9 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
    * @author hankai
    * @since Nov 22, 2018 3:55:39 PM
    */
-  private BreadCrumbLink getBreadCrumbLink(HttpServletRequest request, NavigationItem link,
-      LinkedHashMap<String, BreadCrumbLink> familyMap) {
+  private BreadCrumbLink getBreadCrumbLink(final HttpServletRequest request,
+      final NavigationItem link,
+      final LinkedHashMap<String, BreadCrumbLink> familyMap) {
     BreadCrumbLink breadCrumbLink;
     final BreadCrumbLink breadCrumbObject = familyMap.get(link.label());
     resetBreadCrumbs(familyMap);
@@ -195,7 +199,7 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
    */
   @SuppressWarnings("unchecked")
   private Map<String, LinkedHashMap<String, BreadCrumbLink>> getBreadCrumbLinksFromSession(
-      HttpSession session) {
+      final HttpSession session) {
     final Map<String, LinkedHashMap<String, BreadCrumbLink>> breadCrumb =
         (Map<String, LinkedHashMap<String, BreadCrumbLink>>) session
             .getAttribute(BREAD_CRUMB_LINKS);
@@ -210,7 +214,7 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
    * @author hankai
    * @since Nov 22, 2018 3:58:22 PM
    */
-  private Annotation[] getDeclaredAnnotationsForHandler(Object handler) {
+  private Annotation[] getDeclaredAnnotationsForHandler(final Object handler) {
     if (handler instanceof HandlerMethod) {
       final HandlerMethod handlerMethod = (HandlerMethod) handler;
       final Method method = handlerMethod.getMethod();
@@ -228,7 +232,7 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
    * @author hankai
    * @since Nov 22, 2018 3:47:13 PM
    */
-  private void resetBreadCrumbs(LinkedHashMap<String, BreadCrumbLink> familyMap) {
+  private void resetBreadCrumbs(final LinkedHashMap<String, BreadCrumbLink> familyMap) {
     for (final BreadCrumbLink breadCrumbLink : familyMap.values()) {
       breadCrumbLink.setCurrentPage(false);
     }
@@ -242,8 +246,8 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
    * @author hankai
    * @since Nov 22, 2018 3:48:35 PM
    */
-  private void generateBreadCrumbsRecursively(BreadCrumbLink link,
-      LinkedList<BreadCrumbLink> breadCrumbLinks) {
+  private void generateBreadCrumbsRecursively(final BreadCrumbLink link,
+      final LinkedList<BreadCrumbLink> breadCrumbLinks) {
     if (link.getPrevious() != null) {
       generateBreadCrumbsRecursively(link.getPrevious(), breadCrumbLinks);
     }
@@ -258,8 +262,8 @@ public class BreadCrumbInterceptor implements HandlerInterceptor {
    * @author hankai
    * @since Nov 22, 2018 3:50:12 PM
    */
-  private void createRelationships(LinkedHashMap<String, BreadCrumbLink> familyMap,
-      BreadCrumbLink newLink) {
+  private void createRelationships(final LinkedHashMap<String, BreadCrumbLink> familyMap,
+      final BreadCrumbLink newLink) {
     final Collection<BreadCrumbLink> values = familyMap.values();
     for (final BreadCrumbLink breadCrumbLink : values) {
       if (breadCrumbLink.getLabel().equalsIgnoreCase(newLink.getParentKey())) {
