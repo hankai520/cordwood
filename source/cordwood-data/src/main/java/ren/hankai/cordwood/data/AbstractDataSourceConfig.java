@@ -59,7 +59,7 @@ public abstract class AbstractDataSourceConfig {
    * @author hankai
    * @since Jun 21, 2016 10:45:48 AM
    */
-  protected static Properties loadExternalConfig( final String fileName ) {
+  protected static Properties loadExternalConfig(final String fileName) {
     Properties props = null;
     try {
       props = new Properties();
@@ -82,7 +82,7 @@ public abstract class AbstractDataSourceConfig {
    * @author hankai
    * @since Dec 3, 2018 5:23:54 PM
    */
-  protected static void configureFilters( final Properties props, final DruidDataSource dataSource ) {
+  protected static void configureFilters(final Properties props, final DruidDataSource dataSource) {
     final List<Filter> filters = new ArrayList<>();
     // 记录慢SQL
     final StatFilter statFilter = new StatFilter();
@@ -118,8 +118,8 @@ public abstract class AbstractDataSourceConfig {
    * @author hankai
    * @since Jul 31, 2018 3:21:48 PM
    */
-  protected static void configureDataSourcePool( final Properties props,
-      final DruidDataSource dataSource ) {
+  protected static void configureDataSourcePool(final Properties props,
+      final DruidDataSource dataSource) {
     // 基本属性 url、user、password
     dataSource.setDriverClassName(props.getProperty("driverClassName"));
     dataSource.setUrl(props.getProperty("url"));
