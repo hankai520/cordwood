@@ -54,11 +54,12 @@ public abstract class AbstractDataSourceConfig {
   /**
    * 从外部配置文件加载数据库连接配置。如果数据库配置子类需要在程序启动时，从程序包外部获取配置文件， 则调用此方法获取外部文件配置参数。
    *
+   * @param fileName 文件名
    * @return 是否加载成功
    * @author hankai
    * @since Jun 21, 2016 10:45:48 AM
    */
-  protected static Properties loadExternalConfig(final String fileName) {
+  protected static Properties loadExternalConfig( final String fileName ) {
     Properties props = null;
     try {
       props = new Properties();
@@ -81,7 +82,7 @@ public abstract class AbstractDataSourceConfig {
    * @author hankai
    * @since Dec 3, 2018 5:23:54 PM
    */
-  protected static void configureFilters(final Properties props, final DruidDataSource dataSource) {
+  protected static void configureFilters( final Properties props, final DruidDataSource dataSource ) {
     final List<Filter> filters = new ArrayList<>();
     // 记录慢SQL
     final StatFilter statFilter = new StatFilter();
@@ -117,8 +118,8 @@ public abstract class AbstractDataSourceConfig {
    * @author hankai
    * @since Jul 31, 2018 3:21:48 PM
    */
-  protected static void configureDataSourcePool(final Properties props,
-      final DruidDataSource dataSource) {
+  protected static void configureDataSourcePool( final Properties props,
+      final DruidDataSource dataSource ) {
     // 基本属性 url、user、password
     dataSource.setDriverClassName(props.getProperty("driverClassName"));
     dataSource.setUrl(props.getProperty("url"));
