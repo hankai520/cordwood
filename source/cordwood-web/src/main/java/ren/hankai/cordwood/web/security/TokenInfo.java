@@ -1,6 +1,7 @@
 
 package ren.hankai.cordwood.web.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
@@ -12,6 +13,8 @@ import java.util.Map;
  * @version 1.0.0
  * @since Jun 28, 2016 1:34:50 PM
  */
+@JsonIgnoreProperties(
+    ignoreUnknown = true)
 public final class TokenInfo {
 
   /**
