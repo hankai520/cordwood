@@ -7,7 +7,7 @@ nexusStaging {
 }
 
 ext {
-    mainVersion = "0.0.2.SNAPSHOT"
+    mainVersion = "1.0.0.RELEASE"
     
     springVersion = "4.3.3.RELEASE"
     
@@ -40,6 +40,7 @@ subprojects {
     apply plugin: "java"
     apply plugin: "eclipse"
     apply plugin: "eclipse-wtp"
+    apply plugin: "checkstyle"
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -84,5 +85,11 @@ subprojects {
     
     javadoc {
     	options.addStringOption('encoding', 'UTF-8')
+	}
+	
+	checkstyle {
+		toolVersion = "8.33"
+		configDirectory.set(rootProject.file("config/checkstyle"))
+		configFile file("$configDir/google_checks.xml")
 	}
 }

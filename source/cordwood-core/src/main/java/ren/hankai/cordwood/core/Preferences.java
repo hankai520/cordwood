@@ -1,24 +1,3 @@
-/*******************************************************************************
- * Copyright (C) 2019 hankai
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- ******************************************************************************/
 
 package ren.hankai.cordwood.core;
 
@@ -194,7 +173,7 @@ public final class Preferences {
    * @author hankai
    * @since Oct 21, 2016 1:13:13 PM
    */
-  public static String getConfigFilePath(String configFile) {
+  public static String getConfigFilePath(final String configFile) {
     return getConfigDir() + File.separator + configFile;
   }
 
@@ -347,7 +326,7 @@ public final class Preferences {
    * @author hankai
    * @since Oct 18, 2016 3:09:42 PM
    */
-  public static URL[] getLibUrls(URL... extraUrls) {
+  public static URL[] getLibUrls(final URL... extraUrls) {
     final List<URL> list = new ArrayList<>();
     if ((extraUrls != null) && (extraUrls.length > 0)) {
       list.addAll(Arrays.asList(extraUrls));
@@ -473,7 +452,7 @@ public final class Preferences {
    * @author hankai
    * @since Mar 8, 2017 11:08:01 PM
    */
-  public static String getCustomConfig(String key) {
+  public static String getCustomConfig(final String key) {
     final Object obj = getSystemPrefs().get(key);
     if (obj != null) {
       return obj.toString();

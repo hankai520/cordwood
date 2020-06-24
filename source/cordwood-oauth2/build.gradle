@@ -24,6 +24,7 @@ sourceSets {
 dependencies {
 	compile "org.springframework.security.oauth:spring-security-oauth2:2.0.14.RELEASE"
     compile "org.springframework.security:spring-security-jwt:1.0.9.RELEASE"
+    compile "org.springframework:spring-jdbc:${springVersion}"
     
     compile "commons-io:commons-io:2.2"
     compile "commons-codec:commons-codec:1.9"
@@ -33,7 +34,6 @@ dependencies {
     compile project(":cordwood-web")
     
     testCompile "org.springframework:spring-test:${springVersion}"
-    testCompile 'org.simpleframework:simple:5.1.6'
 }
 
 apply plugin: "com.bmuschko.nexus"

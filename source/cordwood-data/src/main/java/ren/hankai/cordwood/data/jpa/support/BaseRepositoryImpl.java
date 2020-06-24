@@ -1,24 +1,3 @@
-/*******************************************************************************
- * Copyright (C) 2019 hankai
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- ******************************************************************************/
 
 package ren.hankai.cordwood.data.jpa.support;
 
@@ -60,7 +39,7 @@ public class BaseRepositoryImpl<T, I extends Serializable> extends SimpleJpaRepo
    * @param domainClass 实体类的类型
    * @param entityManager JPA 实体管理器
    */
-  public BaseRepositoryImpl(Class<T> domainClass, EntityManager entityManager) {
+  public BaseRepositoryImpl(final Class<T> domainClass, final EntityManager entityManager) {
     super(domainClass, entityManager);
     this.entityManager = entityManager;
     this.domainClass = domainClass;
@@ -72,20 +51,20 @@ public class BaseRepositoryImpl<T, I extends Serializable> extends SimpleJpaRepo
    * @param entityInformation 实体信息
    * @param entityManager 实体管理器（JPA核心对象）
    */
-  public BaseRepositoryImpl(JpaEntityInformation<T, ?> entityInformation,
-      EntityManager entityManager) {
+  public BaseRepositoryImpl(final JpaEntityInformation<T, ?> entityInformation,
+      final EntityManager entityManager) {
     super(entityInformation, entityManager);
     this.entityManager = entityManager;
     this.domainClass = entityInformation.getJavaType();
   }
 
   @Override
-  public void detach(Object entity) {
+  public void detach(final Object entity) {
     entityManager.detach(entity);
   }
 
   @Override
-  public int delete(DeleteSpecification<T> spec) {
+  public int delete(final DeleteSpecification<T> spec) {
     final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
     final CriteriaDelete<T> cd = cb.createCriteriaDelete(domainClass);
     final Root<T> root = cd.from(domainClass);
@@ -94,12 +73,12 @@ public class BaseRepositoryImpl<T, I extends Serializable> extends SimpleJpaRepo
   }
 
   @Override
-  public T findFirst(Specification<T> specification) {
+  public T findFirst(final Specification<T> specification) {
     return findOne(specification, null);
   }
 
   @Override
-  public T findOne(Specification<T> specification, Sort sort) {
+  public T findOne(final Specification<T> specification, final Sort sort) {
     final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
     final CriteriaQuery<T> cq = cb.createQuery(domainClass);
     final Root<T> root = cq.from(domainClass);
@@ -127,12 +106,13 @@ public class BaseRepositoryImpl<T, I extends Serializable> extends SimpleJpaRepo
   }
 
   @Override
-  public int executeNativeUpdate(String sql) {
+  public int executeNativeUpdate(final String sql) {
     return entityManager.createNativeQuery(sql).executeUpdate();
   }
 
+  @SuppressWarnings("unchecked")
   @Override
-  public List<T> executeNativeQuery(String sql) {
+  public List<T> executeNativeQuery(final String sql) {
     return entityManager.createNativeQuery(sql, domainClass).getResultList();
   }
 

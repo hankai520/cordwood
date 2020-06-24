@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
  * API 内部异常处理器（如：spring mvc内部异常）。
  *
  * @author hankai
- * @version 0.0.2
+ * @version 1.0.0
  * @since Aug 29, 2019 12:05:02 PM
  */
 public class ApiInternalExceptionHandler extends ResponseEntityExceptionHandler {

@@ -1,27 +1,10 @@
-/*******************************************************************************
- * Copyright (C) 2019 hankai
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- ******************************************************************************/
 
 package ren.hankai.cordwood.oauth2.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.builders.ClientDetailsServiceBuilder;
 import org.springframework.security.oauth2.config.annotation.builders.JdbcClientDetailsServiceBuilder;
@@ -61,6 +44,8 @@ import javax.sql.DataSource;
 public class CustomJdbcClientDetailsServiceBuilder
     extends ClientDetailsServiceBuilder<JdbcClientDetailsServiceBuilder> {
 
+  private static final Logger logger = LoggerFactory.getLogger(CustomJdbcClientDetailsServiceBuilder.class);
+
   /**
    * 可更新的客户端表字段。
    */
@@ -81,7 +66,7 @@ public class CustomJdbcClientDetailsServiceBuilder
   /**
    * 数据库数据源。
    */
-  private DataSource dataSource;
+  private final DataSource dataSource;
 
   /**
    * 当通过 JdbcClientDetailsService 查找密码（secret）为密文的客户端信息时，需要通过编码器对密码进行编码。
@@ -91,23 +76,17 @@ public class CustomJdbcClientDetailsServiceBuilder
   /**
    * OAUTH2授权信息表名。
    */
-  private String clientDetailsTableName;
+  private final String clientDetailsTableName;
 
-  public CustomJdbcClientDetailsServiceBuilder clientDetailsTableName(final String tableName) {
-    this.clientDetailsTableName = tableName;
-    return this;
-  }
+  /**
+   * 客户端详情表建表语句。
+   */
+  private final String clientDetailsTableDdl;
 
-  public CustomJdbcClientDetailsServiceBuilder dataSource(final DataSource dataSource) {
-    this.dataSource = dataSource;
-    return this;
-  }
-
-  public CustomJdbcClientDetailsServiceBuilder passwordEncoder(
-      final PasswordEncoder passwordEncoder) {
-    this.passwordEncoder = passwordEncoder;
-    return this;
-  }
+  /**
+   * 客户端详情服务。
+   */
+  private final JdbcClientDetailsService actualClientDetailsService;
 
   @Override
   protected void addClient(final String clientId, final ClientDetails value) {
@@ -117,33 +96,68 @@ public class CustomJdbcClientDetailsServiceBuilder
   @Override
   protected ClientDetailsService performBuild() {
     Assert.state(dataSource != null, "You need to provide a DataSource");
-    final JdbcClientDetailsService clientDetailsService = new JdbcClientDetailsService(dataSource);
-    clientDetailsService.setDeleteClientDetailsSql(
+    actualClientDetailsService.setDeleteClientDetailsSql(
         "delete from " + this.clientDetailsTableName + " where client_id = ?");
-    clientDetailsService.setFindClientDetailsSql("select client_id, " + CLIENT_FIELDS + " from "
+    actualClientDetailsService.setFindClientDetailsSql("select client_id, " + CLIENT_FIELDS + " from "
         + this.clientDetailsTableName + " order by client_id");
-    clientDetailsService.setInsertClientDetailsSql(
+    actualClientDetailsService.setInsertClientDetailsSql(
         "insert into " + this.clientDetailsTableName + " (" + CLIENT_FIELDS
             + ", client_id) values (?,?,?,?,?,?,?,?,?,?,?)");
-    clientDetailsService.setSelectClientDetailsSql("select client_id, " + CLIENT_FIELDS
+    actualClientDetailsService.setSelectClientDetailsSql("select client_id, " + CLIENT_FIELDS
         + " from " + this.clientDetailsTableName + " where client_id = ?");
-    clientDetailsService.setUpdateClientDetailsSql("update " + this.clientDetailsTableName + " set "
+    actualClientDetailsService.setUpdateClientDetailsSql("update " + this.clientDetailsTableName + " set "
         + CLIENT_FIELDS_FOR_UPDATE.replaceAll(", ", "=?, ") + "=? where client_id = ?");
-    clientDetailsService.setUpdateClientSecretSql("update " + this.clientDetailsTableName
+    actualClientDetailsService.setUpdateClientSecretSql("update " + this.clientDetailsTableName
         + " set client_secret = ? where client_id = ?");
     if (passwordEncoder != null) {
-      clientDetailsService.setPasswordEncoder(passwordEncoder);
+      actualClientDetailsService.setPasswordEncoder(passwordEncoder);
+    } else {
+      logger.warn("PasswordEncoder not specified, using NoOpPasswordEncoder instead.");
+      actualClientDetailsService.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
     }
     for (final ClientDetails client : clientDetails) {
       ClientDetails existClient = null;
       try {
-        existClient = clientDetailsService.loadClientByClientId(client.getClientId());
+        existClient = actualClientDetailsService.loadClientByClientId(client.getClientId());
       } catch (final Exception expected) {
       }
       if (null == existClient) {
-        clientDetailsService.addClientDetails(client);
+        actualClientDetailsService.addClientDetails(client);
       }
     }
-    return clientDetailsService;
+    return actualClientDetailsService;
+  }
+
+  /**
+   * 构造方法。
+   *
+   * @param dataSource 数据源
+   * @param tableDdl 建表语句
+   * @param tableName 表名
+   */
+  public CustomJdbcClientDetailsServiceBuilder(final DataSource dataSource, final String tableDdl,
+      final String tableName) {
+    this.dataSource = dataSource;
+    this.clientDetailsTableDdl = tableDdl;
+    this.clientDetailsTableName = tableName;
+    this.actualClientDetailsService = new JdbcClientDetailsService(dataSource);
+  }
+
+  /**
+   * 设置密码器。
+   *
+   * @param passwordEncoder 密码器
+   */
+  public void setPasswordEncoder(final PasswordEncoder passwordEncoder) {
+    this.passwordEncoder = passwordEncoder;
+  }
+
+  /**
+   * 创建客户端详情表。
+   *
+   */
+  public void createClientDetailsTable() {
+    final JdbcTemplate jdbcTemplate = new JdbcTemplate(this.dataSource);
+    jdbcTemplate.execute(this.clientDetailsTableDdl);
   }
 }

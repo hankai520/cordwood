@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
 
 /**
- * 鉴权码信息。
+ * 令牌信息。
  *
  * @author hankai
  * @version 1.0.0
