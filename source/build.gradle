@@ -92,4 +92,10 @@ subprojects {
 		configDirectory.set(rootProject.file("config/checkstyle"))
 		configFile file("$configDir/google_checks.xml")
 	}
+	
+	gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
 }

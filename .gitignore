@@ -8,6 +8,7 @@
 **/bin
 **/build
 **/.springBeans
+**/.dbeaver
 
 # app generated files
 **/home-not-set

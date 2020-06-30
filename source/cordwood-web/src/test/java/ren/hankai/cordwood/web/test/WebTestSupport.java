@@ -54,7 +54,7 @@ public abstract class WebTestSupport {
 
     final ApplicationInitInfo initInfo =
         ApplicationInitInfo.initWithConfigs("testSupport.txt");
-    initInfo.addSupportFiles("system.yml");
+    initInfo.addSupportFiles("system.properties");
     initInfo.addTemplates("ut_only.txt");
     Assert.assertTrue(
         ApplicationInitializer.initialize(false, initInfo));

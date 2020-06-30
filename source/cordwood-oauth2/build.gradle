@@ -34,6 +34,10 @@ dependencies {
     compile project(":cordwood-web")
     
     testCompile "org.springframework:spring-test:${springVersion}"
+    testCompile "org.springframework.security:spring-security-test:4.2.17.RELEASE"
+    testCompile "org.yaml:snakeyaml:1.17"
+    testCompile "org.hsqldb:hsqldb:2.4.1"
+    testCompile "com.fasterxml.jackson.core:jackson-core:2.11.0"
 }
 
 apply plugin: "com.bmuschko.nexus"

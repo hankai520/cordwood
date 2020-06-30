@@ -16,6 +16,8 @@ public final class Oauth2Client {
 
   private String id;// 客户端ID
 
+  private String resourceIds; // 逗号分隔的资源标识
+
   private String secret;// 客户端秘钥
 
   private String scopes;// 客户端授权范围
@@ -39,6 +41,24 @@ public final class Oauth2Client {
    */
   public void setId(final String id) {
     this.id = id;
+  }
+
+  /**
+   * 获取 resourceIds 字段的值。
+   *
+   * @return resourceIds 字段值
+   */
+  public String getResourceIds() {
+    return resourceIds;
+  }
+
+  /**
+   * 设置 resourceIds 字段的值。
+   *
+   * @param resourceIds resourceIds 字段的值
+   */
+  public void setResourceIds(final String resourceIds) {
+    this.resourceIds = resourceIds;
   }
 
   /**

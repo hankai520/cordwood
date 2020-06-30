@@ -41,7 +41,7 @@ public abstract class DataTestSupport {
 
   static {
     System.setProperty(Preferences.ENV_APP_HOME_DIR, "./test-home");
-    final String[] configs = {"system.yml", "hsql.properties"};
+    final String[] configs = {"system.properties", "hsql.properties"};
     final ApplicationInitInfo initInfo = ApplicationInitInfo.initWithConfigs(configs);
     final String[] templates = {};
     initInfo.addTemplates(templates);
@@ -104,9 +104,9 @@ public abstract class DataTestSupport {
      * @param jtaTransactionManager 事务管理器
      * @param transactionManagerCustomizers 自定义事务管理
      */
-    protected JpaConfiguration(DataSource dataSource, JpaProperties properties,
-        ObjectProvider<JtaTransactionManager> jtaTransactionManager,
-        ObjectProvider<TransactionManagerCustomizers> transactionManagerCustomizers) {
+    protected JpaConfiguration(final DataSource dataSource, final JpaProperties properties,
+        final ObjectProvider<JtaTransactionManager> jtaTransactionManager,
+        final ObjectProvider<TransactionManagerCustomizers> transactionManagerCustomizers) {
       super(dataSource, properties, jtaTransactionManager, transactionManagerCustomizers);
     }
 

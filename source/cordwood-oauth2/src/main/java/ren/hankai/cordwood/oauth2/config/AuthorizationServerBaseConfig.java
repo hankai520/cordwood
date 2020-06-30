@@ -1,6 +1,7 @@
 
 package ren.hankai.cordwood.oauth2.config;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,6 +113,7 @@ public abstract class AuthorizationServerBaseConfig extends AuthorizationServerC
     if ((null != clientInfos) && !clientInfos.isEmpty()) {
       for (final Oauth2Client clientInfo : clientInfos) {
         builder.withClient(clientInfo.getId())
+            .resourceIds(StringUtils.split(clientInfo.getResourceIds(), ","))
             .secret(clientInfo.getSecret())
             .accessTokenValiditySeconds(Preferences.getApiAccessTokenExpiry() * 60 * 60 * 24)
             .refreshTokenValiditySeconds(2 * Preferences.getApiAccessTokenExpiry() * 60 * 60 * 24)
@@ -139,8 +141,8 @@ public abstract class AuthorizationServerBaseConfig extends AuthorizationServerC
     security
         .allowFormAuthenticationForClients() // 允许resource server远程坚定客户端
         .tokenKeyAccess("isAuthenticated()") // 允许已鉴定的用户获取令牌公钥
-        .checkTokenAccess("permitAll()") // 允许所有请求检查令牌
-        .allowFormAuthenticationForClients(); // 允许客户端通过表单鉴定身份
+        .passwordEncoder(passwordEncoder)
+        .checkTokenAccess("permitAll()"); // 允许所有请求检查令牌
   }
 
   /**
@@ -165,9 +167,9 @@ public abstract class AuthorizationServerBaseConfig extends AuthorizationServerC
       throw new RuntimeException(
           String.format("OAuth java keystore file not found in path: %s", keyResource.getPath()));
     }
-    final String storePwd = Preferences.getCustomConfig("oauth2.keystore.password");
+    final String storePwd = Preferences.getCustomConfig("oauth2KeystorePassword");
     final KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(keyResource, storePwd.toCharArray());
-    final String keyPwd = Preferences.getCustomConfig("oauth2.keypair.password");
+    final String keyPwd = Preferences.getCustomConfig("oauth2KeypairPassword");
     converter.setKeyPair(keyStoreKeyFactory.getKeyPair("oauth", keyPwd.toCharArray()));
     return converter;
   }

@@ -5,11 +5,12 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.config.YamlMapFactoryBean;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.util.CollectionUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * 程序只读配置项。
@@ -96,9 +98,14 @@ public final class Preferences {
   private static Map<String, Object> getSystemPrefs() {
     if (parameters == null) {
       parameters = new HashMap<>();
-      final YamlMapFactoryBean bean = new YamlMapFactoryBean();
-      bean.setResources(new FileSystemResource(Preferences.getConfigDir() + "/system.yml"));
-      parameters.putAll(bean.getObject());
+      final FileSystemResource src = new FileSystemResource(Preferences.getConfigDir() + "/system.properties");
+      try {
+        final Properties props = new Properties();
+        props.load(new InputStreamReader(src.getInputStream(), "UTF-8"));
+        CollectionUtils.mergePropertiesIntoMap(props, parameters);
+      } catch (final IOException ex) {
+        logger.error("Failed to load system.properties file.", ex);
+      }
     }
     return parameters;
   }
