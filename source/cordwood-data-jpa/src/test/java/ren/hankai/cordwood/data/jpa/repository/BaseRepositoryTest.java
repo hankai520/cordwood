@@ -11,8 +11,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
-import ren.hankai.cordwood.data.domain.DeleteSpecification;
-import ren.hankai.cordwood.data.domain.EntitySpecs;
+import ren.hankai.cordwood.data.jpa.domain.DeleteSpecification;
+import ren.hankai.cordwood.data.jpa.domain.EntitySpecs;
 import ren.hankai.cordwood.data.test.DataTestSupport;
 import ren.hankai.cordwood.data.util.PageUtil;
 

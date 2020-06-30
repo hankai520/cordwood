@@ -6,7 +6,7 @@ import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-import ren.hankai.cordwood.data.domain.DeleteSpecification;
+import ren.hankai.cordwood.data.jpa.domain.DeleteSpecification;
 import ren.hankai.cordwood.data.jpa.repository.BaseRepository;
 
 import java.io.Serializable;

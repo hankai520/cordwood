@@ -1,11 +1,11 @@
 eclipse {
     project {
-        name="cordwood-data"
+        name="cordwood-data-mybatis"
     }
 }
 
 jar {
-    baseName = "cordwood-data"
+    baseName = "cordwood-data-mybatis"
     version = mainVersion
     manifest {
         attributes(
@@ -26,9 +26,14 @@ dependencies {
     compile "commons-codec:commons-codec:1.9"
     compile "org.apache.commons:commons-lang3:3.4"
     compile "com.alibaba:druid:1.1.10"
-    compile "org.springframework.data:spring-data-commons:1.13.10.RELEASE"
-        
+    
     compile project(":cordwood-core")
+    compile project(":cordwood-data")
+    
+    testCompile "org.springframework.boot:spring-boot-starter-test:1.5.10.RELEASE"
+    testRuntime "org.hsqldb:hsqldb:2.3.4"
+    testRuntime "org.yaml:snakeyaml:1.18"
+    
 }
 
 apply plugin: "com.bmuschko.nexus"
@@ -39,8 +44,8 @@ version = mainVersion
 
 modifyPom {
     project {
-        name "Cordwood Data"
-        description "Cordwood Data"
+        name "Cordwood Data for MyBatis"
+        description "Cordwood Data for MyBatis"
         url = linkHomepage
         scm {
             url = linkScmUrl

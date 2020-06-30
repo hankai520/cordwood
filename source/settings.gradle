@@ -6,6 +6,8 @@ include "cordwood-mobile"
 
 //data processing
 include "cordwood-data"
+include "cordwood-data-jpa"
+include "cordwood-data-mybatis"
 
 //java web support
 include "cordwood-web"

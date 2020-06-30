@@ -1,5 +1,5 @@
 
-package ren.hankai.cordwood.data.domain;
+package ren.hankai.cordwood.data.jpa.domain;
 
 import org.springframework.data.jpa.domain.Specification;
 

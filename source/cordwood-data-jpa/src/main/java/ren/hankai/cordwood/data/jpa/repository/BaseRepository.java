@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
-import ren.hankai.cordwood.data.domain.DeleteSpecification;
+import ren.hankai.cordwood.data.jpa.domain.DeleteSpecification;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,5 +1,5 @@
 
-package ren.hankai.cordwood.data.domain;
+package ren.hankai.cordwood.data.jpa.domain;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
