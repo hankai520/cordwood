@@ -1,6 +1,7 @@
 
 package ren.hankai.cordwood.data.mybatis.config;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -14,14 +15,21 @@ import ren.hankai.cordwood.core.Preferences;
 import ren.hankai.cordwood.data.AbstractDataSourceConfig;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.sql.DataSource;
 
 /**
- * Mybatis数据源配置类。
+ * Mybatis数据源配置类。内部通过bean的方式配置SqlSessionFactory，通过覆盖 getConfigFileBaseName 方法，
+ * 可以指定xml配置文件基础名，内部根据当前在spring中激活的profile，拼接成最终名称（如 mybatis-test.xml）。
+ * xml配置文件必须在系统启动时拷贝到config目录下。
  *
  * @author hankai
  * @since 1.0.0
+ * @see Preferences
+ * @see Profile
  */
 public abstract class AbstractMybatisConfig extends AbstractDataSourceConfig {
 
@@ -45,6 +53,31 @@ public abstract class AbstractMybatisConfig extends AbstractDataSourceConfig {
   }
 
   /**
+   * 根据指定的Mapper基础包名和Mapper xml后缀，构造一组通配的类路径，用于查找mapper xml。
+   *
+   * @return mapper xml类路径
+   * @throws IOException 读取mapper xml时出现异常
+   * @throws Exception 通过工厂bean获取工厂实例出现异常
+   */
+  private Resource[] getMapperXmlClassPaths() throws IOException, Exception {
+    final String[] pkgs = getMapperPackages();
+    if ((null == pkgs) || (pkgs.length == 0)) {
+      return null;
+    }
+    final List<Resource> paths = new ArrayList<>(pkgs.length);
+    final PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+    final String suffix = getMapperXmlSuffix();
+    for (int i = 0; i < pkgs.length; i++) {
+      final String pkgPath = pkgs[i].replaceAll("\\.", "/"); // 将包名中的点替换为路径分隔符
+      final Resource[] pkgPaths = resolver.getResources(String.format("classpath:%s/*%s", pkgPath, suffix));
+      paths.addAll(Arrays.asList(pkgPaths));
+    }
+    Resource[] classPaths = new Resource[paths.size()];
+    classPaths = paths.toArray(classPaths);
+    return classPaths;
+  }
+
+  /**
    * 配置SqlSessionFactory的内部方法。
    *
    * @param dataSource 数据源
@@ -61,10 +94,7 @@ public abstract class AbstractMybatisConfig extends AbstractDataSourceConfig {
     factoryBean.setConfigLocation(configResource);
     factoryBean.setFailFast(failfast);
     factoryBean.setTypeAliasesPackage(getTypeAliasPackage());
-    final PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-    final Resource[] mapperLocations =
-        resolver.getResources("classpath:" + getMapperPackage().replaceAll("\\.", "/") + "/*" + getMapperXmlSuffix());
-    factoryBean.setMapperLocations(mapperLocations);
+    factoryBean.setMapperLocations(getMapperXmlClassPaths());
     return factoryBean.getObject();
   }
 
@@ -85,7 +115,7 @@ public abstract class AbstractMybatisConfig extends AbstractDataSourceConfig {
    *
    * @return Mapper包名
    */
-  protected abstract String getMapperPackage();
+  protected abstract String[] getMapperPackages();
 
   /**
    * 指定Mapper xml配置文件的通配后缀（默认为 "-mapper.xml"）。
@@ -114,7 +144,10 @@ public abstract class AbstractMybatisConfig extends AbstractDataSourceConfig {
   public MapperScannerConfigurer mapperScannerConfigurer(final SqlSessionFactory factory) {
     final MapperScannerConfigurer scanner = new MapperScannerConfigurer();
     scanner.setAnnotationClass(Mapper.class);
-    scanner.setBasePackage(getMapperPackage());
+    final String[] pkgs = getMapperPackages();
+    if ((null != pkgs) && (pkgs.length > 0)) {
+      scanner.setBasePackage(StringUtils.join(pkgs, ","));
+    }
     return scanner;
   }
 }

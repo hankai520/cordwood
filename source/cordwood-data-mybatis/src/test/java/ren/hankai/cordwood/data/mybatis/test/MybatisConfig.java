@@ -16,9 +16,9 @@ import ren.hankai.cordwood.data.mybatis.test.mapper.UserMapper;
 public class MybatisConfig extends AbstractMybatisConfig {
 
   @Override
-  protected String getMapperPackage() {
+  protected String[] getMapperPackages() {
     final String pkg = UserMapper.class.getPackage().getName();
-    return pkg;
+    return new String[] {pkg};
   }
 
   @Override
