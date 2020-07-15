@@ -9,13 +9,18 @@ import com.alibaba.druid.wall.WallFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import ren.hankai.cordwood.core.Preferences;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+import javax.sql.DataSource;
 
 /**
  * 抽象的数据源配置类。
@@ -159,4 +164,58 @@ public abstract class AbstractDataSourceConfig {
     }
   }
 
+  /**
+   * 数据源。
+   *
+   * @return 数据源
+   */
+  @Profile(Preferences.PROFILE_HSQL)
+  @Bean
+  public DataSource hsqlDataSource() {
+    final Properties props = loadExternalConfig("hsql.properties");
+    // 由于配置文件中无法指定在运行时才能确定的数据库文件存储目录，需要在此处重新设定
+    String url = props.getProperty("url");
+    if (url.contains("%s")) {
+      // 包含通配符，说明需要设置数据库文件路径
+      final String dbPath = Preferences.getDbDir() + File.separator + "application";
+      url = String.format(props.getProperty("url"), dbPath);
+      props.setProperty("url", url);
+    }
+
+    final DruidDataSource dataSource = new DruidDataSource();
+    configureDataSourcePool(props, dataSource);
+    // 用于检查连接是否可用的sql语句
+    dataSource.setValidationQuery("SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS");
+    return dataSource;
+  }
+
+  /**
+   * MySQL 数据源。
+   *
+   * @return 数据源
+   */
+  @Profile(Preferences.PROFILE_MYSQL)
+  @Bean
+  public DataSource mysqlDataSource() {
+    final Properties props = loadExternalConfig("mysql.properties");
+    final DruidDataSource dataSource = new DruidDataSource();
+    configureDataSourcePool(props, dataSource);
+    dataSource.setValidationQuery("select 1");// 用于检查连接是否可用的sql语句
+    return dataSource;
+  }
+
+  /**
+   * ORACLE 数据源。
+   *
+   * @return 数据源
+   */
+  @Profile(Preferences.PROFILE_ORACLE)
+  @Bean
+  public DataSource oracleDataSource() {
+    final Properties props = loadExternalConfig("oracle.properties");
+    final DruidDataSource dataSource = new DruidDataSource();
+    configureDataSourcePool(props, dataSource);
+    dataSource.setValidationQuery("select * from dual");// 用于检查连接是否可用的sql语句
+    return dataSource;
+  }
 }

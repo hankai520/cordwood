@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ren.hankai.cordwood.data.mybatis.test.mapper.UserMapper">
+	<update id="initDatabaseTables">
+		CREATE TABLE IF NOT EXISTS users(
+			name VARCHAR(50) NOT NULL PRIMARY KEY,
+			age INT
+		)
+	</update>
+	<update id="dropDatabaseTables">
+		drop table users;
+	</update>
+	<insert id="addUser" parameterType="User">
+		insert into users values (#{user.name}, #{user.age})
+	</insert>
+	<select id="getUserByName" resultType="User">
+		select * from users where name = #{name}
+	</select>
+	<delete id="deleteAll">
+		delete from users;
+	</delete>
+</mapper>
