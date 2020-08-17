@@ -57,14 +57,9 @@ public final class Preferences {
   public static final String PROFILE_ORACLE = "oracle";
 
   /**
-   * 启用 Redis 来存储会话。
-   */
-  public static final String PROFILE_REDIS_SESSION = "redis-session";
-
-  /**
    * 启用 redis 来缓存数据。
    */
-  public static final String PROFILE_REDIS_CACHE = "redis-cache";
+  public static final String PROFILE_REDIS = "redis";
 
   /**
    * 命令行参数：程序数据根目录。

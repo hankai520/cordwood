@@ -29,13 +29,14 @@ dependencies {
     compile "commons-io:commons-io:2.2"
     compile "commons-codec:commons-codec:1.9"
     compile "org.apache.commons:commons-lang3:3.4"
-    compile "net.sf.ehcache:ehcache:2.10.3"
-    compile "com.google.guava:guava:25.1-jre"
     compile "com.jcabi:jcabi-manifests:1.1"
+    
+    compile "net.sf.ehcache:ehcache:2.10.3"
+	compile "org.redisson:redisson:3.12.5"
     
     testCompile "org.springframework:spring-test:${springVersion}"
     testCompile "org.yaml:snakeyaml:1.17"
-    testCompile 'org.simpleframework:simple:5.1.6'
+    testCompile "org.simpleframework:simple:5.1.6"
 }
 
 /* 上传到 sonatype nexus */

@@ -34,7 +34,7 @@ import java.net.URL;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {CoreTestSupport.class, BeanConfig.class})
-@ActiveProfiles({Preferences.PROFILE_TEST})
+@ActiveProfiles({Preferences.PROFILE_TEST, Preferences.PROFILE_REDIS})
 @Configuration
 @ComponentScan(basePackages = {"ren.hankai"})
 public abstract class CoreTestSupport {

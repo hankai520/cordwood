@@ -33,6 +33,8 @@ import javax.sql.DataSource;
  */
 public abstract class AbstractMybatisConfig extends AbstractDataSourceConfig {
 
+  // private static final Logger logger = LoggerFactory.getLogger(AbstractMybatisConfig.class);
+
   /**
    * 获取Mybatis配置文件。
    *
@@ -53,7 +55,9 @@ public abstract class AbstractMybatisConfig extends AbstractDataSourceConfig {
   }
 
   /**
-   * 根据指定的Mapper基础包名和Mapper xml后缀，构造一组通配的类路径，用于查找mapper xml。
+   * 根据指定的Mapper基础包名和Mapper xml后缀，构造一组通配的类路径，用于查找mapper xml。查找规则：
+   * 1. 查找mapper包路径下的xml
+   * 2. 查找根类路径下的xml
    *
    * @return mapper xml类路径
    * @throws IOException 读取mapper xml时出现异常
@@ -69,8 +73,15 @@ public abstract class AbstractMybatisConfig extends AbstractDataSourceConfig {
     final String suffix = getMapperXmlSuffix();
     for (int i = 0; i < pkgs.length; i++) {
       final String pkgPath = pkgs[i].replaceAll("\\.", "/"); // 将包名中的点替换为路径分隔符
-      final Resource[] pkgPaths = resolver.getResources(String.format("classpath:%s/*%s", pkgPath, suffix));
+      final Resource[] pkgPaths = resolver.getResources(String.format("classpath*:%s/*%s", pkgPath, suffix));
+      if ((null == pkgPaths) || (pkgPaths.length == 0)) {
+        continue;
+      }
       paths.addAll(Arrays.asList(pkgPaths));
+    }
+    final Resource[] rootResources = resolver.getResources(String.format("classpath*:*%s", suffix));
+    if ((null != rootResources) && (rootResources.length > 0)) {
+      paths.addAll(Arrays.asList(rootResources));
     }
     Resource[] classPaths = new Resource[paths.size()];
     classPaths = paths.toArray(classPaths);
@@ -102,11 +113,9 @@ public abstract class AbstractMybatisConfig extends AbstractDataSourceConfig {
    * 指定Mybatis SqlSessionFactory 配置文件基础名称（内部根据当前激活的配置构造完整名称）。
    *
    * @return 配置文件基础名称
-   * @see Preferences.PROFILE_PRODUCTION
-   * @see Preferences.PROFILE_TEST
    */
   protected String getConfigFileBaseName() {
-    // 默认不实用xml配置session factory
+    // 默认不使用xml配置session factory
     return null;
   }
 
@@ -140,6 +149,12 @@ public abstract class AbstractMybatisConfig extends AbstractDataSourceConfig {
     return getSqlSessionFactoryInternal(dataSource, Preferences.PROFILE_TEST, true);
   }
 
+  /**
+   * 配置Mapper扫描。
+   *
+   * @param factory sql会话工厂
+   * @return 扫描配置
+   */
   @Bean
   public MapperScannerConfigurer mapperScannerConfigurer(final SqlSessionFactory factory) {
     final MapperScannerConfigurer scanner = new MapperScannerConfigurer();

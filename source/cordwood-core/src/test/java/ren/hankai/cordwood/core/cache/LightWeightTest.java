@@ -1,15 +1,28 @@
 
 package ren.hankai.cordwood.core.cache;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ren.hankai.cordwood.core.test.CoreTestSupport;
+import ren.hankai.cordwood.core.test.config.CacheConfig;
 
 public class LightWeightTest extends CoreTestSupport {
 
   @Autowired
   private CacheTestFixure fixure;
+
+  @BeforeClass
+  public static void setup() throws Exception {
+    CacheConfig.startRedis();
+  }
+
+  @AfterClass
+  public static void teardown() throws Exception {
+    CacheConfig.stopRedis();
+  }
 
   @Test
   public void testLightWeightCache() throws Exception {
