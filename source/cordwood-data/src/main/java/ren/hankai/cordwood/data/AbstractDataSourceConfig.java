@@ -141,7 +141,8 @@ public abstract class AbstractDataSourceConfig {
     param = props.getProperty("pool.debug", "false");
     if (Boolean.parseBoolean(param)) {
       // 超过时间限制是否回收
-      dataSource.setRemoveAbandoned(true);
+      param = props.getProperty("pool.remove.abandoned", "true");
+      dataSource.setRemoveAbandoned(Boolean.parseBoolean(param));
       // 超时时间：单位为秒
       param = props.getProperty("pool.remove.abandoned.timeout", "180");
       dataSource.setRemoveAbandonedTimeout(Integer.parseInt(param));
