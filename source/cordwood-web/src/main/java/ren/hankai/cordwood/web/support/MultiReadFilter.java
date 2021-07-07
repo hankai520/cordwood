@@ -22,8 +22,6 @@ import javax.servlet.http.HttpServletRequest;
  * @version 1.0.0
  * @since Nov 26, 2018 4:52:12 PM
  */
-@Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
 public class MultiReadFilter implements Filter {
 
   @Override
