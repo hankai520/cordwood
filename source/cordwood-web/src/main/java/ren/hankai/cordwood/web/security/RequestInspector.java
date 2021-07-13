@@ -95,7 +95,7 @@ public interface RequestInspector {
   boolean verifyRequestParameters(Map<String, ?> parameters, String sk);
 
   /**
-   * 用自定义秘钥验证请求参数是否未篡改。
+   * 用自定义秘钥验证请求参数是否未篡改。使用此方法必须配置MultiReadFilter，因为此方法会读取post body，导致后续处理时body为空。
    *
    * @param request HTTP请求
    * @return 是否被篡改
@@ -105,7 +105,7 @@ public interface RequestInspector {
   boolean verifyRequestParameters(HttpServletRequest request);
 
   /**
-   * 用自定义秘钥验证请求参数是否未篡改。
+   * 用自定义秘钥验证请求参数是否未篡改。使用此方法必须配置MultiReadFilter，因为此方法会读取post body，导致后续处理时body为空。
    *
    * @param request HTTP请求
    * @param sk 秘钥
