@@ -25,7 +25,7 @@ import java.util.Set;
 public final class RuntimeVariables {
 
   private static final Logger logger = LoggerFactory.getLogger(RuntimeVariables.class);
-  private static Map<String, String> variables = null;
+  private static Map<String, String> variables = new HashMap<>();
   /**
    * 运行时变量保存路径。
    */
@@ -46,33 +46,42 @@ public final class RuntimeVariables {
    */
   private static Map<String, String> getVariables() {
     // 如果缓存的变量过期了，则清空
-    if (cacheSeconds > 0) {
-      final long timestamp = System.currentTimeMillis() / 1000;
-      if ((timestamp - lastScanTimestamp) > cacheSeconds) {
-        variables = null;
-      }
-    }
-    if (variables == null) {
-      variables = new HashMap<>();
-      try {
-        final Properties props = new Properties();
-        final File file = getVariablesFile();
-        if (file.exists()) {
-          props.load(new FileReader(file));
-          final Set<String> keyset = props.stringPropertyNames();
-          for (final String key : keyset) {
-            variables.put(key, props.getProperty(key));
-          }
+    synchronized (variables) {
+      if (cacheSeconds > 0) {
+        final long timestamp = System.currentTimeMillis() / 1000;
+        if ((timestamp - lastScanTimestamp) > cacheSeconds) {
+          variables.clear();
         }
-        lastScanTimestamp = System.currentTimeMillis() / 1000;
-      } catch (final FileNotFoundException ex) {
-        logger.error(String.format("Runtime variables file \"%s\" not found!", savePath), ex);
-      } catch (final IOException ex) {
-        logger.error(String.format("Failed to load runtime variables from file \"%s\"!", savePath),
-            ex);
       }
+      if (variables.isEmpty()) {
+        try {
+          final Properties props = new Properties();
+          final File file = getVariablesFile();
+          if (file.exists()) {
+            props.load(new FileReader(file));
+            final Set<String> keyset = props.stringPropertyNames();
+            for (final String key : keyset) {
+              final String value = props.getProperty(key);
+              if (null != key && null != value) {
+                variables.put(key, value);
+              }
+            }
+          }
+          lastScanTimestamp = System.currentTimeMillis() / 1000;
+        } catch (final FileNotFoundException ex) {
+          logger.warn(String.format("Runtime variables file \"%s\" not found!", savePath), ex);
+        } catch (final IOException ex) {
+          logger.warn(String.format("Failed to load runtime variables from file \"%s\"!", savePath),
+              ex);
+        } catch (final Exception ex) {
+          logger.warn(String.format(
+              "Failed to load runtime variables from file \"%s\" due to unkown exception!",
+              savePath),
+              ex);
+        }
+      }
+      return variables;
     }
-    return variables;
   }
 
   /**
@@ -119,7 +128,7 @@ public final class RuntimeVariables {
     }
   }
 
-  public static void setVariable(String key, String value) {
+  public static void setVariable(final String key, final String value) {
     getVariables().put(key, value);
   }
 
@@ -131,7 +140,7 @@ public final class RuntimeVariables {
    * @author hankai
    * @since Apr 28, 2017 7:16:18 PM
    */
-  public static String getVariable(String key) {
+  public static String getVariable(final String key) {
     return getVariables().get(key);
   }
 
@@ -143,7 +152,7 @@ public final class RuntimeVariables {
    * @author hankai
    * @since Oct 25, 2016 10:45:33 AM
    */
-  public static boolean getBool(String key) {
+  public static boolean getBool(final String key) {
     final String value = getVariable(key);
     try {
       return Boolean.parseBoolean(value);
@@ -161,7 +170,7 @@ public final class RuntimeVariables {
    * @author hankai
    * @since Oct 25, 2016 10:46:11 AM
    */
-  public static int getInt(String key) {
+  public static int getInt(final String key) {
     final String value = getVariable(key);
     try {
       return Integer.parseInt(value);
@@ -191,7 +200,7 @@ public final class RuntimeVariables {
    * @author hankai
    * @since Oct 25, 2016 10:46:54 AM
    */
-  public static void setAllVariables(Map<String, String> map) {
+  public static void setAllVariables(final Map<String, String> map) {
     if ((map != null) && (map.size() > 0)) {
       variables = map;
     }
@@ -215,7 +224,7 @@ public final class RuntimeVariables {
    * @author hankai
    * @since Sep 5, 2017 5:45:44 PM
    */
-  public static void removeVariable(String key) {
+  public static void removeVariable(final String key) {
     variables.remove(key);
   }
 }
